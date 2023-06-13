@@ -1,14 +1,29 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
+/**
+ * main.js
+ *
+ * Bootstraps Vuetify and other plugins then mounts the App`
+ */
 
-loadFonts()
+// Components
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 
-createApp(App)
-  .use(router)
-  .use(store)
-  .use(vuetify)
-  .mount('#app')
+import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import '@fortawesome/fontawesome-free/css/brands.css';
+
+// Composables
+import { createApp } from 'vue';
+
+// Plugins
+import { registerPlugins } from '@/plugins';
+import 'aos/dist/aos.css';
+
+const app = createApp(App);
+
+registerPlugins(app);
+app.use(router);
+app.use(store);
+app.use(autoAnimatePlugin);
+app.mount('#app');
