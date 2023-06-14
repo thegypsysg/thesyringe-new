@@ -1,10 +1,13 @@
 <template>
   <div>
     <Banner />
-    <JobCategories />
+    <div style="background-color: #f5f6ff">
+      <JobCategories />
+    </div>
     <CardItem />
-    <WhoWillUse />
-    <hr />
+    <div style="background-color: #f5f6ff">
+      <WhoWillUse />
+    </div>
     <Footer />
   </div>
 </template>

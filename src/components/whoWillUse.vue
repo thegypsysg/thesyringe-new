@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <div class="sec-title">
+    <div class="sec-title mt-4">
       <h2><span>WHO WILL </span>USE</h2>
       <p>Everyone in Healthcare</p>
     </div>
-    <v-row>
-      <v-col cols="4" v-for="(card, i) in cardItems" :key="i">
+    <v-row class="mb-8 d-flex justify-center">
+      <v-col cols="3" v-for="(card, i) in cardItems" :key="i">
         <v-lazy :options="{ threshold: 0.5 }" min-height="400">
-          <v-card class="mx-auto card-item" height="400">
+          <v-card class="mx-auto card-item" height="400" elevation="0">
             <v-img
               :src="card.img"
               height="100%"
@@ -17,7 +17,7 @@
             >
               <template #placeholder> <div class="skeleton" /> </template
             ></v-img>
-            <v-card-title class="card-title px-10">
+            <v-card-title class="card-title px-8">
               <h3 class="mb-4">{{ card.title }}</h3>
               <v-btn variant="flat" :color="card.btnColor">{{
                 card.btnText

@@ -1,15 +1,20 @@
 <template>
-  <v-container>
+  <v-container class="mt-4">
     <div class="sec-title">
       <h2><span>EMPLOYER </span>SETTINGS</h2>
       <p>List of places where you can find work</p>
     </div>
-    <v-row>
+    <v-row class="mb-8">
       <v-col cols="4">
         <div>
           <div v-for="(card, i) in cardItem1" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
-              <v-card class="mx-auto card-item" min-width="200" height="300">
+              <v-card
+                class="mx-auto card-item"
+                min-width="200"
+                height="300"
+                elevation="0"
+              >
                 <v-img
                   :src="card.img"
                   height="100%"
@@ -31,7 +36,12 @@
         <div class="card-container flex-wrap">
           <div v-for="(card, i) in cardItems" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="140">
-              <v-card class="mx-auto card-item" min-width="170" height="140">
+              <v-card
+                class="mx-auto card-item"
+                min-width="170"
+                height="140"
+                elevation="0"
+              >
                 <v-img
                   :src="card.img"
                   height="100%"
@@ -52,7 +62,12 @@
         <div>
           <div v-for="(card, i) in cardItem2" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="300">
-              <v-card class="mx-auto card-item" min-width="200" height="300">
+              <v-card
+                class="mx-auto card-item"
+                min-width="200"
+                height="300"
+                elevation="0"
+              >
                 <v-img
                   :src="card.img"
                   height="100%"
@@ -71,6 +86,11 @@
         </div>
       </v-col>
     </v-row>
+    <div class="w-100 d-flex justify-center mb-4">
+      <a href="#" class="btn btn-outline-light"
+        >View All <i class="fa fa-circle-arrow-right"></i
+      ></a>
+    </div>
   </v-container>
 </template>
 

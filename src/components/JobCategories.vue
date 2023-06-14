@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="sec-title mt-8">
+    <div class="sec-title mt-4">
       <h2><span>JOB </span>Categories</h2>
       <p>What Job are you looking for ?</p>
     </div>
@@ -71,6 +71,11 @@
         </v-card>
       </v-lazy>
     </div>
+    <div class="w-100 d-flex justify-center mb-4">
+      <a href="#" class="btn btn-outline-light"
+        >View All <i class="fa fa-circle-arrow-right"></i
+      ></a>
+    </div>
   </v-container>
 </template>
 
@@ -97,6 +102,7 @@ export default {
 
 .job-categories-title h1 {
   font-weight: 500;
+  width: 250px;
 }
 .job-categories-title p {
   color: #5f5f5f;
@@ -104,14 +110,14 @@ export default {
 
 .line-divider {
   height: 1px;
-  width: 240px;
-  background: black;
+  width: 150px;
+  background: rgb(107, 107, 107);
 }
 
 .job-categories-item {
   position: relative;
   overflow: hidden;
-  border-radius: 20px !important;
+  border-radius: 5px !important;
 }
 .job-categories-item-img {
   transition: all 0.3s;

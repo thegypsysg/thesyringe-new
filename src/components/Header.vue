@@ -29,6 +29,7 @@
         id="product_name"
         class="form-control mr-sm-2"
         type="text"
+        style="font-style: italic"
         placeholder="Nurse, Physio, Consultants, Oncologist, Medical, Executives"
         aria-label="Search"
         data-autocompleturl="https://boozards.com/merchant-product/search"

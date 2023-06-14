@@ -76,11 +76,13 @@
           style="margin-top: 37px; padding-right: 20px"
         >
           <v-col cols="4">
-            <p style="margin-bottom: 10px">Mall-e</p>
+            <p style="margin-bottom: 10px">
+              {{ 'Nursing'.substring(0, 10) + '..' }}
+            </p>
             <div class="our-apps">
               <v-img
                 class="our-apps-img"
-                height="70"
+                cover
                 transition="fade-transition"
                 src="@/assets/nurse-jobs.jpg"
               >
@@ -91,11 +93,13 @@
             </div>
           </v-col>
           <v-col cols="4">
-            <p style="margin-bottom: 10px">Boozards</p>
+            <p style="margin-bottom: 10px">
+              {{ 'Allied Health'.substring(0, 10) + '..' }}
+            </p>
             <div class="our-apps">
               <v-img
                 class="our-apps-img"
-                height="70"
+                cover
                 transition="fade-transition"
                 src="@/assets/allied-jobs.jpg"
               >
@@ -106,10 +110,12 @@
             </div>
           </v-col>
           <v-col cols="4">
-            <p style="margin-bottom: 10px">Flea</p>
+            <p style="margin-bottom: 10px">
+              {{ 'Medical / Doctors'.substring(0, 10) + '..' }}
+            </p>
             <div class="our-apps">
               <v-img
-                height="70"
+                cover
                 class="our-apps-img"
                 transition="fade-transition"
                 src="@/assets/doctor-jobs.jpg"
@@ -121,10 +127,12 @@
             </div>
           </v-col>
           <v-col cols="4">
-            <p style="margin-bottom: 10px">Mendesliga</p>
+            <p style="margin-bottom: 10px">
+              {{ 'Executives'.substring(0, 10) + '..' }}
+            </p>
             <div class="our-apps">
               <v-img
-                height="70"
+                cover
                 class="our-apps-img"
                 transition="fade-transition"
                 src="@/assets/exec-jobs.jpg"
@@ -204,16 +212,15 @@ export default {
   height: 50px;
 }
 .our-apps-img {
-  transition: all 0.3s !important;
-  transform: scale(1) !important;
-  object-fit: cover !important;
-  object-position: center !important;
+  transition: all 0.3s;
+  transform: scale(1);
   width: 100% !important;
   height: 100% !important;
 }
 
 .our-apps:hover .our-apps-img {
   transform: scale(1.2);
+  cursor: pointer;
 }
 .skeleton {
   width: 100%;
