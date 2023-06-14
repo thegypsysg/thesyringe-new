@@ -32,7 +32,7 @@
     line-height: 22px !important;
   }
   .bg-image {
-    background-image: url('@/assets/syringe-main.jpg') !important;
+    background-image: url('@/assets/banner.png') !important;
     margin-top: 28vh !important;
   }
 
@@ -126,7 +126,7 @@
 }
 @media (max-width: 599px) {
   .bg-image {
-    background-image: url('@/assets/syringe-main.jpg') !important;
+    background-image: url('@/assets/banner.png') !important;
     margin-top: 28vh !important;
     min-height: 40vh !important;
   }

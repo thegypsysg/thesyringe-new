@@ -1,6 +1,7 @@
 <template>
   <div>
     <Banner />
+    <JobCategories />
     <hr />
     <Footer />
   </div>
@@ -9,6 +10,7 @@
 <script setup>
 import Banner from '@/components/Banner.vue';
 import Footer from '@/components/Footer.vue';
+import JobCategories from './JobCategories.vue';
 </script>
 
 <script>
@@ -19,6 +21,7 @@ export default {
       drawer: false,
     };
   },
+  components: { JobCategories },
 };
 </script>
 
