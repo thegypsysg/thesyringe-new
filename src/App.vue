@@ -7,6 +7,7 @@
           <component :is="Component" />
         </Transition>
       </RouterView>
+      <Footer />
     </div>
   </v-app>
 </template>
@@ -14,10 +15,11 @@
 <script>
 import { RouterView } from 'vue-router';
 import Header from './components/Header.vue';
+import Footer from '@/components/Footer.vue';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
-  components: { RouterView, Header },
+  components: { RouterView, Header, Footer },
   data() {
     return {
       currentRoute: this.$route.path,

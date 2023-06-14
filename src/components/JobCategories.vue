@@ -72,9 +72,9 @@
       </v-lazy>
     </div>
     <div class="w-100 d-flex justify-center mb-4">
-      <a href="#" class="btn btn-outline-light"
+      <router-link to="/job-categories" class="btn btn-outline-light"
         >View All <i class="fa fa-circle-arrow-right"></i
-      ></a>
+      ></router-link>
     </div>
   </v-container>
 </template>

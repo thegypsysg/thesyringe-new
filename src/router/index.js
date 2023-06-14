@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
+import JobCategoriesdetail from '@/components/JobCategoriesdetail.vue';
 
 const routes = [
   {
     path: '/',
     component: Home,
+  },
+  {
+    path: '/job-categories',
+    component: JobCategoriesdetail,
   },
 ];
 

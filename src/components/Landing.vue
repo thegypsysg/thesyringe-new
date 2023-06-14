@@ -8,13 +8,11 @@
     <div style="background-color: #f5f6ff">
       <WhoWillUse />
     </div>
-    <Footer />
   </div>
 </template>
 
 <script setup>
 import Banner from '@/components/Banner.vue';
-import Footer from '@/components/Footer.vue';
 import JobCategories from './JobCategories.vue';
 import CardItem from './CardItem.vue';
 import WhoWillUse from './whoWillUse.vue';
