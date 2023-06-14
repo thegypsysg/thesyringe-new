@@ -195,6 +195,13 @@
       <v-btn variant="text" color="#FA2964" icon="mdi-youtube" />
     </div>
   </v-footer>
+  <a
+    onclick='window.scrollTo({top: 0, behavior: "smooth"});'
+    class="go-up"
+    style="display: inline"
+  >
+    <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+  </a>
 </template>
 
 <script>
