@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <div class="job-categories d-flex align-center my-8">
+    <div class="sec-title mt-8">
+      <h2><span>JOB </span>Categories</h2>
+      <p>What Job are you looking for ?</p>
+    </div>
+    <div class="job-categories d-flex align-center mb-8">
       <div class="job-categories-title">
         <h1>Go beyond your imagination</h1>
         <div class="line-divider my-3" />
@@ -119,7 +123,7 @@ export default {
 }
 
 .job-categories-item:hover .job-categories-item-img {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .job-categories-info {

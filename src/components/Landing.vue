@@ -2,6 +2,7 @@
   <div>
     <Banner />
     <JobCategories />
+    <CardItem />
     <hr />
     <Footer />
   </div>
@@ -11,6 +12,7 @@
 import Banner from '@/components/Banner.vue';
 import Footer from '@/components/Footer.vue';
 import JobCategories from './JobCategories.vue';
+import CardItem from './CardItem.vue';
 </script>
 
 <script>
@@ -21,7 +23,7 @@ export default {
       drawer: false,
     };
   },
-  components: { JobCategories },
+  components: { JobCategories, CardItem },
 };
 </script>
 

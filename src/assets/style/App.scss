@@ -111,6 +111,25 @@ header {
   line-height: 76px;
 }
 
+.sec-title h2 span {
+  position: relative;
+  color: #000;
+  font-weight: 600;
+}
+
+.sec-title h2 {
+  color: #fa2964;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.8rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.sec-title {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
 .card-container {
   display: flex;
   justify-content: space-between;
