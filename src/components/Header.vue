@@ -29,7 +29,7 @@
         id="product_name"
         class="form-control mr-sm-2"
         type="text"
-        placeholder="Type anything that you are looking for "
+        placeholder="Nurse, Physio, Consultants, Oncologist, Medical, Executives"
         aria-label="Search"
         data-autocompleturl="https://boozards.com/merchant-product/search"
       />
@@ -114,7 +114,7 @@
             id="product_name"
             class="form-control mr-sm-2"
             type="text"
-            placeholder="Type anything that you are looking for "
+            placeholder="Nurse, Physio, Consultants, Oncologist, Medical, Executives"
             aria-label="Search"
             data-autocompleturl="https://boozards.com/merchant-product/search"
           />

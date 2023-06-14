@@ -12,6 +12,7 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 
 import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/brands.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 // Composables
 import { createApp } from 'vue';

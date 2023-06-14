@@ -1,31 +1,50 @@
 <template>
   <v-container class="mt-6 footer_lks">
-    <v-row>
+    <v-row class="d-flex justify-center">
       <v-col cols="12" sm="12" md="3">
         <h2 class="footer_title">About The Gypsy</h2>
         <p
           class="footer_paragraph"
           style="margin-bottom: 16px; margin-top: 34px"
         >
-          The Gypsy is a Super App that is useful for users travelling from
-          point A to point B in search of anything and everything!!!
+          The Syringe is a Market Place for Jobs that are specifically on
+          Healthcare around the world.
         </p>
         <ul class="footer_social">
           <li>
-            <img src="@/assets/map-pointer.svg" height="24" />
+            <v-icon
+              color="#FA2964"
+              size="20"
+              class="mr-2 mdi mdi-map-marker"
+              aria-hidden="true"
+            ></v-icon>
             Marine Drive, Singapore
           </li>
           <li>
-            <img src="@/assets/phone.svg" height="24" />
+            <v-icon
+              color="#FA2964"
+              size="20"
+              class="mr-2 fa fa-phone"
+              aria-hidden="true"
+            ></v-icon>
             +65.91992000
           </li>
           <li>
-            <img src="@/assets/whatsapp.svg" height="24" />
+            <v-icon
+              color="#FA2964"
+              size="20"
+              class="mr-2 fab fa-whatsapp"
+            ></v-icon>
             +65.91992000
           </li>
           <li>
-            <img src="@/assets/mail.svg" height="24" />
-            <a href="mailto:support@the-gypsy.in">24hrs@the-gypsy.sg</a>
+            <v-icon
+              color="#FA2964"
+              size="20"
+              class="mr-2 fa fa-envelope"
+              aria-hidden="true"
+            ></v-icon>
+            <a href="mailto:support@the-gypsy.in">support@the-syringe.com</a>
           </li>
         </ul>
       </v-col>
@@ -33,29 +52,25 @@
         <h2 class="footer_title" style="margin-bottom: 16px">Quick links</h2>
         <ul class="footer_links" style="margin-top: 37px">
           <li>
-            <img src="@/assets/links-arrow.svg" height="12" />
-            Our Apps
+            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
+            Job Categories
           </li>
           <li>
-            <img src="@/assets/links-arrow.svg" height="12" />
+            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
             Sign Up/Register
           </li>
           <li>
-            <img src="@/assets/links-arrow.svg" height="12" />
-            Delivery partners
+            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
+            Agencies
           </li>
           <li>
-            <img src="@/assets/links-arrow.svg" height="12" />
-            Merchants
-          </li>
-          <li>
-            <img src="@/assets/links-arrow.svg" height="12" />
+            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
             Employers
           </li>
         </ul>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title">Our Apps</h2>
+        <h2 class="footer_title">Job Categories</h2>
         <v-row
           class="footer_apps"
           style="margin-top: 37px; padding-right: 20px"
@@ -65,6 +80,7 @@
             <div class="our-apps">
               <v-img
                 class="our-apps-img"
+                height="70"
                 transition="fade-transition"
                 src="@/assets/nurse-jobs.jpg"
               >
@@ -79,6 +95,7 @@
             <div class="our-apps">
               <v-img
                 class="our-apps-img"
+                height="70"
                 transition="fade-transition"
                 src="@/assets/allied-jobs.jpg"
               >
@@ -92,6 +109,7 @@
             <p style="margin-bottom: 10px">Flea</p>
             <div class="our-apps">
               <v-img
+                height="70"
                 class="our-apps-img"
                 transition="fade-transition"
                 src="@/assets/doctor-jobs.jpg"
@@ -106,6 +124,7 @@
             <p style="margin-bottom: 10px">Mendesliga</p>
             <div class="our-apps">
               <v-img
+                height="70"
                 class="our-apps-img"
                 transition="fade-transition"
                 src="@/assets/exec-jobs.jpg"
@@ -116,11 +135,13 @@
               </v-img>
             </div>
           </v-col>
+        </v-row>
+        <v-row>
           <v-col>
             <a
               href="javascript:void(0)"
               style="
-                color: #00cdcd;
+                color: #fa2964;
                 font-size: 14px;
                 font-weight: 600;
                 line-height: 19px;
@@ -133,14 +154,13 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title">Sign up / Register</h2>
+        <h2 class="footer_title">Jobseekers</h2>
         <p
           class="footer_paragraph"
           style="margin-bottom: 16px; margin-top: 34px"
         >
-          Sign up and be part of the Gypsy Community. Please Register for a
-          Gypsy ID which can be used for all our Apps.<br />
-          Type your email and press get started.
+          Sign Up and be part of our community of Healthcare Jobs around the
+          world. Please type your email and press get started.
         </p>
         <input class="footer_input" placeholder="Type your email" />
         <v-btn
@@ -148,7 +168,7 @@
             width: inherit;
             border-radius: 0 !important;
             margin-top: 16px;
-            background: #00cdcd;
+            background: #fa2964;
             color: white;
           "
         >
@@ -159,14 +179,12 @@
   </v-container>
 
   <v-footer class="bg-black text-center footer__content">
-    <div class="footer_text">
-      @ The gypsy International | Singapore, India 2023 - 2025
-    </div>
+    <v-spacer></v-spacer>
     <div style="display: flex; justify-content: center">
-      <v-btn variant="text" color="#00CDCD" icon="mdi-facebook" />
-      <v-btn variant="text" color="#00CDCD" icon="mdi-twitter" />
-      <v-btn variant="text" color="#00CDCD" icon="mdi-instagram" />
-      <v-btn variant="text" color="#00CDCD" icon="mdi-youtube" />
+      <v-btn variant="text" color="#FA2964" icon="mdi-facebook" />
+      <v-btn variant="text" color="#FA2964" icon="mdi-twitter" />
+      <v-btn variant="text" color="#FA2964" icon="mdi-instagram" />
+      <v-btn variant="text" color="#FA2964" icon="mdi-youtube" />
     </div>
   </v-footer>
 </template>
@@ -183,14 +201,15 @@ export default {
   position: relative;
   overflow: hidden;
   min-height: 10px;
+  height: 50px;
 }
 .our-apps-img {
-  max-width: 100%;
-  transition: all 0.3s;
-  display: block;
-  width: 100%;
-  height: auto;
-  transform: scale(1);
+  transition: all 0.3s !important;
+  transform: scale(1) !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .our-apps:hover .our-apps-img {

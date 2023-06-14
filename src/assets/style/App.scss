@@ -186,11 +186,11 @@ header {
 }
 .footer_title::before {
   position: absolute;
-  top: 30px;
+  top: 40px;
   content: '';
   width: 60px;
   height: 2px;
-  background-color: #00cdcd;
+  background-color: #fa2964;
 }
 .footer_social,
 .footer_links {
@@ -236,7 +236,7 @@ header {
   width: inherit;
 }
 .footer_input {
-  border: 1px solid #00cdcd;
+  border: 1px solid #fa2964;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -390,9 +390,9 @@ header {
   margin-top: 90px;
   min-height: calc(80vh - 90px);
   //object-fit: cover !important;
-  background-image: url('@/assets/syringe-main.jpg');
+  background-image: url('@/assets/banner.png');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
 }
 .bg-image img {
   object-fit: cover !important;
