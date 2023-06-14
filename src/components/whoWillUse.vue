@@ -1,0 +1,141 @@
+<template>
+  <v-container>
+    <div class="sec-title">
+      <h2><span>WHO WILL </span>USE</h2>
+      <p>Everyone in Healthcare</p>
+    </div>
+    <v-row>
+      <v-col cols="4" v-for="(card, i) in cardItems" :key="i">
+        <v-lazy :options="{ threshold: 0.5 }" min-height="400">
+          <v-card class="mx-auto card-item" height="400">
+            <v-img
+              :src="card.img"
+              height="100%"
+              width="100%"
+              class="card-image"
+              cover
+            >
+              <template #placeholder> <div class="skeleton" /> </template
+            ></v-img>
+            <v-card-title class="card-title px-10">
+              <h3 class="mb-4">{{ card.title }}</h3>
+              <v-btn variant="flat" :color="card.btnColor">{{
+                card.btnText
+              }}</v-btn>
+            </v-card-title>
+          </v-card>
+        </v-lazy>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      cardItems: [
+        {
+          img: require('@/assets/use-1.jpg'),
+          title: 'Job Seekers',
+          btnText: 'Signup / Register',
+          btnColor: '#0596D5',
+        },
+        {
+          img: require('@/assets/use-2.jpg'),
+          title: 'Employers',
+          btnText: 'Open free acount',
+          btnColor: '#C82333',
+        },
+        {
+          img: require('@/assets/use-3.jpg'),
+          title: 'Agencies',
+          btnText: 'Send Inquiry',
+          btnColor: '#218838',
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style scoped>
+.card-container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.card-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 0;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.card-image {
+  position: absolute;
+  transition: all 0.3s;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  transform: scale(1);
+}
+
+.card-item:hover .card-image {
+  transform: scale(1.2);
+}
+
+.card-title {
+  position: absolute;
+  bottom: 5%;
+  left: 100%;
+  transform: translateX(-100%);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.card-tag {
+  background: #fa2964;
+  color: #ffffff;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  padding: 5px 15px;
+  font-size: 11px;
+}
+
+.skeleton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+
+  background: linear-gradient(-90deg, #f2f2f2 0%, #e1e1e1 50%, #f2f2f2 100%);
+  background-size: 400% 400%;
+  animation: skeleton 1.6s ease infinite;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 1279px) {
+  .card-container {
+    flex-wrap: wrap;
+  }
+}
+</style>

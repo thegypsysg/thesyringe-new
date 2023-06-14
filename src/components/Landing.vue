@@ -3,6 +3,7 @@
     <Banner />
     <JobCategories />
     <CardItem />
+    <WhoWillUse />
     <hr />
     <Footer />
   </div>
@@ -13,6 +14,7 @@ import Banner from '@/components/Banner.vue';
 import Footer from '@/components/Footer.vue';
 import JobCategories from './JobCategories.vue';
 import CardItem from './CardItem.vue';
+import WhoWillUse from './whoWillUse.vue';
 </script>
 
 <script>
@@ -23,7 +25,7 @@ export default {
       drawer: false,
     };
   },
-  components: { JobCategories, CardItem },
+  components: { JobCategories, CardItem, WhoWillUse },
 };
 </script>
 
