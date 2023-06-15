@@ -1,9 +1,10 @@
 <template>
   <div>
     <Banner />
-    <div style="background-color: #f5f6ff">
+    <div style="background-color: #f5f6ff" class="mb-10">
       <JobCategories />
     </div>
+    <SpecificJobs />
     <CardItem />
     <div style="background-color: #f5f6ff">
       <WhoWillUse />
@@ -16,6 +17,7 @@ import Banner from '@/components/Banner.vue';
 import JobCategories from './JobCategories.vue';
 import CardItem from './CardItem.vue';
 import WhoWillUse from './whoWillUse.vue';
+import SpecificJobs from './SpecificJobs.vue';
 </script>
 
 <script>
@@ -26,7 +28,7 @@ export default {
       drawer: false,
     };
   },
-  components: { JobCategories, CardItem, WhoWillUse },
+  components: { JobCategories, CardItem, WhoWillUse, SpecificJobs },
 };
 </script>
 
