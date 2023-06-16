@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isSmall" class="banner-container">
-      <div class="btn-container d-flex justify-space-between pt-2 px-4">
+      <!-- <div class="btn-container d-flex justify-space-between pt-2 px-4">
         <v-btn
           size="40"
           to="/"
@@ -32,9 +32,12 @@
             <v-icon> mdi-heart-outline </v-icon>
           </v-btn>
         </div>
+      </div> -->
+      <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
+      <div class="banner-header text-center">
+        <h1>NURSING</h1>
       </div>
-      <v-img src="@/assets/job-detail-banner.jpg" />
-      <div class="section-select my-16 mx-auto pa-2">
+      <div class="w-100 d-flex justify-center mx-auto pa-2">
         <v-select
           label="Select Nursing Specialization"
           :items="[
@@ -45,6 +48,7 @@
             'Texas',
             'Wyoming',
           ]"
+          style="width: 200px !important"
           variant="outlined"
         />
       </div>
@@ -52,7 +56,7 @@
     <div v-if="!isSmall" class="banner-container-desktop">
       <v-img cover src="@/assets/job-detail-banner.jpg" />
     </div>
-    <v-container>
+    <div>
       <v-select
         v-if="!isSmall"
         label="Select Nursing Specialization"
@@ -69,7 +73,7 @@
       />
       <div
         class="card-container d-flex flex-wrap"
-        :class="{ 'mb-2 justify-center': isSmall, ' mb-8': !isSmall }"
+        :class="{ 'mb-2 justify-space-between': isSmall, ' mb-8': !isSmall }"
       >
         <!-- <v-card
         v-for="n in 18"
@@ -94,15 +98,15 @@
         >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
-              height="220"
-              width="250"
-              class="my-4 text-left"
+              :height="isSmall ? 200 : 220"
+              :width="isSmall ? 180 : 250"
+              class="my-1 text-left"
               :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
               elevation="0"
               @click="toggle"
             >
               <div
-                :class="{ 'fw-700': isSmall }"
+                v-if="!isSmall"
                 style="
                   font-size: 14px;
                   font-weight: 600;
@@ -117,6 +121,18 @@
                 }}
               </div>
               <div
+                v-if="isSmall"
+                style="
+                  font-size: 14px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2 fw-700"
+              >
+                {{ item.text.substring(0, 19) + '..' }}
+              </div>
+              <div
                 :class="{
                   'card-img-container': !isSmall,
                   'card-img-container-2': isSmall,
@@ -124,7 +140,7 @@
               >
                 <v-img
                   :src="item.image"
-                  :height="isSmall ? 55 : 220"
+                  :height="isSmall ? 200 : 220"
                   cover
                   class="card-img"
                   transition="fade-transition"
@@ -138,7 +154,7 @@
           </v-lazy>
         </div>
       </div>
-    </v-container>
+    </div>
   </div>
 </template>
 
@@ -222,8 +238,12 @@ export default {
 </script>
 
 <style scoped>
+.banner-header {
+  color: #fa2964;
+  font-weight: 900;
+}
 .banner-container {
-  height: 30vh;
+  margin-top: 150px;
   position: relative;
 }
 .btn-container {
@@ -279,8 +299,8 @@ export default {
 }
 .card-img-container-2 {
   overflow: hidden;
-  width: 55px;
-  height: 55px;
+  height: 200px;
+  width: 180px;
   margin: auto;
 }
 

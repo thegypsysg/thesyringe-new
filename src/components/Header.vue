@@ -1,6 +1,9 @@
 <template>
   <v-app-bar
-    :class="{ 'app-bar-mobile': isSmall }"
+    :class="{
+      'app-bar-mobile-1': isSmall && isHome,
+      'app-bar-mobile-2': isSmall && !isHome,
+    }"
     color="white"
     elevation="1"
     fixed
@@ -77,8 +80,9 @@
     <template v-if="!isWelcome" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
+        :class="{ 'mb-n10': !isHome }"
       >
-        <div>
+        <div v-if="isHome">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
@@ -124,7 +128,7 @@
           </button>
         </form>
 
-        <div class="my-slide d-flex">
+        <div v-if="isHome" class="my-slide d-flex">
           <v-btn
             class="sub-menu-btn view-all"
             :class="{
@@ -336,6 +340,9 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
+    isHome() {
+      return this.$route.path === '/';
+    },
     ...mapState(['activeTag']),
     trendingBtn() {
       return [
@@ -416,8 +423,11 @@ export default {
 .v-app-bar.v-toolbar {
   max-width: 100%;
 }
-.app-bar-mobile {
+.app-bar-mobile-1 {
   height: 29vh;
+}
+.app-bar-mobile-2 {
+  height: 17vh;
 }
 
 .divider {

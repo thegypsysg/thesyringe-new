@@ -131,7 +131,10 @@
     min-height: 40vh !important;
   }
   .navbar__search {
-    max-width: 300px !important;
+    width: 350px !important;
+  }
+  .navbar__search__mobile {
+    width: 350px !important;
   }
   .trending__app__wrapper .v-col-sm-6 {
     flex: 0 0 50%;
