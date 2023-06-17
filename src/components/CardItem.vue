@@ -4,8 +4,8 @@
       <h2><span>EMPLOYER </span>SETTINGS</h2>
       <p>List of places where you can find work</p>
     </div>
-    <v-row class="mb-8">
-      <v-col cols="4">
+    <v-row class="mb-8 d-flex" :class="{ 'flex-column': isSmall }">
+      <v-col :cols="isSmall ? 12 : 4">
         <div>
           <div v-for="(card, i) in cardItem1" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
@@ -32,13 +32,17 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="4">
-        <div class="card-container flex-wrap">
+      <v-col :cols="isSmall ? 12 : 4">
+        <div
+          class="card-container flex-wrap"
+          :class="{ 'card-container-2': isSmall }"
+        >
           <div v-for="(card, i) in cardItems" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="140">
               <v-card
                 class="mx-auto card-item"
-                min-width="170"
+                :class="{ 'my-2': isSmall }"
+                :min-width="!isSmall ? 170 : 155"
                 height="140"
                 elevation="0"
               >
@@ -52,13 +56,17 @@
                   <template #placeholder> <div class="skeleton" /> </template
                 ></v-img>
                 <div class="card-tag">{{ card.jobs }} Jobs</div>
-                <v-card-title class="card-title">{{ card.title }}</v-card-title>
+                <v-card-title
+                  class="card-title"
+                  :class="{ 'card-title-2': isSmall }"
+                  >{{ card.title }}</v-card-title
+                >
               </v-card>
             </v-lazy>
           </div>
         </div>
       </v-col>
-      <v-col cols="4">
+      <v-col :cols="isSmall ? 12 : 4">
         <div>
           <div v-for="(card, i) in cardItem2" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="300">
@@ -134,7 +142,30 @@ export default {
           jobs: 15,
         },
       ],
+      screenWidth: window.innerWidth,
     };
+  },
+  computed: {
+    isSmall() {
+      return this.screenWidth < 640;
+    },
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
+    previousSlideCategory() {
+      this.activeIndexCategory--;
+    },
+    nextSlideCategory() {
+      this.activeIndexCategory++;
+    },
   },
 };
 </script>
@@ -144,6 +175,9 @@ export default {
   display: flex;
   gap: 20px;
   width: 100%;
+}
+.card-container-2 {
+  gap: 5px;
 }
 
 .card-item {
@@ -182,6 +216,10 @@ export default {
   padding: 10px;
   text-align: center;
   width: 100%;
+}
+
+.card-title-2 {
+  font-size: 14px;
 }
 
 .card-tag {
