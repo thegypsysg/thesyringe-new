@@ -4,8 +4,11 @@
       <h2><span>WHO WILL </span>USE</h2>
       <p>Everyone in Healthcare</p>
     </div>
-    <v-row class="mb-8 d-flex justify-center">
-      <v-col cols="3" v-for="(card, i) in cardItems" :key="i">
+    <v-row
+      class="mb-8 d-flex justify-center"
+      :class="{ 'flex-column': isSmall }"
+    >
+      <v-col :cols="!isSmall ? 3 : 12" v-for="(card, i) in cardItems" :key="i">
         <v-lazy :options="{ threshold: 0.5 }" min-height="400">
           <v-card class="mx-auto card-item" height="400" elevation="0">
             <v-img
@@ -54,7 +57,30 @@ export default {
           btnColor: '#218838',
         },
       ],
+      screenWidth: window.innerWidth,
     };
+  },
+  computed: {
+    isSmall() {
+      return this.screenWidth < 640;
+    },
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
+    previousSlideCategory() {
+      this.activeIndexCategory--;
+    },
+    nextSlideCategory() {
+      this.activeIndexCategory++;
+    },
   },
 };
 </script>

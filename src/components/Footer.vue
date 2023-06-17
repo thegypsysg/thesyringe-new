@@ -2,7 +2,7 @@
   <v-container class="mt-6 footer_lks">
     <v-row class="d-flex justify-center">
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title">About The Gypsy</h2>
+        <h2 class="footer_title">About The Syringe</h2>
         <p
           class="footer_paragraph"
           style="margin-bottom: 16px; margin-top: 34px"
