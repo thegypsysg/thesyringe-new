@@ -1,18 +1,27 @@
 <template>
   <div>
-    <div class="promotion-container" v-for="(item, i) in items" :key="i">
-      <div class="w-100 d-flex justify-space-between px-16">
-        <h3>
-          <span style="color: #fa2964; font-weight: 700">{{ item.title }}</span>
-          IN SINGAPORE
-        </h3>
-        <router-link :to="item.path" class="text-decoration-none">
-          <h1 class="view-all">View all</h1>
-        </router-link>
-      </div>
-      <v-sheet class="mx-auto" elevation="0">
-        <v-slide-group v-model="model" class="pa-4">
-          <!-- <template #prev="{ on, attrs }">
+    <div :class="{ 'mt-16': isSmall }">
+      <div class="promotion-container" v-for="(item, i) in items" :key="i">
+        <div
+          class="w-100 d-flex justify-space-between"
+          :class="{
+            'px-16': !isSmall,
+            'px-5 section-head mt-n8 mb-n4': isSmall,
+          }"
+        >
+          <h3>
+            <span style="color: #fa2964; font-weight: 700">{{
+              item.title
+            }}</span>
+            IN SINGAPORE
+          </h3>
+          <router-link :to="item.path" class="text-decoration-none">
+            <h1 class="view-all">View all</h1>
+          </router-link>
+        </div>
+        <v-sheet class="mx-auto" elevation="0">
+          <v-slide-group v-model="model" class="pa-4">
+            <!-- <template #prev="{ on, attrs }">
               <v-btn
                 v-if="activeIndexCategory > 1"
                 color="black"
@@ -38,80 +47,103 @@
                 <v-icon>mdi-arrow-right</v-icon>
               </v-btn>
             </template> -->
-          <v-slide-group-item
-            v-for="card in item.list"
-            :key="card"
-            v-slot="{ toggle }"
-            class="mx-4"
-          >
-            <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-              <v-card
-                class="my-4 text-center mx-3"
-                height="220"
-                width="280"
-                elevation="0"
-                @click="toggle"
-              >
-                <div
-                  style="
-                    font-size: 16px;
-                    font-weight: 600;
-                    margin-bottom: 10px;
-                    line-height: 19.36px;
-                  "
-                  class="pt-2"
+            <v-slide-group-item
+              v-for="card in item.list"
+              :key="card"
+              v-slot="{ toggle }"
+              class="mx-4"
+            >
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="my-4"
+                  :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+                  :height="!isSmall ? 220 : 200"
+                  :width="!isSmall ? 280 : 200"
+                  elevation="0"
+                  @click="toggle"
                 >
-                  {{ card.text.substring(0, 11) + '..' }}
-                </div>
-                <div class="card-image-cont">
-                  <v-img
-                    :src="card.image"
-                    class="card-image"
-                    height="220"
-                    cover
-                    transition="fade-transition"
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2"
                   >
-                    <template #placeholder>
-                      <div class="skeleton skeleton-category ml-2" />
-                    </template>
-                  </v-img>
-                </div>
-              </v-card>
-            </v-lazy>
-          </v-slide-group-item>
-          <v-slide-group-item v-slot="{ toggle }">
-            <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-              <v-card
-                class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-auto pa-10"
-                height="220"
-                width="180"
-                elevation="0"
-                to="/category"
-                style="border-radius: 12px; gap: 20px"
-                @click="toggle"
-              >
-                <div
-                  class="text-left"
-                  style="font-weight: 600; font-size: 12px"
-                >
-                  <p>View All {{ item.btn }}</p>
-                </div>
-                <v-btn
-                  size="40"
-                  color="#0197d5"
-                  rounded
-                  icon
-                  v-bind="attrs"
+                    {{
+                      card.text.length >= 14
+                        ? card.text.substring(0, 14) + '..' + ' ('
+                        : card.text + ' ('
+                    }}<span style="color: #fa2964">20</span> Jobs{{ ')' }}
+                  </div>
+                  <div
+                    v-if="!isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2"
+                  >
+                    {{
+                      card.text.length >= 30
+                        ? card.text.substring(0, 30) + '..'
+                        : card.text
+                    }}
+                  </div>
+                  <div class="card-image-cont">
+                    <v-img
+                      :src="card.image"
+                      class="card-image"
+                      height="220"
+                      cover
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton skeleton-category ml-2" />
+                      </template>
+                    </v-img>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </v-slide-group-item>
+            <v-slide-group-item v-slot="{ toggle }">
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-auto pa-10"
+                  height="220"
+                  width="180"
+                  elevation="0"
                   to="/category"
-                  v-on="on"
+                  style="border-radius: 12px; gap: 20px"
+                  @click="toggle"
                 >
-                  <v-icon color="white"> mdi-arrow-right </v-icon>
-                </v-btn>
-              </v-card>
-            </v-lazy>
-          </v-slide-group-item>
-        </v-slide-group>
-      </v-sheet>
+                  <div
+                    class="text-left"
+                    style="font-weight: 600; font-size: 12px"
+                  >
+                    <p>View All {{ item.btn }}</p>
+                  </div>
+                  <v-btn
+                    size="40"
+                    color="#0197d5"
+                    rounded
+                    icon
+                    v-bind="attrs"
+                    to="/category"
+                    v-on="on"
+                  >
+                    <v-icon color="white"> mdi-arrow-right </v-icon>
+                  </v-btn>
+                </v-card>
+              </v-lazy>
+            </v-slide-group-item>
+          </v-slide-group>
+        </v-sheet>
+      </div>
     </div>
   </div>
 </template>
@@ -265,9 +297,24 @@ export default {
           ],
         },
       ],
+      screenWidth: window.innerWidth,
     };
   },
+  computed: {
+    isSmall() {
+      return this.screenWidth < 640;
+    },
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
     previousSlideCategory() {
       this.activeIndexCategory--;
     },
@@ -321,6 +368,10 @@ export default {
 
 .skeleton-category {
   width: 280px !important;
+}
+
+.section-head {
+  font-size: 12px !important;
 }
 
 @keyframes skeleton {
