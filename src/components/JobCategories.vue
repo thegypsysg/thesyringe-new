@@ -192,6 +192,8 @@
 </template>
 
 <script>
+import app from '@/util/eventBus';
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'JobCategories',
@@ -208,12 +210,43 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    app.config.globalProperties.$eventBus.$on(
+      'scrollToCardSection',
+      this.scrollToCardSection
+    );
+  },
+  beforeUnmount() {
+    app.config.globalProperties.$eventBus.$off(
+      'scrollToCardSection',
+      this.scrollToCardSection
+    );
+    // eventBus.off("filter-card-header", this.filterCards);
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     handleResize() {
       this.screenWidth = window.innerWidth;
+    },
+    scrollToCardSection() {
+      const cardSection = document.getElementById('trending');
+
+      this.$nextTick(() => {
+        if (cardSection) {
+          const cardRect = cardSection.getBoundingClientRect();
+          const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+          const offset = cardRect.top + scrollTop - 250; // Nilai offset yang diinginkan, dalam piksel
+
+          window.scrollTo({
+            top: offset,
+            behavior: 'smooth',
+          });
+        }
+      });
+      // window.scrollBy(0, -scrollOffset);
     },
   },
 };

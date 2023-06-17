@@ -1,6 +1,6 @@
 <template>
   <div class="bg-image" :class="{ 'bg-image-mobile': isSmall }">
-    <!-- <v-container
+    <v-container
       style="height: calc(80vh - 90px); display: flex; align-items: center"
     >
       <v-row :class="{ 'd-flex justify-end': !isSmall }">
@@ -37,19 +37,19 @@
               :height="isSmall ? 40 : 60"
               class="text-white elevation-0 mt-6"
               style="
-                background-color: rgb(253, 169, 0);
-                border-color: rgb(253, 169, 0);
+                background-color: #0197d5;
+                border-color: #0197d5;
                 font-size: 20px;
                 font-weight: 700;
               "
               @click="scrollToTrending"
             >
-              <span class="mr-4">Trending Apps</span>
+              <span class="mr-4">View Jobs (300)</span>
             </v-btn>
           </div>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
     <!--    <v-img class="bg-image" width="100%" src="@/assets/header.png" />-->
   </div>
 </template>
@@ -117,6 +117,6 @@ export default {
 
 <style scoped>
 .bg-image-mobile {
-  height: 53vh !important;
+  height: 73vh !important;
 }
 </style>

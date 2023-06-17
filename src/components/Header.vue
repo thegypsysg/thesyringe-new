@@ -201,7 +201,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-// import app from "@/util/eventBus";
+import app from '@/util/eventBus';
 
 // import eventBus from "@/util/eventBus";
 // import eventBus from "@/util/eventBus";
@@ -349,17 +349,13 @@ export default {
         {
           title: 'View All',
         },
-        { title: 'Promo App', tag: 'Promo App' },
-        { title: 'Alcohol App', tag: 'Alcohol App' },
-        { title: 'Jobs App', tag: 'Job App' },
-        { title: 'On The Run Apps', tag: 'On the Run App' },
-        { title: 'Housing App', tag: 'Housing App' },
-        { title: 'Travel App', tag: 'Travel App' },
-        { title: 'Staycation App', tag: 'Staycation App' },
-        { title: 'Listings App', tag: 'Listing App' },
-        { title: 'Tournaments App', tag: 'Tournament App' },
-        { title: 'Cafe App', tag: 'Cafe App' },
-        { title: 'Overseas Study App', tag: 'Overseas Study App' },
+        { title: 'Nursing Jobs', tag: 'Nursing Jobs' },
+        { title: 'Doctor Jobs', tag: 'Doctor Jobs' },
+        { title: 'Allied Jobs', tag: 'Allied Jobs' },
+        {
+          title: 'Ancillary / Executive Jobs',
+          tag: 'Ancillary / Executive Jobs',
+        },
       ];
     },
   },
@@ -374,7 +370,7 @@ export default {
     selectTag(tag) {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
 
-      // app.config.globalProperties.$eventBus.$emit("filter-card", tag);
+      app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
     },
     // emitFilterEvent(tag) {
     //   this.$emit("filter-card", tag);
