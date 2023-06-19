@@ -1,7 +1,7 @@
 <template>
   <div class="bg-image" :class="{ 'bg-image-mobile': isSmall }">
     <v-container
-      style="height: calc(80vh - 90px); display: flex; align-items: center"
+      style="height: calc(100vh - 90px); display: flex; align-items: center"
     >
       <v-row :class="{ 'd-flex justify-end': !isSmall }">
         <v-col :cols="!isSmall ? 5 : 12">
