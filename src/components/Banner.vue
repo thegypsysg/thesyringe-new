@@ -3,11 +3,11 @@
     <v-container
       style="height: calc(100vh - 90px); display: flex; align-items: center"
     >
-      <v-row :class="{ 'd-flex justify-end': !isSmall }">
+      <v-row :class="{ 'd-flex justify-start': !isSmall }">
         <v-col :cols="!isSmall ? 5 : 12">
           <div
             class="hero__text"
-            :data-aos="!isSmall ? 'fade-left' : 'fade-right'"
+            data-aos="fade-right"
             data-aos-offset="200"
             data-aos-duration="2000"
             data-aos-easing="ease-in-sine"
