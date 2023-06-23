@@ -4,38 +4,27 @@
       style="height: calc(100vh - 90px); display: flex; align-items: center"
     >
       <v-row :class="{ 'd-flex justify-start': !isSmall }">
-        <v-col :cols="!isSmall ? 5 : 12">
+        <v-col :cols="!isSmall ? 6 : 12">
           <div
-            class="hero__text"
+            class="hero_title"
             data-aos="fade-right"
             data-aos-offset="200"
             data-aos-duration="2000"
             data-aos-easing="ease-in-sine"
           >
-            <h2
-              style="color: #fff"
-              :style="{ 'font-size': !isSmall ? '45px' : '35px' }"
-            >
+            <h1 :style="{ 'font-size': !isSmall ? '96px' : '66px' }">
               Welcome !!!
-            </h2>
-            <h1
+            </h1>
+            <h2
               class="mt-2"
-              style="color: rgb(255, 236, 75)"
-              :style="{ 'font-size': !isSmall ? '55px' : '45px' }"
+              style="color: #fff; font-family: 'Oswald', sans-serif !important"
+              :style="{ 'font-size': !isSmall ? '56px' : '46px' }"
             >
-              What are you
-            </h1>
-            <h1
-              style="color: rgb(255, 236, 75)"
-              :style="{
-                'font-size': !isSmall ? '55px' : '45px',
-              }"
-            >
-              Looking for. ?
-            </h1>
+              Are you in Healthcare. ?
+            </h2>
             <v-btn
               :height="isSmall ? 40 : 60"
-              class="text-white elevation-0 mt-6"
+              class="text-white elevation-2 mt-6 px-10"
               style="
                 background-color: #0197d5;
                 border-color: #0197d5;
@@ -44,7 +33,7 @@
               "
               @click="scrollToTrending"
             >
-              <span class="mr-4">View Jobs (300)</span>
+              <span class="mr-4">View Jobs</span>
             </v-btn>
           </div>
         </v-col>
@@ -116,7 +105,18 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
 .bg-image-mobile {
   height: 73vh !important;
+}
+
+.hero_title {
+  text-shadow: 2px 2px 10px #000000;
+  font-weight: 900;
+}
+
+.hero_title h1 {
+  font-family: 'Oswald', sans-serif !important;
+  color: #ffa42e;
 }
 </style>
