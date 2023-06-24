@@ -1,16 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
-import JobCategoriesdetail from '@/components/JobCategoriesdetail.vue';
 import NursingJobs from '@/components/JobDetail/NursingJobs.vue';
 
 const routes = [
   {
     path: '/',
     component: Home,
-  },
-  {
-    path: '/job-categories',
-    component: JobCategoriesdetail,
   },
   {
     path: '/nursing-jobs',

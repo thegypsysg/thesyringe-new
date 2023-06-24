@@ -1,193 +1,151 @@
 <template>
   <v-container>
-    <div v-if="!isSmall" class="sec-title mt-4">
-      <h2><span>JOB </span>Categories</h2>
-      <p v>What Job are you looking for ?</p>
+    <div
+      id="trending-section"
+      class="jumbotron-text"
+      :class="{ 'mb-n4 mt-n10': isSmall }"
+    >
+      <h1
+        align="center"
+        class="header-title mb-n10"
+        style="font-size: 56px; font-style: normal; font-weight: 700"
+      >
+        Trending Healthcare Jobs
+      </h1>
     </div>
-    <div v-if="isSmall" id="trending" class="sec-title mt-4 mb-n2">
-      <h3>Trending Healthcare Job Categories</h3>
-    </div>
-    <div class="job-categories d-flex align-center mb-8" v-if="!isSmall">
-      <div class="job-categories-title">
-        <h1>Go beyond your imagination</h1>
-        <div class="line-divider my-3" />
-        <p>Discover your ideal experience with us</p>
-      </div>
-      <v-lazy :options="{ threshold: 0.5 }" min-height="220">
-        <v-card class="job-categories-item" elevation="0">
-          <v-img
-            min-width="230"
-            min-height="370"
-            cover
-            class="job-categories-item-img"
-            src="@/assets/nurse.png"
-            transition="fade-transition"
+  </v-container>
+
+  <v-container id="trending" class="mt-8 mx-4 mx-auto">
+    <template v-if="isSmall">
+      <v-row class="trending__app__wrapper">
+        <transition-group name="card-transition" mode="out-in">
+          <v-col
+            v-for="(card, i) in trendingCard"
+            :key="i"
+            xs="6"
+            sm="6"
+            md="4"
+            cols="6"
           >
-            <template #placeholder>
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <span class="job-categories-info">Nursing</span>
-          <div class="job-categories-link" />
-        </v-card>
-      </v-lazy>
-      <v-lazy :options="{ threshold: 0.5 }" min-height="220">
-        <v-card class="job-categories-item" elevation="0">
-          <v-img
-            min-width="230"
-            min-height="370"
-            cover
-            class="job-categories-item-img"
-            src="@/assets/doctor-jobs.jpg"
-            transition="fade-transition"
-          >
-            <template #placeholder>
-              <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader />
-              </v-row> -->
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <span class="job-categories-info">Medical / Doctors</span>
-          <div class="job-categories-link" />
-        </v-card>
-      </v-lazy>
-      <v-lazy :options="{ threshold: 0.5 }" min-height="220">
-        <v-card class="job-categories-item" elevation="0">
-          <v-img
-            min-width="230"
-            min-height="370"
-            cover
-            class="job-categories-item-img"
-            src="@/assets/imaging.jpg"
-            transition="fade-transition"
-          >
-            <template #placeholder>
-              <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader type="image" />
-              </v-row> -->
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <div class="job-categories-info">Allied Health</div>
-          <div class="job-categories-link" />
-        </v-card>
-      </v-lazy>
-    </div>
-    <v-row v-if="isSmall">
-      <v-col cols="6">
-        <v-lazy :options="{ threshold: 0.5 }" min-height="120">
-          <v-card class="job-categories-item" elevation="0">
-            <v-img
-              min-width="150"
-              min-height="200"
-              cover
-              class="job-categories-item-img"
-              src="@/assets/nurse.png"
-              transition="fade-transition"
-            >
-              <template #placeholder>
-                <div class="skeleton" />
-              </template>
-            </v-img>
-            <div class="job-categories-info job-categories-info-2 pl-2">
-              <p>Nursing Jobs</p>
-              <div>
-                Ice Nurse Jobs, Enrolled Nurse Jobs, In-Patient Nurse Jobs
+            <v-lazy :options="{ threshold: 0.5 }" min-height="200">
+              <div class="trending__app d-flex justify-center mb-8">
+                <div class="title-card title-card-mobile mx-auto">
+                  <h1>{{ card.title }}</h1>
+                </div>
+                <v-card
+                  style="
+                    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+                    border-radius: 0px;
+                  "
+                >
+                  <div class="img-cont">
+                    <div class="cart clearfix animate-effect">
+                      <div class="action">
+                        <div class="card-desc-cont-mobile px-2 text-center">
+                          <h2>{{ card.title }}</h2>
+                          <p>{{ card.desc }}</p>
+                          <v-btn
+                            elevation="4"
+                            style="
+                              background-color: #ffa42e;
+                              border-radius: 0;
+                              padding-left: 6px;
+                              padding-right: 6px;
+                              padding-top: 4px;
+                              padding-bottom: 4px;
+                              font-weight: 600;
+                              font-size: 12px;
+                            "
+                          >
+                            <span class="text-black" style="">VIEW PRICES</span>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overlay"></div>
+                    <v-img
+                      :src="card.img"
+                      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                      cover
+                      height="250"
+                      class="img-item img-item-mobile"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton" />
+                      </template>
+                    </v-img>
+                  </div>
+                </v-card>
               </div>
-            </div>
-            <div class="job-categories-link job-categories-link-2" />
-          </v-card>
-        </v-lazy>
-      </v-col>
-      <v-col cols="6">
-        <v-lazy :options="{ threshold: 0.5 }" min-height="130">
-          <v-card class="job-categories-item" elevation="0">
-            <v-img
-              min-width="150"
-              min-height="200"
-              cover
-              class="job-categories-item-img"
-              src="@/assets/doctor-jobs.jpg"
-              transition="fade-transition"
-            >
-              <template #placeholder>
-                <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader />
-              </v-row> -->
-                <div class="skeleton" />
-              </template>
-            </v-img>
-            <div class="job-categories-info job-categories-info-2 pl-2">
-              <p>Medical / Doctor Jobs</p>
-              <div>Ontologist Jobs, Nephrologist Jobs, OP Jobs</div>
-            </div>
-            <div class="job-categories-link job-categories-link-2" />
-          </v-card>
-        </v-lazy>
-      </v-col>
-    </v-row>
-    <v-row v-if="isSmall">
-      <v-col cols="6">
-        <v-lazy :options="{ threshold: 0.5 }" min-height="130">
-          <v-card class="job-categories-item" elevation="0">
-            <v-img
-              min-width="150"
-              min-height="200"
-              cover
-              class="job-categories-item-img"
-              src="@/assets/imaging.jpg"
-              transition="fade-transition"
-            >
-              <template #placeholder>
-                <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader type="image" />
-              </v-row> -->
-                <div class="skeleton" />
-              </template>
-            </v-img>
-            <div class="job-categories-info job-categories-info-2 pl-2">
-              <p>Allied Health Jobs</p>
-              <div>
-                Pharmatical Jobs, Physio Jobs, OT Jobs, Medical Tech Jobs
+            </v-lazy>
+          </v-col>
+        </transition-group>
+      </v-row>
+    </template>
+    <template v-if="!isSmall">
+      <v-row class="trending__app__wrapper">
+        <transition-group name="card-transition" mode="out-in">
+          <v-col
+            v-for="(card, i) in trendingCard"
+            :key="i"
+            xs="6"
+            sm="6"
+            md="3"
+            cols="12"
+            class="card"
+          >
+            <v-lazy :options="{ threshold: 0.5 }" min-height="300">
+              <div class="trending__app d-flex justify-center mb-8">
+                <div class="title-card mx-auto">
+                  <h1>{{ card.title }}</h1>
+                </div>
+                <v-card
+                  style="
+                    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+                    border-radius: 10px;
+                  "
+                >
+                  <div class="img-cont">
+                    <div class="cart clearfix animate-effect">
+                      <div class="action">
+                        <div class="card-desc-cont px-2 text-center">
+                          <h2>{{ card.title }}</h2>
+                          <p>{{ card.desc }}</p>
+                          <v-btn
+                            elevation="4"
+                            style="
+                              background-color: #ffa42e;
+                              border-radius: 0;
+                              padding-left: 16px;
+                              padding-right: 16px;
+                              padding-top: 10px;
+                              padding-bottom: 10px;
+                            "
+                          >
+                            <span class="text-black" style="">VIEW PRICES</span>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overlay"></div>
+                    <v-img
+                      :src="card.img"
+                      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                      cover
+                      class="img-item"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton" />
+                      </template>
+                    </v-img>
+                  </div>
+                </v-card>
               </div>
-            </div>
-            <div class="job-categories-link job-categories-link-2" />
-          </v-card>
-        </v-lazy>
-      </v-col>
-      <v-col cols="6">
-        <v-lazy :options="{ threshold: 0.5 }" min-height="130">
-          <v-card class="job-categories-item" elevation="0">
-            <v-img
-              min-width="150"
-              min-height="200"
-              cover
-              class="job-categories-item-img"
-              src="@/assets/job-detail-1e.png"
-              transition="fade-transition"
-            >
-              <template #placeholder>
-                <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader type="image" />
-              </v-row> -->
-                <div class="skeleton" />
-              </template>
-            </v-img>
-            <div class="job-categories-info job-categories-info-2 pl-2">
-              <p>Ancillary / Executive Jobs</p>
-              <div>Patient Service Executives, Porter Jobs</div>
-            </div>
-            <div class="job-categories-link job-categories-link-2" />
-          </v-card>
-        </v-lazy>
-      </v-col>
-    </v-row>
-    <div v-if="!isSmall" class="w-100 d-flex justify-center mb-4">
-      <router-link to="/job-categories" class="btn btn-outline-light"
-        >View All <i class="fa fa-circle-arrow-right"></i
-      ></router-link>
-    </div>
+            </v-lazy>
+          </v-col>
+        </transition-group>
+      </v-row>
+    </template>
   </v-container>
 </template>
 
@@ -200,6 +158,24 @@ export default {
   data() {
     return {
       screenWidth: window.innerWidth,
+      trendingCard: [
+        {
+          img: require('@/assets/nurse.png'),
+          title: 'Nursing Jobs',
+        },
+        {
+          img: require('@/assets/doctor-jobs.jpg'),
+          title: 'Doctor Jobs',
+        },
+        {
+          img: require('@/assets/imaging.jpg'),
+          title: 'Lab Jobs',
+        },
+        {
+          img: require('@/assets/use-3.jpg'),
+          title: 'Nursing Jobs',
+        },
+      ],
     };
   },
   computed: {
@@ -253,103 +229,129 @@ export default {
 </script>
 
 <style scoped>
-.job-categories {
-  gap: 20px;
-}
-.job-categories-title {
-  max-width: 300px;
-}
-
-@media screen and (max-width: 1170px) {
-  .job-categories-title {
-    max-width: 200px;
-  }
-}
-
-.job-categories-title h1 {
-  font-weight: 500;
-  width: 250px;
-}
-.job-categories-title p {
-  color: #5f5f5f;
-}
-
 .line-divider {
-  height: 1px;
+  height: 2px;
   width: 150px;
-  background: rgb(107, 107, 107);
+  background: #ffa42e;
 }
 
-.job-categories-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 5px !important;
-}
-.job-categories-item-img {
-  transition: all 0.3s;
-  transform: scale(1);
-  object-fit: cover !important;
-  object-position: center !important;
-  width: 100% !important;
-  height: auto !important;
-}
-
-.job-categories-item:hover .job-categories-item-img {
-  transform: scale(1.2);
-}
-
-.job-categories-info {
+.title-card {
   position: absolute;
-  bottom: 20px;
+  top: -20px;
+  width: 80%;
   color: white;
+  background-color: #ffa42e;
+  padding: 10px auto;
   z-index: 100;
-  font-size: 20px;
-  font-weight: 300;
-  text-align: center;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 14px !important;
+  border-radius: 30px;
+}
+.title-card-mobile {
+  width: 90%;
+  font-size: 12px !important;
 }
 
-.job-categories-item:hover .job-categories-info {
-  font-weight: 500;
+.card-desc-cont h2 {
+  color: white;
 }
-
-.job-categories-info-2 {
-  text-align: left;
+.card-desc-cont p {
+  color: white;
+  margin-bottom: 10px;
 }
-
-.job-categories-info-2 p {
-  font-size: 14px;
-  margin-bottom: 5px;
+.card-desc-cont-mobile h2 {
+  font-size: 16px;
+  color: white;
 }
-.job-categories-info-2 div {
+.card-desc-cont-mobile p {
   font-size: 12px;
-  line-height: -20px !important;
+  color: white;
+  margin-bottom: 10px;
+}
+.my-slide {
+  position: relative !important;
+}
+.view-all {
+  background: #0596d5;
+  color: white;
+  height: 50px !important;
+  z-index: 100 !important;
+  /* Gaya view all yang sticky */
+}
+.card-transition-enter-active,
+.card-transition-leave-active {
+  transition: transform 0.5s, opacity 0.3s;
 }
 
-.job-categories-link {
-  background: rgba(0, 0, 0, 0.429);
-  -webkit-transition: all 0.4s;
-  transition: all 0.4s;
-  height: 70px;
-  width: 100%;
+.card-transition-enter {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.card-transition-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.img-item {
+  transition: all 0.3s;
+  width: 100% !important;
+  height: 400px;
+  transform: scale(1);
+}
+
+.img-item-mobile {
+  height: 200px;
+}
+
+.trending__app {
+  position: relative;
+}
+.trending__app:hover .title-card {
+  display: none;
+}
+
+.overlay {
   position: absolute;
-  bottom: -100px;
-}
-.job-categories-link-2 {
-  height: 100px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 100;
 }
 
-.job-categories-item:hover .job-categories-link {
-  bottom: 0;
+.trending__app:hover .overlay {
+  opacity: 1;
 }
 
 .skeleton {
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 0;
+
   background: linear-gradient(-90deg, #f2f2f2 0%, #e1e1e1 50%, #f2f2f2 100%);
   background-size: 400% 400%;
   animation: skeleton 1.6s ease infinite;
+}
+
+.desktop-card-desc {
+  height: 70px !important;
+}
+
+.btn-section {
+  background-color: #ffa42e;
+  border-color: #ffa42e;
+  font-weight: 400;
+  font-size: 20px;
+  border-radius: 50px;
+}
+.btn-section-2 {
+  font-size: 14px;
 }
 
 @keyframes skeleton {
