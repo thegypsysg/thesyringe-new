@@ -176,7 +176,9 @@
     </div>
     <ul class="v-list-cont d-flex mt-4" nav dense>
       <li class="v-list-item">
-        <v-list-item-title>Home</v-list-item-title>
+        <router-link class="text-decoration-none text-black" to="/">
+          <v-list-item-title>Home</v-list-item-title>
+        </router-link>
       </li>
 
       <li class="v-list-item">

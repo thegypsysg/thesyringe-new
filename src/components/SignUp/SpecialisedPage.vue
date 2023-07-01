@@ -39,16 +39,19 @@
                           >
                             <span
                               class="item-tag bg-white"
-                              style="color: rgb(108, 0, 0)"
+                              style="color: rgb(108, 0, 0); font-size: 12px"
                               >{{ option.tag }}</span
                             >
                             <v-img
                               :src="option.image"
-                              height="140"
+                              height="100"
                               class="item-image"
                             ></v-img>
-                            <div class="item-title text-center mx-auto">
-                              <span>{{ option.label }}</span>
+                            <div
+                              class="item-title text-center mx-auto"
+                              style="background: rgba(0, 0, 0, 0.3)"
+                            >
+                              <span class="text-white">{{ option.label }}</span>
                             </div>
                           </div>
                         </template>
