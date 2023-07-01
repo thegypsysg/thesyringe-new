@@ -15,53 +15,50 @@
             >
               <v-row>
                 <v-col :cols="isSmall ? '12' : '6'">
-                  <h1
-                    class="mb-6"
+                  <h2
+                    class="mb-1"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Step 3 - Additional Security
-                  </h1>
+                    Step 5 - Additional Information
+                  </h2>
 
                   <v-form fast-fail @submit.prevent="login">
+                    <v-autocomplete
+                      v-model="country"
+                      :items="resource.countries"
+                      label="Enter Country"
+                      class="mt-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
+                    <v-autocomplete
+                      v-model="city"
+                      :items="resource.countries"
+                      label="Enter City"
+                      class="my-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
                     <label
                       style="font-weight: 600"
                       :class="{
                         'section-mobile': isSmall,
                         'section-desktop': !isSmall,
                       }"
-                      >Enter a strong password, min 8 characters</label
+                      >Date of Birth</label
                     >
-                    <div
-                      class="d-flex"
-                      :class="{
-                        'flex-column': isSmall,
-                        'flex-row': !isSmall,
-                      }"
-                    >
+                    <div class="d-flex mb-6">
                       <v-text-field
-                        v-model="password"
-                        class="login-input mb-8"
-                        :class="{
-                          'mr-4 mt-2': !isSmall,
-                          'mt-4': isSmall,
-                        }"
-                        type="password"
+                        v-model="date"
+                        density="compact"
                         variant="outlined"
-                        placeholder="Password"
-                        :persistent-hint="true"
+                        required
+                        class="mt-2 w-50"
+                        type="date"
+                        @input="onDateInput"
                       />
-                      <v-text-field
-                        v-model="password2"
-                        class="login-input mb-8"
-                        :class="{
-                          'mt-2': !isSmall,
-                        }"
-                        type="password"
-                        variant="outlined"
-                        placeholder="Re-enter Password"
-                        :persistent-hint="true"
-                      />
+                      <p class="mt-5 pl-10 w-50">{{ age }} Years</p>
                     </div>
 
                     <div class="d-flex align-center">
@@ -101,9 +98,10 @@
                   cols="6"
                   class="d-flex align-center justify-center"
                 >
-                  <h1 style="width: 80%">
-                    Please create a password so you can use that to login.
-                  </h1>
+                  <h2 style="width: 80%">
+                    Please Enter Addition information in regards to your
+                    Nationality, Country of Passport, Date of Birth
+                  </h2>
                 </v-col>
               </v-row>
             </v-card>
@@ -131,19 +129,43 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'AdditionalSecurity',
+  name: 'AdditionalInformation',
   data() {
     return {
-      password: '',
-      password2: '',
+      nationality: null,
+      passport: null,
+      date: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
+      resource: {
+        countries: ['Singapore', 'India', 'Indonesia'],
+        cities: ['Singapore', 'India', 'Indonesia'],
+        towns: ['Marine Drive', 'Delhi', 'Jakarta'],
+      },
     };
   },
   computed: {
     isSmall() {
       return this.screenWidth < 640;
+    },
+
+    age() {
+      if (!this.date) return null;
+
+      const today = new Date();
+      const birthDate = new Date(this.date);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+
+      return age;
     },
   },
   created() {
@@ -162,9 +184,30 @@ export default {
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
-    resendOTP() {
-      this.isSuccess = true;
-      this.successMessage = 'Success send OTP';
+    onDateInput() {
+      // You can perform any necessary processing here when the date is inputted
+      // For example, you can call the calculateAge method to update the age
+      this.calculateAge(this.date);
+    },
+    calculateAge(date) {
+      if (!date) {
+        this.age = null;
+        return;
+      }
+
+      const today = new Date();
+      const birthDate = new Date(date);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+
+      this.age = age;
     },
   },
 };
@@ -184,7 +227,7 @@ export default {
 }
 
 .section-desktop {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .section-mobile {

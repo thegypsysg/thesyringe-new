@@ -67,6 +67,7 @@
                         label="Country Code"
                         class="mt-2"
                         clearable
+                        variant="outlined"
                         return-object
                         item-slot="{ item }"
                       >
@@ -130,6 +131,7 @@
                         item-text="name"
                         item-value="code"
                         label="Country Code"
+                        variant="outlined"
                         class="mt-2"
                         clearable
                         return-object
@@ -281,9 +283,6 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
-  mounted() {
-    this.getEmail();
-  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
@@ -296,9 +295,6 @@ export default {
     },
     handleResize() {
       this.screenWidth = window.innerWidth;
-    },
-    getEmail() {
-      this.email = 'charltonmendes@gmail.com';
     },
     resendOTP() {
       this.isSuccess = true;

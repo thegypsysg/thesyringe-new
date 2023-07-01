@@ -16,53 +16,39 @@
               <v-row>
                 <v-col :cols="isSmall ? '12' : '6'">
                   <h1
-                    class="mb-6"
+                    class="mb-1"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Step 3 - Additional Security
+                    Step 4 - Where are you now ?
                   </h1>
 
                   <v-form fast-fail @submit.prevent="login">
-                    <label
-                      style="font-weight: 600"
-                      :class="{
-                        'section-mobile': isSmall,
-                        'section-desktop': !isSmall,
-                      }"
-                      >Enter a strong password, min 8 characters</label
-                    >
-                    <div
-                      class="d-flex"
-                      :class="{
-                        'flex-column': isSmall,
-                        'flex-row': !isSmall,
-                      }"
-                    >
-                      <v-text-field
-                        v-model="password"
-                        class="login-input mb-8"
-                        :class="{
-                          'mr-4 mt-2': !isSmall,
-                          'mt-4': isSmall,
-                        }"
-                        type="password"
-                        variant="outlined"
-                        placeholder="Password"
-                        :persistent-hint="true"
-                      />
-                      <v-text-field
-                        v-model="password2"
-                        class="login-input mb-8"
-                        :class="{
-                          'mt-2': !isSmall,
-                        }"
-                        type="password"
-                        variant="outlined"
-                        placeholder="Re-enter Password"
-                        :persistent-hint="true"
-                      />
-                    </div>
+                    <v-autocomplete
+                      v-model="country"
+                      :items="resource.countries"
+                      label="Enter Country"
+                      class="mt-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
+                    <v-autocomplete
+                      v-model="city"
+                      :items="resource.cities"
+                      label="Enter City"
+                      class="mt-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
+                    <v-autocomplete
+                      v-model="town"
+                      :items="resource.towns"
+                      label="Enter Town"
+                      class="mt-6 w-50"
+                      :class="{ 'mb-6': !isSmall }"
+                      variant="outlined"
+                      clearable
+                    />
 
                     <div class="d-flex align-center">
                       <v-btn
@@ -102,7 +88,7 @@
                   class="d-flex align-center justify-center"
                 >
                   <h1 style="width: 80%">
-                    Please create a password so you can use that to login.
+                    Where are you currently, which Country, City, Town ?
                   </h1>
                 </v-col>
               </v-row>
@@ -131,14 +117,20 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'AdditionalSecurity',
+  name: 'WhereAreYou',
   data() {
     return {
-      password: '',
-      password2: '',
+      country: null,
+      city: null,
+      town: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
+      resource: {
+        countries: ['Singapore', 'India', 'Indonesia'],
+        cities: ['Singapore', 'India', 'Indonesia'],
+        towns: ['Marine Drive', 'Delhi', 'Jakarta'],
+      },
     };
   },
   computed: {
@@ -184,7 +176,7 @@ export default {
 }
 
 .section-desktop {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .section-mobile {

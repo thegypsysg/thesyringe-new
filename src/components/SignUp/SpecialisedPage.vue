@@ -10,68 +10,61 @@
             <v-card
               :elevation="!isSmall ? 1 : 0"
               :max-width="isSmall ? `${screenWidth - 30}px` : ''"
+              min-height="80vh"
               class="mx-auto"
               :class="{ 'login-card px-12': !isSmall, 'py-10 px-2': isSmall }"
             >
               <v-row>
-                <v-col :cols="isSmall ? '12' : '6'">
+                <v-col cols="12">
                   <h1
-                    class="mb-6"
+                    class="mb-1"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Step 3 - Additional Security
+                    Step 7 - Your Specialised Page (Any one)
                   </h1>
 
                   <v-form fast-fail @submit.prevent="login">
-                    <label
-                      style="font-weight: 600"
-                      :class="{
-                        'section-mobile': isSmall,
-                        'section-desktop': !isSmall,
-                      }"
-                      >Enter a strong password, min 8 characters</label
-                    >
-                    <div
-                      class="d-flex"
-                      :class="{
-                        'flex-column': isSmall,
-                        'flex-row': !isSmall,
-                      }"
-                    >
-                      <v-text-field
-                        v-model="password"
-                        class="login-input mb-8"
-                        :class="{
-                          'mr-4 mt-2': !isSmall,
-                          'mt-4': isSmall,
-                        }"
-                        type="password"
-                        variant="outlined"
-                        placeholder="Password"
-                        :persistent-hint="true"
-                      />
-                      <v-text-field
-                        v-model="password2"
-                        class="login-input mb-8"
-                        :class="{
-                          'mt-2': !isSmall,
-                        }"
-                        type="password"
-                        variant="outlined"
-                        placeholder="Re-enter Password"
-                        :persistent-hint="true"
-                      />
-                    </div>
+                    <v-radio-group class="w-100" v-model="skill" inline>
+                      <v-radio
+                        v-for="option in resource.skills"
+                        :key="option.value"
+                        :label="option.label"
+                        :value="option.value"
+                        :class="{ 'w-25': !isSmall, 'w-50': isSmall }"
+                      >
+                        <template #label>
+                          <div
+                            class="item-container w-100 text-center d-flex justify-center flex-column"
+                          >
+                            <span
+                              class="item-tag bg-white"
+                              style="color: rgb(108, 0, 0)"
+                              >{{ option.tag }}</span
+                            >
+                            <v-img
+                              :src="option.image"
+                              height="140"
+                              class="item-image"
+                            ></v-img>
+                            <div class="item-title text-center mx-auto">
+                              <span>{{ option.label }}</span>
+                            </div>
+                          </div>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
 
-                    <div class="d-flex align-center">
+                    <v-spacer></v-spacer>
+
+                    <div class="d-flex align-center matop">
                       <v-btn
                         type="submit"
                         variant="outlined"
                         class="login-btn"
                         :class="{
-                          'w-66 login-btn-mobile': isSmall,
-                          'w-75': !isSmall,
+                          'w-33 login-btn-mobile': isSmall,
+                          'w-25 m': !isSmall,
                         }"
                         @click="nextStep"
                       >
@@ -95,15 +88,6 @@
                       </div>
                     </div>
                   </v-form>
-                </v-col>
-                <v-col
-                  v-if="!isSmall"
-                  cols="6"
-                  class="d-flex align-center justify-center"
-                >
-                  <h1 style="width: 80%">
-                    Please create a password so you can use that to login.
-                  </h1>
                 </v-col>
               </v-row>
             </v-card>
@@ -131,14 +115,29 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'AdditionalSecurity',
+  name: 'SpecialisedPage',
   data() {
     return {
-      password: '',
-      password2: '',
+      skill: '',
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
+      resource: {
+        skills: [
+          {
+            label: 'Intensive Care Unit (ICU) Nurse Jobs',
+            value: 'icu nurse jobs',
+            image: require('@/assets/nurse.png'),
+            tag: 'Nursing',
+          },
+          {
+            label: 'Dialysis Nurse Jobs',
+            value: 'dialysis nurse jobs',
+            image: require('@/assets/allied-jobs.jpg'),
+            tag: 'Nursing',
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -184,11 +183,44 @@ export default {
 }
 
 .section-desktop {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .section-mobile {
   font-size: 16px;
+}
+
+.item-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.item-title {
+  position: absolute;
+  bottom: -100px;
+  left: 0;
+  transition: all 0.5s;
+  width: 100%;
+}
+.item-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+}
+
+.item-container:hover .item-title {
+  bottom: 10px;
+}
+
+.item-image-cont {
+  max-height: 100px;
+}
+
+.item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .login-input .v-text-field input:-webkit-autofill {
@@ -251,5 +283,9 @@ export default {
 }
 .login-footer-btn-mobile {
   gap: 40px;
+}
+
+.matop {
+  margin-top: 150px;
 }
 </style>

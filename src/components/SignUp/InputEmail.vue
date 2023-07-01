@@ -23,12 +23,17 @@
                 To begin please enter your email and press Get Started
               </p>
               <v-form fast-fail @submit.prevent="login">
-                <label style="font-size: 24px; font-weight: 600"
+                <label
+                  style="font-weight: 600"
+                  :class="{
+                    'section-mobile': isSmall,
+                    'section-desktop': !isSmall,
+                  }"
                   >Email ID</label
                 >
                 <v-text-field
                   v-model="email"
-                  class="login-input mb-8"
+                  class="login-input mb-8 mt-2"
                   label="Email Address"
                   type="email"
                   variant="outlined"
@@ -185,6 +190,14 @@ export default {
   background-size: cover;
   background-color: #cccccc;
   min-height: 100vh;
+}
+
+.section-desktop {
+  font-size: 24px;
+}
+
+.section-mobile {
+  font-size: 16px;
 }
 
 .login-input .v-text-field input:-webkit-autofill {
