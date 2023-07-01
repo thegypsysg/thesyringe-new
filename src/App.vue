@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <div>
-      <Header :is-welcome="currentRoute === '/welcome' ? true : false" />
+      <Header :is-welcome="currentRoute === '/signup' ? true : false" />
       <RouterView v-slot="{ Component }">
         <Transition name="page-opacity" mode="out-in">
           <component :is="Component" />
         </Transition>
       </RouterView>
-      <Footer />
+      <Footer v-if="currentRoute !== '/signup'" />
     </div>
   </v-app>
 </template>

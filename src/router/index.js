@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
 import NursingJobs from '@/components/JobDetail/NursingJobs.vue';
+import SignUp from '../views/SignUpForm.vue';
 
 const routes = [
   {
     path: '/',
     component: Home,
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignUp,
   },
   {
     path: '/nursing-jobs',

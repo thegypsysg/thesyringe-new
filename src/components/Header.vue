@@ -3,6 +3,7 @@
     :class="{
       'app-bar-mobile-1': isSmall && isHome,
       'app-bar-mobile-2': isSmall && !isHome,
+      'app-bar-mobile-3': isSmall && isWelcome,
     }"
     color="white"
     elevation="1"
@@ -10,12 +11,7 @@
   >
     <router-link to="/">
       <div class="logo-img-container d-flex align-center">
-        <v-img
-          class="logo-img"
-          src="@/assets/syringe-logo.jpg"
-          height="50"
-          :class="{ 'ml-8': isWelcome }"
-        >
+        <v-img class="logo-img" src="@/assets/syringe-logo.jpg" height="50">
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -70,10 +66,10 @@
         </v-list>
       </v-menu>
     </div>
-    <v-btn v-if="!isWelcome" elevation="0" class="btn_sign__up" to="/welcome">
+    <v-btn v-if="!isWelcome" elevation="0" class="btn_sign__up" to="/signup">
       Sign up / Register
     </v-btn>
-    <v-btn v-if="!isWelcome" icon @click="drawer = !drawer">
+    <v-btn icon @click="drawer = !drawer">
       <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
     </v-btn>
 
@@ -174,12 +170,7 @@
       </div>
     </template>
   </v-app-bar>
-  <v-navigation-drawer
-    v-if="!isWelcome || (isWelcome && isSmall)"
-    v-model="drawer"
-    temporary
-    location="right"
-  >
+  <v-navigation-drawer v-model="drawer" temporary location="right">
     <div class="drawer__top">
       <a style="font-size: 1.125rem; color: white">Sign up / Register</a>
     </div>
@@ -424,6 +415,9 @@ export default {
 }
 .app-bar-mobile-2 {
   height: 17vh;
+}
+.app-bar-mobile-3 {
+  height: 9vh;
 }
 
 .divider {
