@@ -11,7 +11,7 @@
   >
     <router-link to="/">
       <div class="logo-img-container d-flex align-center">
-        <v-img class="logo-img" src="@/assets/syringe-logo.jpg" height="50">
+        <v-img class="logo-img" :src="$fileURL + logo" height="50">
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -56,7 +56,7 @@
         </template>
         <v-list>
           <v-list-item
-            v-for="(item, index) in items"
+            v-for="(item, index) in city"
             :key="index"
             :value="index"
             @click="itemSelected = item.title"
@@ -97,7 +97,7 @@
             </template>
             <v-list>
               <v-list-item
-                v-for="(item, index) in items"
+                v-for="(item, index) in city"
                 :key="index"
                 :value="index"
                 @click="itemSelected = item.title"
@@ -198,6 +198,7 @@ import app from '@/util/eventBus';
 
 // import eventBus from "@/util/eventBus";
 // import eventBus from "@/util/eventBus";
+import axios from '@/util/axios';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -224,12 +225,7 @@ export default {
       // ],
       drawer: false,
       itemSelected: 'Singapore',
-      items: [
-        { title: 'Singapore', path: '#' },
-        { title: 'Mumbai', path: '#' },
-        { title: 'Goa', path: '#' },
-        { title: 'Kuala Lumpur', path: '#' },
-      ],
+      city: [],
 
       trendingCard: [
         {
@@ -324,6 +320,9 @@ export default {
         },
       ],
 
+      logo: '',
+      headerData: {},
+
       selectedType: 0,
       activeIndex: 1,
       screenWidth: window.innerWidth,
@@ -355,6 +354,11 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    this.getHeaderData();
+    this.getLogo();
+    this.getCity();
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
@@ -364,6 +368,55 @@ export default {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
 
       app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
+    },
+    getLogo() {
+      axios
+        .get(`/app/logo/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.logo = data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getCity() {
+      axios
+        .get(`/city`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.city = data.map((city) => {
+            return {
+              id: city.city_id,
+              title: city.city_name,
+              path: '#',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getHeaderData() {
+      // this.isLoading = true;
+      axios
+        .get(`/header`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.headerData = data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+      // .finally(() => {
+      //   this.isLoading = false;
+      // });
     },
     // emitFilterEvent(tag) {
     //   this.$emit("filter-card", tag);
