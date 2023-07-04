@@ -1,7 +1,11 @@
 <template>
   <div>
     <div :class="{ 'mt-16': isSmall }">
-      <div class="promotion-container" v-for="(item, i) in items" :key="i">
+      <div
+        class="promotion-container"
+        v-for="item in specificJobs"
+        :key="item.id"
+      >
         <div
           class="w-100 d-flex justify-space-between"
           :class="{
@@ -13,7 +17,7 @@
             <span style="color: #fa2964; font-weight: 700">{{
               item.title
             }}</span>
-            IN SINGAPORE
+            IN {{ itemSelected.toUpperCase() }}
           </h3>
           <router-link :to="item.path" class="text-decoration-none">
             <h1 class="view-all">View all</h1>
@@ -149,158 +153,55 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-  // props: ['items'],
+  props: ['specificJobs'],
   data() {
     return {
       model: null,
       activeIndexCategory: 1,
-      items: [
-        {
-          title: 'NURSING JOBS',
-          btn: 'Nursing',
-          path: '/nursing-jobs',
-          list: [
-            {
-              text: 'ICU Nurse',
-              image: require('@/assets/job-detail-1a.png'),
-            },
-            {
-              text: 'Dialysis Nurse',
-              image: require('@/assets/job-detail-1b.png'),
-            },
-            {
-              text: 'Medical & Surgical Nurse',
-              image: require('@/assets/job-detail-1c.png'),
-            },
-            {
-              text: 'In-Patient / Out-Patient Nurse',
-              image: require('@/assets/job-detail-1d.png'),
-            },
-            {
-              text: 'Orthopedic Nurse',
-              image: require('@/assets/job-detail-1e.png'),
-            },
-            {
-              text: 'Infection Control Nurse',
-              image: require('@/assets/job-detail-1f.png'),
-            },
-            {
-              text: 'Radiologic Imaging Nurse',
-              image: require('@/assets/job-detail-1g.png'),
-            },
-          ],
-        },
-        {
-          title: 'ALLIED HEALTH JOBS',
-          btn: 'Allied Health',
-          path: '#',
-          list: [
-            {
-              text: 'Pharmacist',
-              image: require('@/assets/job-detail-1a.png'),
-            },
-            {
-              text: 'Physiotherapist',
-              image: require('@/assets/job-detail-1b.png'),
-            },
-            {
-              text: 'Occupal Therapist',
-              image: require('@/assets/job-detail-1c.png'),
-            },
-            {
-              text: 'Audiologist',
-              image: require('@/assets/job-detail-1d.png'),
-            },
-            {
-              text: 'Podiatrist',
-              image: require('@/assets/job-detail-1e.png'),
-            },
-            {
-              text: 'Medical Technologist',
-              image: require('@/assets/job-detail-1f.png'),
-            },
-            {
-              text: 'Radiologic Imaging Nurse',
-              image: require('@/assets/job-detail-1g.png'),
-            },
-          ],
-        },
-        {
-          title: 'MEDICAL/DOCTOR JOBS',
-          btn: 'Medical/Doctor',
-          path: '#',
-          list: [
-            {
-              text: 'Medical Officer (MO)',
-              image: require('@/assets/job-detail-1a.png'),
-            },
-            {
-              text: 'Dentist',
-              image: require('@/assets/job-detail-1b.png'),
-            },
-            {
-              text: 'Physiotherapist',
-              image: require('@/assets/job-detail-1c.png'),
-            },
-            {
-              text: 'Audiologist',
-              image: require('@/assets/job-detail-1d.png'),
-            },
-            {
-              text: 'Dialysis Nurse',
-              image: require('@/assets/job-detail-1e.png'),
-            },
-            {
-              text: 'Medical & Surgical Nurse',
-              image: require('@/assets/job-detail-1f.png'),
-            },
-            {
-              text: 'Radiologic Imaging Nurse',
-              image: require('@/assets/job-detail-1g.png'),
-            },
-          ],
-        },
-        {
-          title: 'EXECUTIVES JOBS',
-          btn: 'Executives',
-          path: '#',
-          list: [
-            {
-              text: 'Dentist',
-              image: require('@/assets/job-detail-1b.png'),
-            },
-            {
-              text: 'Physiotherapist',
-              image: require('@/assets/job-detail-1c.png'),
-            },
-            {
-              text: 'Audiologist',
-              image: require('@/assets/job-detail-1d.png'),
-            },
-            {
-              text: 'Dialysis Nurse',
-              image: require('@/assets/job-detail-1e.png'),
-            },
-            {
-              text: 'Medical & Surgical Nurse',
-              image: require('@/assets/job-detail-1f.png'),
-            },
-            {
-              text: 'Radiologic Imaging Nurse',
-              image: require('@/assets/job-detail-1g.png'),
-            },
-            {
-              text: 'Medical Officer (MO)',
-              image: require('@/assets/job-detail-1a.png'),
-            },
-          ],
-        },
-      ],
+      // items: [
+      //   {
+      //     title: 'NURSING JOBS',
+      //     btn: 'Nursing',
+      //     path: '/nursing-jobs',
+      //     list: [
+      //       {
+      //         text: 'ICU Nurse',
+      //         image: require('@/assets/job-detail-1a.png'),
+      //       },
+      //       {
+      //         text: 'Dialysis Nurse',
+      //         image: require('@/assets/job-detail-1b.png'),
+      //       },
+      //       {
+      //         text: 'Medical & Surgical Nurse',
+      //         image: require('@/assets/job-detail-1c.png'),
+      //       },
+      //       {
+      //         text: 'In-Patient / Out-Patient Nurse',
+      //         image: require('@/assets/job-detail-1d.png'),
+      //       },
+      //       {
+      //         text: 'Orthopedic Nurse',
+      //         image: require('@/assets/job-detail-1e.png'),
+      //       },
+      //       {
+      //         text: 'Infection Control Nurse',
+      //         image: require('@/assets/job-detail-1f.png'),
+      //       },
+      //       {
+      //         text: 'Radiologic Imaging Nurse',
+      //         image: require('@/assets/job-detail-1g.png'),
+      //       },
+      //     ],
+      //   },
+      // ],
       screenWidth: window.innerWidth,
     };
   },
   computed: {
+    ...mapState(['itemSelected']),
     isSmall() {
       return this.screenWidth < 640;
     },

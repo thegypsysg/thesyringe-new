@@ -4,7 +4,7 @@
     <div style="background-color: #f5f6ff" class="mb-10">
       <JobCategories :trending-card="trendingCard" />
     </div>
-    <SpecificJobs />
+    <SpecificJobs :specific-jobs="specificJobs" />
     <CardItem />
     <div style="background-color: #f5f6ff">
       <WhoWillUse />
@@ -28,10 +28,12 @@ export default {
     return {
       drawer: false,
       trendingCard: [],
+      specificJobs: [],
     };
   },
   mounted() {
     this.getTrendingCardData();
+    this.getSpecificJobs();
   },
   methods: {
     getTrendingCardData() {
@@ -64,6 +66,34 @@ export default {
       // .finally(() => {
       //   this.isLoading = false;
       // });
+    },
+    getSpecificJobs() {
+      axios
+        .get(`/skills-by-groups`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.specificJobs = data.map((item) => {
+            return {
+              id: item.sgm_id || 1,
+              title: item.group_name
+                ? item.group_name.toUpperCase() + ' JOBS'
+                : '',
+              btn: item.group_name || '',
+              path: item.slug ? `/${item.slug}` : '#',
+              list: item.skills.slice(0, 6).map((skill) => {
+                return {
+                  text: skill.skills_name || '',
+                  image: skill.image ? this.$fileURL + skill.image : '',
+                };
+              }),
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
     },
   },
   components: { JobCategories, CardItem, WhoWillUse, SpecificJobs },

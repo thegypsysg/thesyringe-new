@@ -59,7 +59,7 @@
             v-for="(item, index) in city"
             :key="index"
             :value="index"
-            @click="itemSelected = item.title"
+            @click="changeItemSelected(item.title)"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -100,7 +100,7 @@
                 v-for="(item, index) in city"
                 :key="index"
                 :value="index"
-                @click="itemSelected = item.title"
+                @click="changeItemSelected(item.title)"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -209,7 +209,7 @@ export default {
       trendingBtn: [],
 
       drawer: false,
-      itemSelected: 'Singapore',
+      // itemSelected: 'Singapore',
       city: [],
 
       trendingCard: [],
@@ -223,6 +223,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['itemSelected']),
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -243,10 +244,13 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    changeItemSelected(item) {
+      this.$store.commit('setItemSelected', item);
+    },
     ...mapMutations(['setActiveTag']),
     selectTag(tag) {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
-      console.log('ok');
+      // console.log('ok');
 
       app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
     },
@@ -273,7 +277,7 @@ export default {
               tag: item.group_name || '',
             };
           });
-          console.log(this.trendingBtn);
+          // console.log(this.trendingBtn);
 
           // app.config.globalProperties.$eventBus.$emit(
           //   'update-image',
