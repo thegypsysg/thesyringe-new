@@ -20,8 +20,8 @@
       <v-row class="trending__app__wrapper">
         <transition-group name="card-transition" mode="out-in">
           <v-col
-            v-for="(card, i) in trendingCard"
-            :key="i"
+            v-for="card in filteredItemsMobile"
+            :key="card.id"
             xs="6"
             sm="6"
             md="4"
@@ -57,14 +57,14 @@
                               font-size: 12px;
                             "
                           >
-                            <span class="text-black" style="">VIEW PRICES</span>
+                            <span class="text-black" style="">VIEW JOBS</span>
                           </v-btn>
                         </div>
                       </div>
                     </div>
                     <div class="overlay"></div>
                     <v-img
-                      :src="card.img"
+                      :src="$fileURL + card.img"
                       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                       cover
                       height="250"
@@ -96,7 +96,7 @@
           >
             <v-lazy :options="{ threshold: 0.5 }" min-height="300">
               <div class="trending__app d-flex justify-center mb-8">
-                <div class="title-card mx-auto">
+                <div class="title-card mx-auto text-center">
                   <h1>{{ card.title }}</h1>
                 </div>
                 <v-card
@@ -122,14 +122,14 @@
                               padding-bottom: 10px;
                             "
                           >
-                            <span class="text-black" style="">VIEW PRICES</span>
+                            <span class="text-black" style="">VIEW JOBS</span>
                           </v-btn>
                         </div>
                       </div>
                     </div>
                     <div class="overlay"></div>
                     <v-img
-                      :src="card.img"
+                      :src="$fileURL + card.img"
                       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                       cover
                       class="img-item"
@@ -151,36 +151,50 @@
 
 <script>
 import app from '@/util/eventBus';
+import { mapState } from 'vuex';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'JobCategories',
+  props: ['trendingCard'],
   data() {
     return {
       screenWidth: window.innerWidth,
-      trendingCard: [
-        {
-          img: require('@/assets/nurse.png'),
-          title: 'Nursing Jobs',
-        },
-        {
-          img: require('@/assets/doctor-jobs.jpg'),
-          title: 'Doctor Jobs',
-        },
-        {
-          img: require('@/assets/imaging.jpg'),
-          title: 'Lab Jobs',
-        },
-        {
-          img: require('@/assets/use-3.jpg'),
-          title: 'Nursing Jobs',
-        },
-      ],
+      // trendingCard: [
+      //   {
+      //     img: require('@/assets/nurse.png'),
+      //     title: 'Nursing Jobs',
+      //   },
+      //   {
+      //     img: require('@/assets/doctor-jobs.jpg'),
+      //     title: 'Doctor Jobs',
+      //   },
+      //   {
+      //     img: require('@/assets/imaging.jpg'),
+      //     title: 'Lab Jobs',
+      //   },
+      //   {
+      //     img: require('@/assets/use-3.jpg'),
+      //     title: 'Nursing Jobs',
+      //   },
+      // ],
     };
   },
   computed: {
+    ...mapState(['activeTag']),
     isSmall() {
       return this.screenWidth < 640;
+    },
+    filteredItemsMobile() {
+      // console.log(this.activeTag);
+      if (!this.activeTag || this.activeTag == undefined) {
+        return this.trendingCard;
+      } else {
+        // const searchTextLower = this.search.toLowerCase();
+        return this.trendingCard.filter((item) => {
+          return item.tag.includes(this.activeTag);
+        });
+      }
     },
   },
   created() {
