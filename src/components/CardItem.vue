@@ -7,7 +7,7 @@
     <v-row class="mb-8 d-flex" :class="{ 'flex-column': isSmall }">
       <v-col :cols="isSmall ? 12 : 4">
         <div>
-          <div v-for="(card, i) in cardItem1" :key="i">
+          <div v-for="(card, i) in card1" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <v-card
                 class="mx-auto card-item"
@@ -37,7 +37,7 @@
           class="card-container flex-wrap"
           :class="{ 'card-container-2': isSmall }"
         >
-          <div v-for="(card, i) in cardItems" :key="i">
+          <div v-for="(card, i) in card2" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="140">
               <v-card
                 class="mx-auto card-item"
@@ -68,7 +68,7 @@
       </v-col>
       <v-col :cols="isSmall ? 12 : 4">
         <div>
-          <div v-for="(card, i) in cardItem2" :key="i">
+          <div v-for="(card, i) in card3" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="300">
               <v-card
                 class="mx-auto card-item"
@@ -104,44 +104,9 @@
 
 <script>
 export default {
+  props: ['card1', 'card2', 'card3'],
   data() {
     return {
-      cardItem1: [
-        {
-          img: require('@/assets/card-1.jpg'),
-          title: 'Public Hospital',
-          jobs: 12,
-        },
-      ],
-      cardItems: [
-        {
-          img: require('@/assets/card-2a.jpg'),
-          title: 'Clinics',
-          jobs: 2,
-        },
-        {
-          img: require('@/assets/card-2b.jpg'),
-          title: 'Imaging Center',
-          jobs: 1,
-        },
-        {
-          img: require('@/assets/card-2c.jpg'),
-          title: 'Nursing Home',
-          jobs: 2,
-        },
-        {
-          img: require('@/assets/card-2d.jpg'),
-          title: 'Dialysis Center',
-          jobs: 4,
-        },
-      ],
-      cardItem2: [
-        {
-          img: require('@/assets/card-3.jpg'),
-          title: 'Medical Centers',
-          jobs: 15,
-        },
-      ],
       screenWidth: window.innerWidth,
     };
   },
