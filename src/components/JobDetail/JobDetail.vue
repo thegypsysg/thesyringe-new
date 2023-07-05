@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div v-if="isSmall" class="banner-container">
-      <!-- <div class="btn-container d-flex justify-space-between pt-2 px-4">
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="#fa2964" indeterminate />
+    </div>
+    <template v-if="!isLoading">
+      <div v-if="isSmall" class="banner-container">
+        <!-- <div class="btn-container d-flex justify-space-between pt-2 px-4">
         <v-btn
           size="40"
           to="/"
@@ -33,12 +37,32 @@
           </v-btn>
         </div>
       </div> -->
-      <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
-      <div class="banner-header text-center">
-        <h1>{{ itemData.title }}</h1>
+        <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
+        <div class="banner-header text-center">
+          <h1>{{ itemData.title }}</h1>
+        </div>
+        <div class="w-100 d-flex justify-center mx-auto pa-2">
+          <v-select
+            :label="`Select ${itemData.title} Specialization`"
+            :items="[
+              'California',
+              'Colorado',
+              'Florida',
+              'Georgia',
+              'Texas',
+              'Wyoming',
+            ]"
+            style="width: 200px !important"
+            variant="outlined"
+          />
+        </div>
       </div>
-      <div class="w-100 d-flex justify-center mx-auto pa-2">
+      <div v-if="!isSmall" class="banner-container-desktop">
+        <v-img cover :src="itemData.image" />
+      </div>
+      <div>
         <v-select
+          v-if="!isSmall"
           :label="`Select ${itemData.title} Specialization`"
           :items="[
             'California',
@@ -48,37 +72,17 @@
             'Texas',
             'Wyoming',
           ]"
-          style="width: 200px !important"
           variant="outlined"
+          class="section-select-desktop my-12"
         />
-      </div>
-    </div>
-    <div v-if="!isSmall" class="banner-container-desktop">
-      <v-img cover :src="itemData.image" />
-    </div>
-    <div>
-      <v-select
-        v-if="!isSmall"
-        :label="`Select ${itemData.title} Specialization`"
-        :items="[
-          'California',
-          'Colorado',
-          'Florida',
-          'Georgia',
-          'Texas',
-          'Wyoming',
-        ]"
-        variant="outlined"
-        class="section-select-desktop my-12"
-      />
-      <div
-        class="card-container d-flex flex-wrap"
-        :class="{
-          'mb-2 justify-space-between': isSmall,
-          'justify-space-around mb-8': !isSmall,
-        }"
-      >
-        <!-- <v-card
+        <div
+          class="card-container d-flex flex-wrap"
+          :class="{
+            'mb-2 justify-space-between': isSmall,
+            'justify-space-around mb-8': !isSmall,
+          }"
+        >
+          <!-- <v-card
         v-for="n in 18"
         :key="n"
         class="my-4 pa-4 mx-3"
@@ -94,70 +98,71 @@
           </div>
         </div>
       </v-card> -->
-        <div
-          v-for="item in itemData.list"
-          :key="item.id"
-          :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
-        >
-          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-            <v-card
-              :height="isSmall ? 200 : 220"
-              :width="isSmall ? 180 : 250"
-              class="my-1 text-left"
-              :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
-              elevation="0"
-              @click="toggle"
-            >
-              <div
-                v-if="!isSmall"
-                style="
-                  font-size: 14px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2"
+          <div
+            v-for="item in itemData.list"
+            :key="item.id"
+            :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
+          >
+            <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+              <v-card
+                :height="isSmall ? 200 : 220"
+                :width="isSmall ? 180 : 250"
+                class="my-1 text-left"
+                :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
+                elevation="0"
+                @click="toggle"
               >
-                {{ item.text + ' ('
-                }}<span style="color: #fa2964">{{ item.jobs }}</span> Jobs{{
-                  ')'
-                }}
-              </div>
-              <div
-                v-if="isSmall"
-                style="
-                  font-size: 14px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 fw-700"
-              >
-                {{ item.text.substring(0, 19) + '..' }}
-              </div>
-              <div
-                :class="{
-                  'card-img-container': !isSmall,
-                  'card-img-container-2': isSmall,
-                }"
-              >
-                <v-img
-                  :src="item.image"
-                  :height="isSmall ? 200 : 220"
-                  cover
-                  class="card-img"
-                  transition="fade-transition"
+                <div
+                  v-if="!isSmall"
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    margin-bottom: 10px;
+                    line-height: 19.36px;
+                  "
+                  class="pt-2"
                 >
-                  <template #placeholder>
-                    <div class="skeleton" />
-                  </template>
-                </v-img>
-              </div>
-            </v-card>
-          </v-lazy>
+                  {{ item.text + ' ('
+                  }}<span style="color: #fa2964">{{ item.jobs }}</span> Jobs{{
+                    ')'
+                  }}
+                </div>
+                <div
+                  v-if="isSmall"
+                  style="
+                    font-size: 14px;
+                    font-weight: 600;
+                    margin-bottom: 10px;
+                    line-height: 19.36px;
+                  "
+                  class="pt-2 fw-700"
+                >
+                  {{ item.text.substring(0, 19) + '..' }}
+                </div>
+                <div
+                  :class="{
+                    'card-img-container': !isSmall,
+                    'card-img-container-2': isSmall,
+                  }"
+                >
+                  <v-img
+                    :src="item.image"
+                    :height="isSmall ? 200 : 220"
+                    cover
+                    class="card-img"
+                    transition="fade-transition"
+                  >
+                    <template #placeholder>
+                      <div class="skeleton" />
+                    </template>
+                  </v-img>
+                </div>
+              </v-card>
+            </v-lazy>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -169,6 +174,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       screenWidth: window.innerWidth,
       itemData: [],
       title: '',
@@ -199,6 +205,7 @@ export default {
       this.screenWidth = window.innerWidth;
     },
     getSpecificJobs() {
+      this.isLoading = true;
       axios
         .get(`/skills-by-groups`)
         .then((response) => {
@@ -222,6 +229,9 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
   },

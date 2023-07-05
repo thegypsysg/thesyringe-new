@@ -1,13 +1,18 @@
 <template>
   <div>
-    <Banner />
-    <div style="background-color: #f5f6ff" class="mb-10">
-      <JobCategories :trending-card="trendingCard" />
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
-    <SpecificJobs :specific-jobs="specificJobs" />
-    <CardItem :card1="card1" :card2="card2" :card3="card3" />
-    <div style="background-color: #f5f6ff">
-      <WhoWillUse />
+    <div v-if="!isLoading">
+      <Banner />
+      <div style="background-color: #f5f6ff" class="mb-10">
+        <JobCategories :trending-card="trendingCard" />
+      </div>
+      <SpecificJobs :specific-jobs="specificJobs" />
+      <CardItem :card1="card1" :card2="card2" :card3="card3" />
+      <div style="background-color: #f5f6ff">
+        <WhoWillUse />
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +31,7 @@ export default {
   name: 'App',
   data() {
     return {
+      isLoading: false,
       drawer: false,
       trendingCard: [],
       specificJobs: [],
@@ -41,7 +47,7 @@ export default {
   },
   methods: {
     getTrendingCardData() {
-      // this.isLoading = true;
+      this.isLoading = true;
       axios
         .get(`/skillgroups`)
         .then((response) => {
@@ -66,12 +72,13 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-      // .finally(() => {
-      //   this.isLoading = false;
-      // });
     },
     getSpecificJobs() {
+      this.isLoading = true;
       axios
         .get(`/skills-by-groups`)
         .then((response) => {
@@ -98,10 +105,13 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     getHealthWeb() {
-      // this.isLoading = true;
+      this.isLoading = true;
       axios
         .get(`/health/website-list`)
         .then((response) => {
@@ -139,10 +149,10 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-      // .finally(() => {
-      //   this.isLoading = false;
-      // });
     },
   },
   components: { JobCategories, CardItem, WhoWillUse, SpecificJobs },
@@ -156,5 +166,16 @@ export default {
   font-weight: normal;
   src: url('@/assets/font/nunito/Nunito-VariableFont_wght.ttf')
     format('opentype');
+}
+
+.loading-page {
+  height: 100vh;
+  margin-top: 300px;
+}
+
+@media (max-width: 599px) {
+  .loading-page {
+    margin-top: 450px;
+  }
 }
 </style>
