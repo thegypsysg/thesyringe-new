@@ -35,11 +35,11 @@
       </div> -->
       <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
       <div class="banner-header text-center">
-        <h1>NURSING</h1>
+        <h1>{{ itemData.title }}</h1>
       </div>
       <div class="w-100 d-flex justify-center mx-auto pa-2">
         <v-select
-          label="Select Nursing Specialization"
+          :label="`Select ${itemData.title} Specialization`"
           :items="[
             'California',
             'Colorado',
@@ -54,12 +54,12 @@
       </div>
     </div>
     <div v-if="!isSmall" class="banner-container-desktop">
-      <v-img cover src="@/assets/job-detail-banner.jpg" />
+      <v-img cover :src="itemData.image" />
     </div>
     <div>
       <v-select
         v-if="!isSmall"
-        label="Select Nursing Specialization"
+        :label="`Select ${itemData.title} Specialization`"
         :items="[
           'California',
           'Colorado',
@@ -73,7 +73,10 @@
       />
       <div
         class="card-container d-flex flex-wrap"
-        :class="{ 'mb-2 justify-space-between': isSmall, ' mb-8': !isSmall }"
+        :class="{
+          'mb-2 justify-space-between': isSmall,
+          'justify-space-around mb-8': !isSmall,
+        }"
       >
         <!-- <v-card
         v-for="n in 18"
@@ -92,8 +95,8 @@
         </div>
       </v-card> -->
         <div
-          v-for="(item, i) in list"
-          :key="i"
+          v-for="item in itemData.list"
+          :key="item.id"
           :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
         >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -159,54 +162,16 @@
 </template>
 
 <script>
+import axios from '@/util/axios';
+
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
 
   data() {
     return {
       screenWidth: window.innerWidth,
-      list: [
-        {
-          text: 'ICU Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1a.png'),
-        },
-        {
-          text: 'Dialysis Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1b.png'),
-        },
-        {
-          text: 'Medical & Surgical Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1c.png'),
-        },
-        {
-          text: 'In-Patient / Out-Patient Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1d.png'),
-        },
-        {
-          text: 'Orthopedic Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1e.png'),
-        },
-        {
-          text: 'Infection Control Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1f.png'),
-        },
-        {
-          text: 'Radiologic Imaging Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1g.png'),
-        },
-        {
-          text: 'Radiologic Imaging Nurse',
-          jobs: 20,
-          image: require('@/assets/job-detail-1g.png'),
-        },
-      ],
+      itemData: [],
+      title: '',
       // totalData: 0,
     };
   },
@@ -223,15 +188,41 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
-  // mounted() {
-  //   this.totalData = this.isSmall ? 12 : 18;
-  // },
+  mounted() {
+    this.getSpecificJobs();
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     handleResize() {
       this.screenWidth = window.innerWidth;
+    },
+    getSpecificJobs() {
+      axios
+        .get(`/skills-by-groups`)
+        .then((response) => {
+          const data = response.data.data;
+          const filterKey = this.$route.path.split('/')[1];
+          const filteredData = data.filter((d) => d.slug === filterKey);
+
+          this.itemData = {
+            title: filteredData[0].group_name || '',
+            image: this.$fileURL + filteredData[0].image || '',
+            list: filteredData[0].skills.map((item) => {
+              return {
+                id: item.skills_id || 1,
+                text: item.skills_name || '',
+                jobs: 20,
+                image: item.image ? this.$fileURL + item.image : '',
+              };
+            }),
+          };
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
     },
   },
 };

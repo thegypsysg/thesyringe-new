@@ -121,7 +121,7 @@
                   height="220"
                   width="180"
                   elevation="0"
-                  to="/category"
+                  :to="item.path"
                   style="border-radius: 12px; gap: 20px"
                   @click="toggle"
                 >
@@ -137,7 +137,7 @@
                     rounded
                     icon
                     v-bind="attrs"
-                    to="/category"
+                    :to="item.path"
                     v-on="on"
                   >
                     <v-icon color="white"> mdi-arrow-right </v-icon>
