@@ -205,11 +205,19 @@ export default {
       'scrollToCardSection',
       this.scrollToCardSection
     );
+    app.config.globalProperties.$eventBus.$on(
+      'scrollToTrendingSection',
+      this.scrollToTrendingSection
+    );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
       'scrollToCardSection',
       this.scrollToCardSection
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'scrollToTrendingSection',
+      this.scrollToTrendingSection
     );
     // eventBus.off("filter-card-header", this.filterCards);
   },
@@ -235,6 +243,21 @@ export default {
             behavior: 'smooth',
           });
         }
+      });
+      // window.scrollBy(0, -scrollOffset);
+    },
+    scrollToTrendingSection() {
+      const cardSection = document.getElementById('trending');
+      const cardRect = cardSection.getBoundingClientRect();
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const offset = this.isSmall
+        ? cardRect.top + scrollTop - 330
+        : cardRect.top + scrollTop - 230; // Nilai offset yang diinginkan, dalam piksel
+
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth',
       });
       // window.scrollBy(0, -scrollOffset);
     },
