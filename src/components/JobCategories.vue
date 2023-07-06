@@ -29,7 +29,7 @@
           >
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <div class="trending__app d-flex justify-center mb-8">
-                <div class="title-card title-card-mobile mx-auto">
+                <div class="title-card title-card-mobile text-center mx-auto">
                   <h1>{{ card.title }}</h1>
                 </div>
                 <v-card
@@ -288,7 +288,7 @@ export default {
 }
 .title-card-mobile {
   width: 90%;
-  font-size: 12px !important;
+  font-size: 10px !important;
 }
 
 .card-desc-cont h2 {
