@@ -44,16 +44,11 @@
         <div class="w-100 d-flex justify-center mx-auto pa-2">
           <v-select
             :label="`Select ${itemData.title} Specialization`"
-            :items="[
-              'California',
-              'Colorado',
-              'Florida',
-              'Georgia',
-              'Texas',
-              'Wyoming',
-            ]"
+            :items="skillsGroup"
+            v-model="selectedSkill"
             style="width: 200px !important"
             variant="outlined"
+            clearable
           />
         </div>
       </div>
@@ -64,16 +59,11 @@
         <v-select
           v-if="!isSmall"
           :label="`Select ${itemData.title} Specialization`"
-          :items="[
-            'California',
-            'Colorado',
-            'Florida',
-            'Georgia',
-            'Texas',
-            'Wyoming',
-          ]"
+          :items="skillsGroup"
+          v-model="selectedSkill"
           variant="outlined"
           class="section-select-desktop my-12"
+          clearable
         />
         <div
           class="card-container d-flex flex-wrap"
@@ -98,68 +88,71 @@
           </div>
         </div>
       </v-card> -->
-          <div
-            v-for="item in itemData.list"
-            :key="item.id"
-            :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
-          >
-            <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-              <v-card
-                :height="isSmall ? 200 : 220"
-                :width="isSmall ? 180 : 250"
-                class="my-1 text-left"
-                :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
-                elevation="0"
-                @click="toggle"
-              >
-                <div
-                  v-if="!isSmall"
-                  style="
-                    font-size: 14px;
-                    font-weight: 600;
-                    margin-bottom: 10px;
-                    line-height: 19.36px;
-                  "
-                  class="pt-2"
+          <transition-group name="card-transition" mode="out-in">
+            <div
+              v-for="item in filteredSkills"
+              :key="item.id"
+              class="card-transition"
+              :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
+            >
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  :height="isSmall ? 200 : 220"
+                  :width="isSmall ? 180 : 250"
+                  class="my-2 text-left"
+                  :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
+                  elevation="0"
+                  @click="toggle"
                 >
-                  {{ item.text + ' ('
-                  }}<span style="color: #fa2964">{{ item.jobs }}</span> Jobs{{
-                    ')'
-                  }}
-                </div>
-                <div
-                  v-if="isSmall"
-                  style="
-                    font-size: 14px;
-                    font-weight: 600;
-                    margin-bottom: 10px;
-                    line-height: 19.36px;
-                  "
-                  class="pt-2 fw-700"
-                >
-                  {{ item.text.substring(0, 19) + '..' }}
-                </div>
-                <div
-                  :class="{
-                    'card-img-container': !isSmall,
-                    'card-img-container-2': isSmall,
-                  }"
-                >
-                  <v-img
-                    :src="item.image"
-                    :height="isSmall ? 200 : 220"
-                    cover
-                    class="card-img"
-                    transition="fade-transition"
+                  <div
+                    v-if="!isSmall"
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2"
                   >
-                    <template #placeholder>
-                      <div class="skeleton" />
-                    </template>
-                  </v-img>
-                </div>
-              </v-card>
-            </v-lazy>
-          </div>
+                    {{ item.text + ' ('
+                    }}<span style="color: #fa2964">{{ item.jobs }}</span> Jobs{{
+                      ')'
+                    }}
+                  </div>
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 14px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 fw-700"
+                  >
+                    {{ item.text.substring(0, 19) + '..' }}
+                  </div>
+                  <div
+                    :class="{
+                      'card-img-container': !isSmall,
+                      'card-img-container-2': isSmall,
+                    }"
+                  >
+                    <v-img
+                      :src="item.image"
+                      :height="isSmall ? 200 : 220"
+                      cover
+                      class="card-img"
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton" />
+                      </template>
+                    </v-img>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </div>
+          </transition-group>
         </div>
       </div>
     </template>
@@ -176,8 +169,11 @@ export default {
     return {
       isLoading: false,
       screenWidth: window.innerWidth,
-      itemData: [],
+      itemData: {},
       title: '',
+      skillsGroup: [],
+      skillsCard: [],
+      selectedSkill: null,
       // totalData: 0,
     };
   },
@@ -185,10 +181,15 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
-    totalData() {
-      let tData = 0;
-      this.screenWidth < 640 ? (tData = 12) : (tData = 18);
-      return tData;
+    filteredSkills() {
+      if (!this.selectedSkill) {
+        return this.skillsCard;
+      } else {
+        // const searchTextLower = this.search.toLowerCase();
+        return this.skillsCard.filter((item) => {
+          return item.text.includes(this.selectedSkill);
+        });
+      }
     },
   },
   created() {
@@ -201,6 +202,10 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    filterCards(tag) {
+      // console.log("ok");
+      this.selectedSkill = tag;
+    },
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
@@ -214,17 +219,35 @@ export default {
           const filteredData = data.filter((d) => d.slug === filterKey);
 
           this.itemData = {
+            id: filteredData[0].sgm_id || 1,
             title: filteredData[0].group_name || '',
             image: this.$fileURL + filteredData[0].image || '',
-            list: filteredData[0].skills.map((item) => {
-              return {
-                id: item.skills_id || 1,
-                text: item.skills_name || '',
-                jobs: 20,
-                image: item.image ? this.$fileURL + item.image : '',
-              };
-            }),
           };
+          this.getListSkill(this.itemData.id);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getListSkill(id) {
+      this.isLoading = true;
+      axios
+        .get(`/skills/group/${id}`)
+        .then((response) => {
+          const data = response.data.data;
+          this.skillsGroup = data.map((item) => item.skills_name);
+          this.skillsCard = data.map((item) => {
+            return {
+              id: item.skills_id || 1,
+              text: item.skills_name || '',
+              jobs: 20,
+              image: item.image ? this.$fileURL + item.image : '',
+            };
+          });
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -283,7 +306,8 @@ export default {
 }
 
 .section-select-desktop {
-  width: 280px;
+  min-width: 280px;
+  max-width: 400px;
   margin: 0 auto;
   color: black !important;
 }
@@ -338,6 +362,20 @@ export default {
   animation: skeleton 1.6s ease infinite;
 }
 
+.card-transition-enter-active,
+.card-transition-leave-active {
+  transition: transform 0.5s, opacity 0.3s;
+}
+
+.card-transition-enter {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.card-transition-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
 @keyframes skeleton {
   0% {
     background-position: 100% 0;
