@@ -24,7 +24,7 @@
               Are you in Healthcare. ?
             </h2>
             <v-btn
-              :height="isSmall ? 40 : 60"
+              height="60"
               class="text-white elevation-2 mt-6 px-10"
               style="
                 background-color: #0197d5;
@@ -125,6 +125,6 @@ export default {
 
 .hero_title h1 {
   font-family: 'Oswald', sans-serif !important;
-  color: #ffa42e;
+  color: #fa2964;
 }
 </style>

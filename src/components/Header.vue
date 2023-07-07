@@ -154,7 +154,7 @@
                 @click="selectTag(btn.tag)"
               >
                 <p style="font-size: 12px" elevation>
-                  {{ btn.title }}
+                  {{ btn.title }} Jobs
                   <span>{{
                     countCards(btn.tag) == 0 ? '' : `(${countCards(btn.tag)})`
                   }}</span>

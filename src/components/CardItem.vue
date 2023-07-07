@@ -26,7 +26,9 @@
                 ></v-img>
                 <div class="card-tag">{{ card.jobs }} Jobs</div>
 
-                <v-card-title class="card-title">{{ card.title }}</v-card-title>
+                <v-card-title class="card-title"
+                  >{{ card.title }} Jobs</v-card-title
+                >
               </v-card>
             </v-lazy>
           </div>
@@ -58,8 +60,8 @@
                 <div class="card-tag">{{ card.jobs }} Jobs</div>
                 <v-card-title
                   class="card-title"
-                  :class="{ 'card-title-2': isSmall }"
-                  >{{ card.title }}</v-card-title
+                  :class="{ 'card-title-2': !isSmall, 'card-title-3': isSmall }"
+                  >{{ card.title }} Jobs</v-card-title
                 >
               </v-card>
             </v-lazy>
@@ -87,7 +89,9 @@
                 ></v-img>
                 <div class="card-tag">{{ card.jobs }} Jobs</div>
 
-                <v-card-title class="card-title">{{ card.title }}</v-card-title>
+                <v-card-title class="card-title"
+                  >{{ card.title }} Jobs</v-card-title
+                >
               </v-card>
             </v-lazy>
           </div>
@@ -176,7 +180,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   padding: 10px;
   text-align: center;
@@ -184,6 +188,9 @@ export default {
 }
 
 .card-title-2 {
+  font-size: 16px;
+}
+.card-title-3 {
   font-size: 14px;
 }
 

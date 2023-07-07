@@ -30,7 +30,7 @@
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <div class="trending__app d-flex justify-center mb-8">
                 <div class="title-card title-card-mobile text-center mx-auto">
-                  <h1>{{ card.title }}</h1>
+                  <h1>{{ card.title }} Jobs</h1>
                 </div>
                 <v-card
                   style="
@@ -46,8 +46,9 @@
                           <p>{{ card.desc }}</p>
                           <v-btn
                             elevation="4"
+                            :to="card.path"
                             style="
-                              background-color: #ffa42e;
+                              background-color: #fa2964;
                               border-radius: 0;
                               padding-left: 6px;
                               padding-right: 6px;
@@ -97,7 +98,7 @@
             <v-lazy :options="{ threshold: 0.5 }" min-height="300">
               <div class="trending__app d-flex justify-center mb-8">
                 <div class="title-card mx-auto text-center">
-                  <h1>{{ card.title }}</h1>
+                  <h1>{{ card.title }} Jobs</h1>
                 </div>
                 <v-card
                   style="
@@ -113,8 +114,9 @@
                           <p>{{ card.desc }}</p>
                           <v-btn
                             elevation="4"
+                            :to="card.path"
                             style="
-                              background-color: #ffa42e;
+                              background-color: #fa2964;
                               border-radius: 0;
                               padding-left: 16px;
                               padding-right: 16px;
@@ -269,7 +271,7 @@ export default {
 .line-divider {
   height: 2px;
   width: 150px;
-  background: #ffa42e;
+  background: #fa2964;
 }
 
 .title-card {
@@ -277,13 +279,13 @@ export default {
   top: -20px;
   width: 80%;
   color: white;
-  background-color: #ffa42e;
-  padding: 10px auto;
+  background-color: #fa2964;
+  padding: 5px;
   z-index: 100;
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  font-size: 14px !important;
+  font-size: 12px !important;
   border-radius: 30px;
 }
 .title-card-mobile {
@@ -381,8 +383,8 @@ export default {
 }
 
 .btn-section {
-  background-color: #ffa42e;
-  border-color: #ffa42e;
+  background-color: #fa2964;
+  border-color: #fa2964;
   font-weight: 400;
   font-size: 20px;
   border-radius: 50px;
