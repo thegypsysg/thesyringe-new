@@ -88,9 +88,7 @@ export default {
           this.specificJobs = data.map((item) => {
             return {
               id: item.sgm_id || 1,
-              title: item.group_name
-                ? item.group_name.toUpperCase() + ' JOBS'
-                : '',
+              title: item.group_name ? item.group_name + ' Jobs' : '',
               btn: item.group_name || '',
               path: item.slug ? `/${item.slug}` : '#',
               list: item.skills.slice(0, 6).map((skill) => {

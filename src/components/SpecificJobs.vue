@@ -13,11 +13,17 @@
             'px-5 section-head mt-n8 mb-n4': isSmall,
           }"
         >
-          <h3>
+          <h2 v-if="!isSmall">
             <span style="color: #fa2964; font-weight: 700">{{
               item.title
             }}</span>
-            IN {{ itemSelected.toUpperCase() }}
+            in {{ itemSelected }}
+          </h2>
+          <h3 style="font-size: 16px !important" v-if="isSmall">
+            <span style="color: #fa2964; font-weight: 700">{{
+              item.title
+            }}</span>
+            in {{ itemSelected }}
           </h3>
           <router-link :to="item.path" class="text-decoration-none">
             <h1 class="view-all">View all</h1>
