@@ -52,7 +52,7 @@ export default {
         .get(`/skillgroups`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          // console.log(data);
           this.trendingCard = data.map((item) => {
             return {
               id: item.sgm_id || 1,

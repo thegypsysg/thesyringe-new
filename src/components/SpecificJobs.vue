@@ -14,13 +14,13 @@
           }"
         >
           <h2 v-if="!isSmall">
-            <span style="color: #fa2964; font-weight: 700">{{
+            <span style="color: #ed1c2d; font-weight: 700">{{
               item.title
             }}</span>
             in {{ itemSelected }}
           </h2>
           <h3 style="font-size: 16px !important" v-if="isSmall">
-            <span style="color: #fa2964; font-weight: 700">{{
+            <span style="color: #ed1c2d; font-weight: 700">{{
               item.title
             }}</span>
             in {{ itemSelected }}
@@ -65,9 +65,9 @@
             >
               <v-lazy :options="{ threshold: 0.5 }" min-height="100">
                 <v-card
-                  class="my-4"
+                  class="my-4 card-cont"
                   :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                  :height="!isSmall ? 220 : 200"
+                  :height="!isSmall ? 250 : 200"
                   :width="!isSmall ? 280 : 200"
                   elevation="0"
                   @click="toggle"
@@ -83,10 +83,10 @@
                     class="pt-2"
                   >
                     {{
-                      card.text.length >= 14
-                        ? card.text.substring(0, 14) + '..' + ' ('
-                        : card.text + ' ('
-                    }}<span style="color: #fa2964">20</span> Jobs{{ ')' }}
+                      card.text.length >= 24
+                        ? card.text.substring(0, 24) + '..'
+                        : card.text
+                    }}
                   </div>
                   <div
                     v-if="!isSmall"
@@ -96,7 +96,7 @@
                       margin-bottom: 10px;
                       line-height: 19.36px;
                     "
-                    class="pt-2"
+                    class="pt-2 text-left"
                   >
                     {{
                       card.text.length >= 30
@@ -104,11 +104,40 @@
                         : card.text
                     }}
                   </div>
-                  <div class="card-image-cont">
+                  <div
+                    class="trending__app"
+                    :class="{
+                      'card-image-cont-1': !isSmall,
+                      'card-image-cont-2': isSmall,
+                    }"
+                  >
+                    <div class="cart clearfix animate-effect">
+                      <div class="action">
+                        <div class="px-2 text-center">
+                          <v-btn
+                            elevation="4"
+                            :to="card.path"
+                            style="
+                              background-color: #fa2964;
+                              border-radius: 0;
+                              padding-left: 6px;
+                              padding-right: 6px;
+                              padding-top: 4px;
+                              padding-bottom: 4px;
+                              font-weight: 600;
+                              font-size: 12px;
+                            "
+                          >
+                            <span class="text-black" style="">VIEW JOBS</span>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overlay"></div>
                     <v-img
                       :src="card.image"
                       class="card-image"
-                      height="220"
+                      :height="isSmall ? 130 : 220"
                       cover
                       transition="fade-transition"
                     >
@@ -116,6 +145,39 @@
                         <div class="skeleton skeleton-category ml-2" />
                       </template>
                     </v-img>
+                  </div>
+
+                  <div
+                    style="
+                      font-weight: 600;
+                      font-size: 14px;
+                      position: relative;
+                    "
+                    class="py-2 text-left"
+                  >
+                    <span style="color: #fa2964">24</span> Jobs
+                  </div>
+                  <div class="card-btn-container d-flex justify-space-between">
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      width="32"
+                      height="32"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="20" color="red">
+                        mdi-share-variant-outline
+                      </v-icon></v-btn
+                    >
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      width="32"
+                      height="32"
+                    >
+                      <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                    </v-btn>
                   </div>
                 </v-card>
               </v-lazy>
@@ -233,11 +295,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-image-cont {
+.card-cont {
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+.trending__app:hover .overlay {
+  opacity: 1;
+}
+.card-image-cont-1 {
   position: relative;
   overflow: hidden;
-  height: 220px;
+  height: 180px;
   width: 280px;
+}
+.card-image-cont-2 {
+  position: relative;
+  overflow: hidden;
+  height: 130px;
+  width: 200px;
+}
+
+.card-btn-container {
+  position: absolute;
+  gap: 10px;
+  bottom: 20px;
+  right: 30px;
+  z-index: 100;
+}
+
+.card-btn {
+  background: #fff !important;
+  border: none !important;
+  box-shadow: 1px rgba(0, 0, 0, 1) !important;
 }
 .card-image {
   width: 100%;
@@ -245,7 +345,10 @@ export default {
   transition: all 0.3s;
   transform: scale(1);
 }
-.card-image-cont:hover .card-image {
+.card-image-cont-1:hover .card-image {
+  transform: scale(1.2);
+}
+.card-image-cont-2:hover .card-image {
   transform: scale(1.2);
 }
 .promotion-container {

@@ -36,10 +36,12 @@
             <v-icon> mdi-heart-outline </v-icon>
           </v-btn>
         </div>
-      </div> -->
+        </div> -->
         <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
-        <div class="banner-header text-center">
-          <h1>{{ itemData.title }}</h1>
+        <div class="text-center mb-2">
+          <h2>
+            <span class="banner-header">{{ itemData.title }}</span> Jobs
+          </h2>
         </div>
         <div class="w-100 d-flex justify-center mx-auto pa-2">
           <v-select
@@ -56,20 +58,27 @@
         <v-img cover :src="itemData.image" />
       </div>
       <div>
-        <v-select
-          v-if="!isSmall"
-          :label="`Select ${itemData.title} Specialization`"
-          :items="skillsGroup"
-          v-model="selectedSkill"
-          variant="outlined"
-          class="section-select-desktop my-12"
-          clearable
-        />
+        <template v-if="!isSmall">
+          <div class="text-center my-4">
+            <h2>
+              <span class="banner-header">{{ itemData.title }}</span> Jobs
+            </h2>
+          </div>
+          <v-select
+            v-if="!isSmall"
+            :label="`Select ${itemData.title} Specialization`"
+            :items="skillsGroup"
+            v-model="selectedSkill"
+            variant="outlined"
+            class="section-select-desktop mb-12"
+            clearable
+          />
+        </template>
         <div
-          class="card-container d-flex flex-wrap"
+          class="card-container mx-auto"
           :class="{
-            'mb-2 justify-space-between': isSmall,
-            'justify-space-around mb-8': !isSmall,
+            'd-flex flex-wrap justify-center mb-2': isSmall,
+            'card-container-desktop mb-8': !isSmall,
           }"
         >
           <!-- <v-card
@@ -92,14 +101,14 @@
             <div
               v-for="item in filteredSkills"
               :key="item.id"
-              class="card-transition"
-              :class="{ 'card-item-2': isSmall, 'card-item': !isSmall }"
+              class="card-transition mx-auto"
+              :class="{ 'card-item-2 mx-auto': isSmall }"
             >
               <v-lazy :options="{ threshold: 0.5 }" min-height="100">
                 <v-card
-                  :height="isSmall ? 200 : 220"
-                  :width="isSmall ? 180 : 250"
-                  class="my-2 text-left"
+                  :height="isSmall ? 200 : 250"
+                  :width="isSmall ? '100%' : 300"
+                  class="my-2 text-left card-cont"
                   :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
                   elevation="0"
                   @click="toggle"
@@ -107,39 +116,68 @@
                   <div
                     v-if="!isSmall"
                     style="
-                      font-size: 14px;
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 text-left"
+                  >
+                    {{
+                      item.text.length >= 35
+                        ? item.text.substring(0, 35) + '..'
+                        : item.text
+                    }}
+                  </div>
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
                       font-weight: 600;
                       margin-bottom: 10px;
                       line-height: 19.36px;
                     "
                     class="pt-2"
                   >
-                    {{ item.text + ' ('
-                    }}<span style="color: #fa2964">{{ item.jobs }}</span> Jobs{{
-                      ')'
+                    {{
+                      item.text.length >= 50
+                        ? item.text.substring(0, 50) + '..'
+                        : item.text
                     }}
                   </div>
                   <div
-                    v-if="isSmall"
-                    style="
-                      font-size: 14px;
-                      font-weight: 600;
-                      margin-bottom: 10px;
-                      line-height: 19.36px;
-                    "
-                    class="pt-2 fw-700"
-                  >
-                    {{ item.text.substring(0, 19) + '..' }}
-                  </div>
-                  <div
+                    class="trending__app"
                     :class="{
                       'card-img-container': !isSmall,
                       'card-img-container-2': isSmall,
                     }"
                   >
+                    <div class="cart clearfix animate-effect">
+                      <div class="action">
+                        <div class="px-2 text-center">
+                          <v-btn
+                            elevation="4"
+                            :to="item.path"
+                            style="
+                              background-color: #fa2964;
+                              border-radius: 0;
+                              padding-left: 6px;
+                              padding-right: 6px;
+                              padding-top: 4px;
+                              padding-bottom: 4px;
+                              font-weight: 600;
+                              font-size: 12px;
+                            "
+                          >
+                            <span class="text-black" style="">VIEW JOBS</span>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overlay"></div>
                     <v-img
                       :src="item.image"
-                      :height="isSmall ? 200 : 220"
+                      :height="isSmall ? 120 : 170"
                       cover
                       class="card-img"
                       transition="fade-transition"
@@ -148,6 +186,39 @@
                         <div class="skeleton" />
                       </template>
                     </v-img>
+                  </div>
+                  <div
+                    style="
+                      font-weight: 600;
+                      font-size: 14px;
+                      position: relative;
+                    "
+                    class="py-2 text-left"
+                  >
+                    <span style="color: #fa2964">24</span> Jobs
+                  </div>
+
+                  <div class="card-btn-container d-flex justify-space-between">
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      width="32"
+                      height="32"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="20" color="red">
+                        mdi-share-variant-outline
+                      </v-icon></v-btn
+                    >
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      width="32"
+                      height="32"
+                    >
+                      <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                    </v-btn>
                   </div>
                 </v-card>
               </v-lazy>
@@ -312,20 +383,52 @@ export default {
   color: black !important;
 }
 
+.card-item-2 {
+  width: 95% !important;
+}
+
 .card-container {
   width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+.trending__app:hover .overlay {
+  opacity: 1;
+}
+
+.card-container-desktop {
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+
+.card-cont {
+  position: relative;
 }
 
 .card-img-container {
   position: relative;
   overflow: hidden;
-  height: 220px;
-  width: 250px;
+  height: 170px;
+  width: 300px;
 }
 .card-img-container-2 {
+  position: relative;
   overflow: hidden;
-  height: 200px;
-  width: 180px;
+  height: 120px;
+  width: 100%;
   margin: auto;
 }
 
@@ -337,6 +440,23 @@ export default {
 }
 .card-img-container:hover .card-img {
   transform: scale(1.2);
+}
+.card-img-container-2:hover .card-img {
+  transform: scale(1.2);
+}
+
+.card-btn-container {
+  position: absolute;
+  gap: 10px;
+  bottom: 25px;
+  right: 20px;
+  z-index: 100;
+}
+
+.card-btn {
+  background: #fff !important;
+  border: none !important;
+  box-shadow: 1px rgba(0, 0, 0, 1) !important;
 }
 
 .card-text {
