@@ -49,16 +49,19 @@
                             :to="card.path"
                             style="
                               background-color: #fa2964;
-                              border-radius: 0;
+                              border-radius: 50px;
                               padding-left: 6px;
-                              padding-right: 6px;
-                              padding-top: 4px;
+                              padding-right: 4px;
+                              padding-top: 2px;
                               padding-bottom: 4px;
                               font-weight: 600;
                               font-size: 12px;
                             "
                           >
-                            <span class="text-black" style="">VIEW JOBS</span>
+                            <span class="text-white" style="">View Jobs</span>
+                            <v-icon right style="color: #fff">
+                              mdi-chevron-right
+                            </v-icon>
                           </v-btn>
                         </div>
                       </div>
@@ -117,14 +120,17 @@
                             :to="card.path"
                             style="
                               background-color: #fa2964;
-                              border-radius: 0;
+                              border-radius: 50px;
                               padding-left: 16px;
-                              padding-right: 16px;
-                              padding-top: 10px;
+                              padding-right: 14px;
+                              padding-top: 8px;
                               padding-bottom: 10px;
                             "
                           >
-                            <span class="text-black" style="">VIEW JOBS</span>
+                            <span class="text-white" style="">View Jobs</span>
+                            <v-icon right style="color: #fff">
+                              mdi-chevron-right
+                            </v-icon>
                           </v-btn>
                         </div>
                       </div>

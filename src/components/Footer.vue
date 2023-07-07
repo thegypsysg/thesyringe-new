@@ -278,7 +278,7 @@ export default {
   position: relative;
   overflow: hidden;
   min-height: 10px;
-  height: 50px;
+  height: 70px;
 }
 .our-apps-img {
   transition: all 0.3s;

@@ -67,8 +67,8 @@
                 <v-card
                   class="my-4 card-cont"
                   :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                  :height="!isSmall ? 250 : 200"
-                  :width="!isSmall ? 280 : 200"
+                  :height="!isSmall ? 250 : 240"
+                  :width="!isSmall ? 280 : 250"
                   elevation="0"
                   @click="toggle"
                 >
@@ -119,8 +119,8 @@
                             :to="card.path"
                             style="
                               background-color: #fa2964;
-                              border-radius: 0;
-                              padding-left: 6px;
+                              border-radius: 50px;
+                              padding-left: 8px;
                               padding-right: 6px;
                               padding-top: 4px;
                               padding-bottom: 4px;
@@ -128,7 +128,10 @@
                               font-size: 12px;
                             "
                           >
-                            <span class="text-black" style="">VIEW JOBS</span>
+                            <span class="text-white" style="">View Jobs</span>
+                            <v-icon right style="color: #fff">
+                              mdi-chevron-right
+                            </v-icon>
                           </v-btn>
                         </div>
                       </div>
@@ -137,7 +140,7 @@
                     <v-img
                       :src="card.image"
                       class="card-image"
-                      :height="isSmall ? 130 : 220"
+                      :height="isSmall ? 170 : 220"
                       cover
                       transition="fade-transition"
                     >
@@ -161,8 +164,8 @@
                     <v-btn
                       color="black"
                       class="card-btn"
-                      width="32"
-                      height="32"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
                       icon="mdi-share-variant-outline"
                     >
                       <v-icon size="20" color="red">
@@ -173,8 +176,8 @@
                       class="card-btn"
                       color="black"
                       icon="mdi-heart-outline"
-                      width="32"
-                      height="32"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
                     >
                       <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
                     </v-btn>
@@ -322,8 +325,8 @@ export default {
 .card-image-cont-2 {
   position: relative;
   overflow: hidden;
-  height: 130px;
-  width: 200px;
+  height: 170px;
+  width: 250px;
 }
 
 .card-btn-container {
