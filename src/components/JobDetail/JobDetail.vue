@@ -106,7 +106,7 @@
             >
               <v-lazy :options="{ threshold: 0.5 }" min-height="100">
                 <v-card
-                  :height="isSmall ? 280 : 250"
+                  :height="isSmall ? 320 : 250"
                   :width="isSmall ? '100%' : 300"
                   class="my-2 text-left card-cont"
                   :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
@@ -126,7 +126,7 @@
                     {{
                       item.text.length >= 35
                         ? item.text.substring(0, 35) + '..'
-                        : item.text
+                        : item.text + ' Jobs'
                     }}
                   </div>
                   <div
@@ -142,7 +142,7 @@
                     {{
                       item.text.length >= 50
                         ? item.text.substring(0, 50) + '..'
-                        : item.text
+                        : item.text + ' Jobs'
                     }}
                   </div>
                   <div
@@ -180,7 +180,7 @@
                     <div class="overlay"></div>
                     <v-img
                       :src="item.image"
-                      :height="isSmall ? 200 : 170"
+                      :height="isSmall ? 240 : 170"
                       cover
                       class="card-img"
                       transition="fade-transition"
@@ -201,15 +201,18 @@
                     <span style="color: #fa2964">24</span> Jobs
                   </div>
 
-                  <div class="card-btn-container d-flex justify-space-between">
+                  <div
+                    class="card-btn-container d-flex justify-space-between"
+                    :class="{ 'card-btn-container-2': isSmall }"
+                  >
                     <v-btn
                       color="black"
                       class="card-btn"
-                      :width="isSmall ? 40 : 32"
-                      :height="isSmall ? 40 : 32"
+                      :width="isSmall ? 45 : 32"
+                      :height="isSmall ? 45 : 32"
                       icon="mdi-share-variant-outline"
                     >
-                      <v-icon size="20" color="red">
+                      <v-icon :size="isSmall ? 25 : 20" color="red">
                         mdi-share-variant-outline
                       </v-icon></v-btn
                     >
@@ -217,10 +220,12 @@
                       class="card-btn"
                       color="black"
                       icon="mdi-heart-outline"
-                      :width="isSmall ? 40 : 32"
-                      :height="isSmall ? 40 : 32"
+                      :width="isSmall ? 45 : 32"
+                      :height="isSmall ? 45 : 32"
                     >
-                      <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                      <v-icon :size="isSmall ? 25 : 20" color="red">
+                        mdi-heart-outline
+                      </v-icon>
                     </v-btn>
                   </div>
                 </v-card>
@@ -430,7 +435,7 @@ export default {
 .card-img-container-2 {
   position: relative;
   overflow: hidden;
-  height: 200px;
+  height: 240px;
   width: 100%;
   margin: auto;
 }
@@ -454,6 +459,11 @@ export default {
   bottom: 25px;
   right: 20px;
   z-index: 100;
+}
+.card-btn-container-2 {
+  gap: 20px;
+  bottom: 15px;
+  right: 30px;
 }
 
 .card-btn {

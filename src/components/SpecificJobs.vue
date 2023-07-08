@@ -83,9 +83,9 @@
                     class="pt-2"
                   >
                     {{
-                      card.text.length >= 24
-                        ? card.text.substring(0, 24) + '..'
-                        : card.text
+                      card.text.length >= 28
+                        ? card.text.substring(0, 28) + '..'
+                        : card.text + ' Jobs'
                     }}
                   </div>
                   <div
@@ -99,9 +99,9 @@
                     class="pt-2 text-left"
                   >
                     {{
-                      card.text.length >= 30
-                        ? card.text.substring(0, 30) + '..'
-                        : card.text
+                      card.text.length >= 32
+                        ? card.text.substring(0, 32) + '..'
+                        : card.text + ' Jobs'
                     }}
                   </div>
                   <div
