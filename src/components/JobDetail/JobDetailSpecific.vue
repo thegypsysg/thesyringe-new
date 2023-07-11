@@ -38,7 +38,7 @@
         </div>
         </div> -->
         <!-- <v-img src="@/assets/job-detail-banner.jpg" /> -->
-        <div class="text-center mb-2">
+        <!-- <div class="text-center mb-2">
           <h2>
             <span class="banner-header">{{ itemData.title }}</span> Specific
             Jobs
@@ -53,7 +53,7 @@
             variant="outlined"
             clearable
           />
-        </div>
+        </div> -->
       </div>
       <div v-if="!isSmall" class="banner-container-desktop text-center">
         <v-img cover :src="itemData.image" />
@@ -568,7 +568,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 150px;
+  margin-top: 250px;
   position: relative;
 }
 .btn-container {

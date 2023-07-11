@@ -228,7 +228,7 @@ export default {
       return this.screenWidth < 640;
     },
     isHome() {
-      return this.$route.path === '/';
+      return this.$route.path === '/' || this.$route.path === '/physiojobs';
     },
     ...mapState(['activeTag']),
   },
