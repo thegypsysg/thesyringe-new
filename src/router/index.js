@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
 import JobDetail from '@/components/JobDetail/JobDetail.vue';
+import JobDetailSpecific from '@/components/JobDetail/JobDetailSpecific.vue';
 import SignUp from '../views/SignUpForm.vue';
 
 const routes = [
@@ -28,6 +29,11 @@ const routes = [
   {
     path: '/executives-jobs',
     component: JobDetail,
+  },
+  {
+    name: 'detail page specific',
+    path: '/:name',
+    component: JobDetailSpecific,
   },
 ];
 

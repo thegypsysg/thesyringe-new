@@ -96,6 +96,9 @@ export default {
                   id: skill.skills_id || 1,
                   text: skill.skills_name || '',
                   image: skill.image ? this.$fileURL + skill.image : '',
+                  path:
+                    skill.description.split(' ').join('').toLowerCase() +
+                    'jobs',
                 };
               }),
             };

@@ -13,6 +13,10 @@ body {
   height: 50px !important;
 }
 
+.wrapper-box {
+  max-width: 1024px;
+}
+
 :deep(.pencarian) {
   border-block-color: red;
 }

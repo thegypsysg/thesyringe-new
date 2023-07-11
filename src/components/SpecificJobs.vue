@@ -116,7 +116,7 @@
                         <div class="px-2 text-center">
                           <v-btn
                             elevation="4"
-                            :to="card.path"
+                            :to="`/${card.path}`"
                             style="
                               background-color: #fa2964;
                               border-radius: 50px;
