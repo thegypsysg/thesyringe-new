@@ -24,6 +24,7 @@ import CardItem from './CardItem.vue';
 import WhoWillUse from './whoWillUse.vue';
 import SpecificJobs from './SpecificJobs.vue';
 import axios from '@/util/axios';
+import app from '@/util/eventBus';
 </script>
 
 <script>
@@ -44,8 +45,12 @@ export default {
     this.getTrendingCardData();
     this.getSpecificJobs();
     this.getHealthWeb();
+    this.checkNotDetail();
   },
   methods: {
+    checkNotDetail() {
+      app.config.globalProperties.$eventBus.$emit('getHeaderLanding');
+    },
     getTrendingCardData() {
       this.isLoading = true;
       axios

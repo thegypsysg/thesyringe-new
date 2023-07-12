@@ -229,7 +229,7 @@
                       {{
                         card.text.length >= 28
                           ? card.text.substring(0, 28) + '..'
-                          : card.text + ' Jobs'
+                          : card.text
                       }}
                     </div>
                     <div
@@ -245,7 +245,7 @@
                       {{
                         card.text.length >= 32
                           ? card.text.substring(0, 32) + '..'
-                          : card.text + ' Jobs'
+                          : card.text
                       }}
                     </div>
                     <div
@@ -329,14 +329,15 @@
                         >
                           <h4 style="font-weight: 600">
                             {{
-                              card.text.length >= 32
-                                ? card.text.substring(0, 32) + '..'
-                                : card.text + ' Jobs'
+                              card.place.length >= 32
+                                ? card.place.substring(0, 32) + '..'
+                                : card.place + ' Jobs'
                             }}
                           </h4>
                           <p style="font-weight: 400">
-                            Outram Road
-                            <span class="text-red ml-2">4.5 kms</span
+                            {{ card.address }}
+                            <span class="text-red ml-2"
+                              >{{ card.distance }} kms</span
                             ><span class="text-muted"> away</span>
                           </p>
                         </div>
@@ -412,6 +413,7 @@
 
 <script>
 import axios from '@/util/axios';
+import app from '@/util/eventBus';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
@@ -452,29 +454,86 @@ export default {
   mounted() {
     this.getSpecificJobs();
     this.getGroups();
+    this.checkDetail();
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
+    app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
+    checkDetail() {
+      app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
+    },
     getGroups() {
-      axios
-        .get(`/groups`)
-        .then((response) => {
-          const data = response.data.data;
-          // console.log(data);
-          this.trendingBtn = data.map((group) => {
-            return {
-              id: group.app_group_id,
-              title: group.app_group_name,
-              tag: group.app_group_name,
-            };
-          });
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        });
+      this.trendingBtn = [
+        {
+          id: 1,
+          title: 'Physiotherapist',
+          tag: 'Physiotherapist',
+        },
+        {
+          id: 2,
+          title: 'Senior Physiotherapist',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 3,
+          title: 'Principal Physiotherapist',
+          tag: 'Principal Physiotherapist',
+        },
+        {
+          id: 4,
+          title: 'Physio Assistants',
+          tag: 'Physio Assistants',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+        {
+          id: 0,
+          title: '',
+          tag: '',
+        },
+      ];
+      // axios
+      //   .get(`/groups`)
+      //   .then((response) => {
+      //     const data = response.data.data;
+      //     // console.log(data);
+      //     this.trendingBtn = data.map((group) => {
+      //       return {
+      //         id: group.app_group_id,
+      //         title: group.app_group_name,
+      //         tag: group.app_group_name,
+      //       };
+      //     });
+      //   })
+      //   .catch((error) => {
+      //     // eslint-disable-next-line
+      //     console.log(error);
+      //   });
     },
     // countCards(tag) {
     //   const count = this.trendingCard.filter(
@@ -505,26 +564,166 @@ export default {
             image: this.$fileURL + filteredData[0].image || '',
           };
 
-          this.specificJobs = data
-            .map((item) => {
-              return {
-                id: item.sgm_id || 1,
-                title: item.group_name ? item.group_name + ' Jobs' : '',
-                btn: item.group_name || '',
-                path: item.slug ? `/${item.slug}` : '#',
-                list: item.skills.slice(0, 6).map((skill) => {
-                  return {
-                    id: skill.skills_id || 1,
-                    text: skill.skills_name || '',
-                    image: skill.image ? this.$fileURL + skill.image : '',
-                    path:
-                      skill.description.split(' ').join('').toLowerCase() +
-                      'jobs',
-                  };
-                }),
-              };
-            })
-            .slice(0, 2);
+          // this.specificJobs = data
+          //   .map((item) => {
+          //     return {
+          //       id: item.sgm_id || 1,
+          //       title: item.group_name ? item.group_name + ' Jobs' : '',
+          //       btn: item.group_name || '',
+          //       path: item.slug ? `/${item.slug}` : '#',
+          //       list: item.skills.slice(0, 6).map((skill) => {
+          //         return {
+          //           id: skill.skills_id || 1,
+          //           text: skill.skills_name || '',
+          //           image: skill.image ? this.$fileURL + skill.image : '',
+          //           path:
+          //             skill.description.split(' ').join('').toLowerCase() +
+          //             'jobs',
+          //         };
+          //       }),
+          //     };
+          //   })
+          //   .slice(0, 2);
+          this.specificJobs = [
+            {
+              id: 1,
+              title: 'Community Hospital',
+              btn: 'Community Hospital',
+              path: '/community-hospital',
+              list: [
+                {
+                  id: 1,
+                  text: 'Staff / Registered Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
+                  path: 'registered-nurse',
+                  place: 'Thye Hua Kwan Hospital',
+                  address: 'Ang Mu Kuo',
+                  distance: '4,5',
+                },
+                {
+                  id: 2,
+                  text: 'ICU Staff Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
+                  path: 'icu-nurse',
+                  place: 'Concorde Hospital',
+                  address: 'Serangon Road',
+                  distance: '2,3',
+                },
+                {
+                  id: 3,
+                  text: 'Enrolled Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
+                  path: 'enrolled-nurse',
+                  place: 'Tan Tock Seng Hospital',
+                  address: 'Novena',
+                  distance: '1,2',
+                },
+                {
+                  id: 4,
+                  text: 'Nurse Assistant',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
+                  path: 'nurse-assistant',
+                  place: 'Singapore General Hospital',
+                  address: 'Outram Road',
+                  distance: '4,5',
+                },
+                {
+                  id: 5,
+                  text: 'Staff / Registered Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
+                  path: 'registered-nurse',
+                  place: 'Thye Hua Kwan Hospital',
+                  address: 'Ang Mu Kuo',
+                  distance: '4,5',
+                },
+                {
+                  id: 6,
+                  text: 'ICU Staff Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
+                  path: 'icu-nurse',
+                  place: 'Concorde Hospital',
+                  address: 'Serangon Road',
+                  distance: '2,3',
+                },
+              ],
+            },
+            {
+              id: 2,
+              title: 'Private Hospital',
+              btn: 'Private Hospital',
+              path: '/private-hospital',
+              list: [
+                {
+                  id: 1,
+                  text: 'Staff / Registered Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
+                  path: 'registered-nurse',
+                  place: 'Thye Hua Kwan Hospital',
+                  address: 'Ang Mu Kuo',
+                  distance: '4,5',
+                },
+                {
+                  id: 2,
+                  text: 'ICU Staff Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
+                  path: 'icu-nurse',
+                  place: 'Concorde Hospital',
+                  address: 'Serangon Road',
+                  distance: '2,3',
+                },
+                {
+                  id: 3,
+                  text: 'Enrolled Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
+                  path: 'enrolled-nurse',
+                  place: 'Tan Tock Seng Hospital',
+                  address: 'Novena',
+                  distance: '1,2',
+                },
+                {
+                  id: 4,
+                  text: 'Nurse Assistant',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
+                  path: 'nurse-assistant',
+                  place: 'Singapore General Hospital',
+                  address: 'Outram Road',
+                  distance: '4,5',
+                },
+                {
+                  id: 5,
+                  text: 'Staff / Registered Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
+                  path: 'registered-nurse',
+                  place: 'Thye Hua Kwan Hospital',
+                  address: 'Ang Mu Kuo',
+                  distance: '4,5',
+                },
+                {
+                  id: 6,
+                  text: 'ICU Staff Nurse',
+                  image:
+                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
+                  path: 'icu-nurse',
+                  place: 'Concorde Hospital',
+                  address: 'Serangon Road',
+                  distance: '2,3',
+                },
+              ],
+            },
+          ];
+
+          console.log(this.specificJobs);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -557,6 +756,13 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+
+    previousSlide() {
+      this.activeIndex--;
+    },
+    nextSlide() {
+      this.activeIndex++;
     },
   },
 };

@@ -22,8 +22,15 @@
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
     </div>
-    <v-spacer v-if="isWelcome" />
-    <form v-if="!isWelcome" class="navbar__search navbar__search__desktop">
+    <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
+      <div v-if="!isSmall" class="divider" />
+      <span :class="{ 'header-info-span': isSmall }">Physiotherapist Jobs</span>
+    </div>
+    <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
+    <form
+      v-if="!isWelcome && !isDetail"
+      class="navbar__search navbar__search__desktop"
+    >
       <input
         id="product_name"
         class="form-control mr-sm-2"
@@ -78,6 +85,9 @@
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{ 'mb-n10': !isHome }"
       >
+        <div class="mb-n2" v-if="isDetail">
+          <h2>Physiotherapist Jobs</h2>
+        </div>
         <div v-if="isHome">
           <v-menu>
             <template #activator="{ props }">
@@ -108,6 +118,7 @@
           </v-menu>
         </div>
         <form
+          v-if="!isDetail"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -207,6 +218,7 @@ export default {
     return {
       // selectedTag: null,
       trendingBtn: [],
+      isDetail: false,
 
       drawer: false,
       // itemSelected: 'Singapore',
@@ -239,11 +251,40 @@ export default {
     this.getLogo();
     this.getCity();
     this.getTrendingCardData();
+    app.config.globalProperties.$eventBus.$on(
+      'getHeaderDetail',
+      this.getHeaderDetail
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'getHeaderLanding',
+      this.getTrendingCardData
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'removeDetail',
+      this.removeDetail
+    );
+  },
+  beforeUnmount() {
+    app.config.globalProperties.$eventBus.$off(
+      'getHeaderDetail',
+      this.getHeaderDetail
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getHeaderLanding',
+      this.getTrendingCardData
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'removeDetail',
+      this.removeDetail
+    );
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    removeDetail() {
+      this.isDetail = false;
+    },
     changeItemSelected(item) {
       this.$store.commit('setItemSelected', item);
     },
@@ -253,6 +294,31 @@ export default {
       // console.log('ok');
 
       app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
+    },
+    getHeaderDetail() {
+      this.isDetail = true;
+      this.trendingBtn = [
+        {
+          id: 1,
+          title: 'Physiotherapist',
+          tag: 'Physiotherapist',
+        },
+        {
+          id: 2,
+          title: 'Senior Physiotherapist',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 3,
+          title: 'Principal Physiotherapist',
+          tag: 'Principal Physiotherapist',
+        },
+        {
+          id: 4,
+          title: 'Physio Assistants',
+          tag: 'Physio Assistants',
+        },
+      ];
     },
     getTrendingCardData() {
       // this.isLoading = true;
