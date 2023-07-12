@@ -104,6 +104,7 @@ export default {
                   path:
                     skill.description.split(' ').join('').toLowerCase() +
                     'jobs',
+                  slug: item.slug,
                 };
               }),
             };

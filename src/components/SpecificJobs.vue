@@ -1,11 +1,7 @@
 <template>
   <div>
     <div :class="{ 'mt-16': isSmall }">
-      <div
-        class="promotion-container"
-        v-for="item in specificJobs"
-        :key="item.id"
-      >
+      <div class="promotion-container" v-for="item in items" :key="item.id">
         <div
           class="w-100 d-flex justify-space-between"
           :class="{
@@ -116,7 +112,8 @@
                         <div class="px-2 text-center">
                           <v-btn
                             elevation="4"
-                            :to="`/${card.path}`"
+                            :to="card.isLive ? `/${card.path}` : ''"
+                            @click="card.isLive ? '' : openLive(card)"
                             style="
                               background-color: #fa2964;
                               border-radius: 50px;
@@ -220,6 +217,15 @@
         </v-sheet>
       </div>
     </div>
+    <v-dialog v-model="isOpenLive" persistent width="auto">
+      <v-card width="450">
+        <v-card-text class="text-center">
+          <v-img height="100" :src="liveData.img" />
+          <h2 class="my-4">{{ liveData.title }} would be Live Soon</h2>
+          <v-btn class="mb-4" @click="closeLive()"> OK </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -229,45 +235,13 @@ export default {
   props: ['specificJobs'],
   data() {
     return {
+      isOpenLive: false,
+      liveData: {
+        img: '',
+        title: '',
+      },
       model: null,
       activeIndexCategory: 1,
-      // items: [
-      //   {
-      //     title: 'NURSING JOBS',
-      //     btn: 'Nursing',
-      //     path: '/nursing-jobs',
-      //     list: [
-      //       {
-      //         text: 'ICU Nurse',
-      //         image: require('@/assets/job-detail-1a.png'),
-      //       },
-      //       {
-      //         text: 'Dialysis Nurse',
-      //         image: require('@/assets/job-detail-1b.png'),
-      //       },
-      //       {
-      //         text: 'Medical & Surgical Nurse',
-      //         image: require('@/assets/job-detail-1c.png'),
-      //       },
-      //       {
-      //         text: 'In-Patient / Out-Patient Nurse',
-      //         image: require('@/assets/job-detail-1d.png'),
-      //       },
-      //       {
-      //         text: 'Orthopedic Nurse',
-      //         image: require('@/assets/job-detail-1e.png'),
-      //       },
-      //       {
-      //         text: 'Infection Control Nurse',
-      //         image: require('@/assets/job-detail-1f.png'),
-      //       },
-      //       {
-      //         text: 'Radiologic Imaging Nurse',
-      //         image: require('@/assets/job-detail-1g.png'),
-      //       },
-      //     ],
-      //   },
-      // ],
       screenWidth: window.innerWidth,
     };
   },
@@ -275,6 +249,20 @@ export default {
     ...mapState(['itemSelected']),
     isSmall() {
       return this.screenWidth < 640;
+    },
+    items() {
+      const itemMap = this.specificJobs.map((item) => {
+        return {
+          ...item,
+          list: item.list.map((l) => {
+            return {
+              ...l,
+              isLive: item.slug == null ? true : true,
+            };
+          }),
+        };
+      });
+      return itemMap;
     },
   },
   created() {
@@ -284,6 +272,20 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    openLive(item) {
+      this.isOpenLive = true;
+      this.liveData = {
+        img: item.image,
+        title: item.text,
+      };
+    },
+    closeLive() {
+      this.isOpenLive = false;
+      this.liveData = {
+        img: '',
+        title: '',
+      };
+    },
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
