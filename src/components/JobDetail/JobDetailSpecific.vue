@@ -734,7 +734,7 @@ export default {
     getSpecificJobs() {
       this.isLoading = true;
       axios
-        .get(`/skills-by-groups`)
+        .get(`/skills-by-groups/100/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -744,6 +744,7 @@ export default {
           this.itemData = {
             id: filteredData[0].sgm_id || 1,
             title: filteredData[0].group_name || '',
+            slug: filteredData[0].slug || '',
             image: this.$fileURL + filteredData[0].image || '',
           };
 
@@ -928,10 +929,10 @@ export default {
           this.isLoading = false;
         });
     },
-    getListSkill(id) {
+    getListSkill(slug) {
       this.isLoading = true;
       axios
-        .get(`/skills/group/${id}`)
+        .get(`/skills/group/slug/${slug}`)
         .then((response) => {
           const data = response.data.data;
           this.skillsGroup = data.map((item) => item.skills_name);

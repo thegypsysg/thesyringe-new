@@ -54,7 +54,7 @@ export default {
     getTrendingCardData() {
       this.isLoading = true;
       axios
-        .get(`/skillgroups`)
+        .get(`/skillgroups/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -86,7 +86,7 @@ export default {
     getSpecificJobs() {
       this.isLoading = true;
       axios
-        .get(`/skills-by-groups`)
+        .get(`/skills-by-groups/6/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -96,7 +96,7 @@ export default {
               title: item.group_name ? item.group_name + ' Jobs' : '',
               btn: item.group_name || '',
               path: item.slug ? `/${item.slug}` : '#',
-              list: item.skills.slice(0, 6).map((skill) => {
+              list: item.skills.map((skill) => {
                 return {
                   id: skill.skills_id || 1,
                   text: skill.skills_name || '',

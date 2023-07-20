@@ -243,7 +243,7 @@ export default {
     getTrendingCardData() {
       // this.isLoading = true;
       axios
-        .get(`/skillgroups`)
+        .get(`/skillgroups/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
