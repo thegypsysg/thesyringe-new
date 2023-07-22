@@ -4,6 +4,7 @@
       'app-bar-mobile-1': isSmall && isHome,
       'app-bar-mobile-2': isSmall && !isHome,
       'app-bar-mobile-3': isSmall && isWelcome,
+      'app-bar-mobile-4': isSmall && isDetailPage,
     }"
     color="white"
     elevation="1"
@@ -24,7 +25,7 @@
     </div>
     <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
-      <span :class="{ 'header-info-span': isSmall }">Physiotherapist Jobs</span>
+      <span :class="{ 'header-info-span': isSmall }">{{ titleHeader }}</span>
     </div>
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
@@ -85,10 +86,14 @@
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{ 'mb-n10': !isHome }"
       >
-        <div class="mb-n2" v-if="isDetail">
-          <h2>Physiotherapist Jobs</h2>
+        <div
+          class="mb-n2"
+          :class="{ 'mt-1 mb-n4': isDetailPage }"
+          v-if="isDetail"
+        >
+          <h2>{{ titleHeader }}</h2>
         </div>
-        <div v-if="isHome">
+        <div v-if="isHome || isDetailPage">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
@@ -117,6 +122,20 @@
             </v-list>
           </v-menu>
         </div>
+        <div
+          v-if="isDetailPage"
+          style="height: 50px"
+          class="info-title d-flex align-center mb-4 mt-n4"
+        >
+          <v-img height="50" src="@/assets/exec-jobs.jpg"></v-img>
+          <div class="divider-2 ml-10 mr-4"></div>
+          <div class="web">
+            <h4>BMJ Therapy Pte Ltd</h4>
+            <p class="text-blue-darken-4 font-weight-bold">
+              www.bmjtherapy.com
+            </p>
+          </div>
+        </div>
         <form
           v-if="!isDetail"
           class="navbar__search navbar__search__mobile mx-auto"
@@ -134,7 +153,6 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
-
         <div v-if="isHome" class="my-slide d-flex">
           <v-btn
             class="sub-menu-btn view-all"
@@ -242,7 +260,22 @@ export default {
     isHome() {
       return this.$route.path === '/' || this.$route.path === '/physiojobs';
     },
+    isDetailPage() {
+      return this.$route.path.includes('detail');
+    },
     ...mapState(['activeTag']),
+    titleHeader() {
+      let path = this.$route.path;
+      let name = this.$route.path.split('/')[1];
+      let name2 = this.$route.params.name.split('-').join(' ');
+      let title = '';
+      if (path.includes('detail')) {
+        title = this.capitalizeFirstLetter(name2);
+      } else {
+        title = this.capitalizeFirstLetter(name);
+      }
+      return title;
+    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -282,6 +315,15 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    capitalizeFirstLetter(sentence) {
+      const words = sentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      const capitalizedSentence = words.join(' ');
+      return capitalizedSentence;
+    },
     removeDetail() {
       this.isDetail = false;
     },
@@ -446,11 +488,19 @@ export default {
 .app-bar-mobile-3 {
   height: 9vh;
 }
+.app-bar-mobile-4 {
+  height: 26vh;
+}
 
 .divider {
   background: rgb(173, 173, 173);
   width: 2px;
   height: 70px;
+}
+.divider-2 {
+  background: rgb(173, 173, 173);
+  width: 1px;
+  height: 50px;
 }
 
 .header-info {

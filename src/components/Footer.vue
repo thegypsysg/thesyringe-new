@@ -138,7 +138,10 @@
     </v-row>
   </v-container>
 
-  <v-footer class="bg-black text-center footer__content">
+  <v-footer
+    class="bg-black text-center footer__content"
+    :class="{ 'footer-detail': isSmall && isDetailPage }"
+  >
     <v-spacer></v-spacer>
     <div class="footer_text">
       {{ footerData.copyright }}
@@ -171,12 +174,56 @@
     </div>
   </v-footer>
   <a
+    v-if="!isDetailPage"
     onclick='window.scrollTo({top: 0, behavior: "smooth"});'
     class="go-up"
+    :class="{ 'go-up-2': isSmall && isDetailPage }"
     style="display: inline"
   >
     <i class="fa fa-angle-double-up" aria-hidden="true"></i>
   </a>
+  <v-container
+    style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
+    class="d-flex justify-space-between align-center"
+    v-if="isSmall && isDetailPage"
+  >
+    <v-btn
+      class="apply"
+      style="
+        width: 75%;
+        border-radius: 10px;
+        background: #fa2964;
+        color: white;
+        font-size: 20px;
+      "
+      height="50"
+    >
+      Apply
+    </v-btn>
+    <v-btn
+      style="background: #c5c5c5; color: black"
+      variant="text"
+      color="black"
+      icon="mdi-share-outline"
+      width="40"
+      height="40"
+    >
+      <v-icon color="black" size="18"> mdi-share-outline </v-icon>
+    </v-btn>
+    <!-- <v-btn
+      class="apply"
+      style="
+        width: 20px;
+        height: 40px;
+        margin-top: 16px;
+        background: #c5c5c5;
+        color: black;
+        border-radius: 100%;
+      "
+    >
+      <v-icon size="20">mdi-share-outline</v-icon>
+    </v-btn> -->
+  </v-container>
 </template>
 
 <script>
@@ -201,13 +248,31 @@ export default {
         youtube: '',
       },
       trendingCard: [],
+      screenWidth: window.innerWidth,
     };
+  },
+  computed: {
+    isSmall() {
+      return this.screenWidth < 640;
+    },
+    isDetailPage() {
+      return this.$route.path.includes('detail');
+    },
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
   },
   mounted() {
     this.getAppContact();
     this.getTrendingCardData();
   },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
     scrollToTrending() {
       app.config.globalProperties.$eventBus.$emit('scrollToTrendingSection');
     },
@@ -239,7 +304,6 @@ export default {
       //   this.isLoading = false;
       // });
     },
-
     getTrendingCardData() {
       // this.isLoading = true;
       axios
@@ -298,6 +362,44 @@ export default {
   background: linear-gradient(-90deg, #f2f2f2 0%, #e1e1e1 50%, #f2f2f2 100%);
   background-size: 400% 400%;
   animation: skeleton 1.6s ease infinite;
+}
+
+.footer-detail {
+  height: 20vh;
+}
+
+.go-up {
+  position: fixed;
+  bottom: 4.8rem;
+  z-index: 99999;
+  right: 0.8rem;
+  font-size: 1.5rem;
+  background: #fa2964;
+  padding: 0.4rem;
+  color: #fff !important;
+  border-radius: 5px;
+  text-decoration: none;
+  line-height: 0;
+  display: none;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.go-up:hover,
+.go-up:focus {
+  outline: 0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.go-up-2 {
+  bottom: 2.8rem;
+}
+.go-up-2:hover,
+.go-up-2:focus {
+  outline: 0;
+  text-decoration: none;
+  color: #fff;
 }
 
 @keyframes skeleton {

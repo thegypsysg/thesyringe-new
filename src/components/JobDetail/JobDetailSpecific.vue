@@ -190,8 +190,9 @@
                         </template>
                       </v-img>
                     </div>
-                    <div
-                      :to="`/${card.path}`"
+                    <v-btn
+                      elevation="4"
+                      :to="`/detail/${card.path}`"
                       style="
                         position: absolute;
                         bottom: 90px;
@@ -207,10 +208,7 @@
                       "
                     >
                       <span class="text-white" style="">View Jobs</span>
-                      <!-- <v-icon right style="color: #fff">
-                                mdi-chevron-right
-                              </v-icon> -->
-                    </div>
+                    </v-btn>
 
                     <div
                       class="card-description d-flex flex-column mt-4"
@@ -452,8 +450,9 @@
                         </template>
                       </v-img>
                     </div>
-                    <div
-                      :to="`/${card.path}`"
+                    <v-btn
+                      elevation="4"
+                      :to="`/detail/${card.path}`"
                       style="
                         position: absolute;
                         bottom: 90px;
@@ -469,10 +468,7 @@
                       "
                     >
                       <span class="text-white" style="">View Jobs</span>
-                      <!-- <v-icon right style="color: #fff">
-                                mdi-chevron-right
-                              </v-icon> -->
-                    </div>
+                    </v-btn>
 
                     <div
                       class="card-description d-flex flex-column mt-4"
