@@ -562,6 +562,65 @@
           </v-sheet>
         </div>
       </template>
+      <v-container>
+        <div
+          :class="{
+            'description my-10  d-flex justify-space-between': !isSmall,
+            'description-2 my-6  d-flex justify-space-between': isSmall,
+          }"
+        >
+          <div
+            :class="{
+              'registrable-desc': !isSmall,
+              'registrable-desc-2': isSmall,
+            }"
+          >
+            <div class="registrable-info mb-10">
+              <p class="registrable-title mb-4">
+                <span class="text-blue-darken-4">Physiotherapist</span> is
+                Registrable
+              </p>
+              <p>
+                Your Qualifications must be registrable with
+                <span class="text-blue-darken-4">AHPC</span> in Order for you to
+                apply for a
+                <span class="text-blue-darken-4">Physioterapist Job</span> in
+                <span class="text-blue-darken-4">Singapore</span>
+              </p>
+            </div>
+            <v-btn
+              elevation="1"
+              style="
+                background-color: #0865c2;
+                border-radius: 50px;
+                font-weight: 600;
+              "
+              :height="isSmall ? 50 : ''"
+              :class="{ 'regist-btn': !isSmall, 'regist-btn-2': isSmall }"
+            >
+              <span class="text-white" style="">Check Here</span>
+            </v-btn>
+          </div>
+          <div class="regist-img d-flex">
+            <div
+              :class="{
+                'registrable-img-cont': !isSmall,
+                'registrable-img-cont-2': isSmall,
+              }"
+            >
+              <v-img
+                :class="{
+                  'registrable-img': !isSmall,
+                  'registrable-img-2': isSmall,
+                }"
+                :height="isSmall ? 130 : 150"
+                cover
+                src="@/assets/use-1.jpg"
+              ></v-img>
+            </div>
+          </div>
+        </div>
+      </v-container>
     </template>
   </div>
 </template>
@@ -1252,5 +1311,70 @@ export default {
   100% {
     background-position: -100% 0;
   }
+}
+
+.description {
+  width: 65%;
+}
+.description-2 {
+  width: 100%;
+}
+
+.description-list li {
+  margin-top: 20px;
+  margin-left: 15px;
+}
+
+.registrable-desc {
+  width: 55%;
+  font-size: 20px;
+}
+.registrable-desc-2 {
+  width: 50%;
+  font-size: 16px;
+}
+
+.regist-img {
+  width: 40%;
+}
+
+.registrable-img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+.registrable-img-cont {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+}
+.registrable-img-2 {
+  height: 130px;
+  width: 130px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+.registrable-img-cont-2 {
+  height: 130px;
+  width: 130px;
+  border-radius: 50%;
+}
+
+.regist-btn {
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 14px;
+}
+.regist-btn-2 {
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 16px;
 }
 </style>
