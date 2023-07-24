@@ -562,11 +562,11 @@
           </v-sheet>
         </div>
       </template>
-      <v-container>
+      <v-container :class="{ 'w-75 mx-auto': !isSmall }">
         <div
           :class="{
-            'description my-10  d-flex justify-space-between': !isSmall,
-            'description-2 my-6  d-flex justify-space-between': isSmall,
+            ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
+            ' my-6 d-flex justify-space-between': isSmall,
           }"
         >
           <div
@@ -576,11 +576,15 @@
             }"
           >
             <div class="registrable-info mb-10">
-              <p class="registrable-title mb-4">
+              <h1 v-if="!isSmall" class="registrable-title mb-4">
                 <span class="text-blue-darken-4">Physiotherapist</span> is
                 Registrable
-              </p>
-              <p>
+              </h1>
+              <h3 v-if="isSmall" class="registrable-title mb-4">
+                <span class="text-blue-darken-4">Physiotherapist</span> is
+                Registrable
+              </h3>
+              <p :class="{ 'regist-desktop': !isSmall }">
                 Your Qualifications must be registrable with
                 <span class="text-blue-darken-4">AHPC</span> in Order for you to
                 apply for a
@@ -595,13 +599,22 @@
                 border-radius: 50px;
                 font-weight: 600;
               "
-              :height="isSmall ? 50 : ''"
-              :class="{ 'regist-btn': !isSmall, 'regist-btn-2': isSmall }"
+              :height="isSmall ? 50 : 60"
+              :class="{
+                'regist-btn px-10': !isSmall,
+                'regist-btn-2 px-6': isSmall,
+              }"
             >
               <span class="text-white" style="">Check Here</span>
             </v-btn>
           </div>
-          <div class="regist-img d-flex">
+          <div
+            class="d-flex justify-end"
+            :class="{
+              'regist-img': !isSmall,
+              'regist-img-2': isSmall,
+            }"
+          >
             <div
               :class="{
                 'registrable-img-cont': !isSmall,
@@ -613,10 +626,14 @@
                   'registrable-img': !isSmall,
                   'registrable-img-2': isSmall,
                 }"
-                :height="isSmall ? 130 : 150"
+                :height="isSmall ? 145 : 250"
                 cover
                 src="@/assets/use-1.jpg"
-              ></v-img>
+              >
+                <template #placeholder>
+                  <div class="skeleton" />
+                </template>
+              </v-img>
             </div>
           </div>
         </div>
@@ -1326,7 +1343,7 @@ export default {
 }
 
 .registrable-desc {
-  width: 55%;
+  width: 45%;
   font-size: 20px;
 }
 .registrable-desc-2 {
@@ -1334,47 +1351,46 @@ export default {
   font-size: 16px;
 }
 
+.regist-desktop {
+  font-size: 22px;
+}
+
 .regist-img {
+  width: 30%;
+}
+.regist-img-2 {
   width: 40%;
 }
 
 .registrable-img {
-  height: 150px;
-  width: 150px;
+  height: 250px;
+  width: 250px;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
 }
 .registrable-img-cont {
-  height: 150px;
-  width: 150px;
+  height: 250px;
+  width: 250px;
   border-radius: 50%;
 }
 .registrable-img-2 {
-  height: 130px;
-  width: 130px;
+  height: 145px;
+  width: 145px;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
 }
 .registrable-img-cont-2 {
-  height: 130px;
-  width: 130px;
+  height: 145px;
+  width: 145px;
   border-radius: 50%;
 }
 
 .regist-btn {
-  padding-left: 25px;
-  padding-right: 25px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  font-size: 14px;
+  font-size: 20px;
 }
 .regist-btn-2 {
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-top: 12px;
-  padding-bottom: 12px;
   font-size: 16px;
 }
 </style>
