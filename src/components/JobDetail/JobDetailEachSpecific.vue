@@ -754,7 +754,7 @@ export default {
             },
           ];
 
-          console.log(this.specificJobs);
+          // console.log(this.specificJobs);
         })
         .catch((error) => {
           // eslint-disable-next-line

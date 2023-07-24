@@ -6,14 +6,16 @@
     <template v-if="!isLoading">
       <template v-if="!isSmall">
         <div class="banner-container-desktop text-center">
-          <v-img cover :src="itemData.image" />
+          <v-img cover :src="skillSlug.image" />
         </div>
         <div class="text-center my-4">
           <!-- <h2>
               <span class="banner-header">{{ itemData.title }}</span> Specific
               Jobs
             </h2> -->
-          <h1 class="font-weight-black">Trending Physiotherapist Positions</h1>
+          <h1 class="font-weight-black">
+            Trending {{ skillSlug.name }} Positions
+          </h1>
         </div>
         <v-container id="trending" class="wrapper-box">
           <div class="d-flex">
@@ -26,7 +28,7 @@
                 'py-n4 ml-n14': !isSmall,
               }"
               style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
-              @click="filterCards('')"
+              @click="filterSpecificJobs('')"
             >
               <p style="font-size: 12px" elevation>View All</p>
             </v-btn>
@@ -69,7 +71,6 @@
                 v-slot="{ isSelected, toggle }"
                 :value="btn.tag"
                 class="my-slide-item"
-                @click="filterCards(btn.tag)"
               >
                 <v-btn
                   class="sub-menu-btn"
@@ -79,7 +80,12 @@
                     'py-4 mx-2': !isSmall,
                   }"
                   style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
-                  @click="toggle"
+                  @click="
+                    () => {
+                      filterSpecificJobs(btn.id);
+                      toggle;
+                    }
+                  "
                 >
                   <p style="font-size: 12px" elevation>
                     {{ btn.title }}
@@ -216,7 +222,10 @@
                     >
                       <div class="card-address d-flex align-center">
                         <div style="width: 25%">
-                          <v-img src="@/assets/use-1.jpg" height="35" />
+                          <v-img :src="card.locationImg" height="35"
+                            ><template #placeholder>
+                              <div class="skeleton" /> </template
+                          ></v-img>
                         </div>
                         <div
                           style="width: 75 %"
@@ -476,7 +485,10 @@
                     >
                       <div class="card-address d-flex align-center">
                         <div style="width: 25%">
-                          <v-img src="@/assets/use-1.jpg" height="35" />
+                          <v-img :src="card.locationImg" height="35"
+                            ><template #placeholder>
+                              <div class="skeleton" /> </template
+                          ></v-img>
                         </div>
                         <div
                           style="width: 75 %"
@@ -656,6 +668,8 @@ export default {
       screenWidth: window.innerWidth,
       itemData: {},
       title: '',
+      skillSlug: {},
+      countryId: null,
       skillsGroup: [],
       skillsCard: [],
       selectedTag: null,
@@ -667,49 +681,62 @@ export default {
   },
   computed: {
     ...mapState(['activeTag']),
+    ...mapState(['itemSelected']),
     isSmall() {
       return this.screenWidth < 640;
     },
     filteredItems() {
       // console.log(this.activeTag);
-      if (!this.activeTag || this.activeTag == undefined) {
-        return this.specificJobs;
-      } else {
-        // const searchTextLower = this.search.toLowerCase();
-        return this.specificJobs.map((s) => {
-          return {
-            ...s,
-            list: s.list.filter((item) => {
-              return item.tag.includes(this.activeTag);
-            }),
-          };
-        });
-      }
+      //if (!this.activeTag || this.activeTag == undefined) {
+      //  return this.specificJobs;
+      //} else {
+      //  // const searchTextLower = this.search.toLowerCase();
+      //  return this.specificJobs.map((s) => {
+      //    return {
+      //      ...s,
+      //      list: s.list.filter((item) => {
+      //        return item.tag.includes(this.activeTag);
+      //      }),
+      //    };
+      //  });
+      //}
+      return this.specificJobs;
     },
     filteredItemsDesktop() {
       // console.log(this.activeTag);
-      if (!this.selectedTag || this.selectedTag == undefined) {
-        return this.specificJobs;
-      } else {
-        // const searchTextLower = this.search.toLowerCase();
-        return this.specificJobs.map((s) => {
-          return {
-            ...s,
-            list: s.list.filter((item) => {
-              return item.tag.includes(this.selectedTag);
-            }),
-          };
-        });
-      }
+      //if (!this.selectedTag || this.selectedTag == undefined) {
+      //  return this.specificJobs;
+      //} else {
+      //  // const searchTextLower = this.search.toLowerCase();
+      //  return this.specificJobs.map((s) => {
+      //    return {
+      //      ...s,
+      //      list: s.list.filter((item) => {
+      //        return item.tag.includes(this.selectedTag);
+      //      }),
+      //    };
+      //  });
+      //}
+      return this.specificJobs;
     },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.getSkillBySlug();
     this.getSpecificJobs();
-    this.getGroups();
     this.checkDetail();
+    app.config.globalProperties.$eventBus.$on(
+      'filterSpecificJobs',
+      this.filterSpecificJobs
+    );
+  },
+  beforeUnmount() {
+    app.config.globalProperties.$eventBus.$off(
+      'filterSpecificJobs',
+      this.filterSpecificJobs
+    );
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -719,76 +746,187 @@ export default {
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
     },
-    getGroups() {
-      this.trendingBtn = [
-        {
-          id: 1,
-          title: 'Physiotherapist',
-          tag: 'Physiotherapist',
-        },
-        {
-          id: 2,
-          title: 'Senior Physiotherapist',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 3,
-          title: 'Principal Physiotherapist',
-          tag: 'Principal Physiotherapist',
-        },
-        {
-          id: 4,
-          title: 'Physio Assistants',
-          tag: 'Physio Assistants',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-      ];
-      // axios
-      //   .get(`/groups`)
-      //   .then((response) => {
-      //     const data = response.data.data;
-      //     // console.log(data);
-      //     this.trendingBtn = data.map((group) => {
-      //       return {
-      //         id: group.app_group_id,
-      //         title: group.app_group_name,
-      //         tag: group.app_group_name,
-      //       };
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     // eslint-disable-next-line
-      //     console.log(error);
-      //   });
+    getCountry() {
+      axios
+        .get(`/country`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.countryId = data
+            .filter((d) => d.country_name == this.itemSelected)
+            .map((country) => country.country_id)[0];
+          this.getGroups(this.skillSlug.skills_id, this.countryId);
+          this.getSpecificJobs(this.skillSlug.skills_id, this.countryId);
+          // console.log(this.countryId);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getSkillBySlug() {
+      const slug = this.$route.params.name;
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.skillSlug = {
+            ...data,
+            image: this.$fileURL + data.image || '',
+            name: data.skills_name || '',
+          };
+          this.getCountry();
+          // console.log(this.skillSlug);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getGroups(skillId, countryId) {
+      // this.trendingBtn = [
+      //   {
+      //     id: 1,
+      //     title: 'Physiotherapist',
+      //     tag: 'Physiotherapist',
+      //   },
+      // ];
+      axios
+        .get(`/job-positions/${skillId}/${countryId}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.trendingBtn = data.map((group) => {
+            return {
+              id: group.position_id,
+              title: group.position_name,
+              tag: group.position_name,
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getSpecificJobs(skillId, countryId) {
+      this.isLoading = true;
+      axios
+        .get(`/sub-industries-jobs/${skillId}/${countryId}`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          // const filterKey = 'allied-health-jobs';
+          // const filteredData = data.filter((d) => d.slug === filterKey);
+
+          // this.itemData = {
+          //   id: filteredData[0].sgm_id || 1,
+          //   title: filteredData[0].group_name || '',
+          //   slug: filteredData[0].slug || '',
+          //   image: this.$fileURL + filteredData[0].image || '',
+          // };
+
+          this.specificJobs = data.map((item) => {
+            return {
+              id: item.sub_industry_id || 1,
+              title: item.sub_industry_name
+                ? item.sub_industry_name + ' Jobs'
+                : '',
+              btn: item.sub_industry_name || '',
+              path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              list: item.jobs.map((skill) => {
+                return {
+                  id: skill.job_id || 1,
+                  text: skill.position_name || '',
+                  image: skill.logo ? this.$fileURL + skill.logo : '',
+                  path:
+                    skill.location_name.split(' ').join('').toLowerCase() +
+                    'jobs',
+                  place: skill.partner_name || '',
+                  locationImg: skill.location_image
+                    ? this.$fileURL + skill.location_image
+                    : '',
+                  address: skill.location_name || '',
+                  distance: '4,5',
+                  tag: skill.position_name || '',
+                };
+              }),
+            };
+          });
+
+          // console.log(this.specificJobs);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    filterSpecificJobs(positionId) {
+      this.isLoading = true;
+      axios
+        .get(
+          positionId == ''
+            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}`
+            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/${positionId}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          // const filterKey = 'allied-health-jobs';
+          // const filteredData = data.filter((d) => d.slug === filterKey);
+
+          // this.itemData = {
+          //   id: filteredData[0].sgm_id || 1,
+          //   title: filteredData[0].group_name || '',
+          //   slug: filteredData[0].slug || '',
+          //   image: this.$fileURL + filteredData[0].image || '',
+          // };
+
+          this.specificJobs = data.map((item) => {
+            return {
+              id: item.sub_industry_id || 1,
+              title: item.sub_industry_name
+                ? item.sub_industry_name + ' Jobs'
+                : '',
+              btn: item.sub_industry_name || '',
+              path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              list: item.jobs.map((skill) => {
+                return {
+                  id: skill.job_id || 1,
+                  text: skill.position_name || '',
+                  image: skill.logo ? this.$fileURL + skill.logo : '',
+                  path:
+                    skill.location_name.split(' ').join('').toLowerCase() +
+                    'jobs',
+                  place: skill.partner_name || '',
+                  locationImg: skill.location_image
+                    ? this.$fileURL + skill.location_image
+                    : '',
+                  address: skill.location_name || '',
+                  distance: '4,5',
+                  tag: skill.position_name || '',
+                };
+              }),
+            };
+          });
+
+          // console.log(this.specificJobs);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     // countCards(tag) {
     //   const count = this.trendingCard.filter(
@@ -803,229 +941,30 @@ export default {
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
-    getSpecificJobs() {
-      this.isLoading = true;
-      axios
-        .get(`/skills-by-groups/100/${this.$appId}`)
-        .then((response) => {
-          const data = response.data.data;
-          // console.log(data);
-          const filterKey = 'allied-health-jobs';
-          const filteredData = data.filter((d) => d.slug === filterKey);
-
-          this.itemData = {
-            id: filteredData[0].sgm_id || 1,
-            title: filteredData[0].group_name || '',
-            slug: filteredData[0].slug || '',
-            image: this.$fileURL + filteredData[0].image || '',
-          };
-
-          // this.specificJobs = data
-          //   .map((item) => {
-          //     return {
-          //       id: item.sgm_id || 1,
-          //       title: item.group_name ? item.group_name + ' Jobs' : '',
-          //       btn: item.group_name || '',
-          //       path: item.slug ? `/${item.slug}` : '#',
-          //       list: item.skills.slice(0, 6).map((skill) => {
-          //         return {
-          //           id: skill.skills_id || 1,
-          //           text: skill.skills_name || '',
-          //           image: skill.image ? this.$fileURL + skill.image : '',
-          //           path:
-          //             skill.description.split(' ').join('').toLowerCase() +
-          //             'jobs',
-          //         };
-          //       }),
-          //     };
-          //   })
-          //   .slice(0, 2);
-          this.specificJobs = [
-            {
-              id: 1,
-              title: 'Community Hospital',
-              btn: 'Community Hospital',
-              path: '/community-hospital',
-              list: [
-                {
-                  id: 1,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 2,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-                {
-                  id: 3,
-                  text: 'Enrolled Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
-                  path: 'enrolled-nurse',
-                  place: 'Tan Tock Seng Hospital',
-                  address: 'Novena',
-                  distance: '1,2',
-                  tag: 'Principal Physiotherapist',
-                },
-                {
-                  id: 4,
-                  text: 'Nurse Assistant',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
-                  path: 'nurse-assistant',
-                  place: 'Singapore General Hospital',
-                  address: 'Outram Road',
-                  distance: '4,5',
-                  tag: 'Physio Assistants',
-                },
-                {
-                  id: 5,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 6,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-              ],
-            },
-            {
-              id: 2,
-              title: 'Private Hospital',
-              btn: 'Private Hospital',
-              path: '/private-hospital',
-              list: [
-                {
-                  id: 1,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 2,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-                {
-                  id: 3,
-                  text: 'Enrolled Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
-                  path: 'enrolled-nurse',
-                  place: 'Tan Tock Seng Hospital',
-                  address: 'Novena',
-                  distance: '1,2',
-                  tag: 'Principal Physiotherapist',
-                },
-                {
-                  id: 4,
-                  text: 'Nurse Assistant',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
-                  path: 'nurse-assistant',
-                  place: 'Singapore General Hospital',
-                  address: 'Outram Road',
-                  distance: '4,5',
-                  tag: 'Physio Assistants',
-                },
-                {
-                  id: 5,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 6,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-              ],
-            },
-          ];
-
-          console.log(this.specificJobs);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
-    getListSkill(slug) {
-      this.isLoading = true;
-      axios
-        .get(`/skills/group/slug/${slug}`)
-        .then((response) => {
-          const data = response.data.data;
-          this.skillsGroup = data.map((item) => item.skills_name);
-          this.skillsCard = data.map((item) => {
-            return {
-              id: item.skills_id || 1,
-              text: item.skills_name || '',
-              jobs: 20,
-              image: item.image ? this.$fileURL + item.image : '',
-            };
-          });
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
-
+    //getListSkill(slug) {
+    //  this.isLoading = true;
+    //  axios
+    //    .get(`/skills/group/slug/${slug}`)
+    //    .then((response) => {
+    //      const data = response.data.data;
+    //      this.skillsGroup = data.map((item) => item.skills_name);
+    //      this.skillsCard = data.map((item) => {
+    //        return {
+    //          id: item.skills_id || 1,
+    //          text: item.skills_name || '',
+    //          jobs: 20,
+    //          image: item.image ? this.$fileURL + item.image : '',
+    //        };
+    //      });
+    //    })
+    //    .catch((error) => {
+    //      // eslint-disable-next-line
+    //      console.log(error);
+    //    })
+    //    .finally(() => {
+    //      this.isLoading = false;
+    //    });
+    //},
     previousSlide() {
       this.activeIndex--;
     },

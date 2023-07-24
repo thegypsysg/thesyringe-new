@@ -25,7 +25,9 @@
     </div>
     <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
-      <span :class="{ 'header-info-span': isSmall }">{{ titleHeader }}</span>
+      <span :class="{ 'header-info-span': isSmall }">{{
+        isDetail ? skillSlug.name : titleHeader
+      }}</span>
     </div>
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
@@ -64,7 +66,7 @@
         </template>
         <v-list>
           <v-list-item
-            v-for="(item, index) in city"
+            v-for="(item, index) in country"
             :key="index"
             :value="index"
             @click="changeItemSelected(item.title)"
@@ -91,7 +93,7 @@
           :class="{ 'mt-1 mb-n4': isDetailPage }"
           v-if="isDetail"
         >
-          <h2>{{ titleHeader }}</h2>
+          <h2>{{ isDetail ? skillSlug.name : titleHeader }}</h2>
         </div>
         <div v-if="isHome || isDetailPage">
           <v-menu>
@@ -112,7 +114,7 @@
             </template>
             <v-list>
               <v-list-item
-                v-for="(item, index) in city"
+                v-for="(item, index) in country"
                 :key="index"
                 :value="index"
                 @click="changeItemSelected(item.title)"
@@ -180,7 +182,7 @@
                   active: isSelected,
                 }"
                 style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
-                @click="selectTag(btn.tag)"
+                @click="selectTag(btn.id)"
               >
                 <p style="font-size: 12px" elevation>
                   {{ btn.title }} Jobs
@@ -237,10 +239,12 @@ export default {
       // selectedTag: null,
       trendingBtn: [],
       isDetail: false,
+      skillSlug: {},
+      countryId: null,
 
       drawer: false,
       // itemSelected: 'Singapore',
-      city: [],
+      country: [],
 
       trendingCard: [],
 
@@ -282,11 +286,15 @@ export default {
   },
   mounted() {
     this.getLogo();
-    this.getCity();
+    this.getCountry();
     this.getTrendingCardData();
+    // app.config.globalProperties.$eventBus.$on(
+    //   'getHeaderDetail',
+    //   this.getHeaderDetail
+    // );
     app.config.globalProperties.$eventBus.$on(
       'getHeaderDetail',
-      this.getHeaderDetail
+      this.getSkillBySlug
     );
     app.config.globalProperties.$eventBus.$on(
       'getHeaderLanding',
@@ -298,9 +306,13 @@ export default {
     );
   },
   beforeUnmount() {
+    // app.config.globalProperties.$eventBus.$off(
+    //   'getHeaderDetail',
+    //   this.getHeaderDetail
+    // );
     app.config.globalProperties.$eventBus.$off(
       'getHeaderDetail',
-      this.getHeaderDetail
+      this.getSkillBySlug
     );
     app.config.globalProperties.$eventBus.$off(
       'getHeaderLanding',
@@ -315,6 +327,56 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getSkillBySlug() {
+      this.isDetail = true;
+      const slug = this.$route.params.name;
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.skillSlug = {
+            ...data,
+            name: `${data.skills_name} Jobs` || '',
+          };
+          // console.log(this.skillSlug);
+          this.getHeaderDetail();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getHeaderDetail() {
+      // this.trendingBtn = [
+      //   {
+      //     id: 1,
+      //     title: 'Physiotherapist',
+      //     tag: 'Physiotherapist',
+      //   },
+      // ];
+      axios
+        .get(`/job-positions/${this.skillSlug.skills_id}/${this.countryId}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.trendingBtn = data.map((group) => {
+            return {
+              id: group.position_id,
+              title: group.position_name,
+              tag: group.position_name,
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
     capitalizeFirstLetter(sentence) {
       const words = sentence.split(' ');
       for (let i = 0; i < words.length; i++) {
@@ -335,32 +397,11 @@ export default {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
       // console.log('ok');
 
-      app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
-    },
-    getHeaderDetail() {
-      this.isDetail = true;
-      this.trendingBtn = [
-        {
-          id: 1,
-          title: 'Physiotherapist',
-          tag: 'Physiotherapist',
-        },
-        {
-          id: 2,
-          title: 'Senior Physiotherapist',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 3,
-          title: 'Principal Physiotherapist',
-          tag: 'Principal Physiotherapist',
-        },
-        {
-          id: 4,
-          title: 'Physio Assistants',
-          tag: 'Physio Assistants',
-        },
-      ];
+      if (this.isDetail) {
+        app.config.globalProperties.$eventBus.$emit('filterSpecificJobs', tag);
+      } else {
+        app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
+      }
     },
     getTrendingCardData() {
       // this.isLoading = true;
@@ -413,19 +454,22 @@ export default {
           console.log(error);
         });
     },
-    getCity() {
+    getCountry() {
       axios
-        .get(`/city`)
+        .get(`/country`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
-          this.city = data.map((city) => {
+          this.country = data.map((country) => {
             return {
-              id: city.city_id,
-              title: city.city_name,
+              id: country.country_id,
+              title: country.country_name,
               path: '#',
             };
           });
+          this.countryId = data
+            .filter((d) => d.country_name == this.itemSelected)
+            .map((country) => country.country_id)[0];
         })
         .catch((error) => {
           // eslint-disable-next-line
