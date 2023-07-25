@@ -79,7 +79,10 @@
                     active: isSelected,
                     'py-4 mx-2': !isSmall,
                   }"
-                  style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
+                  style="
+                    box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
+                    height: 50px !important;
+                  "
                   @click="
                     () => {
                       filterSpecificJobs(btn.id);
