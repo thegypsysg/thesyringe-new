@@ -843,14 +843,14 @@ export default {
                 return {
                   id: skill.job_id || 1,
                   text: skill.position_name || '',
-                  image: skill.logo ? this.$fileURL + skill.logo : '',
+                  image: skill.location_image
+                    ? this.$fileURL + skill.location_image
+                    : '',
                   path:
                     skill.location_name.split(' ').join('').toLowerCase() +
                     'jobs',
                   place: skill.partner_name || '',
-                  locationImg: skill.location_image
-                    ? this.$fileURL + skill.location_image
-                    : '',
+                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
                   address: skill.location_name || '',
                   distance: '4,5',
                   tag: skill.position_name || '',
@@ -902,14 +902,14 @@ export default {
                 return {
                   id: skill.job_id || 1,
                   text: skill.position_name || '',
-                  image: skill.logo ? this.$fileURL + skill.logo : '',
+                  image: skill.location_image
+                    ? this.$fileURL + skill.location_image
+                    : '',
                   path:
                     skill.location_name.split(' ').join('').toLowerCase() +
                     'jobs',
                   place: skill.partner_name || '',
-                  locationImg: skill.location_image
-                    ? this.$fileURL + skill.location_image
-                    : '',
+                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
                   address: skill.location_name || '',
                   distance: '4,5',
                   tag: skill.position_name || '',
