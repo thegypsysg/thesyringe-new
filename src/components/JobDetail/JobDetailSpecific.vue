@@ -201,7 +201,7 @@
                     </div>
                     <v-btn
                       elevation="4"
-                      :to="`/detail/${card.path}`"
+                      :to="`/detail/${card.id}`"
                       style="
                         position: absolute;
                         bottom: 90px;
@@ -464,7 +464,7 @@
                     </div>
                     <v-btn
                       elevation="4"
-                      :to="`/detail/${card.path}`"
+                      :to="`/detail/${card.id}`"
                       style="
                         position: absolute;
                         bottom: 90px;

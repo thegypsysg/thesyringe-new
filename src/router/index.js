@@ -38,7 +38,7 @@ const routes = [
   },
   {
     name: 'detail page each specific',
-    path: '/detail/:name',
+    path: '/detail/:id',
     component: JobDetailEachSpecific,
   },
 ];

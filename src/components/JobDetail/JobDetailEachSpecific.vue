@@ -38,17 +38,20 @@
           style="height: 80px"
         >
           <div class="info-title d-flex align-center justify-start">
-            <v-img height="80" src="@/assets/exec-jobs.jpg"></v-img>
+            <v-img height="80" :src="itemData.logo"
+              ><template #placeholder> <div class="skeleton" /> </template
+            ></v-img>
             <div class="divider ml-10 mr-4"></div>
             <div class="web">
-              <h4>BMJ Therapy Pte Ltd</h4>
+              <h4>{{ itemData.partner }}</h4>
               <p class="text-blue-darken-4 font-weight-bold">
-                www.bmjtherapy.com
+                {{ itemData.website }}
               </p>
             </div>
             <div class="divider ml-10 mr-4"></div>
             <div class="group">
-              <span>Healthcare</span>|<span>Private Physio CLinic</span>
+              <span>{{ itemData.industry }}</span
+              >|<span>{{ itemData.subIndustry }}</span>
             </div>
           </div>
           <div class="share pa-2">
@@ -117,11 +120,11 @@
           </div>
         </div>
         <div class="info-2 d-flex align-center mt-6" style="height: 20px">
-          <span class="text-grey">15th July 2023</span>
+          <span class="text-grey">{{ itemData.dated }}</span>
           <div class="divider mx-6" style="background: #a7a7a7"></div>
-          <span class="text-grey">1 Position</span>
+          <span class="text-grey">{{ itemData.numPositions }} Position</span>
           <div class="divider mx-6" style="background: #a7a7a7"></div>
-          <span class="text-grey">Full Time</span>
+          <span class="text-grey">{{ itemData.jobType }}</span>
         </div>
         <div class="info-3 mt-4">
           <div class="address d-flex mb-2">
@@ -129,7 +132,8 @@
               mdi-map-marker
             </v-icon>
             <span
-              >{{ 'Tampines' + ' (' }} <span>{{ 'East' + ')' }}</span></span
+              >{{ itemData.city + ' (' }}
+              <span>{{ itemData.zone + ')' }}</span></span
             >
           </div>
           <div class="time d-flex mb-2">
@@ -138,15 +142,16 @@
             </v-icon>
             <div class="time-desc">
               <p>Work Schedule</p>
-              <p>9am to 6pm (Mon to Friday)</p>
-              <p>9am to 12pm (Saturday)</p>
+              <p>
+                {{ itemData.work }}
+              </p>
             </div>
           </div>
           <div class="price d-flex">
             <v-icon class="mr-4 mt-1" size="20" color="#808080">
               mdi-currency-usd
             </v-icon>
-            <span>Negotiable</span>
+            <span>{{ itemData.salary }}</span>
           </div>
         </div>
         <div
@@ -161,39 +166,19 @@
           </div>
           <div class="description-desc">
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
-              maiores quisquam dignissimos! Mollitia placeat quasi facere harum,
-              suscipit magnam amet.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
-              maiores quisquam dignissimos! Mollitia placeat quasi facere harum,
-              suscipit magnam amet.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Consequatur sint dolore, laboriosam nobis nemo accusamus! Quos,
-              recusandae ad maxime blanditiis iure alias possimus facilis quis.
+              {{ itemData.desc }}
             </p>
           </div>
-          <div class="description-list">
+          <div v-if="itemData.desc != '-'" class="description-list">
             <ul>
               <li>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus, voluptatibus.
-              </li>
-              <li>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus, voluptatibus.
-              </li>
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Cupiditate excepturi accusantium totam, nemo ipsum maxime.
+                {{ itemData.desc }}
               </li>
             </ul>
           </div>
         </div>
         <div
+          v-if="itemData.requirement"
           :class="{
             'description mt-10': !isSmall,
             'description-2 mt-8': isSmall,
@@ -223,10 +208,11 @@
             <h2 v-if="isSmall">Benefits</h2>
           </div>
           <div class="description-list">
-            <ul>
-              <li>Lorem ipsum dolor sit amet</li>
-              <li>Lorem ipsum dolor sit amet</li>
-              <li>Lorem ipsum dolor sit amet</li>
+            <p v-if="itemData.benefits === '-'">-</p>
+            <ul v-if="itemData.benefits !== '-'">
+              <li v-for="(benefit, index) in itemData.benefits" :key="index">
+                {{ benefit }}
+              </li>
             </ul>
           </div>
         </div>
@@ -238,18 +224,17 @@
         >
           <div class="description-title mb-4">
             <h1 v-if="!isSmall">
-              About <span class="text-blue-accent-4">BMJ THERAPY</span>
+              About
+              <span class="text-blue-accent-4">{{ itemData.partner }}</span>
             </h1>
             <h2 v-if="isSmall">
-              About <span class="text-blue-accent-4">BMJ THERAPY</span>
+              About
+              <span class="text-blue-accent-4">{{ itemData.partner }}</span>
             </h2>
           </div>
           <div class="description-desc">
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus
-              dolore magnam corrupti nam facere! Atque suscipit doloribus,
-              reprehenderit nesciunt rem perspiciatis voluptas velit totam
-              animi, voluptatem commodi assumenda blanditiis numquam.
+              {{ itemData.about }}
             </p>
           </div>
         </div>
@@ -261,8 +246,10 @@
             <h1 v-if="!isSmall">Get Connected</h1>
             <h2 v-if="isSmall">Get Connected</h2>
           </div>
-          <div class="connected-link d-flex justify-space-between">
+          <div style="gap: 10px" class="connected-link d-flex">
             <v-btn
+              v-if="itemData.tiktok != null"
+              :to="itemData.tiktok"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: black"
@@ -275,6 +262,8 @@
             </v-btn>
 
             <v-btn
+              v-if="itemData.facebook != null"
+              :to="itemData.facebook"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #4267b2"
@@ -287,6 +276,8 @@
             </v-btn>
 
             <v-btn
+              v-if="itemData.instagram != null"
+              :to="itemData.instagram"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #fc2145"
@@ -299,6 +290,8 @@
             </v-btn>
 
             <v-btn
+              v-if="itemData.google != null"
+              :to="itemData.google"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               color="white"
@@ -311,14 +304,30 @@
             </v-btn>
 
             <v-btn
+              v-if="itemData.youtube != null"
+              :to="itemData.youtube"
               :size="!isSmall ? '40' : '50'"
               variant="text"
-              style="background: #0072b1"
+              style="background: #cd201f"
               color="white"
               icon
             >
               <v-icon :size="!isSmall ? '18' : '24'">
-                <i class="fa-brands fa-linkedin-in" />
+                <i class="fa-brands fa-youtube" />
+              </v-icon>
+            </v-btn>
+
+            <v-btn
+              v-if="itemData.twitter != null"
+              :to="itemData.twitter"
+              :size="!isSmall ? '40' : '50'"
+              variant="text"
+              style="background: #55acee"
+              color="white"
+              icon
+            >
+              <v-icon :size="!isSmall ? '18' : '24'">
+                <i class="fa-brands fa-twitter" />
               </v-icon>
             </v-btn>
           </div>
@@ -409,6 +418,7 @@
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
 import { mapState } from 'vuex';
+import moment from 'moment';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
@@ -418,6 +428,7 @@ export default {
       isLoading: false,
       screenWidth: window.innerWidth,
       itemData: {},
+      idDetail: null,
       title: '',
       skillsGroup: [],
       skillsCard: [],
@@ -568,193 +579,48 @@ export default {
     },
     getSpecificJobs() {
       this.isLoading = true;
+      const id = this.$route.params.id;
       axios
-        .get(`/skills-by-groups/100/${this.$appId}`)
+        .get(`/jobs/get-details/${id}`)
         .then((response) => {
           const data = response.data.data;
-          // console.log(data);
-          const filterKey = 'allied-health-jobs';
-          const filteredData = data.filter((d) => d.slug === filterKey);
 
           this.itemData = {
-            id: filteredData[0].sgm_id || 1,
-            title: filteredData[0].group_name || '',
-            slug: filteredData[0].slug || '',
-            image: this.$fileURL + filteredData[0].image || '',
+            ...data,
+            id: data.job_id || 1,
+            title: data.position_name || '',
+            // slug: data.slug || '',
+            image: this.$fileURL + data.location_image || '',
+            logo: this.$fileURL + data.logo || '',
+            partner: data.partner_name || '',
+            website: data.website || '',
+            industry: data.industry_name || '',
+            subIndustry: data.sub_industry_name || '',
+            dated:
+              moment(data.job_dated, 'DD/MM/YYYY').format('DD MMMM YYYY') || '',
+            numPositions: data.num_positions || '-',
+            jobType:
+              data.job_type == 'F'
+                ? 'Full Time'
+                : data.job_type == 'P'
+                ? 'Part Time'
+                : '-',
+            city: data.city_name || '',
+            zone: data.zone_name || '',
+            work:
+              data.work_timings && data.shift
+                ? `${data.work_timings} (${data.shift})`
+                : data.work_timings && !data.shift
+                ? `${data.work_timings} (-)`
+                : !data.work_timings && data.shift
+                ? `- (${data.shift})`
+                : '-',
+            salary: data.salary_range || '-',
+            desc: data.job_description || '-',
+            benefits: data.benefits || '-',
+            about: data.about_us || '-',
           };
-
-          // this.specificJobs = data
-          //   .map((item) => {
-          //     return {
-          //       id: item.sgm_id || 1,
-          //       title: item.group_name ? item.group_name + ' Jobs' : '',
-          //       btn: item.group_name || '',
-          //       path: item.slug ? `/${item.slug}` : '#',
-          //       list: item.skills.slice(0, 6).map((skill) => {
-          //         return {
-          //           id: skill.skills_id || 1,
-          //           text: skill.skills_name || '',
-          //           image: skill.image ? this.$fileURL + skill.image : '',
-          //           path:
-          //             skill.description.split(' ').join('').toLowerCase() +
-          //             'jobs',
-          //         };
-          //       }),
-          //     };
-          //   })
-          //   .slice(0, 2);
-          this.specificJobs = [
-            {
-              id: 1,
-              title: 'Community Hospital',
-              btn: 'Community Hospital',
-              path: '/community-hospital',
-              list: [
-                {
-                  id: 1,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 2,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-                {
-                  id: 3,
-                  text: 'Enrolled Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
-                  path: 'enrolled-nurse',
-                  place: 'Tan Tock Seng Hospital',
-                  address: 'Novena',
-                  distance: '1,2',
-                  tag: 'Principal Physiotherapist',
-                },
-                {
-                  id: 4,
-                  text: 'Nurse Assistant',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
-                  path: 'nurse-assistant',
-                  place: 'Singapore General Hospital',
-                  address: 'Outram Road',
-                  distance: '4,5',
-                  tag: 'Physio Assistants',
-                },
-                {
-                  id: 5,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 6,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-              ],
-            },
-            {
-              id: 2,
-              title: 'Private Hospital',
-              btn: 'Private Hospital',
-              path: '/private-hospital',
-              list: [
-                {
-                  id: 1,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/a5b27a1b0c59d0403b38388e2d3d570a.jpg',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 2,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/1ea540aea23e1fbdf7655bbc8c99002c.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-                {
-                  id: 3,
-                  text: 'Enrolled Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/52fd27c5a4ced4e49d1877b84b056391.JPG',
-                  path: 'enrolled-nurse',
-                  place: 'Tan Tock Seng Hospital',
-                  address: 'Novena',
-                  distance: '1,2',
-                  tag: 'Principal Physiotherapist',
-                },
-                {
-                  id: 4,
-                  text: 'Nurse Assistant',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/ccfd28dfe81747c8e66aa827bde78eef.jpg',
-                  path: 'nurse-assistant',
-                  place: 'Singapore General Hospital',
-                  address: 'Outram Road',
-                  distance: '4,5',
-                  tag: 'Physio Assistants',
-                },
-                {
-                  id: 5,
-                  text: 'Staff / Registered Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/c4a51dfc6c1c83bc5400f0974b2bad26.png',
-                  path: 'registered-nurse',
-                  place: 'Thye Hua Kwan Hospital',
-                  address: 'Ang Mu Kuo',
-                  distance: '4,5',
-                  tag: 'Physiotherapist',
-                },
-                {
-                  id: 6,
-                  text: 'ICU Staff Nurse',
-                  image:
-                    'https://admin1.the-gypsy.sg/img/app/406443d8b9bd02f87e6860fc79cff518.jpg',
-                  path: 'icu-nurse',
-                  place: 'Concorde Hospital',
-                  address: 'Serangon Road',
-                  distance: '2,3',
-                  tag: 'Senior Physiotherapist',
-                },
-              ],
-            },
-          ];
-
-          // console.log(this.specificJobs);
+          this.$store.commit('setDetailHeader', this.itemData.title);
         })
         .catch((error) => {
           // eslint-disable-next-line

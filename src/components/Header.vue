@@ -26,7 +26,7 @@
     <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">{{
-        isDetail ? skillSlug.name : titleHeader
+        isDetailPage ? detailHeader : isDetail ? skillSlug.name : titleHeader
       }}</span>
     </div>
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
@@ -93,7 +93,15 @@
           :class="{ 'mt-1 mb-n4': isDetailPage }"
           v-if="isDetail"
         >
-          <h2>{{ isDetail ? skillSlug.name : titleHeader }}</h2>
+          <h2>
+            {{
+              isDetailPage
+                ? detailHeader
+                : isDetail
+                ? skillSlug.name
+                : titleHeader
+            }}
+          </h2>
         </div>
         <div v-if="isHome || isDetailPage">
           <v-menu>
@@ -258,6 +266,7 @@ export default {
   },
   computed: {
     ...mapState(['itemSelected']),
+    ...mapState(['detailHeader']),
     isSmall() {
       return this.screenWidth < 640;
     },

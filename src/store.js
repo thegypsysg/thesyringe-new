@@ -6,6 +6,7 @@ export default createStore({
   state: {
     activeTag: null, // Tag yang aktif
     itemSelected: 'Singapore',
+    detailHeader: '',
   },
   mutations: {
     setActiveTag(state, tag) {
@@ -13,6 +14,9 @@ export default createStore({
     },
     setItemSelected(state, item) {
       state.itemSelected = item; // Memperbarui tag yang aktif
+    },
+    setDetailHeader(state, data) {
+      state.detailHeader = data;
     },
   },
 });
