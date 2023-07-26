@@ -44,14 +44,16 @@
             <div class="divider ml-10 mr-4"></div>
             <div class="web">
               <h4>{{ itemData.partner }}</h4>
-              <p class="text-blue-darken-4 font-weight-bold">
-                {{ itemData.website }}
-              </p>
+              <a class="text-decoration-none" :href="itemData.website"
+                ><p class="text-blue-darken-4 font-weight-bold">
+                  {{ itemData.website }}
+                </p></a
+              >
             </div>
             <div class="divider ml-10 mr-4"></div>
             <div class="group">
-              <span>{{ itemData.industry }}</span
-              >|<span>{{ itemData.subIndustry }}</span>
+              <span>{{ itemData.industry }}</span> |
+              <span>{{ itemData.subIndustry }}</span>
             </div>
           </div>
           <div class="share pa-2">
@@ -169,13 +171,13 @@
               {{ itemData.desc }}
             </p>
           </div>
-          <div v-if="itemData.desc != '-'" class="description-list">
+          <!-- <div v-if="itemData.desc != '-'" class="description-list">
             <ul>
               <li>
                 {{ itemData.desc }}
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
         <div
           v-if="itemData.requirement"
@@ -208,12 +210,12 @@
             <h2 v-if="isSmall">Benefits</h2>
           </div>
           <div class="description-list">
-            <p v-if="itemData.benefits === '-'">-</p>
-            <ul v-if="itemData.benefits !== '-'">
+            <p>{{ itemData.benefits }}</p>
+            <!-- <ul v-if="itemData.benefits !== '-'">
               <li v-for="(benefit, index) in itemData.benefits" :key="index">
                 {{ benefit }}
               </li>
-            </ul>
+            </ul> -->
           </div>
         </div>
         <div
@@ -599,19 +601,15 @@ export default {
             dated:
               moment(data.job_dated, 'DD/MM/YYYY').format('DD MMMM YYYY') || '',
             numPositions: data.num_positions || '-',
-            jobType:
-              data.job_type == 'F'
-                ? 'Full Time'
-                : data.job_type == 'P'
-                ? 'Part Time'
-                : '-',
+            jobType: data.job_type || '-',
+            workOption: data.working_option || '-',
             city: data.city_name || '',
             zone: data.zone_name || '',
             work:
               data.work_timings && data.shift
                 ? `${data.work_timings} (${data.shift})`
                 : data.work_timings && !data.shift
-                ? `${data.work_timings} (-)`
+                ? `${data.work_timings}`
                 : !data.work_timings && data.shift
                 ? `- (${data.shift})`
                 : '-',
