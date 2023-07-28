@@ -10,7 +10,7 @@
         class="banner-container-desktop text-center d-flex justify-center w-100"
       >
         <v-img cover :src="itemData.image" />
-        <div class="banner-title mx-auto" style="width: 40%">
+        <!-- <div class="banner-title mx-auto" style="width: 40%">
           <h1 class="mb-4" style="font-size: 40px">
             Prehab and post-surgical rehabilitation
           </h1>
@@ -29,7 +29,7 @@
           >
             <span class="text-white" style="">FIND OUT MORE</span>
           </v-btn>
-        </div>
+        </div> -->
       </div>
       <v-container>
         <div
@@ -166,11 +166,7 @@
             <h1 v-if="!isSmall">Job Description</h1>
             <h2 v-if="isSmall">Job Description</h2>
           </div>
-          <div class="description-desc">
-            <p>
-              {{ itemData.desc }}
-            </p>
-          </div>
+          <div v-html="detailHeader.desc" class="description-desc"></div>
           <!-- <div v-if="itemData.desc != '-'" class="description-list">
             <ul>
               <li>
@@ -443,6 +439,7 @@ export default {
   },
   computed: {
     ...mapState(['activeTag']),
+    ...mapState(['detailHeader']),
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -618,7 +615,9 @@ export default {
             benefits: data.benefits || '-',
             about: data.about_us || '-',
           };
-          this.$store.commit('setDetailHeader', this.itemData.title);
+          //console.log(this.itemData.desc);
+
+          this.$store.commit('setDetailHeader', this.itemData);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -982,9 +981,9 @@ export default {
   width: 100%;
 }
 
-.description-list li {
-  margin-top: 20px;
-  margin-left: 15px;
+.description-desc li {
+  margin-top: 20px !important;
+  margin-left: 15px !important;
 }
 
 .registrable-desc {

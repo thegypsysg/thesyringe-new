@@ -26,7 +26,11 @@
     <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">{{
-        isDetailPage ? detailHeader : isDetail ? skillSlug.name : titleHeader
+        isDetailPage
+          ? detailHeader.title
+          : isDetail
+          ? skillSlug.name
+          : titleHeader
       }}</span>
     </div>
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
@@ -96,7 +100,7 @@
           <h2>
             {{
               isDetailPage
-                ? detailHeader
+                ? detailHeader.title
                 : isDetail
                 ? skillSlug.name
                 : titleHeader
@@ -137,13 +141,18 @@
           style="height: 50px"
           class="info-title d-flex align-center mb-4 mt-n4"
         >
-          <v-img height="50" src="@/assets/exec-jobs.jpg"></v-img>
+          <v-img height="50" :src="detailHeader.logo">
+            <!-- <template #placeholder> <div class="skeleton" /> </template
+          > -->
+          </v-img>
           <div class="divider-2 ml-10 mr-4"></div>
           <div class="web">
-            <h4>BMJ Therapy Pte Ltd</h4>
-            <p class="text-blue-darken-4 font-weight-bold">
-              www.bmjtherapy.com
-            </p>
+            <h4>{{ detailHeader.partner }}</h4>
+            <a class="text-decoration-none" :href="detailHeader.website"
+              ><p class="text-blue-darken-4 font-weight-bold">
+                {{ detailHeader.website }}
+              </p></a
+            >
           </div>
         </div>
         <form

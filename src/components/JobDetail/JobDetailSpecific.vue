@@ -93,8 +93,8 @@
                   <p style="font-size: 12px" elevation>
                     {{ btn.title }}
                     <!-- <span>{{
-                      countCards(btn.tag) == 0 ? '' : `(${countCards(btn.tag)})`
-                    }}</span> -->
+                    countCards(btn.tag) == 0 ? '' : `(${countCards(btn.tag)})`
+                  }}</span> -->
                   </p>
                   <!-- <span class="badge" :class="isSelected ? 'active' : ''">2.7K</span> -->
                 </v-btn>
@@ -102,249 +102,272 @@
             </v-slide-group>
           </div>
         </v-container>
-        <div
-          class="promotion-container"
-          v-for="item in filteredItemsDesktop"
-          :key="item.id"
-        >
+        <template v-if="isCardLoading">
+          <v-container>
+            <p class="ml-8 mt-10">Loading...</p>
+          </v-container>
+        </template>
+        <template v-if="!isCardLoading">
           <div
-            class="w-100 d-flex justify-space-between"
-            :class="{
-              'px-16': !isSmall,
-              'px-5 section-head mt-n8 mb-n4': isSmall,
-            }"
+            class="promotion-container"
+            v-for="item in filteredItemsDesktop"
+            :key="item.id"
           >
-            <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
-              {{ item.title }}
-            </h2>
-            <h3
-              style="font-size: 16px !important; color: #000; font-weight: 700"
-              v-if="isSmall"
+            <div
+              class="w-100 d-flex justify-space-between"
+              :class="{
+                'px-16': !isSmall,
+                'px-5 section-head mt-n8 mb-n4': isSmall,
+              }"
             >
-              {{ item.title }}
-            </h3>
-            <router-link :to="item.path" class="text-decoration-none">
-              <h1 class="view-all">View all</h1>
-            </router-link>
-          </div>
-          <v-sheet
-            class="d-flex justify-start"
-            :class="{ 'ml-12': filteredItemsDesktop[0].list.length <= 4 }"
-            elevation="0"
-          >
-            <v-slide-group v-model="model" class="pa-4">
-              <v-slide-group-item
-                v-for="card in item.list"
-                :key="card"
-                v-slot="{ toggle }"
-                class="mx-4"
+              <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
+                {{ item.title }}
+              </h2>
+              <h3
+                style="
+                  font-size: 16px !important;
+                  color: #000;
+                  font-weight: 700;
+                "
+                v-if="isSmall"
               >
-                <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-                  <v-card
-                    class="my-4 card-cont"
-                    :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                    :height="!isSmall ? 290 : 280"
-                    :width="!isSmall ? 280 : 250"
-                    elevation="0"
-                    @click="toggle"
-                  >
-                    <div
-                      v-if="isSmall"
-                      style="
-                        font-size: 16px;
-                        font-weight: 600;
-                        margin-bottom: 10px;
-                        line-height: 19.36px;
-                      "
-                      class="pt-2"
+                {{ item.title }}
+              </h3>
+              <router-link :to="item.path" class="text-decoration-none">
+                <h1 class="view-all">View all</h1>
+              </router-link>
+            </div>
+            <v-sheet
+              class="d-flex justify-start"
+              :class="{ 'ml-12': filteredItemsDesktop[0].list.length <= 4 }"
+              elevation="0"
+            >
+              <v-slide-group v-model="model" class="pa-4">
+                <v-slide-group-item
+                  v-for="card in item.list"
+                  :key="card"
+                  v-slot="{ toggle }"
+                  class="mx-4"
+                >
+                  <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                    <v-card
+                      class="my-4 card-cont"
+                      :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+                      :height="!isSmall ? 290 : 280"
+                      :width="!isSmall ? 280 : 250"
+                      elevation="0"
+                      @click="toggle"
                     >
-                      {{
-                        card.text.length >= 28
-                          ? card.text.substring(0, 28) + '..'
-                          : card.text
-                      }}
-                    </div>
-                    <div
-                      v-if="!isSmall"
-                      style="
-                        font-size: 16px;
-                        font-weight: 600;
-                        margin-bottom: 10px;
-                        line-height: 19.36px;
-                      "
-                      class="pt-2 text-left"
-                    >
-                      {{
-                        card.text.length >= 32
-                          ? card.text.substring(0, 32) + '..'
-                          : card.text
-                      }}
-                    </div>
-                    <div
-                      class="trending__app"
-                      :class="{
-                        'card-image-cont-1': !isSmall,
-                        'card-image-cont-2': isSmall,
-                      }"
-                    >
-                      <v-img
-                        :src="card.image"
-                        class="card-image"
-                        :height="isSmall ? 170 : 220"
-                        cover
-                        transition="fade-transition"
+                      <div
+                        v-if="isSmall"
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 10px;
+                          line-height: 19.36px;
+                        "
+                        class="pt-2"
                       >
-                        <template #placeholder>
-                          <div class="skeleton skeleton-category ml-2" />
-                        </template>
-                      </v-img>
-                    </div>
-                    <v-btn
-                      elevation="4"
-                      :to="`/detail/${card.id}`"
-                      style="
-                        position: absolute;
-                        bottom: 90px;
-                        left: 15px;
-                        background-color: #fa2964;
-                        border-radius: 5px;
-                        padding-left: 8px;
-                        padding-right: 6px;
-                        padding-top: 4px;
-                        padding-bottom: 4px;
-                        font-weight: 600;
-                        font-size: 12px;
-                      "
-                    >
-                      <span class="text-white" style="">View Jobs</span>
-                    </v-btn>
-
-                    <div
-                      class="card-description d-flex flex-column mt-4"
-                      style="position: relative; gap: 10px"
-                    >
-                      <div class="card-address d-flex align-center">
-                        <div style="width: 25%">
-                          <v-img :src="card.locationImg" height="35"
-                            ><template #placeholder>
-                              <div class="skeleton" /> </template
-                          ></v-img>
-                        </div>
-                        <div
-                          style="width: 75 %"
-                          class="card-address-info text-left"
+                        {{
+                          card.text.length >= 28
+                            ? card.text.substring(0, 28) + '..'
+                            : card.text
+                        }}
+                      </div>
+                      <div
+                        v-if="!isSmall"
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 10px;
+                          line-height: 19.36px;
+                        "
+                        class="pt-2 text-left"
+                      >
+                        {{
+                          card.text.length >= 32
+                            ? card.text.substring(0, 32) + '..'
+                            : card.text
+                        }}
+                      </div>
+                      <div
+                        class="trending__app"
+                        :class="{
+                          'card-image-cont-1': !isSmall,
+                          'card-image-cont-2': isSmall,
+                        }"
+                      >
+                        <v-img
+                          :src="card.image"
+                          class="card-image"
+                          :height="isSmall ? 170 : 220"
+                          cover
+                          transition="fade-transition"
                         >
-                          <h4 style="font-weight: 600">
-                            {{
-                              card.place.length >= 32
-                                ? card.place.substring(0, 32) + '..'
-                                : card.place + ' Jobs'
-                            }}
-                          </h4>
-                          <p style="font-weight: 400">
-                            {{ card.address }}
-                            <span class="text-red ml-2"
-                              >{{ card.distance }} kms</span
-                            ><span class="text-muted"> away</span>
-                          </p>
+                          <template #placeholder>
+                            <div class="skeleton skeleton-category ml-2" />
+                          </template>
+                        </v-img>
+                      </div>
+                      <v-btn
+                        elevation="4"
+                        :to="`/detail/${card.id}`"
+                        style="
+                          position: absolute;
+                          bottom: 90px;
+                          left: 15px;
+                          background-color: #fa2964;
+                          border-radius: 5px;
+                          padding-left: 8px;
+                          padding-right: 6px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                        "
+                      >
+                        <span class="text-white" style="">View Jobs</span>
+                      </v-btn>
+
+                      <div
+                        class="card-description d-flex flex-column mt-4"
+                        style="position: relative; gap: 10px"
+                      >
+                        <div class="card-address d-flex align-center">
+                          <div style="width: 25%">
+                            <v-img :src="card.locationImg" height="35"
+                              ><template #placeholder>
+                                <div class="skeleton" /> </template
+                            ></v-img>
+                          </div>
+                          <div
+                            style="width: 75 %"
+                            class="card-address-info text-left"
+                          >
+                            <h4 style="font-weight: 600">
+                              {{
+                                card.place.length >= 32
+                                  ? card.place.substring(0, 32) + '..'
+                                  : card.place + ' Jobs'
+                              }}
+                            </h4>
+                            <p style="font-weight: 400">
+                              {{ card.address }}
+                              <span class="text-red ml-2"
+                                >{{ card.distance }} kms</span
+                              ><span class="text-muted"> away</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div
-                      class="card-btn-container d-flex justify-space-between"
-                    >
-                      <v-btn
-                        color="black"
-                        class="card-btn"
-                        :width="isSmall ? 40 : 32"
-                        :height="isSmall ? 40 : 32"
-                        icon="mdi-share-variant-outline"
+                      <div
+                        class="card-btn-container d-flex justify-space-between"
                       >
-                        <v-icon size="20" color="red">
-                          mdi-share-variant-outline
-                        </v-icon></v-btn
-                      >
-                      <v-btn
-                        class="card-btn"
-                        color="black"
-                        icon="mdi-heart-outline"
-                        :width="isSmall ? 40 : 32"
-                        :height="isSmall ? 40 : 32"
-                      >
-                        <v-icon size="20" color="red">
-                          mdi-heart-outline
-                        </v-icon>
-                      </v-btn>
-                    </div>
-                  </v-card>
-                </v-lazy>
-              </v-slide-group-item>
-              <v-slide-group-item v-slot="{ toggle }">
-                <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-                  <v-card
-                    class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-4 py-10"
-                    height="220"
-                    width="180"
-                    elevation="0"
-                    :to="item.path"
-                    style="border-radius: 12px; gap: 20px"
-                    @click="toggle"
-                  >
-                    <div
-                      class="text-left"
-                      style="font-weight: 600; font-size: 12px"
-                    >
-                      <p>View All {{ item.btn }}</p>
-                    </div>
-                    <v-btn
-                      size="40"
-                      color="#0197d5"
-                      rounded
-                      icon
-                      v-bind="attrs"
+                        <v-btn
+                          color="black"
+                          class="card-btn"
+                          :width="isSmall ? 40 : 32"
+                          :height="isSmall ? 40 : 32"
+                          icon="mdi-share-variant-outline"
+                        >
+                          <v-icon size="20" color="red">
+                            mdi-share-variant-outline
+                          </v-icon></v-btn
+                        >
+                        <v-btn
+                          class="card-btn"
+                          color="black"
+                          icon="mdi-heart-outline"
+                          :width="isSmall ? 40 : 32"
+                          :height="isSmall ? 40 : 32"
+                        >
+                          <v-icon size="20" color="red">
+                            mdi-heart-outline
+                          </v-icon>
+                        </v-btn>
+                      </div>
+                    </v-card>
+                  </v-lazy>
+                </v-slide-group-item>
+                <v-slide-group-item
+                  v-if="item.list.length > 4"
+                  v-slot="{ toggle }"
+                >
+                  <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                    <v-card
+                      class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-4 py-10"
+                      height="220"
+                      width="180"
+                      elevation="0"
                       :to="item.path"
-                      v-on="on"
+                      style="border-radius: 12px; gap: 20px"
+                      @click="toggle"
                     >
-                      <v-icon color="white"> mdi-arrow-right </v-icon>
-                    </v-btn>
-                  </v-card>
-                </v-lazy>
-              </v-slide-group-item>
-            </v-slide-group>
-          </v-sheet>
-        </div>
+                      <div
+                        class="text-left"
+                        style="font-weight: 600; font-size: 12px"
+                      >
+                        <p>View All {{ item.btn }}</p>
+                      </div>
+                      <v-btn
+                        size="40"
+                        color="#0197d5"
+                        rounded
+                        icon
+                        v-bind="attrs"
+                        :to="item.path"
+                        v-on="on"
+                      >
+                        <v-icon color="white"> mdi-arrow-right </v-icon>
+                      </v-btn>
+                    </v-card>
+                  </v-lazy>
+                </v-slide-group-item>
+              </v-slide-group>
+            </v-sheet>
+          </div>
+        </template>
       </template>
       <template v-if="isSmall">
         <div class="banner-container"></div>
-
-        <div
-          class="promotion-container"
-          v-for="item in filteredItems"
-          :key="item.id"
-        >
+        <template v-if="isCardLoading">
+          <v-container>
+            <p class="ml-8 mt-10">Loading...</p>
+          </v-container>
+        </template>
+        <template v-if="!isCardLoading">
           <div
-            class="w-100 d-flex justify-space-between"
-            :class="{
-              'px-16': !isSmall,
-              'px-5 section-head mt-n8 mb-n4': isSmall,
-            }"
+            class="promotion-container"
+            v-for="item in filteredItems"
+            :key="item.id"
           >
-            <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
-              {{ item.title }}
-            </h2>
-            <h3
-              style="font-size: 16px !important; color: #000; font-weight: 700"
-              v-if="isSmall"
+            <div
+              class="w-100 d-flex justify-space-between"
+              :class="{
+                'px-16': !isSmall,
+                'px-5 section-head mt-n8 mb-n4': isSmall,
+              }"
             >
-              {{ item.title }}
-            </h3>
-            <router-link :to="item.path" class="text-decoration-none">
-              <h1 class="view-all">View all</h1>
-            </router-link>
-          </div>
-          <v-sheet class="mx-auto" elevation="0">
-            <v-slide-group v-model="model" class="pa-4">
-              <!-- <template #prev="{ on, attrs }">
+              <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
+                {{ item.title }}
+              </h2>
+              <h3
+                style="
+                  font-size: 16px !important;
+                  color: #000;
+                  font-weight: 700;
+                "
+                v-if="isSmall"
+              >
+                {{ item.title }}
+              </h3>
+              <router-link :to="item.path" class="text-decoration-none">
+                <h1 class="view-all">View all</h1>
+              </router-link>
+            </div>
+            <v-sheet class="mx-auto" elevation="0">
+              <v-slide-group v-model="model" class="pa-4">
+                <!-- <template #prev="{ on, attrs }">
                 <v-btn
                   v-if="activeIndexCategory > 1"
                   color="black"
@@ -370,61 +393,61 @@
                   <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
               </template> -->
-              <v-slide-group-item
-                v-for="card in item.list"
-                :key="card"
-                v-slot="{ toggle }"
-                class="mx-4"
-              >
-                <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-                  <v-card
-                    class="my-4 card-cont"
-                    :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                    :height="!isSmall ? 290 : 280"
-                    :width="!isSmall ? 280 : 250"
-                    elevation="0"
-                    @click="toggle"
-                  >
-                    <div
-                      v-if="isSmall"
-                      style="
-                        font-size: 16px;
-                        font-weight: 600;
-                        margin-bottom: 10px;
-                        line-height: 19.36px;
-                      "
-                      class="pt-2"
+                <v-slide-group-item
+                  v-for="card in item.list"
+                  :key="card"
+                  v-slot="{ toggle }"
+                  class="mx-4"
+                >
+                  <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                    <v-card
+                      class="my-4 card-cont"
+                      :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+                      :height="!isSmall ? 290 : 280"
+                      :width="!isSmall ? 280 : 250"
+                      elevation="0"
+                      @click="toggle"
                     >
-                      {{
-                        card.text.length >= 28
-                          ? card.text.substring(0, 28) + '..'
-                          : card.text
-                      }}
-                    </div>
-                    <div
-                      v-if="!isSmall"
-                      style="
-                        font-size: 16px;
-                        font-weight: 600;
-                        margin-bottom: 10px;
-                        line-height: 19.36px;
-                      "
-                      class="pt-2 text-left"
-                    >
-                      {{
-                        card.text.length >= 32
-                          ? card.text.substring(0, 32) + '..'
-                          : card.text
-                      }}
-                    </div>
-                    <div
-                      class="trending__app"
-                      :class="{
-                        'card-image-cont-1': !isSmall,
-                        'card-image-cont-2': isSmall,
-                      }"
-                    >
-                      <!-- <div class="cart clearfix animate-effect">
+                      <div
+                        v-if="isSmall"
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 10px;
+                          line-height: 19.36px;
+                        "
+                        class="pt-2"
+                      >
+                        {{
+                          card.text.length >= 28
+                            ? card.text.substring(0, 28) + '..'
+                            : card.text
+                        }}
+                      </div>
+                      <div
+                        v-if="!isSmall"
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 10px;
+                          line-height: 19.36px;
+                        "
+                        class="pt-2 text-left"
+                      >
+                        {{
+                          card.text.length >= 32
+                            ? card.text.substring(0, 32) + '..'
+                            : card.text
+                        }}
+                      </div>
+                      <div
+                        class="trending__app"
+                        :class="{
+                          'card-image-cont-1': !isSmall,
+                          'card-image-cont-2': isSmall,
+                        }"
+                      >
+                        <!-- <div class="cart clearfix animate-effect">
                         <div class="action">
                           <div class="px-2 text-center">
                             <v-btn
@@ -449,133 +472,137 @@
                           </div>
                         </div>
                       </div> -->
-                      <!-- <div class="overlay"></div> -->
-                      <v-img
-                        :src="card.image"
-                        class="card-image"
-                        :height="isSmall ? 170 : 220"
-                        cover
-                        transition="fade-transition"
-                      >
-                        <template #placeholder>
-                          <div class="skeleton skeleton-category ml-2" />
-                        </template>
-                      </v-img>
-                    </div>
-                    <v-btn
-                      elevation="4"
-                      :to="`/detail/${card.id}`"
-                      style="
-                        position: absolute;
-                        bottom: 90px;
-                        left: 15px;
-                        background-color: #fa2964;
-                        border-radius: 5px;
-                        padding-left: 8px;
-                        padding-right: 6px;
-                        padding-top: 4px;
-                        padding-bottom: 4px;
-                        font-weight: 600;
-                        font-size: 12px;
-                      "
-                    >
-                      <span class="text-white" style="">View Jobs</span>
-                    </v-btn>
-
-                    <div
-                      class="card-description d-flex flex-column mt-4"
-                      style="position: relative; gap: 10px"
-                    >
-                      <div class="card-address d-flex align-center">
-                        <div style="width: 25%">
-                          <v-img :src="card.locationImg" height="35"
-                            ><template #placeholder>
-                              <div class="skeleton" /> </template
-                          ></v-img>
-                        </div>
-                        <div
-                          style="width: 75 %"
-                          class="card-address-info text-left"
+                        <!-- <div class="overlay"></div> -->
+                        <v-img
+                          :src="card.image"
+                          class="card-image"
+                          :height="isSmall ? 170 : 220"
+                          cover
+                          transition="fade-transition"
                         >
-                          <h4 style="font-weight: 600">
-                            {{
-                              card.place.length >= 32
-                                ? card.place.substring(0, 32) + '..'
-                                : card.place + ' Jobs'
-                            }}
-                          </h4>
-                          <p style="font-weight: 400">
-                            {{ card.address }}
-                            <span class="text-red ml-2"
-                              >{{ card.distance }} kms</span
-                            ><span class="text-muted"> away</span>
-                          </p>
+                          <template #placeholder>
+                            <div class="skeleton skeleton-category ml-2" />
+                          </template>
+                        </v-img>
+                      </div>
+                      <v-btn
+                        elevation="4"
+                        :to="`/detail/${card.id}`"
+                        style="
+                          position: absolute;
+                          bottom: 90px;
+                          left: 15px;
+                          background-color: #fa2964;
+                          border-radius: 5px;
+                          padding-left: 8px;
+                          padding-right: 6px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                        "
+                      >
+                        <span class="text-white" style="">View Jobs</span>
+                      </v-btn>
+
+                      <div
+                        class="card-description d-flex flex-column mt-4"
+                        style="position: relative; gap: 10px"
+                      >
+                        <div class="card-address d-flex align-center">
+                          <div style="width: 25%">
+                            <v-img :src="card.locationImg" height="35"
+                              ><template #placeholder>
+                                <div class="skeleton" /> </template
+                            ></v-img>
+                          </div>
+                          <div
+                            style="width: 75 %"
+                            class="card-address-info text-left"
+                          >
+                            <h4 style="font-weight: 600">
+                              {{
+                                card.place.length >= 32
+                                  ? card.place.substring(0, 32) + '..'
+                                  : card.place + ' Jobs'
+                              }}
+                            </h4>
+                            <p style="font-weight: 400">
+                              {{ card.address }}
+                              <span class="text-red ml-2"
+                                >{{ card.distance }} kms</span
+                              ><span class="text-muted"> away</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div
-                      class="card-btn-container d-flex justify-space-between"
-                    >
-                      <v-btn
-                        color="black"
-                        class="card-btn"
-                        :width="isSmall ? 40 : 32"
-                        :height="isSmall ? 40 : 32"
-                        icon="mdi-share-variant-outline"
+                      <div
+                        class="card-btn-container d-flex justify-space-between"
                       >
-                        <v-icon size="20" color="red">
-                          mdi-share-variant-outline
-                        </v-icon></v-btn
-                      >
-                      <v-btn
-                        class="card-btn"
-                        color="black"
-                        icon="mdi-heart-outline"
-                        :width="isSmall ? 40 : 32"
-                        :height="isSmall ? 40 : 32"
-                      >
-                        <v-icon size="20" color="red">
-                          mdi-heart-outline
-                        </v-icon>
-                      </v-btn>
-                    </div>
-                  </v-card>
-                </v-lazy>
-              </v-slide-group-item>
-              <v-slide-group-item v-slot="{ toggle }">
-                <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-                  <v-card
-                    class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-4 py-10"
-                    height="220"
-                    width="180"
-                    elevation="0"
-                    :to="item.path"
-                    style="border-radius: 12px; gap: 20px"
-                    @click="toggle"
-                  >
-                    <div
-                      class="text-left"
-                      style="font-weight: 600; font-size: 12px"
-                    >
-                      <p>View All {{ item.btn }}</p>
-                    </div>
-                    <v-btn
-                      size="40"
-                      color="#0197d5"
-                      rounded
-                      icon
-                      v-bind="attrs"
+                        <v-btn
+                          color="black"
+                          class="card-btn"
+                          :width="isSmall ? 40 : 32"
+                          :height="isSmall ? 40 : 32"
+                          icon="mdi-share-variant-outline"
+                        >
+                          <v-icon size="20" color="red">
+                            mdi-share-variant-outline
+                          </v-icon></v-btn
+                        >
+                        <v-btn
+                          class="card-btn"
+                          color="black"
+                          icon="mdi-heart-outline"
+                          :width="isSmall ? 40 : 32"
+                          :height="isSmall ? 40 : 32"
+                        >
+                          <v-icon size="20" color="red">
+                            mdi-heart-outline
+                          </v-icon>
+                        </v-btn>
+                      </div>
+                    </v-card>
+                  </v-lazy>
+                </v-slide-group-item>
+                <v-slide-group-item
+                  v-if="item.list.length > 4"
+                  v-slot="{ toggle }"
+                >
+                  <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                    <v-card
+                      class="my-4 text-center mx-3 d-flex flex-column align-center justify-center px-4 py-10"
+                      height="220"
+                      width="180"
+                      elevation="0"
                       :to="item.path"
-                      v-on="on"
+                      style="border-radius: 12px; gap: 20px"
+                      @click="toggle"
                     >
-                      <v-icon color="white"> mdi-arrow-right </v-icon>
-                    </v-btn>
-                  </v-card>
-                </v-lazy>
-              </v-slide-group-item>
-            </v-slide-group>
-          </v-sheet>
-        </div>
+                      <div
+                        class="text-left"
+                        style="font-weight: 600; font-size: 12px"
+                      >
+                        <p>View All {{ item.btn }}</p>
+                      </div>
+                      <v-btn
+                        size="40"
+                        color="#0197d5"
+                        rounded
+                        icon
+                        v-bind="attrs"
+                        :to="item.path"
+                        v-on="on"
+                      >
+                        <v-icon color="white"> mdi-arrow-right </v-icon>
+                      </v-btn>
+                    </v-card>
+                  </v-lazy>
+                </v-slide-group-item>
+              </v-slide-group>
+            </v-sheet>
+          </div>
+        </template>
       </template>
       <v-container :class="{ 'w-75 mx-auto': !isSmall }">
         <div
@@ -596,15 +623,18 @@
                 Registrable
               </h1>
               <h3 v-if="isSmall" class="registrable-title mb-4">
-                <span class="text-blue-darken-4">Physiotherapist</span> is
+                <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
                 Registrable
               </h3>
               <p :class="{ 'regist-desktop': !isSmall }">
                 Your Qualifications must be registrable with
-                <span class="text-blue-darken-4">AHPC</span> in Order for you to
-                apply for a
-                <span class="text-blue-darken-4">Physioterapist Job</span> in
-                <span class="text-blue-darken-4">Singapore</span>
+                <span class="text-blue-darken-4">{{
+                  skillSlug.regulator
+                }}</span>
+                in Order for you to apply for a
+                <span class="text-blue-darken-4">{{ skillSlug.name }} Job</span>
+                in
+                <span class="text-blue-darken-4">{{ itemSelected }}</span>
               </p>
             </div>
             <v-btn
@@ -643,7 +673,7 @@
                 }"
                 :height="isSmall ? 145 : 250"
                 cover
-                src="@/assets/use-1.jpg"
+                :src="skillSlug.mainImage"
               >
                 <template #placeholder>
                   <div class="skeleton" />
@@ -668,6 +698,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isCardLoading: false,
       screenWidth: window.innerWidth,
       itemData: {},
       title: '',
@@ -728,7 +759,6 @@ export default {
   },
   mounted() {
     this.getSkillBySlug();
-    this.getSpecificJobs();
     this.checkDetail();
     app.config.globalProperties.$eventBus.$on(
       'filterSpecificJobs',
@@ -750,6 +780,7 @@ export default {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
     },
     getCountry() {
+      this.isLoading = true;
       axios
         .get(`/country`)
         .then((response) => {
@@ -765,6 +796,9 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     getSkillBySlug() {
@@ -774,10 +808,12 @@ export default {
         .get(`/skills/slug/${slug}`)
         .then((response) => {
           const data = response.data.data;
-          // console.log(data);
+          //console.log(data);
           this.skillSlug = {
             ...data,
             image: this.$fileURL + data.image || '',
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
             name: data.skills_name || '',
           };
           this.getCountry();
@@ -792,6 +828,7 @@ export default {
         });
     },
     getGroups(skillId, countryId) {
+      this.isCardLoading = true;
       // this.trendingBtn = [
       //   {
       //     id: 1,
@@ -815,10 +852,13 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
         });
     },
     getSpecificJobs(skillId, countryId) {
-      this.isLoading = true;
+      this.isCardLoading = true;
       axios
         .get(`/sub-industries-jobs/${skillId}/${countryId}`)
         .then((response) => {
@@ -869,7 +909,7 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          this.isLoading = false;
+          this.isCardLoading = false;
         });
     },
     filterSpecificJobs(positionId) {
@@ -1305,8 +1345,8 @@ export default {
 }
 
 .registrable-img {
-  height: 250px;
-  width: 250px;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
@@ -1317,8 +1357,8 @@ export default {
   border-radius: 50%;
 }
 .registrable-img-2 {
-  height: 145px;
-  width: 145px;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
