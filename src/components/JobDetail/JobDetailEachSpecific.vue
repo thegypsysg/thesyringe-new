@@ -334,7 +334,7 @@
         <div :class="{ 'w-75': !isSmall }">
           <div
             :class="{
-              ' my-16 d-flex justify-space-between': !isSmall,
+              ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
               ' my-6 d-flex justify-space-between': isSmall,
             }"
           >
@@ -346,19 +346,24 @@
             >
               <div class="registrable-info mb-10">
                 <h1 v-if="!isSmall" class="registrable-title mb-4">
-                  <span class="text-blue-darken-4">Physiotherapist</span> is
-                  Registrable
+                  <span class="text-blue-darken-4">{{ skillSlug.name }}</span>
+                  is Registrable
                 </h1>
                 <h3 v-if="isSmall" class="registrable-title mb-4">
-                  <span class="text-blue-darken-4">Physiotherapist</span> is
-                  Registrable
+                  <span class="text-blue-darken-4">{{ skillSlug.name }}</span>
+                  is Registrable
                 </h3>
                 <p :class="{ 'regist-desktop': !isSmall }">
                   Your Qualifications must be registrable with
-                  <span class="text-blue-darken-4">AHPC</span> in Order for you
-                  to apply for a
-                  <span class="text-blue-darken-4">Physioterapist Job</span> in
-                  <span class="text-blue-darken-4">Singapore</span>
+                  <span class="text-blue-darken-4">{{
+                    skillSlug.regulator
+                  }}</span>
+                  in Order for you to apply for a
+                  <span class="text-blue-darken-4"
+                    >{{ skillSlug.name }} Job</span
+                  >
+                  in
+                  <span class="text-blue-darken-4">{{ itemSelected }}</span>
                 </p>
               </div>
               <v-btn
@@ -397,7 +402,7 @@
                   }"
                   :height="isSmall ? 145 : 250"
                   cover
-                  src="@/assets/use-1.jpg"
+                  :src="skillSlug.mainImage"
                 >
                   <template #placeholder>
                     <div class="skeleton" />
@@ -426,6 +431,7 @@ export default {
       isLoading: false,
       screenWidth: window.innerWidth,
       itemData: {},
+      skillSlug: {},
       idDetail: null,
       title: '',
       skillsGroup: [],
@@ -439,6 +445,7 @@ export default {
   },
   computed: {
     ...mapState(['activeTag']),
+    ...mapState(['itemSelected']),
     ...mapState(['detailHeader']),
     isSmall() {
       return this.screenWidth < 640;
@@ -481,7 +488,6 @@ export default {
   },
   mounted() {
     this.getSpecificJobs();
-    this.getGroups();
     this.checkDetail();
   },
   unmounted() {
@@ -492,76 +498,30 @@ export default {
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
     },
-    getGroups() {
-      this.trendingBtn = [
-        {
-          id: 1,
-          title: 'Physiotherapist',
-          tag: 'Physiotherapist',
-        },
-        {
-          id: 2,
-          title: 'Senior Physiotherapist',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 3,
-          title: 'Principal Physiotherapist',
-          tag: 'Principal Physiotherapist',
-        },
-        {
-          id: 4,
-          title: 'Physio Assistants',
-          tag: 'Physio Assistants',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-        {
-          id: 0,
-          title: '',
-          tag: '',
-        },
-      ];
-      // axios
-      //   .get(`/groups`)
-      //   .then((response) => {
-      //     const data = response.data.data;
-      //     // console.log(data);
-      //     this.trendingBtn = data.map((group) => {
-      //       return {
-      //         id: group.app_group_id,
-      //         title: group.app_group_name,
-      //         tag: group.app_group_name,
-      //       };
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     // eslint-disable-next-line
-      //     console.log(error);
-      //   });
+    getSkillBySlug(slug) {
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          this.skillSlug = {
+            ...data,
+            image: this.$fileURL + data.image || '',
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
+            name: data.skills_name || '',
+          };
+          this.getCountry();
+          // console.log(this.skillSlug);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     // countCards(tag) {
     //   const count = this.trendingCard.filter(
@@ -583,7 +543,7 @@ export default {
         .get(`/jobs/get-details/${id}`)
         .then((response) => {
           const data = response.data.data;
-
+          this.getSkillBySlug(data.slug);
           this.itemData = {
             ...data,
             id: data.job_id || 1,
@@ -614,9 +574,9 @@ export default {
             desc: data.job_description || '-',
             benefits: data.benefits || '-',
             about: data.about_us || '-',
+            slug: data.slug || '',
           };
           //console.log(this.itemData.desc);
-
           this.$store.commit('setDetailHeader', this.itemData);
         })
         .catch((error) => {

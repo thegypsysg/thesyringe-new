@@ -619,7 +619,7 @@
           >
             <div class="registrable-info mb-10">
               <h1 v-if="!isSmall" class="registrable-title mb-4">
-                <span class="text-blue-darken-4">Physiotherapist</span> is
+                <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
                 Registrable
               </h1>
               <h3 v-if="isSmall" class="registrable-title mb-4">
