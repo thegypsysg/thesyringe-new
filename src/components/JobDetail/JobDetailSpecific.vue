@@ -610,78 +610,87 @@
       >
         <div
           :class="{
-            ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
-            ' my-6 d-flex justify-space-between': isSmall,
+            'd-flex flex-column mt-10 mb-14': !isSmall,
+            'd-flex flex-column my-6 d-flex': isSmall,
           }"
         >
+          <h1 v-if="!isSmall" class="registrable-title mb-4">
+            <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
+            Registrable
+          </h1>
+          <h3 v-if="isSmall" class="registrable-title mb-4">
+            <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
+            Registrable
+          </h3>
           <div
             :class="{
-              'registrable-desc': !isSmall,
-              'registrable-desc-2': isSmall,
-            }"
-          >
-            <div class="registrable-info mb-10">
-              <h1 v-if="!isSmall" class="registrable-title mb-4">
-                <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
-                Registrable
-              </h1>
-              <h3 v-if="isSmall" class="registrable-title mb-4">
-                <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
-                Registrable
-              </h3>
-              <p :class="{ 'regist-desktop': !isSmall }">
-                Your Qualifications must be registrable with
-                <span class="text-blue-darken-4">{{
-                  skillSlug.regulator
-                }}</span>
-                in Order for you to apply for a
-                <span class="text-blue-darken-4">{{ skillSlug.name }} Job</span>
-                in
-                <span class="text-blue-darken-4">{{ itemSelected }}</span>
-              </p>
-            </div>
-            <v-btn
-              elevation="1"
-              style="
-                background-color: #0865c2;
-                border-radius: 50px;
-                font-weight: 600;
-              "
-              :height="isSmall ? 50 : 60"
-              :class="{
-                'regist-btn px-10': !isSmall,
-                'regist-btn-2 px-6': isSmall,
-              }"
-            >
-              <span class="text-white" style="">Check Here</span>
-            </v-btn>
-          </div>
-          <div
-            class="d-flex justify-end"
-            :class="{
-              'regist-img': !isSmall,
-              'regist-img-2': isSmall,
+              ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
+              ' my-6 d-flex justify-space-between': isSmall,
             }"
           >
             <div
               :class="{
-                'registrable-img-cont': !isSmall,
-                'registrable-img-cont-2': isSmall,
+                'registrable-desc': !isSmall,
+                'registrable-desc-2': isSmall,
               }"
             >
-              <v-img
+              <div class="registrable-info mb-10">
+                <p :class="{ 'regist-desktop': !isSmall }">
+                  Your Qualifications must be registrable with
+                  <span class="text-blue-darken-4">{{
+                    skillSlug.regulator
+                  }}</span>
+                  in Order for you to apply for a
+                  <span class="text-blue-darken-4"
+                    >{{ skillSlug.name }} Job</span
+                  >
+                  in
+                  <span class="text-blue-darken-4">{{ itemSelected }}</span>
+                </p>
+              </div>
+              <v-btn
+                elevation="1"
+                style="
+                  background-color: #0865c2;
+                  border-radius: 50px;
+                  font-weight: 600;
+                "
+                :height="isSmall ? 50 : 60"
                 :class="{
-                  'registrable-img': !isSmall,
-                  'registrable-img-2': isSmall,
+                  'regist-btn px-10': !isSmall,
+                  'regist-btn-2 px-6': isSmall,
                 }"
-                :height="isSmall ? 145 : 250"
-                cover
-                :src="skillSlug.mainImage"
               >
-                <template #placeholder>
-                  <div class="skeleton" />
-                </template>
-              </v-img>
+                <span class="text-white" style="">Check Here</span>
+              </v-btn>
+            </div>
+            <div
+              class="d-flex justify-end"
+              :class="{
+                'regist-img': !isSmall,
+                'regist-img-2': isSmall,
+              }"
+            >
+              <div
+                :class="{
+                  'registrable-img-cont': !isSmall,
+                  'registrable-img-cont-2': isSmall,
+                }"
+              >
+                <v-img
+                  :class="{
+                    'registrable-img': !isSmall,
+                    'registrable-img-2': isSmall,
+                  }"
+                  :height="isSmall ? 145 : 250"
+                  cover
+                  :src="skillSlug.mainImage"
+                >
+                  <template #placeholder>
+                    <div class="skeleton" />
+                  </template>
+                </v-img>
+              </div>
             </div>
           </div>
         </div>
