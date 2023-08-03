@@ -517,7 +517,7 @@ export default {
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
           };
-          this.getCountry();
+          //this.getCountry();
           // console.log(this.skillSlug);
         })
         .catch((error) => {
@@ -548,7 +548,7 @@ export default {
         .get(`/jobs/get-details/${id}`)
         .then((response) => {
           const data = response.data.data;
-          this.getSkillBySlug(data.slug);
+          //this.getSkillBySlug(data.slug);
           this.itemData = {
             ...data,
             id: data.job_id || 1,
@@ -578,9 +578,15 @@ export default {
                 : '-',
             salary: data.salary_range || '-',
             desc: data.job_description || '-',
-            benefits: data.benefits.split('\r\n') || '-',
+            benefits: data.benefits != null ? data.benefits.split('\r\n') : '-',
             about: data.about_us || '-',
             slug: data.slug || '',
+          };
+          this.skillSlug = {
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
+            name: data.skills_name || '',
+            registrable: data.registrable || 'N',
           };
           //console.log(this.itemData.desc);
           this.$store.commit('setDetailHeader', this.itemData);
