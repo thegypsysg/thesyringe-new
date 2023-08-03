@@ -121,7 +121,11 @@
             </div>
           </div>
         </div>
-        <div class="info-2 d-flex align-center mt-6" style="height: 20px">
+        <div
+          :class="{ 'info-2-mobile': isSmall }"
+          class="info-2 d-flex align-center mt-6"
+          style="height: 20px"
+        >
           <span class="text-grey">{{ itemData.dated }}</span>
           <div class="divider mx-6" style="background: #a7a7a7"></div>
           <span class="text-grey">{{ itemData.numPositions }} Position</span>
@@ -206,7 +210,7 @@
             <h2 v-if="isSmall">Benefits</h2>
           </div>
           <div class="description-list">
-            <p>{{ itemData.benefits }}</p>
+            <p v-for="item in itemData.benefits" :key="item">{{ item }}</p>
             <!-- <ul v-if="itemData.benefits !== '-'">
               <li v-for="(benefit, index) in itemData.benefits" :key="index">
                 {{ benefit }}
@@ -247,7 +251,7 @@
           <div style="gap: 10px" class="connected-link d-flex">
             <v-btn
               v-if="itemData.tiktok != null"
-              :to="itemData.tiktok"
+              :href="itemData.tiktok"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: black"
@@ -261,7 +265,7 @@
 
             <v-btn
               v-if="itemData.facebook != null"
-              :to="itemData.facebook"
+              :href="itemData.facebook"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #4267b2"
@@ -275,7 +279,7 @@
 
             <v-btn
               v-if="itemData.instagram != null"
-              :to="itemData.instagram"
+              :href="itemData.instagram"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #fc2145"
@@ -289,7 +293,7 @@
 
             <v-btn
               v-if="itemData.google != null"
-              :to="itemData.google"
+              :href="itemData.google"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               color="white"
@@ -303,7 +307,7 @@
 
             <v-btn
               v-if="itemData.youtube != null"
-              :to="itemData.youtube"
+              :href="itemData.youtube"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #cd201f"
@@ -317,7 +321,7 @@
 
             <v-btn
               v-if="itemData.twitter != null"
-              :to="itemData.twitter"
+              :href="itemData.twitter"
               :size="!isSmall ? '40' : '50'"
               variant="text"
               style="background: #55acee"
@@ -331,7 +335,7 @@
           </div>
         </div>
 
-        <div :class="{ 'w-75': !isSmall }">
+        <div v-if="skillSlug.registrable == 'Y'" :class="{ 'w-75': !isSmall }">
           <div
             :class="{
               ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
@@ -511,6 +515,7 @@ export default {
             mainImage: this.$fileURL + data.main_image || '',
             regulator: data.partner_name || '',
             name: data.skills_name || '',
+            registrable: data.registrable || 'N',
           };
           this.getCountry();
           // console.log(this.skillSlug);
@@ -561,6 +566,7 @@ export default {
             jobType: data.job_type || '-',
             workOption: data.working_option || '-',
             city: data.city_name || '',
+            location: data.location_name || '',
             zone: data.zone_name || '',
             work:
               data.work_timings && data.shift
@@ -572,7 +578,7 @@ export default {
                 : '-',
             salary: data.salary_range || '-',
             desc: data.job_description || '-',
-            benefits: data.benefits || '-',
+            benefits: data.benefits.split('\r\n') || '-',
             about: data.about_us || '-',
             slug: data.slug || '',
           };
@@ -628,7 +634,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 190px;
+  margin-top: 210px;
   position: relative;
 }
 .btn-container {
@@ -927,6 +933,10 @@ export default {
   width: 1px;
   height: 100%;
   background: #000;
+}
+
+.info-2-mobile {
+  font-size: 14px;
 }
 
 .share {

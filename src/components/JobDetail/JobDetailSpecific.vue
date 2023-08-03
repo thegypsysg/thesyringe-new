@@ -604,7 +604,10 @@
           </div>
         </template>
       </template>
-      <v-container :class="{ 'w-75 mx-auto': !isSmall }">
+      <v-container
+        v-if="skillSlug.registrable == 'Y'"
+        :class="{ 'w-75 mx-auto': !isSmall }"
+      >
         <div
           :class="{
             ' mt-10 mb-14  d-flex justify-space-between': !isSmall,
@@ -815,6 +818,7 @@ export default {
             mainImage: this.$fileURL + data.main_image || '',
             regulator: data.partner_name || '',
             name: data.skills_name || '',
+            registrable: data.registrable || 'N',
           };
           this.getCountry();
           // console.log(this.skillSlug);
@@ -1024,7 +1028,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 300px;
+  margin-top: 230px;
   position: relative;
 }
 .btn-container {

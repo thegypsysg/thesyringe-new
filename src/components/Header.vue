@@ -5,6 +5,7 @@
       'app-bar-mobile-2': isSmall && !isHome,
       'app-bar-mobile-3': isSmall && isWelcome,
       'app-bar-mobile-4': isSmall && isDetailPage,
+      'app-bar-mobile-5': isSmall && isSpecific,
     }"
     color="white"
     elevation="1"
@@ -90,8 +91,37 @@
     <template v-if="!isWelcome" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
-        :class="{ 'mb-n10': !isHome }"
+        :class="{ 'mb-n10': !isHome, 'mobile-specific': isSpecific }"
       >
+        <div v-if="isSpecific">
+          <v-menu>
+            <template #activator="{ props }">
+              <v-btn
+                style="
+                  margin-left: 30px;
+                  margin-right: 30px;
+                  font-size: 16px;
+                  color: #494949;
+                "
+                v-bind="props"
+                variant="text"
+              >
+                {{ itemSelected }}
+                <v-icon right dark> mdi-menu-down </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in country"
+                :key="index"
+                :value="index"
+                @click="changeItemSelected(item.title)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
         <div
           class="mb-n2"
           :class="{ 'mt-1 mb-n4': isDetailPage }"
@@ -107,7 +137,12 @@
             }}
           </h2>
         </div>
-        <div v-if="isHome || isDetailPage">
+        <div v-if="isDetailPage">
+          <span v-if="detailHeader.location">{{
+            detailHeader.location + ' ' + detailHeader.city
+          }}</span>
+        </div>
+        <div v-if="isHome">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
@@ -141,12 +176,12 @@
           style="height: 50px"
           class="info-title d-flex align-center mb-4 mt-n4"
         >
-          <v-img height="50" :src="detailHeader.logo">
+          <v-img height="40" :src="detailHeader.logo">
             <!-- <template #placeholder> <div class="skeleton" /> </template
           > -->
           </v-img>
-          <div class="divider-2 ml-10 mr-4"></div>
-          <div class="web">
+          <div v-if="!isSmall" class="divider-2 ml-10 mr-4"></div>
+          <div class="web" style="font-size: 12px">
             <h4>{{ detailHeader.partner }}</h4>
             <a class="text-decoration-none" :href="detailHeader.website"
               ><p class="text-blue-darken-4 font-weight-bold">
@@ -280,7 +315,10 @@ export default {
       return this.screenWidth < 640;
     },
     isHome() {
-      return this.$route.path === '/' || this.$route.path === '/physiojobs';
+      return this.$route.path === '/';
+    },
+    isSpecific() {
+      return this.$route.params.name;
     },
     isDetailPage() {
       return this.$route.path.includes('detail');
@@ -356,7 +394,7 @@ export default {
           // console.log(data);
           this.skillSlug = {
             ...data,
-            name: `${data.skills_name} Jobs` || '',
+            name: `${data.skills_name} Jobs ` || '',
           };
           // console.log(this.skillSlug);
           this.getHeaderDetail();
@@ -553,6 +591,9 @@ export default {
 .app-bar-mobile-4 {
   height: 26vh;
 }
+.app-bar-mobile-5 {
+  height: 20vh;
+}
 
 .divider {
   background: rgb(173, 173, 173);
@@ -601,6 +642,10 @@ export default {
 .v-list-cont {
   flex-direction: column;
   gap: 20px;
+}
+
+.mobile-specific {
+  height: 100px !important;
 }
 
 @keyframes skeleton {
