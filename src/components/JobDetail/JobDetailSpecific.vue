@@ -916,7 +916,7 @@ export default {
                     'jobs',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address: skill.location_name || '',
+                  address: skill.town_name || '',
                   distance: '4,5',
                   tag: skill.position_name || '',
                 };
@@ -975,7 +975,7 @@ export default {
                     'jobs',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address: skill.location_name || '',
+                  address: skill.town_name || '',
                   distance: '4,5',
                   tag: skill.position_name || '',
                 };
@@ -1252,7 +1252,7 @@ export default {
 .card-btn-container {
   position: absolute;
   gap: 10px;
-  bottom: 55px;
+  bottom: 60px;
   right: 30px;
   z-index: 100;
 }
