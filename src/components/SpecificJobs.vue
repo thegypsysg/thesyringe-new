@@ -13,13 +13,11 @@
             <span style="color: #ed1c2d; font-weight: 700">{{
               item.title
             }}</span>
-            in {{ itemSelected }}
           </h2>
           <h3 style="font-size: 16px !important" v-if="isSmall">
             <span style="color: #ed1c2d; font-weight: 700">{{
               item.title
             }}</span>
-            in {{ itemSelected }}
           </h3>
           <router-link :to="item.path" class="text-decoration-none">
             <h1 class="view-all">View all</h1>

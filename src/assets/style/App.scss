@@ -394,7 +394,7 @@ header {
   position: relative;
   margin-bottom: 0;
 }
-.navbar__search input {
+.navbar__search .search-input {
   border-radius: 0;
   box-sizing: border-box;
   color: #777777;
@@ -414,7 +414,7 @@ header {
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   height: 44px;
 }
-.navbar__search input:focus {
+.navbar__search .search-input:focus {
   outline: none;
 }
 .btn--search {

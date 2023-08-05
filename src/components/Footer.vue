@@ -174,7 +174,7 @@
     </div>
   </v-footer>
   <a
-    v-if="!isDetailPage"
+    v-if="!isDetailPage && !isSpecific"
     onclick='window.scrollTo({top: 0, behavior: "smooth"});'
     class="go-up"
     :class="{ 'go-up-2': isSmall && isDetailPage }"
@@ -182,6 +182,37 @@
   >
     <i class="fa fa-angle-double-up" aria-hidden="true"></i>
   </a>
+  <v-container
+    style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
+    class="d-flex justify-space-between align-center"
+    v-if="isSmall && isSpecific"
+  >
+    <div style="background: #fff" class="w-75 py-2 px-4">
+      <h3>Physioterapist Jobs Globally</h3>
+      <div class="d-flex" style="gap: 10px">
+        <v-card elevation="0">
+          <span>U.A.E</span>
+          <v-img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/255px-Flag_of_the_United_Arab_Emirates.svg.png"
+            height="30"
+          >
+            <template #placeholder> <div class="skeleton" /> </template
+          ></v-img>
+          <p><span class="text-red">20</span> Jobs</p>
+        </v-card>
+        <v-card elevation="0">
+          <span>Malaysia</span>
+          <v-img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Flag_of_Malaya.svg/1280px-Flag_of_Malaya.svg.png"
+            height="30"
+          >
+            <template #placeholder> <div class="skeleton" /> </template
+          ></v-img>
+          <p><span class="text-red">20</span> Jobs</p>
+        </v-card>
+      </div>
+    </div>
+  </v-container>
   <v-container
     style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
     class="d-flex justify-space-between align-center"
@@ -257,6 +288,9 @@ export default {
     },
     isDetailPage() {
       return this.$route.path.includes('detail');
+    },
+    isSpecific() {
+      return this.$route.params.name;
     },
   },
   created() {

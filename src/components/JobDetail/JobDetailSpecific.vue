@@ -336,6 +336,15 @@
           </v-container>
         </template>
         <template v-if="!isCardLoading">
+          <v-container class="mt-n16">
+            <p class="font-weight-bold pb-4">
+              In here you will find all
+              <span class="text-blue-darken-4">{{ skillSlug.name }} Jobs</span>
+              specifically in
+              <span class="text-blue-darken-4">{{ itemSelected }}</span>
+            </p>
+            <hr />
+          </v-container>
           <div
             class="promotion-container"
             v-for="item in filteredItems"
@@ -345,7 +354,7 @@
               class="w-100 d-flex justify-space-between"
               :class="{
                 'px-16': !isSmall,
-                'px-5 section-head mt-n8 mb-n4': isSmall,
+                'px-5 section-head mb-n4': isSmall,
               }"
             >
               <h2 style="color: #000; font-weight: 700" v-if="!isSmall">

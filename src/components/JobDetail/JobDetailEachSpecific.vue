@@ -574,6 +574,7 @@ export default {
             workOption: data.working_option || '-',
             city: data.city_name || '',
             location: data.location_name || '',
+            town: data.town_name || '',
             zone: data.zone_name || '',
             work:
               data.work_timings && data.shift
@@ -591,7 +592,7 @@ export default {
           };
           this.skillSlug = {
             mainImage: this.$fileURL + data.main_image || '',
-            regulator: data.partner_name || '',
+            regulator: data.partner_name_reg || '',
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
           };

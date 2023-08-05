@@ -157,7 +157,7 @@
                         <div class="px-2 text-center">
                           <v-btn
                             elevation="4"
-                            :to="item.path"
+                            :to="item.path != '' ? `/${item.path}` : ''"
                             style="
                               background-color: #fa2964;
                               border-radius: 50px;
@@ -325,6 +325,7 @@ export default {
               id: item.skills_id || 1,
               text: item.skills_name || '',
               jobs: 20,
+              path: item.slug || '',
               image: item.image ? this.$fileURL + item.image : '',
             };
           });
