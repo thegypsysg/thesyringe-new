@@ -59,9 +59,12 @@
             >
               <div class="d-flex align-center w-100">
                 <div class="w-25 py-1">
-                  <v-img height="40" :src="item?.raw?.image">
-                    <template #placeholder> <div class="skeleton" /> </template
-                  ></v-img>
+                  <div style="width: 100px">
+                    <v-img height="40" :src="item?.raw?.image">
+                      <template #placeholder>
+                        <div class="skeleton" /> </template
+                    ></v-img>
+                  </div>
                 </div>
                 <div class="w-75">
                   <p>{{ item?.raw?.name }}</p>
@@ -244,10 +247,12 @@
                 >
                   <div class="d-flex align-center w-100">
                     <div class="w-25 py-1">
-                      <v-img height="40" :src="item?.raw?.image">
-                        <template #placeholder>
-                          <div class="skeleton" /> </template
-                      ></v-img>
+                      <div style="width: 100px">
+                        <v-img height="40" :src="item?.raw?.image">
+                          <template #placeholder>
+                            <div class="skeleton" /> </template
+                        ></v-img>
+                      </div>
                     </div>
                     <div class="w-75">
                       <p>{{ item?.raw?.name }}</p>
@@ -272,12 +277,12 @@
         <div v-if="isHome" class="my-slide d-flex">
           <v-btn
             class="sub-menu-btn view-all"
-            :class="{
-              active: isSelected,
-            }"
             style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
             @click="selectTag('')"
           >
+            <!-- :class="{
+              active: isSelected,
+            }" -->
             <p style="font-size: 12px" elevation>View All</p>
             <!-- <span class="badge" :class="isSelected ? 'active' : ''"
             >2.7K</span
@@ -287,13 +292,13 @@
             <v-slide-group-item
               v-for="btn in trendingBtn"
               :key="btn.id"
-              v-slot="{ isSelected }"
               :value="btn.tag"
             >
+              <!-- v-slot="{ isSelected }" -->
               <v-btn
                 class="sub-menu-btn"
                 :class="{
-                  active: isSelected,
+                  active: activeTag == btn.id,
                 }"
                 style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
                 @click="selectTag(btn.id)"
@@ -351,23 +356,13 @@ export default {
   data() {
     return {
       // selectedTag: null,
+
       trendingBtn: [],
       isDetail: false,
       skillSlug: {},
       countryId: null,
       search: null,
-      searchItems: [
-        {
-          name: 'Physiotherapist',
-          image: require('@/assets/allied-jobs.jpg'),
-          slug: 'physiojobs',
-        },
-        {
-          name: 'Occupational Therapist',
-          image: require('@/assets/allied-jobs.jpg'),
-          slug: 'occupational-physio-jobs',
-        },
-      ],
+      searchItems: [],
 
       drawer: false,
       // itemSelected: 'Singapore',
@@ -382,6 +377,11 @@ export default {
       activeIndex: 1,
       screenWidth: window.innerWidth,
     };
+  },
+  watch: {
+    $route() {
+      this.search = null;
+    },
   },
   computed: {
     ...mapState(['itemSelected']),
@@ -416,9 +416,11 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.search = null;
     this.getLogo();
     this.getCountry();
     this.getTrendingCardData();
+    this.getActiveSkills();
     // app.config.globalProperties.$eventBus.$on(
     //   'getHeaderDetail',
     //   this.getHeaderDetail
@@ -458,6 +460,30 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getActiveSkills() {
+      this.isLoading = true;
+      axios
+        .get(`/skills/active`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.searchItems = data.map((item) => {
+            return {
+              id: item.skills_id || 1,
+              name: item.skills_name || '',
+              image: this.$fileURL + item.image || '',
+              slug: item.slug || '',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     getSkillBySlug() {
       this.isDetail = true;
       const slug = this.$route.params.name;
@@ -483,13 +509,6 @@ export default {
         });
     },
     getHeaderDetail() {
-      // this.trendingBtn = [
-      //   {
-      //     id: 1,
-      //     title: 'Physiotherapist',
-      //     tag: 'Physiotherapist',
-      //   },
-      // ];
       axios
         .get(`/job-positions/${this.skillSlug.skills_id}/${this.countryId}`)
         .then((response) => {
@@ -557,12 +576,6 @@ export default {
               tag: item.group_name || '',
             };
           });
-          // console.log(this.trendingBtn);
-
-          // app.config.globalProperties.$eventBus.$emit(
-          //   'update-image',
-          //   this.items
-          // );
         })
         .catch((error) => {
           // eslint-disable-next-line
