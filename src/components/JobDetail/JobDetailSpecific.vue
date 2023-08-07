@@ -120,7 +120,11 @@
                 'px-5 section-head mt-n8 mb-n4': isSmall,
               }"
             >
-              <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
+              <h2
+                style="font-weight: 700"
+                v-if="!isSmall"
+                class="text-blue-darken-4"
+              >
                 {{ item.title }}
               </h2>
               <h3
@@ -230,7 +234,7 @@
                       </v-btn>
 
                       <div
-                        class="card-description d-flex flex-column mt-4"
+                        class="card-description d-flex flex-column mt-6"
                         style="position: relative; gap: 10px"
                       >
                         <div class="card-address d-flex align-center">
@@ -251,12 +255,15 @@
                                   : card.place + ' Jobs'
                               }}
                             </h4>
-                            <p style="font-weight: 400">
-                              {{ card.address }}
-                              <span class="text-red ml-2"
-                                >{{ card.distance }} kms</span
-                              ><span class="text-muted"> away</span>
-                            </p>
+
+                            <div style="font-weight: 400">
+                              <p>{{ card.address }}</p>
+                              <p>
+                                <span class="text-red"
+                                  >{{ card.distance }} kms</span
+                                ><span class="text-muted"> away</span>
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -343,15 +350,16 @@
               specifically in
               <span class="text-blue-darken-4">{{ itemSelected }}</span>
             </p>
-            <hr />
+            <!-- <hr /> -->
           </v-container>
           <div
             class="promotion-container"
             v-for="item in filteredItems"
             :key="item.id"
           >
+            <hr />
             <div
-              class="w-100 d-flex justify-space-between"
+              class="w-100 d-flex justify-space-between mt-6"
               :class="{
                 'px-16': !isSmall,
                 'px-5 section-head mb-n4': isSmall,
@@ -360,21 +368,18 @@
               <h2 style="color: #000; font-weight: 700" v-if="!isSmall">
                 {{ item.title }}
               </h2>
-              <h3
-                style="
-                  font-size: 16px !important;
-                  color: #000;
-                  font-weight: 700;
-                "
+              <h2
+                style="font-size: 20px !important; font-weight: 700"
+                class="text-blue-darken-4"
                 v-if="isSmall"
               >
                 {{ item.title }}
-              </h3>
+              </h2>
               <router-link :to="item.path" class="text-decoration-none">
                 <h1 class="view-all">View all</h1>
               </router-link>
             </div>
-            <v-sheet class="mx-auto" elevation="0">
+            <v-sheet class="mx-auto mb-2" elevation="0">
               <v-slide-group v-model="model" class="pa-4">
                 <!-- <template #prev="{ on, attrs }">
                 <v-btn
@@ -410,7 +415,7 @@
                 >
                   <v-lazy :options="{ threshold: 0.5 }" min-height="100">
                     <v-card
-                      class="my-4 card-cont"
+                      class="mt-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
                       :height="!isSmall ? 290 : 280"
                       :width="!isSmall ? 280 : 250"
@@ -515,7 +520,7 @@
                       </v-btn>
 
                       <div
-                        class="card-description d-flex flex-column mt-4"
+                        class="card-description d-flex flex-column mt-6"
                         style="position: relative; gap: 10px"
                       >
                         <div class="card-address d-flex align-center">
@@ -526,7 +531,7 @@
                             ></v-img>
                           </div>
                           <div
-                            style="width: 75 %"
+                            style="width: 75%"
                             class="card-address-info text-left"
                           >
                             <h4 style="font-weight: 600">
@@ -536,12 +541,14 @@
                                   : card.place + ' Jobs'
                               }}
                             </h4>
-                            <p style="font-weight: 400">
-                              {{ card.address }}
-                              <span class="text-red ml-2"
-                                >{{ card.distance }} kms</span
-                              ><span class="text-muted"> away</span>
-                            </p>
+                            <div style="font-weight: 400">
+                              <p>{{ card.address }}</p>
+                              <p>
+                                <span class="text-red"
+                                  >{{ card.distance }} kms</span
+                                ><span class="text-muted"> away</span>
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>

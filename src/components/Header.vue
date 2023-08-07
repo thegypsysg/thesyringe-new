@@ -54,7 +54,7 @@
         <template v-slot:item="{ props, item }">
           <div v-bind="props">
             <router-link
-              class="text-decoration-none text-black"
+              class="text-decoration-none text-black font-weight-bold"
               :to="item.raw.slug"
             >
               <div class="d-flex align-center w-100">
@@ -242,19 +242,18 @@
             <template v-slot:item="{ props, item }">
               <div v-bind="props">
                 <router-link
-                  class="text-decoration-none text-black"
+                  class="text-decoration-none text-black font-weight-bold"
+                  style="font-size: 12px"
                   :to="item.raw.slug"
                 >
-                  <div class="d-flex align-center w-100">
-                    <div class="w-25 py-1">
-                      <div style="width: 100px">
-                        <v-img height="40" :src="item?.raw?.image">
-                          <template #placeholder>
-                            <div class="skeleton" /> </template
-                        ></v-img>
-                      </div>
+                  <div class="d-flex align-center" style="width: 100%">
+                    <div style="width: 30% !important" class="py-1">
+                      <v-img height="40" :src="item?.raw?.image">
+                        <template #placeholder>
+                          <div class="skeleton" /> </template
+                      ></v-img>
                     </div>
-                    <div class="w-75">
+                    <div style="width: 70% !important" class="pl-2">
                       <p>{{ item?.raw?.name }}</p>
                     </div>
                   </div>
