@@ -183,14 +183,17 @@
     <i class="fa fa-angle-double-up" aria-hidden="true"></i>
   </a>
   <v-container
-    style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
+    style="position: fixed; bottom: 0rem; left: 0; z-index: 99999"
     class="d-flex justify-space-between align-center"
     v-if="isSmall && isSpecific"
   >
-    <div style="background: #fff" class="w-75 py-2 px-4">
+    <div style="background: #a6fdf7" class="w-100 py-2 px-4">
       <h3>Physioterapist Jobs Globally</h3>
-      <div class="d-flex" style="gap: 10px">
-        <v-card elevation="0">
+      <div
+        class="d-flex mt-2"
+        style="gap: 10px; font-size: 12px; font-weight: 600"
+      >
+        <div elevation="0">
           <span>U.A.E</span>
           <v-img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/255px-Flag_of_the_United_Arab_Emirates.svg.png"
@@ -199,8 +202,8 @@
             <template #placeholder> <div class="skeleton" /> </template
           ></v-img>
           <p><span class="text-red">20</span> Jobs</p>
-        </v-card>
-        <v-card elevation="0">
+        </div>
+        <div elevation="0">
           <span>Malaysia</span>
           <v-img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Flag_of_Malaya.svg/1280px-Flag_of_Malaya.svg.png"
@@ -209,7 +212,7 @@
             <template #placeholder> <div class="skeleton" /> </template
           ></v-img>
           <p><span class="text-red">20</span> Jobs</p>
-        </v-card>
+        </div>
       </div>
     </div>
   </v-container>

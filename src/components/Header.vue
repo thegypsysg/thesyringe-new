@@ -49,26 +49,26 @@
         style="font-style: italic"
         placeholder="Nurse, Physio, Consultants, Oncologist, Medical, Executives"
         density="compact"
-        chips
-        closable-chips
         color="blue-grey-lighten-2"
       >
-        <template v-slot:chip="{ props, item }">
-          <v-chip
-            v-bind="props"
-            :to="`/${item.raw.slug}`"
-            :prepend-avatar="item.raw.image"
-            :text="item.raw.name"
-          ></v-chip>
-        </template>
-
         <template v-slot:item="{ props, item }">
-          <v-list-item
-            :to="`/${item.raw.slug}`"
-            v-bind="props"
-            :prepend-avatar="item?.raw?.image"
-            :title="item?.raw?.name"
-          ></v-list-item>
+          <div v-bind="props">
+            <router-link
+              class="text-decoration-none text-black"
+              :to="item.raw.slug"
+            >
+              <div class="d-flex align-center w-100">
+                <div class="w-25 py-1">
+                  <v-img height="40" :src="item?.raw?.image">
+                    <template #placeholder> <div class="skeleton" /> </template
+                  ></v-img>
+                </div>
+                <div class="w-75">
+                  <p>{{ item?.raw?.name }}</p>
+                </div>
+              </div>
+            </router-link>
+          </div>
         </template>
       </v-autocomplete>
       <!-- data-autocompleturl="https://boozards.com/merchant-product/search" -->
@@ -76,7 +76,7 @@
         <v-icon color="white"> mdi-magnify </v-icon>
       </button>
     </form>
-    <div class="mr-4" v-if="isDetailPage">
+    <div class="mr-4" v-if="isDetailPage && !isSmall">
       <span v-if="detailHeader.location">{{
         detailHeader.town + ' ' + detailHeader.city
       }}</span>
@@ -234,26 +234,27 @@
             style="font-style: italic"
             placeholder="Nurse, Physio, Consultants, Oncologist, Medical, Executives"
             density="compact"
-            chips
-            closable-chips
             color="blue-grey-lighten-2"
           >
-            <template v-slot:chip="{ props, item }">
-              <v-chip
-                v-bind="props"
-                :to="`/${item.raw.slug}`"
-                :prepend-avatar="item.raw.image"
-                :text="item.raw.name"
-              ></v-chip>
-            </template>
-
             <template v-slot:item="{ props, item }">
-              <v-list-item
-                :to="`/${item.raw.slug}`"
-                v-bind="props"
-                :prepend-avatar="item?.raw?.image"
-                :title="item?.raw?.name"
-              ></v-list-item>
+              <div v-bind="props">
+                <router-link
+                  class="text-decoration-none text-black"
+                  :to="item.raw.slug"
+                >
+                  <div class="d-flex align-center w-100">
+                    <div class="w-25 py-1">
+                      <v-img height="40" :src="item?.raw?.image">
+                        <template #placeholder>
+                          <div class="skeleton" /> </template
+                      ></v-img>
+                    </div>
+                    <div class="w-75">
+                      <p>{{ item?.raw?.name }}</p>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
             </template>
           </v-autocomplete>
           <!-- <input

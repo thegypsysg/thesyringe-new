@@ -586,7 +586,7 @@ export default {
                 : '-',
             salary: data.salary_range || '-',
             desc: data.job_description || '-',
-            benefits: data.benefits != null ? data.benefits.split('\r\n') : '-',
+            benefits: data.benefits != null ? data.benefits.split('\n') : '-',
             about: data.about_us || '-',
             slug: data.slug || '',
           };
