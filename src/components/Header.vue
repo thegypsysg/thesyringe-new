@@ -462,7 +462,7 @@ export default {
     getActiveSkills() {
       this.isLoading = true;
       axios
-        .get(`/skills/active`)
+        .get(`/skills/active/app/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
