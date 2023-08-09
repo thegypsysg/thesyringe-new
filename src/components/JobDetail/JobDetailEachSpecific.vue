@@ -153,11 +153,29 @@
               </p>
             </div>
           </div>
+          <div class="description-title mb-3 mt-6">
+            <h1 v-if="!isSmall">Salary</h1>
+            <h2 v-if="isSmall">Salary</h2>
+          </div>
+          <div class="price">
+            <p v-for="salary in itemData.salary" :key="salary">{{ salary }}</p>
+          </div>
+          <div class="description-title mb-3 mt-6">
+            <h1 v-if="!isSmall">Open to Foreigners</h1>
+            <h2 v-if="isSmall">Open to Foreigners</h2>
+          </div>
           <div class="price d-flex">
-            <v-icon class="mr-4 mt-1" size="20" color="#808080">
-              mdi-currency-usd
-            </v-icon>
-            <span>{{ itemData.salary }}</span>
+            <span>{{ itemData.foreigners }}</span>
+          </div>
+          <div
+            v-if="itemData.shift !== null"
+            class="description-title mb-3 mt-6"
+          >
+            <h1 v-if="!isSmall">Shift</h1>
+            <h2 v-if="isSmall">Shift</h2>
+          </div>
+          <div v-if="itemData.shift !== null" class="price">
+            <p v-for="shift in itemData.shift" :key="shift">{{ shift }}</p>
           </div>
         </div>
         <div
@@ -216,6 +234,15 @@
                 {{ benefit }}
               </li>
             </ul> -->
+          </div>
+          <div class="description-title mb-3 mt-6">
+            <h1 v-if="!isSmall">Official Working Hours</h1>
+            <h2 v-if="isSmall">Official Working Hours</h2>
+          </div>
+          <div class="price">
+            <p v-for="working in itemData.working" :key="working">
+              {{ working }}
+            </p>
           </div>
         </div>
         <div
@@ -559,7 +586,11 @@ export default {
             id: data.job_id || 1,
             title: data.position_name || '',
             // slug: data.slug || '',
-            image: this.$fileURL + data.location_image || '',
+            image: data.location_image
+              ? this.$fileURL + data.location_image
+              : data.partners_image
+              ? this.$fileURL + data.partners_image
+              : '',
             logo: this.$fileURL + data.logo || '',
             partner: data.partner_name || '',
             website: data.website || '',
@@ -574,6 +605,7 @@ export default {
             location: data.location_name || '',
             town: data.town_name || '',
             zone: data.zone_name || '',
+            shift: data.shift != null ? data.shift.split('\n') : null,
             work:
               data.work_timings && data.shift
                 ? `${data.work_timings} (${data.shift})`
@@ -582,9 +614,22 @@ export default {
                 : !data.work_timings && data.shift
                 ? `- (${data.shift})`
                 : '-',
-            salary: data.salary_range || '-',
+            salary:
+              data.salary_range != null
+                ? data.salary_range.split('\n')
+                : 'Negotiable',
+            foreigners:
+              data.foreigners == 'Y'
+                ? 'Yes - Foreigners may Apply'
+                : 'No - Open to Locals only',
             desc: data.job_description || '-',
             benefits: data.benefits != null ? data.benefits.split('\n') : '-',
+            working:
+              data.work_timings != null
+                ? data.work_timings.split('\n')
+                : data.official_hours != null
+                ? data.official_hours.split('\n')
+                : '-',
             about: data.about_us != null ? data.about_us.split('\n') : '-',
             slug: data.slug || '',
           };

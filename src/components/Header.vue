@@ -79,10 +79,10 @@
         <v-icon color="white"> mdi-magnify </v-icon>
       </button>
     </form>
-    <div class="mr-4" v-if="isDetailPage && !isSmall">
-      <span v-if="detailHeader.location">{{
-        detailHeader.town + ' ' + detailHeader.city
-      }}</span>
+    <div class="mr-16 pr-16" v-if="isDetailPage && !isSmall">
+      <h2 v-if="detailHeader.location">
+        {{ detailHeader.town + ' ' + detailHeader.city }}
+      </h2>
     </div>
     <div v-if="isSpecific" class="desktop__app">
       <v-menu>
@@ -116,7 +116,7 @@
     <v-btn v-if="!isWelcome" elevation="0" class="btn_sign__up" to="/signup">
       Sign up / Register
     </v-btn>
-    <v-btn icon @click="drawer = !drawer">
+    <v-btn v-if="!isDetailPage" icon @click="drawer = !drawer">
       <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
     </v-btn>
 

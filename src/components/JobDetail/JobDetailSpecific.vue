@@ -917,10 +917,13 @@ export default {
                   text: skill.position_name || '',
                   image: skill.location_image
                     ? this.$fileURL + skill.location_image
+                    : skill.partners_image
+                    ? this.$fileURL + skill.partners_image
                     : '',
-                  path:
-                  skill.location_name? skill.location_name.split(' ').join('').toLowerCase() +
-                      'jobs' : '',
+                  path: skill.location_name
+                    ? skill.location_name.split(' ').join('').toLowerCase() +
+                      'jobs'
+                    : '',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
                   address: skill.town_name || '',
@@ -976,6 +979,8 @@ export default {
                   text: skill.position_name || '',
                   image: skill.location_image
                     ? this.$fileURL + skill.location_image
+                    : skill.partners_image
+                    ? this.$fileURL + skill.partners_image
                     : '',
                   path:
                     skill.location_name.split(' ').join('').toLowerCase() +
