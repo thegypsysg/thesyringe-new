@@ -182,7 +182,7 @@
   >
     <i class="fa fa-angle-double-up" aria-hidden="true"></i>
   </a>
-  <v-container
+  <!-- <v-container
     style="position: fixed; bottom: 0rem; left: 0; z-index: 99999"
     class="d-flex justify-space-between align-center"
     v-if="isSmall && isSpecific"
@@ -215,7 +215,7 @@
         </div>
       </div>
     </div>
-  </v-container>
+  </v-container> -->
   <v-container
     style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
     class="d-flex justify-space-between align-center"

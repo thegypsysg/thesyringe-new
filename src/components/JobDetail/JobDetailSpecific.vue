@@ -919,8 +919,8 @@ export default {
                     ? this.$fileURL + skill.location_image
                     : '',
                   path:
-                    skill.location_name.split(' ').join('').toLowerCase() +
-                    'jobs',
+                  skill.location_name? skill.location_name.split(' ').join('').toLowerCase() +
+                      'jobs' : '',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
                   address: skill.town_name || '',
