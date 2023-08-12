@@ -37,11 +37,14 @@
           class="info-1 d-flex justify-space-between w-100 mt-6"
           style="height: 80px"
         >
-          <div class="info-title d-flex align-center justify-start">
+          <div
+            class="info-title d-flex align-center justify-start"
+            style="gap: 50px"
+          >
             <v-img height="80" :src="itemData.logo"
               ><template #placeholder> <div class="skeleton" /> </template
             ></v-img>
-            <div class="divider ml-10 mr-4"></div>
+            <!-- <div class="divider ml-10 mr-4"></div> -->
             <div class="web">
               <h4>{{ itemData.partner }}</h4>
               <a class="text-decoration-none" :href="itemData.website"
@@ -50,13 +53,9 @@
                 </p></a
               >
             </div>
-            <div class="divider ml-10 mr-4"></div>
-            <div class="group">
-              <span>{{ itemData.industry }}</span> |
-              <span>{{ itemData.subIndustry }}</span>
-            </div>
+            <!-- <div class="divider ml-10 mr-4"></div> -->
           </div>
-          <div class="share pa-2">
+          <!-- <div class="share pa-2">
             <p>Share this job with your friends</p>
             <div class="share-link d-flex justify-space-between mt-2">
               <v-btn
@@ -119,9 +118,9 @@
                 </v-icon>
               </v-btn>
             </div>
-          </div>
+          </div> -->
         </div>
-        <div
+        <!-- <div
           :class="{ 'info-2-mobile': isSmall }"
           class="info-2 d-flex align-center mt-6"
           style="height: 20px"
@@ -131,9 +130,9 @@
           <span class="text-grey">{{ itemData.numPositions }} Position</span>
           <div class="divider mx-6" style="background: #a7a7a7"></div>
           <span class="text-grey">{{ itemData.jobType }}</span>
-        </div>
+        </div> -->
         <div class="info-3 mt-4">
-          <div class="address d-flex mb-2">
+          <!-- <div v-if="isSmall" class="address d-flex mb-2">
             <v-icon class="mr-4 mt-1" size="20" color="#808080">
               mdi-map-marker
             </v-icon>
@@ -141,8 +140,21 @@
               >{{ itemData.city + ' (' }}
               <span>{{ itemData.zone + ')' }}</span></span
             >
+          </div> -->
+          <div class="address d-flex mb-2">
+            <v-icon class="mr-4 mt-1" size="20" color="#808080">
+              mdi-map-marker
+            </v-icon>
+            <span>{{ itemData.address }}</span>
           </div>
-          <div class="time d-flex mb-2">
+          <div class="address d-flex mb-2">
+            <v-icon class="mr-4 mt-1" size="20" color="#808080">
+              mdi-office-building-outline
+            </v-icon>
+            <span>{{ itemData.subIndustry + '&nbsp;' }}</span>
+            <span> ({{ itemData.industry }})</span>
+          </div>
+          <!-- <div v-if="isSmall" class="time d-flex mb-2">
             <v-icon class="mr-4 mt-1" size="20" color="#808080">
               mdi-clock-outline
             </v-icon>
@@ -152,6 +164,34 @@
                 {{ itemData.work }}
               </p>
             </div>
+          </div> -->
+          <div class="time d-flex mb-2">
+            <v-icon class="mr-4 mt-1" size="20" color="#808080">
+              mdi-clock-outline
+            </v-icon>
+            <div class="time-desc">
+              <!-- <p>Work Schedule</p> -->
+              <p>
+                {{ itemData.jobType }}
+              </p>
+            </div>
+          </div>
+          <div class="time d-flex mb-2">
+            <v-icon class="mr-4 mt-1" size="20" color="#808080">
+              mdi-currency-usd
+            </v-icon>
+            <div class="time-desc">
+              <!-- <p>Work Schedule</p> -->
+              <p>{{ itemData.numPositions }} Position</p>
+            </div>
+          </div>
+          <div class="address d-flex mb-2">
+            <v-icon class="mr-4 mt-1" size="20" color="#808080">
+              mdi-office-building-outline
+            </v-icon>
+            <p>
+              Posted On {{ itemData.dated + ' ' + itemData.differentDated }}
+            </p>
           </div>
           <div class="description-title mb-3 mt-6">
             <h1 v-if="!isSmall">Salary</h1>
@@ -349,12 +389,26 @@
               :href="itemData.twitter"
               :size="!isSmall ? '40' : '50'"
               variant="text"
-              style="background: #55acee"
               color="white"
               icon
+              style="background: #55acee"
             >
               <v-icon :size="!isSmall ? '18' : '24'">
                 <i class="fa-brands fa-twitter" />
+              </v-icon>
+            </v-btn>
+
+            <v-btn
+              v-if="itemData.linkedin != null"
+              :href="itemData.linkedin"
+              :size="!isSmall ? '40' : '50'"
+              variant="text"
+              color="white"
+              icon
+              style="background: #0072b1"
+            >
+              <v-icon :size="!isSmall ? '18' : '24'">
+                <i class="fa-brands fa-linkedin-in" />
               </v-icon>
             </v-btn>
           </div>
@@ -596,13 +650,39 @@ export default {
             website: data.website || '',
             industry: data.industry_name || '',
             subIndustry: data.sub_industry_name || '',
-            dated:
-              moment(data.job_dated, 'DD/MM/YYYY').format('DD MMMM YYYY') || '',
+            //dated:
+            //  moment(data.job_dated, 'DD/MM/YYYY').format('DD MMMM YYYY') || '',
+            dated: data.job_dated || '',
+            differentDated:
+              '(' +
+              moment
+                .duration(moment().diff(moment(data.job_dated, 'DD/MM/YYYY')))
+                .humanize() +
+              ' ago)',
             numPositions: data.num_positions || '-',
             jobType: data.job_type || '-',
             workOption: data.working_option || '-',
             city: data.city_name || '',
             location: data.location_name || '',
+            address:
+              data.location_name && data.zone_name && data.city_name
+                ? `${data.location_name} (${data.zone_name}), ${data.city_name}`
+                : data.town_name &&
+                  data.zone_name &&
+                  data.city_name &&
+                  data.location_name == null
+                ? `${data.town_name} (${data.zone_name}), ${data.city_name}`
+                : data.zone_name &&
+                  data.location_name == null &&
+                  data.town_name == null &&
+                  data.city_name
+                ? `${data.city_name} (${data.zone_name})`
+                : data.city_name &&
+                  data.location_name == null &&
+                  data.town_name &&
+                  data.zone_name == null
+                ? `${data.town_name} , ${data.city_name}`
+                : '-',
             town: data.town_name || '',
             zone: data.zone_name || '',
             shift: data.shift != null ? data.shift.split('\n') : null,
@@ -617,7 +697,7 @@ export default {
             salary:
               data.salary_range != null
                 ? data.salary_range.split('\n')
-                : 'Negotiable',
+                : ['Negotiable'],
             foreigners:
               data.foreigners == 'Y'
                 ? 'Yes - Foreigners may Apply'

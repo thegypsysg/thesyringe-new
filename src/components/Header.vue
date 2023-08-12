@@ -79,10 +79,40 @@
         <v-icon color="white"> mdi-magnify </v-icon>
       </button>
     </form>
-    <div class="mr-16 pr-16" v-if="isDetailPage && !isSmall">
-      <h2 v-if="detailHeader.location">
-        {{ detailHeader.town + ' ' + detailHeader.city }}
-      </h2>
+    <div
+      class="mr-10 d-flex justify-space-between"
+      style="min-width: 500px"
+      v-if="isDetailPage && !isSmall"
+    >
+      <div class="d-flex">
+        <v-btn
+          style="background: #f4f5f7; color: black"
+          variant="text"
+          color="black"
+          icon="mdi-share-outline"
+          width="40"
+          height="40"
+          class="mr-4"
+        >
+          <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
+        </v-btn>
+        <h2>
+          {{ detailHeader.address }}
+        </h2>
+      </div>
+
+      <v-btn
+        class="apply"
+        style="
+          border-radius: 0;
+          background: #ea027a;
+          color: white;
+          font-size: 14px;
+        "
+        height="37"
+      >
+        Quick Apply
+      </v-btn>
     </div>
     <div v-if="isSpecific" class="desktop__app">
       <v-menu>
@@ -170,9 +200,7 @@
           </h2>
         </div>
         <div v-if="isDetailPage">
-          <span v-if="detailHeader.location">{{
-            detailHeader.town + ' ' + detailHeader.city
-          }}</span>
+          <span>{{ detailHeader.address }}</span>
         </div>
         <!-- <div v-if="isHome">
           <v-menu>
