@@ -252,7 +252,7 @@
                               {{
                                 card.place.length >= 32
                                   ? card.place.substring(0, 32) + '..'
-                                  : card.place + ' Jobs'
+                                  : card.place
                               }}
                             </h4>
 
@@ -532,13 +532,13 @@
                           </div>
                           <div
                             style="width: 75%"
-                            class="card-address-info text-left"
+                            class="card-address-info-mobile text-left"
                           >
                             <h4 style="font-weight: 600">
                               {{
-                                card.place.length >= 32
-                                  ? card.place.substring(0, 32) + '..'
-                                  : card.place + ' Jobs'
+                                card.place.length >= 33
+                                  ? card.place.substring(0, 33) + '..'
+                                  : card.place
                               }}
                             </h4>
                             <div style="font-weight: 400">
@@ -744,6 +744,8 @@ export default {
   computed: {
     ...mapState(['activeTag']),
     ...mapState(['itemSelected']),
+    ...mapState(['itemSelectedComplete']),
+    ...mapState(['itemSelected2Complete']),
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -792,11 +794,27 @@ export default {
       'filterSpecificJobs',
       this.filterSpecificJobs
     );
+    app.config.globalProperties.$eventBus.$on(
+      'getJobDetailSpecific1',
+      this.getSkillBySlug2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'getJobDetailSpecific2',
+      this.getJobDetailSpecific
+    );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
       'filterSpecificJobs',
       this.filterSpecificJobs
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getJobDetailSpecific1',
+      this.getSkillBySlug2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getJobDetailSpecific2',
+      this.getJobDetailSpecific
     );
   },
   unmounted() {
@@ -804,6 +822,18 @@ export default {
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
+    getJobDetailSpecific() {
+      this.getGroups2(
+        this.skillSlug.skills_id,
+        this.itemSelectedComplete.id,
+        this.itemSelected2Complete.id
+      );
+      this.getSpecificJobs2(
+        this.skillSlug.skills_id,
+        this.itemSelectedComplete.id,
+        this.itemSelected2Complete.id
+      );
+    },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
     },
@@ -856,6 +886,48 @@ export default {
           this.isLoading = false;
         });
     },
+    getSkillBySlug2() {
+      const slug = this.$route.params.name;
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}/${this.itemSelectedComplete?.id || 1}`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+
+          if (data == null) {
+            this.specificJobs = [];
+            this.trendingBtn = [];
+          } else {
+            this.skillSlug = {
+              ...data,
+              image: this.$fileURL + data.image || '',
+              mainImage: this.$fileURL + data.main_image || '',
+              regulator: data.partner_name || '',
+              name: data.skills_name || '',
+              registrable: data.registrable || 'N',
+            };
+            this.getGroups2(
+              this.skillSlug.skills_id,
+              this.itemSelectedComplete.id,
+              ''
+            );
+            this.getSpecificJobs2(
+              this.skillSlug.skills_id,
+              this.itemSelectedComplete.id,
+              ''
+            );
+          }
+          // console.log(this.skillSlug);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     getGroups(skillId, countryId) {
       this.isCardLoading = true;
       // this.trendingBtn = [
@@ -890,6 +962,102 @@ export default {
       this.isCardLoading = true;
       axios
         .get(`/sub-industries-jobs/${skillId}/${countryId}`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          // const filterKey = 'allied-health-jobs';
+          // const filteredData = data.filter((d) => d.slug === filterKey);
+
+          // this.itemData = {
+          //   id: filteredData[0].sgm_id || 1,
+          //   title: filteredData[0].group_name || '',
+          //   slug: filteredData[0].slug || '',
+          //   image: this.$fileURL + filteredData[0].image || '',
+          // };
+
+          this.specificJobs = data.map((item) => {
+            return {
+              id: item.sub_industry_id || 1,
+              title: item.sub_industry_name
+                ? item.sub_industry_name + ' Jobs'
+                : '',
+              btn: item.sub_industry_name || '',
+              path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              list: item.jobs.map((skill) => {
+                return {
+                  id: skill.job_id || 1,
+                  text: skill.position_name || '',
+                  image: skill.location_image
+                    ? this.$fileURL + skill.location_image
+                    : skill.partners_image
+                    ? this.$fileURL + skill.partners_image
+                    : '',
+                  path: skill.location_name
+                    ? skill.location_name.split(' ').join('').toLowerCase() +
+                      'jobs'
+                    : '',
+                  place: skill.partner_name || '',
+                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+                  address: skill.town_name || '',
+                  distance: '4,5',
+                  tag: skill.position_name || '',
+                };
+              }),
+            };
+          });
+
+          // console.log(this.specificJobs);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getGroups2(skillId, countryId, cityId) {
+      this.isCardLoading = true;
+      // this.trendingBtn = [
+      //   {
+      //     id: 1,
+      //     title: 'Physiotherapist',
+      //     tag: 'Physiotherapist',
+      //   },
+      // ];
+      axios
+        .get(
+          cityId != ''
+            ? `/job-positions/${skillId}/${countryId}/${cityId}`
+            : `/job-positions/${skillId}/${countryId}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.trendingBtn = data.map((group) => {
+            return {
+              id: group.position_id,
+              title: group.position_name,
+              tag: group.position_name,
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getSpecificJobs2(skillId, countryId, cityId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          cityId != ''
+            ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}`
+            : `/sub-industries-jobs/${skillId}/${countryId}`
+        )
         .then((response) => {
           const data = response.data.data;
           //console.log(data);
@@ -1058,7 +1226,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 230px;
+  margin-top: 300px;
   position: relative;
 }
 .btn-container {
@@ -1308,6 +1476,11 @@ export default {
   font-weight: 600;
   font-size: 12px;
   line-height: 15px;
+}
+.card-address-info-mobile {
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 13px;
 }
 
 .skeleton {

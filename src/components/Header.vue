@@ -118,12 +118,7 @@
       <v-menu>
         <template #activator="{ props }">
           <v-btn
-            style="
-              margin-left: 30px;
-              margin-right: 30px;
-              font-size: 16px;
-              color: #494949;
-            "
+            style="margin-left: 30px; font-size: 16px; color: #494949"
             v-bind="props"
             variant="text"
           >
@@ -136,7 +131,34 @@
             v-for="(item, index) in country"
             :key="index"
             :value="index"
-            @click="changeItemSelected(item.title)"
+            @click="changeItemSelected(item)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn
+            style="
+              margin-left: 10px;
+              margin-right: 30px;
+              font-size: 16px;
+              color: #494949;
+            "
+            v-bind="props"
+            variant="text"
+          >
+            {{ isLoading ? 'loading...' : itemSelected2 }}
+            <v-icon right dark> mdi-menu-down </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in city"
+            :key="index"
+            :value="index"
+            @click="changeItemSelected2(item)"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -155,16 +177,11 @@
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{ 'mb-n10': !isHome, 'mobile-specific': isSpecific }"
       >
-        <div v-if="isSpecific">
+        <div class="d-flex flex-column mt-n8" v-if="isSpecific">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
-                style="
-                  margin-left: 30px;
-                  margin-right: 30px;
-                  font-size: 16px;
-                  color: #494949;
-                "
+                style="font-size: 16px; color: #494949"
                 v-bind="props"
                 variant="text"
               >
@@ -177,7 +194,29 @@
                 v-for="(item, index) in country"
                 :key="index"
                 :value="index"
-                @click="changeItemSelected(item.title)"
+                @click="changeItemSelected(item)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-menu>
+            <template #activator="{ props }">
+              <v-btn
+                style="font-size: 16px; color: #494949"
+                v-bind="props"
+                variant="text"
+              >
+                {{ isLoading ? 'loading...' : itemSelected2 }}
+                <v-icon right dark> mdi-menu-down </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in city"
+                :key="index"
+                :value="index"
+                @click="changeItemSelected2(item)"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -383,11 +422,12 @@ export default {
   data() {
     return {
       // selectedTag: null,
-
+      isLoading: false,
       trendingBtn: [],
       isDetail: false,
       skillSlug: {},
       countryId: null,
+      cityId: null,
       search: null,
       searchItems: [],
 
@@ -412,6 +452,9 @@ export default {
   },
   computed: {
     ...mapState(['itemSelected']),
+    ...mapState(['itemSelected2']),
+    ...mapState(['itemSelectedComplete']),
+    ...mapState(['itemSelected2Complete']),
     ...mapState(['detailHeader']),
     isSmall() {
       return this.screenWidth < 640;
@@ -446,6 +489,7 @@ export default {
     this.search = null;
     this.getLogo();
     this.getCountry();
+    this.getCity();
     this.getTrendingCardData();
     this.getActiveSkills();
     // app.config.globalProperties.$eventBus.$on(
@@ -567,9 +611,25 @@ export default {
       this.isDetail = false;
     },
     changeItemSelected(item) {
-      this.$store.commit('setItemSelected', item);
+      this.setItemSelected(item.title);
+      this.setItemSelectedComplete(item);
+      this.setItemSelected2('---Select City---');
+      this.setItemSelected2Complete(null);
+      this.getCity();
+      app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific1');
     },
-    ...mapMutations(['setActiveTag']),
+    changeItemSelected2(item) {
+      this.setItemSelected2(item.title);
+      this.setItemSelected2Complete(item);
+      app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific2');
+    },
+    ...mapMutations([
+      'setActiveTag',
+      'setItemSelected',
+      'setItemSelectedComplete',
+      'setItemSelected2',
+      'setItemSelected2Complete',
+    ]),
     selectTag(tag) {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
       // console.log('ok');
@@ -626,6 +686,7 @@ export default {
         });
     },
     getCountry() {
+      this.isLoading = true;
       axios
         .get(`/country`)
         .then((response) => {
@@ -645,6 +706,36 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getCity() {
+      this.isLoading = true;
+      axios
+        .get(`/cities/country/${this.itemSelectedComplete?.id}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.city = data.map((city) => {
+            return {
+              id: city.city_id,
+              title: city.city_name,
+              countryId: city.country_id,
+              path: '#',
+            };
+          });
+          this.cityId = data
+            .filter((d) => d.city_name == this.itemSelected2)
+            .map((city) => city.city_id)[0];
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     // emitFilterEvent(tag) {
@@ -707,7 +798,7 @@ export default {
   height: 26vh;
 }
 .app-bar-mobile-5 {
-  height: 20vh;
+  height: 25vh;
 }
 
 .divider {
@@ -760,7 +851,7 @@ export default {
 }
 
 .mobile-specific {
-  height: 100px !important;
+  height: 150px !important;
 }
 
 @keyframes skeleton {
