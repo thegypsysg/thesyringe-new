@@ -698,6 +698,9 @@ export default {
             regulator: data.partner_name || '',
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+            association: data.country_association || '',
+            country: data.country_regulator || '',
           };
           //this.getCountry();
           // console.log(this.skillSlug);
@@ -814,6 +817,9 @@ export default {
             regulator: data.partner_name_reg || '',
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+            association: data.country_association || '',
+            country: data.country_regulator || '',
           };
           //console.log(this.itemData.desc);
           this.$store.commit('setDetailHeader', this.itemData);

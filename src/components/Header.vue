@@ -84,7 +84,7 @@
       style="min-width: 500px"
       v-if="isDetailPage && !isSmall"
     >
-      <div class="d-flex">
+      <div class="d-flex align-center">
         <v-btn
           style="background: #f4f5f7; color: black"
           variant="text"
@@ -92,17 +92,17 @@
           icon="mdi-share-outline"
           width="40"
           height="40"
-          class="mr-4"
+          class="mx-4"
         >
           <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
         </v-btn>
-        <h2>
+        <h3>
           {{ detailHeader.address }}
-        </h2>
+        </h3>
       </div>
 
       <v-btn
-        class="apply"
+        class="apply ml-4"
         style="
           border-radius: 0;
           background: #ea027a;
@@ -137,7 +137,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-menu>
+      <v-menu v-if="itemSelectedComplete?.oneCity != true">
         <template #activator="{ props }">
           <v-btn
             style="
@@ -177,7 +177,22 @@
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{ 'mb-n10': !isHome, 'mobile-specific': isSpecific }"
       >
-        <div class="d-flex flex-column mt-n8" v-if="isSpecific">
+        <div
+          class="mb-n2"
+          :class="{ 'mt-1': isDetailPage, 'mt-n2': isSpecific }"
+          v-if="isDetail"
+        >
+          <h2>
+            {{
+              isDetailPage
+                ? detailHeader.title
+                : isDetail
+                ? skillSlug.name
+                : titleHeader
+            }}
+          </h2>
+        </div>
+        <div class="d-flex flex-column" v-if="isSpecific">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
@@ -200,7 +215,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-menu>
+          <v-menu v-if="itemSelectedComplete?.oneCity != true">
             <template #activator="{ props }">
               <v-btn
                 style="font-size: 16px; color: #494949"
@@ -223,21 +238,7 @@
             </v-list>
           </v-menu>
         </div>
-        <div
-          class="mb-n2"
-          :class="{ 'mt-1 mb-n4': isDetailPage }"
-          v-if="isDetail"
-        >
-          <h2>
-            {{
-              isDetailPage
-                ? detailHeader.title
-                : isDetail
-                ? skillSlug.name
-                : titleHeader
-            }}
-          </h2>
-        </div>
+
         <div v-if="isDetailPage">
           <span>{{ detailHeader.address }}</span>
         </div>
@@ -616,6 +617,7 @@ export default {
       this.setItemSelected2('---Select City---');
       this.setItemSelected2Complete(null);
       this.getCity();
+      console.log(this.itemSelectedComplete);
       app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific1');
     },
     changeItemSelected2(item) {
@@ -696,6 +698,7 @@ export default {
             return {
               id: country.country_id,
               title: country.country_name,
+              oneCity: country.one_city == 'Y' ? true : false,
               path: '#',
             };
           });
@@ -798,7 +801,7 @@ export default {
   height: 26vh;
 }
 .app-bar-mobile-5 {
-  height: 25vh;
+  height: 23vh;
 }
 
 .divider {
@@ -851,7 +854,7 @@ export default {
 }
 
 .mobile-specific {
-  height: 150px !important;
+  height: 120px !important;
 }
 
 @keyframes skeleton {

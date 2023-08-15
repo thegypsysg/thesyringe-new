@@ -157,7 +157,7 @@
                     <v-card
                       class="my-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                      :height="!isSmall ? 290 : 280"
+                      :height="!isSmall ? 320 : 280"
                       :width="!isSmall ? 280 : 250"
                       elevation="0"
                       @click="toggle"
@@ -218,7 +218,7 @@
                         :to="`/detail/${card.id}`"
                         style="
                           position: absolute;
-                          bottom: 90px;
+                          bottom: 110px;
                           left: 15px;
                           background-color: #fa2964;
                           border-radius: 5px;
@@ -237,6 +237,15 @@
                         class="card-description d-flex flex-column mt-6"
                         style="position: relative; gap: 10px"
                       >
+                        <div
+                          class="card-address-info text-left mt-n4 mb-n2"
+                          style="font-weight: 400"
+                        >
+                          <p>
+                            <span class="text-red">{{ card.distance }} kms</span
+                            ><span class="text-muted"> away</span>
+                          </p>
+                        </div>
                         <div class="card-address d-flex align-center">
                           <div style="width: 25%">
                             <v-img :src="card.locationImg" height="35"
@@ -245,10 +254,10 @@
                             ></v-img>
                           </div>
                           <div
-                            style="width: 75 %"
+                            style="width: 75%"
                             class="card-address-info text-left"
                           >
-                            <h4 style="font-weight: 600">
+                            <h4 class="mt-4" style="font-weight: 600">
                               {{
                                 card.place.length >= 32
                                   ? card.place.substring(0, 32) + '..'
@@ -256,19 +265,14 @@
                               }}
                             </h4>
 
-                            <div style="font-weight: 400">
+                            <div class="mt-2" style="font-weight: 400">
                               <p>{{ card.address }}</p>
-                              <p>
-                                <span class="text-red"
-                                  >{{ card.distance }} kms</span
-                                ><span class="text-muted"> away</span>
-                              </p>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div
-                        class="card-btn-container d-flex justify-space-between"
+                        class="card-btn-container-1 d-flex justify-space-between"
                       >
                         <v-btn
                           color="black"
@@ -348,7 +352,9 @@
               In here you will find all
               <span class="text-blue-darken-4">{{ skillSlug.name }} Jobs</span>
               specifically in
-              <span class="text-blue-darken-4">{{ itemSelected }}</span>
+              <span class="text-blue-darken-4">{{
+                itemSelected2 == '---Select City---' ? '' : itemSelected2
+              }}</span>
             </p>
             <!-- <hr /> -->
           </v-container>
@@ -379,8 +385,16 @@
                 <h1 class="view-all">View all</h1>
               </router-link>
             </div>
-            <v-sheet class="mx-auto mb-2" elevation="0">
-              <v-slide-group v-model="model" class="pa-4">
+            <v-sheet
+              class="mx-auto mb-2"
+              :class="{ 'ml-n16': item.list.length <= 1 }"
+              elevation="0"
+            >
+              <v-slide-group
+                v-model="model"
+                :class="{ 'ml-n12': item.list.length <= 1 }"
+                class="pa-4"
+              >
                 <!-- <template #prev="{ on, attrs }">
                 <v-btn
                   v-if="activeIndexCategory > 1"
@@ -417,7 +431,7 @@
                     <v-card
                       class="mt-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                      :height="!isSmall ? 290 : 280"
+                      :height="!isSmall ? 300 : 300"
                       :width="!isSmall ? 280 : 250"
                       elevation="0"
                       @click="toggle"
@@ -504,7 +518,7 @@
                         :to="`/detail/${card.id}`"
                         style="
                           position: absolute;
-                          bottom: 90px;
+                          bottom: 100px;
                           left: 15px;
                           background-color: #fa2964;
                           border-radius: 5px;
@@ -523,6 +537,15 @@
                         class="card-description d-flex flex-column mt-6"
                         style="position: relative; gap: 10px"
                       >
+                        <div
+                          class="card-address-info-mobile mt-n4 mb-n2"
+                          style="font-weight: 400"
+                        >
+                          <p>
+                            <span class="text-red">{{ card.distance }} kms</span
+                            ><span class="text-muted"> away</span>
+                          </p>
+                        </div>
                         <div class="card-address d-flex align-center">
                           <div style="width: 25%">
                             <v-img :src="card.locationImg" height="35"
@@ -532,7 +555,7 @@
                           </div>
                           <div
                             style="width: 75%"
-                            class="card-address-info-mobile text-left"
+                            class="card-address-info-mobile mt-3 text-left"
                           >
                             <h4 style="font-weight: 600">
                               {{
@@ -541,19 +564,14 @@
                                   : card.place
                               }}
                             </h4>
-                            <div style="font-weight: 400">
+                            <div style="font-weight: 400" class="mt-2">
                               <p>{{ card.address }}</p>
-                              <p>
-                                <span class="text-red"
-                                  >{{ card.distance }} kms</span
-                                ><span class="text-muted"> away</span>
-                              </p>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div
-                        class="card-btn-container d-flex justify-space-between"
+                        class="card-btn-container-2 d-flex justify-space-between"
                       >
                         <v-btn
                           color="black"
@@ -622,7 +640,7 @@
       </template>
       <template v-if="!isSmall">
         <v-container
-          v-if="skillSlug.registrable == 'Y'"
+          v-if="skillSlug.countryRegistrable == 'Y'"
           :class="{ 'w-75 mx-auto': !isSmall }"
         >
           <div
@@ -655,14 +673,16 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.regulator
+                      skillSlug.association
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
                       >{{ skillSlug.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{
+                      skillSlug.country
+                    }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -715,7 +735,7 @@
       </template>
       <template v-if="isSmall">
         <v-container
-          v-if="skillSlug.registrable == 'Y'"
+          v-if="skillSlug.countryRegistrable == 'Y'"
           :class="{ 'w-75': !isSmall }"
         >
           <div
@@ -775,14 +795,16 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.regulator
+                      skillSlug.association
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
                       >{{ skillSlug.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{
+                      skillSlug.country
+                    }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -838,6 +860,7 @@ export default {
   computed: {
     ...mapState(['activeTag']),
     ...mapState(['itemSelected']),
+    ...mapState(['itemSelected2']),
     ...mapState(['itemSelectedComplete']),
     ...mapState(['itemSelected2Complete']),
     isSmall() {
@@ -968,6 +991,9 @@ export default {
             regulator: data.partner_name || '',
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+            association: data.country_association || '',
+            country: data.country_regulator || '',
           };
           this.getCountry();
           // console.log(this.skillSlug);
@@ -1000,6 +1026,9 @@ export default {
               regulator: data.partner_name || '',
               name: data.skills_name || '',
               registrable: data.registrable || 'N',
+              countryRegistrable: data.country_registrable || 'N',
+              association: data.country_association || '',
+              country: data.country_regulator || '',
             };
             this.getGroups2(
               this.skillSlug.skills_id,
@@ -1092,7 +1121,25 @@ export default {
                     : '',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address: skill.town_name || '',
+                  address:
+                    skill.location_name && skill.zone_name && skill.city_name
+                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.town_name &&
+                        skill.zone_name &&
+                        skill.city_name &&
+                        skill.location_name == null
+                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.zone_name &&
+                        skill.location_name == null &&
+                        skill.town_name == null &&
+                        skill.city_name
+                      ? `${skill.city_name} (${skill.zone_name})`
+                      : skill.city_name &&
+                        skill.location_name == null &&
+                        skill.town_name &&
+                        skill.zone_name == null
+                      ? `${skill.town_name} , ${skill.city_name}`
+                      : '-',
                   distance: '4,5',
                   tag: skill.position_name || '',
                 };
@@ -1188,7 +1235,25 @@ export default {
                     : '',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address: skill.town_name || '',
+                  address:
+                    skill.location_name && skill.zone_name && skill.city_name
+                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.town_name &&
+                        skill.zone_name &&
+                        skill.city_name &&
+                        skill.location_name == null
+                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.zone_name &&
+                        skill.location_name == null &&
+                        skill.town_name == null &&
+                        skill.city_name
+                      ? `${skill.city_name} (${skill.zone_name})`
+                      : skill.city_name &&
+                        skill.location_name == null &&
+                        skill.town_name &&
+                        skill.zone_name == null
+                      ? `${skill.town_name} , ${skill.city_name}`
+                      : '-',
                   distance: '4,5',
                   tag: skill.position_name || '',
                 };
@@ -1249,7 +1314,25 @@ export default {
                     'jobs',
                   place: skill.partner_name || '',
                   locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address: skill.town_name || '',
+                  address:
+                    skill.location_name && skill.zone_name && skill.city_name
+                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.town_name &&
+                        skill.zone_name &&
+                        skill.city_name &&
+                        skill.location_name == null
+                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                      : skill.zone_name &&
+                        skill.location_name == null &&
+                        skill.town_name == null &&
+                        skill.city_name
+                      ? `${skill.city_name} (${skill.zone_name})`
+                      : skill.city_name &&
+                        skill.location_name == null &&
+                        skill.town_name &&
+                        skill.zone_name == null
+                      ? `${skill.town_name} , ${skill.city_name}`
+                      : '-',
                   distance: '4,5',
                   tag: skill.position_name || '',
                 };
@@ -1320,7 +1403,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 300px;
+  margin-top: 270px;
   position: relative;
 }
 .btn-container {
@@ -1427,19 +1510,6 @@ export default {
   transform: scale(1.2);
 }
 
-.card-btn-container {
-  position: absolute;
-  gap: 10px;
-  bottom: 25px;
-  right: 20px;
-  z-index: 100;
-}
-.card-btn-container-2 {
-  gap: 20px;
-  bottom: 15px;
-  right: 30px;
-}
-
 .card-btn {
   background: #fff !important;
   border: none !important;
@@ -1523,10 +1593,17 @@ export default {
   width: 250px;
 }
 
-.card-btn-container {
+.card-btn-container-1 {
   position: absolute;
   gap: 10px;
-  bottom: 60px;
+  bottom: 90px;
+  right: 30px;
+  z-index: 100;
+}
+.card-btn-container-2 {
+  position: absolute;
+  gap: 10px;
+  bottom: 75px;
   right: 30px;
   z-index: 100;
 }
