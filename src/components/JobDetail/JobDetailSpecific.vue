@@ -673,16 +673,14 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.association
+                      skillSlug.regulator
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
                       >{{ skillSlug.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{
-                      skillSlug.country
-                    }}</span>
+                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -795,16 +793,14 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.association
+                      skillSlug.regulator
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
                       >{{ skillSlug.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{
-                      skillSlug.country
-                    }}</span>
+                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -913,11 +909,11 @@ export default {
     );
     app.config.globalProperties.$eventBus.$on(
       'getJobDetailSpecific1',
-      this.getSkillBySlug2
+      this.getJobDetailSpecific1
     );
     app.config.globalProperties.$eventBus.$on(
       'getJobDetailSpecific2',
-      this.getJobDetailSpecific
+      this.getJobDetailSpecific2
     );
   },
   beforeUnmount() {
@@ -927,11 +923,11 @@ export default {
     );
     app.config.globalProperties.$eventBus.$off(
       'getJobDetailSpecific1',
-      this.getSkillBySlug2
+      this.getJobDetailSpecific1
     );
     app.config.globalProperties.$eventBus.$off(
       'getJobDetailSpecific2',
-      this.getJobDetailSpecific
+      this.getJobDetailSpecific2
     );
   },
   unmounted() {
@@ -939,7 +935,14 @@ export default {
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
-    getJobDetailSpecific() {
+    getJobDetailSpecific1() {
+      this.getGroups(this.skillSlug.skills_id, this.itemSelectedComplete.id);
+      this.getSpecificJobs(
+        this.skillSlug.skills_id,
+        this.itemSelectedComplete.id
+      );
+    },
+    getJobDetailSpecific2() {
       this.getGroups2(
         this.skillSlug.skills_id,
         this.itemSelectedComplete.id,
@@ -992,8 +995,6 @@ export default {
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
-            association: data.country_association || '',
-            country: data.country_regulator || '',
           };
           this.getCountry();
           // console.log(this.skillSlug);
@@ -1027,8 +1028,6 @@ export default {
               name: data.skills_name || '',
               registrable: data.registrable || 'N',
               countryRegistrable: data.country_registrable || 'N',
-              association: data.country_association || '',
-              country: data.country_regulator || '',
             };
             this.getGroups2(
               this.skillSlug.skills_id,

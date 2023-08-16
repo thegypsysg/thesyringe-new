@@ -415,7 +415,7 @@
         </div>
         <template v-if="!isSmall">
           <div
-            v-if="skillSlug.registrable == 'Y'"
+            v-if="skillSlug.countryRegistrable == 'Y'"
             :class="{ 'w-75': !isSmall }"
           >
             <div
@@ -508,7 +508,7 @@
         </template>
         <template v-if="isSmall">
           <div
-            v-if="skillSlug.registrable == 'Y'"
+            v-if="skillSlug.countryRegistrable == 'Y'"
             :class="{ 'w-75': !isSmall }"
           >
             <div
@@ -699,8 +699,6 @@ export default {
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
-            association: data.country_association || '',
-            country: data.country_regulator || '',
           };
           //this.getCountry();
           // console.log(this.skillSlug);
@@ -818,8 +816,6 @@ export default {
             name: data.skills_name || '',
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
-            association: data.country_association || '',
-            country: data.country_regulator || '',
           };
           //console.log(this.itemData.desc);
           this.$store.commit('setDetailHeader', this.itemData);
