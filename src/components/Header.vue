@@ -24,7 +24,11 @@
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
     </div>
-    <div v-if="isDetail && !isSmall" class="ml-10 d-flex flex-row header-info">
+    <div
+      v-if="isDetail && !isSmall"
+      class="ml-4 d-flex flex-row header-info"
+      style="max-width: 300px"
+    >
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">{{
         isDetailPage
@@ -95,6 +99,38 @@
           class="mx-4"
         >
           <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" color="black" size="18">
+                    mdi-email-outline </v-icon
+                  >Email</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" size="18">
+                    <i class="fa-brands fa-facebook-f" /> </v-icon
+                  >Facebook</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" color="black" size="18">
+                    mdi-twitter </v-icon
+                  >Twitter</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" size="18">
+                    <i class="fa-brands fa-linkedin-in" /> </v-icon
+                  >Linkedin</v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-btn>
         <h3>
           {{ detailHeader.address }}
@@ -114,11 +150,59 @@
         Quick Apply
       </v-btn>
     </div>
-    <div v-if="isSpecific" class="desktop__app">
+    <div
+      v-if="isSpecific"
+      class="desktop__app"
+      style="min-width: 600px !important"
+    >
+      <v-btn
+        style="background: #f4f5f7; color: black"
+        variant="text"
+        color="black"
+        icon="mdi-share-outline"
+        width="40"
+        height="40"
+        class="mr-2 ml-4"
+      >
+        <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
+        <v-menu activator="parent">
+          <v-list>
+            <v-list-item @click="console.log('share')">
+              <v-list-item-title
+                ><v-icon class="mr-4" color="black" size="18">
+                  mdi-email-outline </v-icon
+                >Email</v-list-item-title
+              >
+            </v-list-item>
+            <v-list-item @click="console.log('share')">
+              <v-list-item-title
+                ><v-icon class="mr-4" size="18">
+                  <i class="fa-brands fa-facebook-f" /> </v-icon
+                >Facebook</v-list-item-title
+              >
+            </v-list-item>
+            <v-list-item @click="console.log('share')">
+              <v-list-item-title
+                ><v-icon class="mr-4" color="black" size="18">
+                  mdi-twitter </v-icon
+                >Twitter</v-list-item-title
+              >
+            </v-list-item>
+            <v-list-item @click="console.log('share')">
+              <v-list-item-title
+                ><v-icon class="mr-4" size="18">
+                  <i class="fa-brands fa-linkedin-in" /> </v-icon
+                >Linkedin</v-list-item-title
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn>
+      <!-- <div class="d-flex w-100 justify-space-between"> -->
       <v-menu>
         <template #activator="{ props }">
           <v-btn
-            style="margin-left: 30px; font-size: 16px; color: #494949"
+            style="font-size: 16px; color: #494949"
             v-bind="props"
             variant="text"
           >
@@ -142,7 +226,7 @@
           <v-btn
             style="
               margin-left: 10px;
-              margin-right: 30px;
+              margin-right: 20px;
               font-size: 16px;
               color: #494949;
             "
@@ -164,8 +248,14 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <!-- </div> -->
     </div>
-    <v-btn v-if="!isWelcome" elevation="0" class="btn_sign__up" to="/signup">
+    <v-btn
+      v-if="!isWelcome"
+      elevation="0"
+      class="btn_sign__up mr-4"
+      to="/signup"
+    >
       Sign up / Register
     </v-btn>
     <v-btn v-if="!isDetailPage" icon @click="drawer = !drawer">
@@ -179,7 +269,7 @@
       >
         <div
           class="mb-n2"
-          :class="{ 'mt-1': isDetailPage, 'mt-n2': isSpecific }"
+          :class="{ 'mt-1': isDetailPage, 'mt-n10': isSpecific }"
           v-if="isDetail"
         >
           <h2>
@@ -192,7 +282,7 @@
             }}
           </h2>
         </div>
-        <div class="d-flex flex-column" v-if="isSpecific">
+        <div class="d-flex flex-column mb-n4" v-if="isSpecific">
           <v-menu>
             <template #activator="{ props }">
               <v-btn
@@ -341,7 +431,7 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
-        <div v-if="isHome" class="my-slide d-flex">
+        <div v-if="isHome || isSpecific" class="my-slide d-flex">
           <v-btn
             class="sub-menu-btn view-all"
             style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
@@ -636,7 +726,7 @@ export default {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
       // console.log('ok');
 
-      if (this.isDetail) {
+      if (this.isSpecific) {
         app.config.globalProperties.$eventBus.$emit('filterSpecificJobs', tag);
       } else {
         app.config.globalProperties.$eventBus.$emit('scrollToCardSection');
@@ -801,7 +891,7 @@ export default {
   height: 26vh;
 }
 .app-bar-mobile-5 {
-  height: 23vh;
+  height: 32vh;
 }
 
 .divider {
@@ -817,8 +907,8 @@ export default {
 
 .header-info {
   align-items: center;
-  gap: 25px;
-  font-size: 30px;
+  gap: 15px;
+  font-size: 25px;
   color: black;
   font-weight: 800;
 }
@@ -854,7 +944,7 @@ export default {
 }
 
 .mobile-specific {
-  height: 120px !important;
+  height: 220px !important;
 }
 
 @keyframes skeleton {

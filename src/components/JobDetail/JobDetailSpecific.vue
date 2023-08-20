@@ -242,7 +242,7 @@
                           style="font-weight: 400"
                         >
                           <p>
-                            <span class="text-red">{{ card.distance }} kms</span
+                            <span class="text-red">{{ card.distanceText }}</span
                             ><span class="text-muted"> away</span>
                           </p>
                         </div>
@@ -353,7 +353,9 @@
               <span class="text-blue-darken-4">{{ skillSlug.name }} Jobs</span>
               specifically in
               <span class="text-blue-darken-4">{{
-                itemSelected2 == '---Select City---' ? '' : itemSelected2
+                itemSelected2 == '---Select City---'
+                  ? itemSelected
+                  : itemSelected2
               }}</span>
             </p>
             <!-- <hr /> -->
@@ -392,7 +394,7 @@
             >
               <v-slide-group
                 v-model="model"
-                :class="{ 'ml-n12': item.list.length <= 1 }"
+                :class="{ 'ml-n8': item.list.length <= 1 }"
                 class="pa-4"
               >
                 <!-- <template #prev="{ on, attrs }">
@@ -542,7 +544,7 @@
                           style="font-weight: 400"
                         >
                           <p>
-                            <span class="text-red">{{ card.distance }} kms</span
+                            <span class="text-red">{{ card.distanceText }}</span
                             ><span class="text-muted"> away</span>
                           </p>
                         </div>
@@ -842,6 +844,8 @@ export default {
       screenWidth: window.innerWidth,
       itemData: {},
       title: '',
+      //latitude: null,
+      //longitude: null,
       skillSlug: {},
       countryId: null,
       skillsGroup: [],
@@ -859,6 +863,12 @@ export default {
     ...mapState(['itemSelected2']),
     ...mapState(['itemSelectedComplete']),
     ...mapState(['itemSelected2Complete']),
+    latitude() {
+      return localStorage.getItem('latitude');
+    },
+    longitude() {
+      return localStorage.getItem('longitude');
+    },
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -935,12 +945,25 @@ export default {
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
+    formatDistance(distance) {
+      if (distance === 0 || distance === null) {
+        return '0 km';
+      } else {
+        const roundedDistance = Math.round(distance * 10) / 10;
+        const formattedDistance = roundedDistance.toLocaleString('en-US', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        });
+        return `${formattedDistance} km`;
+      }
+    },
     getJobDetailSpecific1() {
-      this.getGroups(this.skillSlug.skills_id, this.itemSelectedComplete.id);
-      this.getSpecificJobs(
-        this.skillSlug.skills_id,
-        this.itemSelectedComplete.id
-      );
+      this.getSkillBySlug2();
+      //this.getSpecificJobs(
+      //  this.skillSlug.skills_id,
+      //  this.itemSelectedComplete.id
+      //);
+      //this.getGroups(this.skillSlug.skills_id, this.itemSelectedComplete.id);
     },
     getJobDetailSpecific2() {
       this.getGroups2(
@@ -983,7 +1006,7 @@ export default {
       const slug = this.$route.params.name;
       this.isLoading = true;
       axios
-        .get(`/skills/slug/${slug}`)
+        .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
           //console.log(data);
@@ -1011,7 +1034,7 @@ export default {
       const slug = this.$route.params.name;
       this.isLoading = true;
       axios
-        .get(`/skills/slug/${slug}/${this.itemSelectedComplete?.id || 1}`)
+        .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
           console.log(data);
@@ -1019,6 +1042,7 @@ export default {
           if (data == null) {
             this.specificJobs = [];
             this.trendingBtn = [];
+            this.skillSlug = {};
           } else {
             this.skillSlug = {
               ...data,
@@ -1029,16 +1053,24 @@ export default {
               registrable: data.registrable || 'N',
               countryRegistrable: data.country_registrable || 'N',
             };
-            this.getGroups2(
+            this.getSpecificJobs(
               this.skillSlug.skills_id,
-              this.itemSelectedComplete.id,
-              ''
+              this.itemSelectedComplete.id
             );
-            this.getSpecificJobs2(
+            this.getGroups(
               this.skillSlug.skills_id,
-              this.itemSelectedComplete.id,
-              ''
+              this.itemSelectedComplete.id
             );
+            //this.getGroups2(
+            //  this.skillSlug.skills_id,
+            //  this.itemSelectedComplete.id,
+            //  ''
+            //);
+            //this.getSpecificJobs2(
+            //  this.skillSlug.skills_id,
+            //  this.itemSelectedComplete.id,
+            //  ''
+            //);
           }
           // console.log(this.skillSlug);
         })
@@ -1083,7 +1115,9 @@ export default {
     getSpecificJobs(skillId, countryId) {
       this.isCardLoading = true;
       axios
-        .get(`/sub-industries-jobs/${skillId}/${countryId}`)
+        .get(
+          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+        )
         .then((response) => {
           const data = response.data.data;
           //console.log(data);
@@ -1105,44 +1139,47 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
-              list: item.jobs.map((skill) => {
-                return {
-                  id: skill.job_id || 1,
-                  text: skill.position_name || '',
-                  image: skill.location_image
-                    ? this.$fileURL + skill.location_image
-                    : skill.partners_image
-                    ? this.$fileURL + skill.partners_image
-                    : '',
-                  path: skill.location_name
-                    ? skill.location_name.split(' ').join('').toLowerCase() +
-                      'jobs'
-                    : '',
-                  place: skill.partner_name || '',
-                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address:
-                    skill.location_name && skill.zone_name && skill.city_name
-                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.town_name &&
-                        skill.zone_name &&
-                        skill.city_name &&
-                        skill.location_name == null
-                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.zone_name &&
-                        skill.location_name == null &&
-                        skill.town_name == null &&
-                        skill.city_name
-                      ? `${skill.city_name} (${skill.zone_name})`
-                      : skill.city_name &&
-                        skill.location_name == null &&
-                        skill.town_name &&
-                        skill.zone_name == null
-                      ? `${skill.town_name} , ${skill.city_name}`
-                      : '-',
-                  distance: '4,5',
-                  tag: skill.position_name || '',
-                };
-              }),
+              list: item.jobs
+                .sort((a, b) => a.distance - b.distance)
+                .map((skill) => {
+                  return {
+                    id: skill.job_id || 1,
+                    text: skill.position_name || '',
+                    image: skill.location_image
+                      ? this.$fileURL + skill.location_image
+                      : skill.partners_image
+                      ? this.$fileURL + skill.partners_image
+                      : '',
+                    path: skill.location_name
+                      ? skill.location_name.split(' ').join('').toLowerCase() +
+                        'jobs'
+                      : '',
+                    place: skill.partner_name || '',
+                    distance: skill.distance || 0,
+                    distanceText: this.formatDistance(skill.distance),
+                    locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+                    address:
+                      skill.location_name && skill.zone_name && skill.city_name
+                        ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.town_name &&
+                          skill.zone_name &&
+                          skill.city_name &&
+                          skill.location_name == null
+                        ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.zone_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.city_name
+                        ? `${skill.city_name} (${skill.zone_name})`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name &&
+                          skill.zone_name == null
+                        ? `${skill.town_name} , ${skill.city_name}`
+                        : '-',
+                    tag: skill.position_name || '',
+                  };
+                }),
             };
           });
 
@@ -1195,8 +1232,8 @@ export default {
       axios
         .get(
           cityId != ''
-            ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}`
-            : `/sub-industries-jobs/${skillId}/${countryId}`
+            ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
+            : `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -1219,44 +1256,47 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
-              list: item.jobs.map((skill) => {
-                return {
-                  id: skill.job_id || 1,
-                  text: skill.position_name || '',
-                  image: skill.location_image
-                    ? this.$fileURL + skill.location_image
-                    : skill.partners_image
-                    ? this.$fileURL + skill.partners_image
-                    : '',
-                  path: skill.location_name
-                    ? skill.location_name.split(' ').join('').toLowerCase() +
-                      'jobs'
-                    : '',
-                  place: skill.partner_name || '',
-                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address:
-                    skill.location_name && skill.zone_name && skill.city_name
-                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.town_name &&
-                        skill.zone_name &&
-                        skill.city_name &&
-                        skill.location_name == null
-                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.zone_name &&
-                        skill.location_name == null &&
-                        skill.town_name == null &&
-                        skill.city_name
-                      ? `${skill.city_name} (${skill.zone_name})`
-                      : skill.city_name &&
-                        skill.location_name == null &&
-                        skill.town_name &&
-                        skill.zone_name == null
-                      ? `${skill.town_name} , ${skill.city_name}`
-                      : '-',
-                  distance: '4,5',
-                  tag: skill.position_name || '',
-                };
-              }),
+              list: item.jobs
+                .sort((a, b) => a.distance - b.distance)
+                .map((skill) => {
+                  return {
+                    id: skill.job_id || 1,
+                    text: skill.position_name || '',
+                    image: skill.location_image
+                      ? this.$fileURL + skill.location_image
+                      : skill.partners_image
+                      ? this.$fileURL + skill.partners_image
+                      : '',
+                    path: skill.location_name
+                      ? skill.location_name.split(' ').join('').toLowerCase() +
+                        'jobs'
+                      : '',
+                    place: skill.partner_name || '',
+                    distance: skill.distance || 0,
+                    distanceText: this.formatDistance(skill.distance),
+                    locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+                    address:
+                      skill.location_name && skill.zone_name && skill.city_name
+                        ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.town_name &&
+                          skill.zone_name &&
+                          skill.city_name &&
+                          skill.location_name == null
+                        ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.zone_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.city_name
+                        ? `${skill.city_name} (${skill.zone_name})`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name &&
+                          skill.zone_name == null
+                        ? `${skill.town_name} , ${skill.city_name}`
+                        : '-',
+                    tag: skill.position_name || '',
+                  };
+                }),
             };
           });
 
@@ -1275,8 +1315,8 @@ export default {
       axios
         .get(
           positionId == ''
-            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}`
-            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/${positionId}`
+            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/-1/-1/${this.latitude}/${this.longitude}`
+            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/${positionId}/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -1299,43 +1339,46 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
-              list: item.jobs.map((skill) => {
-                return {
-                  id: skill.job_id || 1,
-                  text: skill.position_name || '',
-                  image: skill.location_image
-                    ? this.$fileURL + skill.location_image
-                    : skill.partners_image
-                    ? this.$fileURL + skill.partners_image
-                    : '',
-                  path:
-                    skill.location_name.split(' ').join('').toLowerCase() +
-                    'jobs',
-                  place: skill.partner_name || '',
-                  locationImg: skill.logo ? this.$fileURL + skill.logo : '',
-                  address:
-                    skill.location_name && skill.zone_name && skill.city_name
-                      ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.town_name &&
-                        skill.zone_name &&
-                        skill.city_name &&
-                        skill.location_name == null
-                      ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
-                      : skill.zone_name &&
-                        skill.location_name == null &&
-                        skill.town_name == null &&
-                        skill.city_name
-                      ? `${skill.city_name} (${skill.zone_name})`
-                      : skill.city_name &&
-                        skill.location_name == null &&
-                        skill.town_name &&
-                        skill.zone_name == null
-                      ? `${skill.town_name} , ${skill.city_name}`
-                      : '-',
-                  distance: '4,5',
-                  tag: skill.position_name || '',
-                };
-              }),
+              list: item.jobs
+                .sort((a, b) => a.distance - b.distance)
+                .map((skill) => {
+                  return {
+                    id: skill.job_id || 1,
+                    text: skill.position_name || '',
+                    image: skill.location_image
+                      ? this.$fileURL + skill.location_image
+                      : skill.partners_image
+                      ? this.$fileURL + skill.partners_image
+                      : '',
+                    path:
+                      skill.location_name.split(' ').join('').toLowerCase() +
+                      'jobs',
+                    place: skill.partner_name || '',
+                    distance: skill.distance || 0,
+                    distanceText: this.formatDistance(skill.distance),
+                    locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+                    address:
+                      skill.location_name && skill.zone_name && skill.city_name
+                        ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.town_name &&
+                          skill.zone_name &&
+                          skill.city_name &&
+                          skill.location_name == null
+                        ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                        : skill.zone_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.city_name
+                        ? `${skill.city_name} (${skill.zone_name})`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name &&
+                          skill.zone_name == null
+                        ? `${skill.town_name} , ${skill.city_name}`
+                        : '-',
+                    tag: skill.position_name || '',
+                  };
+                }),
             };
           });
 
@@ -1402,7 +1445,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 270px;
+  margin-top: 325px;
   position: relative;
 }
 .btn-container {
