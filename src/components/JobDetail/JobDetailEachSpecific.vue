@@ -459,6 +459,8 @@
                     </p>
                   </div>
                   <v-btn
+                    to="/recognised-qualifications"
+                    @click="goToRecognised(skillSlug)"
                     elevation="1"
                     style="
                       background-color: #0865c2;
@@ -579,6 +581,8 @@
                     </p>
                   </div>
                   <v-btn
+                    to="/recognised-qualifications"
+                    @click="goToRecognised(skillSlug)"
                     elevation="1"
                     style="
                       background-color: #0865c2;
@@ -606,7 +610,7 @@
 <script>
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import moment from 'moment';
 
 export default {
@@ -632,6 +636,9 @@ export default {
   computed: {
     ...mapState(['activeTag']),
     ...mapState(['itemSelected']),
+    ...mapState(['itemSelected2']),
+    ...mapState(['itemSelectedComplete']),
+    ...mapState(['itemSelected2Complete']),
     ...mapState(['detailHeader']),
     isSmall() {
       return this.screenWidth < 640;
@@ -681,6 +688,19 @@ export default {
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
+    ...mapMutations([
+      'setCountryRecognised',
+      'setSkillRecognised',
+      'setIdCountryRecognised',
+      'setIdSkillRecognised',
+    ]),
+    goToRecognised(skillSlug) {
+      this.setCountryRecognised(this.itemSelected);
+      this.setIdCountryRecognised(this.itemSelectedComplete.id);
+      this.setSkillRecognised(skillSlug.name);
+      this.setIdSkillRecognised(skillSlug.skills_id);
+      app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+    },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
     },
@@ -814,6 +834,7 @@ export default {
             mainImage: this.$fileURL + data.main_image || '',
             regulator: data.partner_name_reg || '',
             name: data.skills_name || '',
+            skills_id: data.skills_id,
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
           };

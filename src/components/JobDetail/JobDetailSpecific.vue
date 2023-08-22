@@ -686,6 +686,8 @@
                   </p>
                 </div>
                 <v-btn
+                  to="/recognised-qualifications"
+                  @click="goToRecognised(skillSlug)"
                   elevation="1"
                   style="
                     background-color: #0865c2;
@@ -806,6 +808,8 @@
                   </p>
                 </div>
                 <v-btn
+                  to="/recognised-qualifications"
+                  @click="goToRecognised(skillSlug)"
                   elevation="1"
                   style="
                     background-color: #0865c2;
@@ -832,7 +836,7 @@
 <script>
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
@@ -945,6 +949,19 @@ export default {
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
   methods: {
+    ...mapMutations([
+      'setCountryRecognised',
+      'setSkillRecognised',
+      'setIdCountryRecognised',
+      'setIdSkillRecognised',
+    ]),
+    goToRecognised(skillSlug) {
+      this.setCountryRecognised(this.itemSelected);
+      this.setIdCountryRecognised(this.itemSelectedComplete.id);
+      this.setSkillRecognised(skillSlug.name);
+      this.setIdSkillRecognised(skillSlug.skills_id);
+      app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+    },
     formatDistance(distance) {
       if (distance === 0 || distance === null) {
         return '0 km';

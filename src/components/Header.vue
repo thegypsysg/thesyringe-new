@@ -6,6 +6,7 @@
       'app-bar-mobile-3': isSmall && isWelcome,
       'app-bar-mobile-4': isSmall && isDetailPage,
       'app-bar-mobile-5': isSmall && isSpecific,
+      'app-bar-mobile-6': isSmall && isRecognised,
     }"
     color="white"
     elevation="1"
@@ -23,6 +24,12 @@
     <div v-if="isWelcome" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
+    </div>
+    <div v-if="isRecognised" class="ml-0 d-flex flex-row header-info">
+      <div class="divider" />
+      <span :class="{ 'header-info-span-2': isSmall }"
+        >Recognised Qualifications</span
+      >
     </div>
     <div
       v-if="isDetail && !isSmall"
@@ -251,21 +258,25 @@
       <!-- </div> -->
     </div>
     <v-btn
-      v-if="!isWelcome"
+      v-if="!isWelcome && !isRecognised"
       elevation="0"
       class="btn_sign__up mr-4"
       to="/signup"
     >
       Sign up / Register
     </v-btn>
-    <v-btn v-if="!isDetailPage" icon @click="drawer = !drawer">
+    <v-btn v-if="!isRecognised" icon @click="drawer = !drawer">
       <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
     </v-btn>
 
     <template v-if="!isWelcome" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
-        :class="{ 'mb-n10': !isHome, 'mobile-specific': isSpecific }"
+        :class="{
+          'mb-n10': !isHome,
+          'mobile-specific': isSpecific,
+          'mobile-recognised': isRecognised,
+        }"
       >
         <div
           class="mb-n2"
@@ -329,6 +340,60 @@
           </v-menu>
         </div>
 
+        <div class="d-flex flex-column mb-n4" v-if="isRecognised">
+          <p style="font-size: 12px" class="text-grey font-weight-bold">
+            Where are you Looking For a Job. ?
+          </p>
+          <v-menu>
+            <template #activator="{ props }">
+              <v-btn
+                style="font-size: 15px; color: #851826; font-weight: 600"
+                v-bind="props"
+                variant="text"
+              >
+                {{ countryRecognised }}
+                <v-icon right dark> mdi-menu-down </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in countryRegistrable"
+                :key="index"
+                :value="index"
+                @click="changeCountryRecognised(item)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-menu>
+            <template #activator="{ props }">
+              <v-btn
+                style="font-size: 18px; color: #000000; font-weight: 600"
+                v-bind="props"
+                variant="text"
+              >
+                {{
+                  skillRecognised != '---Select Skills---'
+                    ? `${skillRecognised} Jobs`
+                    : skillRecognised
+                }}
+                <v-icon right dark> mdi-menu-down </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in skillRegistrable"
+                :key="index"
+                :value="index"
+                @click="changeSkillRecognised(item)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+
         <div v-if="isDetailPage">
           <span>{{ detailHeader.address }}</span>
         </div>
@@ -381,7 +446,7 @@
           </div>
         </div>
         <form
-          v-if="!isDetail"
+          v-if="!isDetail && !isRecognised"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -525,6 +590,8 @@ export default {
       drawer: false,
       // itemSelected: 'Singapore',
       country: [],
+      countryRegistrable: [],
+      skillRegistrable: [],
 
       trendingCard: [],
 
@@ -547,6 +614,10 @@ export default {
     ...mapState(['itemSelectedComplete']),
     ...mapState(['itemSelected2Complete']),
     ...mapState(['detailHeader']),
+    ...mapState(['countryRecognised']),
+    ...mapState(['idCountryRecognised']),
+    ...mapState(['skillRecognised']),
+    ...mapState(['idSkillRecognised']),
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -555,6 +626,9 @@ export default {
     },
     isSpecific() {
       return this.$route.params.name;
+    },
+    isRecognised() {
+      return this.$route.path === '/recognised-qualifications';
     },
     isDetailPage() {
       return this.$route.path.includes('detail');
@@ -592,6 +666,10 @@ export default {
       this.getSkillBySlug
     );
     app.config.globalProperties.$eventBus.$on(
+      'getRegistrableCountrySkills',
+      this.getRegistrableCountrySkills
+    );
+    app.config.globalProperties.$eventBus.$on(
       'getHeaderLanding',
       this.getTrendingCardData
     );
@@ -610,6 +688,10 @@ export default {
       this.getSkillBySlug
     );
     app.config.globalProperties.$eventBus.$off(
+      'getRegistrableCountrySkills',
+      this.getRegistrableCountrySkills
+    );
+    app.config.globalProperties.$eventBus.$off(
       'getHeaderLanding',
       this.getTrendingCardData
     );
@@ -622,6 +704,36 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getRegistrableCountrySkills() {
+      this.isLoading = true;
+      axios
+        .get(`/registrable-country/country-skills`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          this.countryRegistrable = data.map((country) => {
+            return {
+              id: country.country_id,
+              title: country.country_name,
+              path: '#',
+            };
+          });
+          this.skillRegistrable = data.map((skills) => {
+            return {
+              id: skills.skills[0].skills_id,
+              title: skills.skills[0].skills_name,
+              path: '#',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     getActiveSkills() {
       this.isLoading = true;
       axios
@@ -715,12 +827,28 @@ export default {
       this.setItemSelected2Complete(item);
       app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific2');
     },
+    changeCountryRecognised(item) {
+      this.setCountryRecognised(item.title);
+      this.setIdCountryRecognised(item.id);
+      app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+      app.config.globalProperties.$eventBus.$emit('getQualificationInfo');
+    },
+    changeSkillRecognised(item) {
+      this.setSkillRecognised(item.title);
+      this.setIdSkillRecognised(item.id);
+      app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+      app.config.globalProperties.$eventBus.$emit('getQualificationInfo');
+    },
     ...mapMutations([
       'setActiveTag',
       'setItemSelected',
       'setItemSelectedComplete',
       'setItemSelected2',
       'setItemSelected2Complete',
+      'setCountryRecognised',
+      'setSkillRecognised',
+      'setIdCountryRecognised',
+      'setIdSkillRecognised',
     ]),
     selectTag(tag) {
       this.setActiveTag(tag); // Menetapkan tag yang dipilih sebagai tag aktif
@@ -893,6 +1021,9 @@ export default {
 .app-bar-mobile-5 {
   height: 32vh;
 }
+.app-bar-mobile-6 {
+  height: 25vh;
+}
 
 .divider {
   background: rgb(173, 173, 173);
@@ -915,6 +1046,10 @@ export default {
 
 .header-info-span {
   font-size: 25px;
+  font-weight: 800;
+}
+.header-info-span-2 {
+  font-size: 20px;
   font-weight: 800;
 }
 
@@ -944,6 +1079,9 @@ export default {
 }
 
 .mobile-specific {
+  height: 220px !important;
+}
+.mobile-recognised {
   height: 220px !important;
 }
 

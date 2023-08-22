@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue';
 import JobDetail from '@/components/JobDetail/JobDetail.vue';
 import JobDetailSpecific from '@/components/JobDetail/JobDetailSpecific.vue';
 import JobDetailEachSpecific from '@/components/JobDetail/JobDetailEachSpecific.vue';
+import RecognisedQualifications from '@/components/RecognisedQualifications.vue';
 import SignUp from '../views/SignUpForm.vue';
 
 const routes = [
@@ -40,6 +41,11 @@ const routes = [
     name: 'detail page each specific',
     path: '/detail/:id',
     component: JobDetailEachSpecific,
+  },
+  {
+    name: 'recognised qualifications',
+    path: '/recognised-qualifications',
+    component: RecognisedQualifications,
   },
 ];
 

@@ -18,6 +18,10 @@ export default createStore({
       partner: '',
       website: '',
     },
+    countryRecognised: 'Singapore',
+    idCountryRecognised: 1,
+    skillRecognised: '---Select Skills---',
+    idSkillRecognised: null,
   },
   mutations: {
     setActiveTag(state, tag) {
@@ -37,6 +41,18 @@ export default createStore({
     },
     setDetailHeader(state, data) {
       state.detailHeader = { ...data };
+    },
+    setCountryRecognised(state, item) {
+      state.countryRecognised = item;
+    },
+    setIdCountryRecognised(state, item) {
+      state.idCountryRecognised = item;
+    },
+    setSkillRecognised(state, item) {
+      state.skillRecognised = item;
+    },
+    setIdSkillRecognised(state, item) {
+      state.idSkillRecognised = item;
     },
   },
 });
