@@ -27,9 +27,67 @@
     </div>
     <div v-if="isRecognised" class="ml-0 d-flex flex-row header-info">
       <div class="divider" />
-      <span :class="{ 'header-info-span-2': isSmall }"
+      <span v-if="isSmall" class="header-info-span-2"
         >Recognised Qualifications</span
       >
+      <h3 v-if="!isSmall">Recognised Qualifications</h3>
+    </div>
+    <div
+      v-if="!isSmall && isRecognised"
+      class="ml-0 d-flex flex-row header-info"
+    >
+      <div class="divider mx-2" />
+      <p style="font-size: 16px" class="text-grey font-weight-bold">
+        Where are you Looking For a Job. ?
+      </p>
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn
+            style="font-size: 20px; color: #851826; font-weight: 600"
+            v-bind="props"
+            variant="text"
+          >
+            {{ countryRecognised }}
+            <v-icon right dark> mdi-menu-down </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in countryRegistrable"
+            :key="index"
+            :value="index"
+            @click="changeCountryRecognised(item)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn
+            style="font-size: 18px; color: #000000; font-weight: 600"
+            v-bind="props"
+            variant="text"
+          >
+            {{
+              skillRecognised != '---Select Skills---'
+                ? `${skillRecognised} Jobs`
+                : skillRecognised
+            }}
+            <v-icon right dark> mdi-menu-down </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in skillRegistrable"
+            :key="index"
+            :value="index"
+            @click="changeSkillRecognised(item)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
     <div
       v-if="isDetail && !isSmall"
@@ -47,7 +105,7 @@
     </div>
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail"
+      v-if="!isWelcome && !isDetail && !isRecognised"
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete

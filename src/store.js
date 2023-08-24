@@ -22,6 +22,11 @@ export default createStore({
     idCountryRecognised: 1,
     skillRecognised: '---Select Skills---',
     idSkillRecognised: null,
+    skillSlug: {
+      skills_id: '',
+      name: '',
+      image: '',
+    },
   },
   mutations: {
     setActiveTag(state, tag) {
@@ -53,6 +58,14 @@ export default createStore({
     },
     setIdSkillRecognised(state, item) {
       state.idSkillRecognised = item;
+    },
+    setSkillSlug(state, item) {
+      state.skillSlug = {
+        ...item,
+        name: item.name,
+        image: item.image,
+        skills_id: item.skills_id,
+      };
     },
   },
 });

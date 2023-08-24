@@ -2,18 +2,28 @@
   <v-container v-if="isLoading" class="text-center loading-page">
     <v-progress-circular :size="50" color="#fa2964" indeterminate />
   </v-container>
-  <v-container v-if="!isLoading" class="banner-mobile mt-16 pt-16">
-    <h5 class="recognised-title font-weight-black text-center py-2 mt-16 mb-10">
+  <v-container
+    v-if="!isLoading"
+    class="pt-16"
+    :class="{ 'mt-16': isSmall, 'mt-8': !isSmall }"
+  >
+    <h5
+      v-if="isSmall"
+      class="recognised-title font-weight-black text-center py-2 mt-16 mb-10"
+    >
       List of Qualifications recognised in {{ countryRecognised }}
     </h5>
-    <div class="regu-info" style="white-space: normal">
+    <h1 v-if="!isSmall" class="font-weight-black text-left py-2 mb-10">
+      List of Recognised Qualifications in {{ countryRecognised }}
+    </h1>
+    <div :class="{ 'regu-info-desktop': !isSmall }" style="white-space: normal">
       <v-row>
-        <v-col cols="3" class="regu-info-title font-weight-bold"
+        <v-col cols="3" md="2" class="regu-info-title font-weight-bold"
           >Profession</v-col
         >
-        <v-col cols="8">
+        <v-col cols="8" md="6">
           <p
-            style="font-size: 14px; font-weight: 600"
+            :class="{ 'regu-info-mobile-1': isSmall }"
             class="text-blue-darken-4"
           >
             {{
@@ -23,20 +33,22 @@
             }}
           </p></v-col
         >
-        <v-col cols="3" class="regu-info-title font-weight-bold"
+      </v-row>
+      <v-row>
+        <v-col cols="3" md="2" class="regu-info-title font-weight-bold"
           >Regulator</v-col
         >
-        <v-col cols="8">
+        <v-col cols="8" md="6">
           <div class="">
             <p
-              style="font-size: 14px; font-weight: 600"
+              :class="{ 'regu-info-mobile-1': isSmall }"
               class="text-blue-darken-4"
             >
               {{ reguInfo.name }}
             </p>
           </div>
-          <div class="">
-            <p style="font-size: 12px; font-weight: 600" class="text-grey">
+          <div :class="{ 'regu-info-mobile': isSmall }">
+            <p class="text-grey">
               {{
                 reguInfo.city != '-' && reguInfo.town != '-'
                   ? reguInfo.town + ', ' + reguInfo.city
@@ -51,7 +63,7 @@
               Marine Parade, Singapore
             </p> -->
           </div>
-          <div style="font-size: 12px; font-weight: 600" class="">
+          <div :class="{ 'regu-info-mobile': isSmall }">
             <!-- <a
               class="text-decoration-none"
               href="https://www.healthprofessional.go.id"
@@ -63,7 +75,47 @@
           </div>
         </v-col>
       </v-row>
-      <div class="d-flex mt-4">
+      <div v-if="!isSmall" class="mt-12">
+        <v-row>
+          <v-col cols="7">
+            <span
+              style="font-size: 22px; line-height: 8px !important"
+              class="font-weight-black text-left"
+              >Which Country did you obtain your Physioterapist
+              Qualifications</span
+            >
+            <div class="w-100 d-flex justify-center mt-6">
+              <v-menu height="400" max-height="400">
+                <template #activator="{ props }">
+                  <v-btn
+                    style="font-size: 16px; color: #8c8c8c; font-weight: 600"
+                    v-bind="props"
+                    variant="text"
+                  >
+                    {{ selectedCountry }}
+                    <v-icon right dark> mdi-menu-down </v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="selectedCountry = 'Show All'">
+                    <v-list-item-title>Show All</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-for="(item, index) in country"
+                    :key="index"
+                    :value="index"
+                    @click="selectedCountry = item.title"
+                  >
+                    <!-- @click="changeItemSelected(item)" -->
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-if="isSmall" class="d-flex mt-4">
         <div style="width: 43%">
           <span
             style="font-size: 12px; line-height: 8px !important"
@@ -103,8 +155,11 @@
       </div>
       <v-sheet class="py-2 mt-4" width="100%">
         <v-row>
-          <v-col cols="12">
-            <v-table style="font-size: 12px" class="country-table">
+          <v-col :cols="isSmall ? 12 : 8">
+            <v-table
+              :style="{ fontSize: isSmall ? '12px' : '14px' }"
+              class="country-table"
+            >
               <thead>
                 <tr>
                   <th class="text-left font-weight-bold text-black">Country</th>
@@ -171,6 +226,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      screenWidth: window.innerWidth,
       reguInfo: {},
       qualInfo: [],
       country: [],
@@ -182,6 +238,9 @@ export default {
     ...mapState(['idCountryRecognised']),
     ...mapState(['skillRecognised']),
     ...mapState(['idSkillRecognised']),
+    isSmall() {
+      return this.screenWidth < 640;
+    },
     filteredQual() {
       if (
         this.selectedCountry == '---Select Country---' ||
@@ -195,6 +254,9 @@ export default {
         item.countryGroup.toLowerCase().includes(searchTextLower)
       );
     },
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
   },
   mounted() {
     this.checkRecognised();
@@ -220,7 +282,13 @@ export default {
       this.getQualificationInfo
     );
   },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
     checkRecognised() {
       app.config.globalProperties.$eventBus.$emit(
         'getRegistrableCountrySkills'
@@ -308,6 +376,19 @@ export default {
 <style lang="scss" scoped>
 .recognised-title {
   border: 1px solid black;
+}
+
+.regu-info-desktop {
+  font-size: 16px;
+  font-weight: 600;
+}
+.regu-info-mobile {
+  font-size: 12px;
+  font-weight: 600;
+}
+.regu-info-mobile-1 {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .regu-info-title::after {

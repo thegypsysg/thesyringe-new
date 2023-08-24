@@ -104,7 +104,7 @@
         </v-container>
         <template v-if="isCardLoading">
           <v-container>
-            <p class="ml-8 mt-10">Loading...</p>
+            <p class="ml-8 my-10">Loading...</p>
           </v-container>
         </template>
         <template v-if="!isCardLoading">
@@ -137,7 +137,11 @@
               >
                 {{ item.title }}
               </h3>
-              <router-link :to="item.path" class="text-decoration-none">
+              <router-link
+                v-if="item.list.length >= 4"
+                :to="`/view-all/${item.id}`"
+                class="text-decoration-none"
+              >
                 <h1 class="view-all">View all</h1>
               </router-link>
             </div>
@@ -148,7 +152,7 @@
             >
               <v-slide-group v-model="model" class="pa-4">
                 <v-slide-group-item
-                  v-for="card in item.list"
+                  v-for="card in item.list.slice(0, 6)"
                   :key="card"
                   v-slot="{ toggle }"
                   class="mx-4"
@@ -301,7 +305,7 @@
                   </v-lazy>
                 </v-slide-group-item>
                 <v-slide-group-item
-                  v-if="item.list.length > 4"
+                  v-if="item.list.length >= 6"
                   v-slot="{ toggle }"
                 >
                   <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -310,7 +314,7 @@
                       height="220"
                       width="180"
                       elevation="0"
-                      :to="item.path"
+                      :to="`/view-all/${item.id}`"
                       style="border-radius: 12px; gap: 20px"
                       @click="toggle"
                     >
@@ -326,7 +330,7 @@
                         rounded
                         icon
                         v-bind="attrs"
-                        :to="item.path"
+                        :to="`/view-all/${item.id}`"
                         v-on="on"
                       >
                         <v-icon color="white"> mdi-arrow-right </v-icon>
@@ -343,7 +347,7 @@
         <div class="banner-container"></div>
         <template v-if="isCardLoading">
           <v-container>
-            <p class="ml-8 mt-10">Loading...</p>
+            <p class="ml-8 my-10">Loading...</p>
           </v-container>
         </template>
         <template v-if="!isCardLoading">
@@ -383,7 +387,10 @@
               >
                 {{ item.title }}
               </h2>
-              <router-link :to="item.path" class="text-decoration-none">
+              <router-link
+                :to="`/view-all/${item.id}`"
+                class="text-decoration-none"
+              >
                 <h1 class="view-all">View all</h1>
               </router-link>
             </div>
@@ -611,7 +618,7 @@
                       height="220"
                       width="180"
                       elevation="0"
-                      :to="item.path"
+                      :to="`/view-all/${item.id}`"
                       style="border-radius: 12px; gap: 20px"
                       @click="toggle"
                     >
@@ -627,7 +634,7 @@
                         rounded
                         icon
                         v-bind="attrs"
-                        :to="item.path"
+                        :to="`/view-all/${item.id}`"
                         v-on="on"
                       >
                         <v-icon color="white"> mdi-arrow-right </v-icon>
@@ -640,7 +647,7 @@
           </div>
         </template>
       </template>
-      <template v-if="!isSmall">
+      <template v-if="!isSmall && filteredItemsDesktop.length > 0">
         <v-container
           v-if="skillSlug.countryRegistrable == 'Y'"
           :class="{ 'w-75 mx-auto': !isSmall }"
@@ -735,7 +742,7 @@
           </div>
         </v-container>
       </template>
-      <template v-if="isSmall">
+      <template v-if="isSmall && filteredItems.length > 0">
         <v-container
           v-if="skillSlug.countryRegistrable == 'Y'"
           :class="{ 'w-75': !isSmall }"
@@ -954,6 +961,7 @@ export default {
       'setSkillRecognised',
       'setIdCountryRecognised',
       'setIdSkillRecognised',
+      'setSkillSLug',
     ]),
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);
@@ -966,12 +974,14 @@ export default {
       if (distance === 0 || distance === null) {
         return '0 km';
       } else {
-        const roundedDistance = Math.round(distance * 10) / 10;
-        const formattedDistance = roundedDistance.toLocaleString('en-US', {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        });
-        return `${formattedDistance} km`;
+        //const roundedDistance = Math.round(distance * 10) / 10;
+        //const formattedDistance = roundedDistance.toLocaleString('en-US', {
+        //  minimumFractionDigits: 1,
+        //  maximumFractionDigits: 1,
+        //});
+        //return `${formattedDistance} km`;
+
+        return distance.toFixed(1) + ' km';
       }
     },
     getJobDetailSpecific1() {
@@ -1036,6 +1046,10 @@ export default {
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
           };
+
+          localStorage.setItem('skill_name', this.skillSlug.name);
+          localStorage.setItem('skill_id', this.skillSlug.skills_id);
+          localStorage.setItem('skill_image', this.skillSlug.image);
           this.getCountry();
           // console.log(this.skillSlug);
         })
@@ -1070,6 +1084,9 @@ export default {
               registrable: data.registrable || 'N',
               countryRegistrable: data.country_registrable || 'N',
             };
+            localStorage.setItem('skill_name', this.skillSlug.name);
+            localStorage.setItem('skill_id', this.skillSlug.skills_id);
+            localStorage.setItem('skill_image', this.skillSlug.image);
             this.getSpecificJobs(
               this.skillSlug.skills_id,
               this.itemSelectedComplete.id
@@ -1156,6 +1173,7 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
@@ -1273,6 +1291,7 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
@@ -1332,8 +1351,20 @@ export default {
       axios
         .get(
           positionId == ''
-            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/-1/-1/${this.latitude}/${this.longitude}`
-            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${this.countryId}/${positionId}/-1/${this.latitude}/${this.longitude}`
+            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${
+                this.countryId
+              }/-1/${
+                this.itemSelected2Complete
+                  ? this.itemSelected2Complete.id
+                  : '-1'
+              }/${this.latitude}/${this.longitude}`
+            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${
+                this.countryId
+              }/${positionId}/${
+                this.itemSelected2Complete
+                  ? this.itemSelected2Complete.id
+                  : '-1'
+              }/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -1356,6 +1387,7 @@ export default {
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
+              slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
@@ -1367,9 +1399,10 @@ export default {
                       : skill.partners_image
                       ? this.$fileURL + skill.partners_image
                       : '',
-                    path:
-                      skill.location_name.split(' ').join('').toLowerCase() +
-                      'jobs',
+                    path: skill.location_name
+                      ? skill.location_name.split(' ').join('').toLowerCase() +
+                        'jobs'
+                      : '',
                     place: skill.partner_name || '',
                     distance: skill.distance || 0,
                     distanceText: this.formatDistance(skill.distance),
