@@ -102,6 +102,299 @@
             </v-slide-group>
           </div>
         </v-container>
+        <div class="international-cont w-100">
+          <v-container>
+            <h3 class="ml-8">
+              International {{ skillSlug.name }} Jobs (<span>2</span>)
+            </h3>
+            <div class="d-flex mt-4">
+              <v-slide-group
+                v-if="!isSmall"
+                v-model="selectedTag"
+                class="trending-slide my-slide"
+              >
+                <template #prev="{ on, attrs }">
+                  <v-btn
+                    v-if="activeIndex > 1"
+                    color="#0596d5"
+                    rounded
+                    icon
+                    size="40"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="previousSlide"
+                  >
+                    <v-icon size="20" color="white"> mdi-arrow-left </v-icon>
+                  </v-btn>
+                </template>
+                <template #next="{ on, attrs }">
+                  <v-btn
+                    v-if="activeIndex + 1 <= trendingBtn.length / 4"
+                    color="#0596d5"
+                    rounded
+                    size="40"
+                    icon
+                    v-bind="attrs"
+                    @click="nextSlide"
+                    v-on="on"
+                  >
+                    <v-icon size="20" color="white"> mdi-arrow-right </v-icon>
+                  </v-btn>
+                </template>
+                <v-slide-group-item
+                  v-for="btn in trendingBtn"
+                  :key="btn.tag"
+                  v-slot="{ isSelected, toggle }"
+                  :value="btn.tag"
+                  class="my-slide-item"
+                >
+                  <v-btn
+                    class="sub-menu-btn"
+                    :class="{
+                      active: isSelected,
+                      'py-4 px-2 mx-2': !isSmall,
+                    }"
+                    style="
+                      box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
+                      height: 40px !important;
+                    "
+                    @click="
+                      () => {
+                        filterSpecificJobs(btn.id);
+                        toggle;
+                      }
+                    "
+                  >
+                    <p style="font-size: 12px" elevation>{{ btn.title }} (2)</p>
+                  </v-btn>
+                </v-slide-group-item>
+              </v-slide-group>
+            </div>
+            <div>
+              <v-sheet class="d-flex justify-start" elevation="0">
+                <v-slide-group v-model="model" class="pa-4 international-cont">
+                  <v-slide-group-item
+                    v-for="card in itemsTry"
+                    :key="card"
+                    v-slot="{ toggle }"
+                    class="mx-4"
+                  >
+                    <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                      <v-card
+                        class="my-4 card-cont"
+                        :class="{
+                          'mx-3 text-center': !isSmall,
+                          'mx-1': isSmall,
+                        }"
+                        :height="!isSmall ? 140 : 100"
+                        :width="!isSmall ? 350 : 320"
+                        elevation="0"
+                        @click="toggle"
+                      >
+                        <div class="card-description">
+                          <div
+                            class="w-100 card-address d-flex justify-space-between align-center pa-4"
+                          >
+                            <div style="width: 15%" class="mr-2">
+                              <v-img :src="card.locationImg" height="35"
+                                ><template #placeholder>
+                                  <div class="skeleton" /> </template
+                              ></v-img>
+                            </div>
+                            <div
+                              style="width: 65%"
+                              class="card-address-info text-left mr-2"
+                            >
+                              <h4 class="mt-4" style="font-weight: 600">
+                                {{
+                                  card.text.length >= 32
+                                    ? card.text.substring(0, 32) + '..'
+                                    : card.text
+                                }}
+                              </h4>
+                              <h4 class="mt-2" style="font-weight: 600">
+                                {{
+                                  card.place.length >= 32
+                                    ? card.place.substring(0, 32) + '..'
+                                    : card.place
+                                }}
+                              </h4>
+
+                              <div class="mt-2" style="font-weight: 400">
+                                <p>{{ card.address }}</p>
+                              </div>
+                            </div>
+                            <div style="width: 20%">
+                              <v-btn
+                                elevation="4"
+                                style="
+                                  background-color: #0596d5;
+                                  border-radius: 5px;
+                                  padding-left: 8px;
+                                  padding-right: 6px;
+                                  padding-top: 4px;
+                                  padding-bottom: 4px;
+                                  font-weight: 600;
+                                  font-size: 12px;
+                                "
+                              >
+                                <span class="text-white" style=""
+                                  >View All</span
+                                >
+                              </v-btn>
+                            </div>
+                          </div>
+                        </div>
+                      </v-card>
+                    </v-lazy>
+                  </v-slide-group-item>
+                </v-slide-group>
+              </v-sheet>
+            </div>
+          </v-container>
+        </div>
+        <v-container class="d-flex w-100 justify-start">
+          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+            <v-card
+              class="my-4 card-cont pa-2"
+              :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+              :height="!isSmall ? 360 : 320"
+              :width="!isSmall ? 300 : 270"
+              elevation="1"
+              @click="toggle"
+            >
+              <h2 class="text-purple-darken-4 text-left">Platinum Partner</h2>
+              <div
+                v-if="isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2"
+              >
+                {{
+                  itemTry.text.length >= 28
+                    ? itemTry.text.substring(0, 28) + '..'
+                    : itemTry.text
+                }}
+              </div>
+              <div
+                v-if="!isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2 text-left"
+              >
+                {{
+                  itemTry.text.length >= 32
+                    ? itemTry.text.substring(0, 32) + '..'
+                    : itemTry.text
+                }}
+              </div>
+              <div
+                class="trending__app"
+                :class="{
+                  'card-image-cont-1': !isSmall,
+                  'card-image-cont-2': isSmall,
+                }"
+              >
+                <v-img
+                  :src="itemTry.image"
+                  class="card-image"
+                  :height="isSmall ? 170 : 220"
+                  cover
+                  transition="fade-transition"
+                >
+                  <template #placeholder>
+                    <div class="skeleton skeleton-category ml-2" />
+                  </template>
+                </v-img>
+              </div>
+              <v-btn
+                elevation="4"
+                :to="`/detail/${itemTry.id}`"
+                style="
+                  position: absolute;
+                  bottom: 110px;
+                  left: 15px;
+                  background-color: #fa2964;
+                  border-radius: 5px;
+                  padding-left: 8px;
+                  padding-right: 6px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  font-weight: 600;
+                  font-size: 12px;
+                "
+              >
+                <span class="text-white" style="">View Jobs</span>
+              </v-btn>
+
+              <div
+                class="card-description d-flex flex-column mt-6"
+                style="position: relative; gap: 10px"
+              >
+                <div
+                  class="card-address-info text-left mt-n4 mb-n2"
+                  style="font-weight: 400"
+                >
+                  <p>
+                    <span class="text-red">{{ itemTry.distanceText }}</span
+                    ><span class="text-muted"> away</span>
+                  </p>
+                </div>
+                <div class="card-address d-flex align-center">
+                  <div style="width: 25%">
+                    <v-img :src="itemTry.locationImg" height="35"
+                      ><template #placeholder>
+                        <div class="skeleton" /> </template
+                    ></v-img>
+                  </div>
+                  <div style="width: 75%" class="card-address-info text-left">
+                    <h4 class="mt-4" style="font-weight: 600">
+                      {{
+                        itemTry.place.length >= 32
+                          ? itemTry.place.substring(0, 32) + '..'
+                          : itemTry.place
+                      }}
+                    </h4>
+
+                    <div class="mt-2" style="font-weight: 400">
+                      <p>{{ itemTry.address }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-btn-container-1 d-flex justify-space-between">
+                <v-btn
+                  color="black"
+                  class="card-btn"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                  icon="mdi-share-variant-outline"
+                >
+                  <v-icon size="20" color="red">
+                    mdi-share-variant-outline
+                  </v-icon></v-btn
+                >
+                <v-btn
+                  class="card-btn"
+                  color="black"
+                  icon="mdi-heart-outline"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                >
+                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                </v-btn>
+              </div>
+            </v-card>
+          </v-lazy>
+        </v-container>
         <template v-if="isCardLoading">
           <v-container>
             <p class="ml-8 my-10">Loading...</p>
@@ -345,13 +638,278 @@
       </template>
       <template v-if="isSmall">
         <div class="banner-container"></div>
+        <div class="international-cont w-100">
+          <v-container>
+            <h4 class="ml-8">
+              International {{ skillSlug.name }} Jobs (<span>2</span>)
+            </h4>
+            <div class="d-flex mt-4">
+              <v-slide-group
+                v-model="selectedTag"
+                class="trending-slide my-slide"
+              >
+                <v-slide-group-item
+                  v-for="btn in trendingBtn"
+                  :key="btn.tag"
+                  v-slot="{ isSelected, toggle }"
+                  :value="btn.tag"
+                  class="my-slide-item"
+                >
+                  <v-btn
+                    class="sub-menu-btn"
+                    height="30"
+                    :class="{
+                      active: isSelected,
+                      'py-4 px-2 mx-2': !isSmall,
+                    }"
+                    style="
+                      box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
+                      height: 30px !important;
+                    "
+                    @click="
+                      () => {
+                        filterSpecificJobs(btn.id);
+                        toggle;
+                      }
+                    "
+                  >
+                    <p style="font-size: 10px" elevation>{{ btn.title }} (2)</p>
+                  </v-btn>
+                </v-slide-group-item>
+              </v-slide-group>
+            </div>
+            <div>
+              <v-sheet class="d-flex justify-start mt-n16" elevation="0">
+                <v-slide-group v-model="model" class="pa-0 international-cont">
+                  <v-slide-group-item
+                    v-for="card in itemsTry"
+                    :key="card"
+                    v-slot="{ toggle }"
+                    class="mx-4"
+                  >
+                    <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                      <v-card
+                        class="my-2 card-cont"
+                        :class="{
+                          'mx-3 text-center': !isSmall,
+                          'mx-1': isSmall,
+                        }"
+                        :height="!isSmall ? 140 : 120"
+                        :width="!isSmall ? 350 : 280"
+                        elevation="0"
+                        @click="toggle"
+                      >
+                        <div class="card-description">
+                          <div
+                            class="w-100 card-address d-flex justify-space-between align-center pa-2"
+                          >
+                            <div style="width: 15%" class="mr-2">
+                              <v-img :src="card.locationImg" height="35"
+                                ><template #placeholder>
+                                  <div class="skeleton" /> </template
+                              ></v-img>
+                            </div>
+                            <div
+                              style="width: 55%"
+                              class="card-address-info-mobile text-left mr-2"
+                            >
+                              <h4 class="mt-2" style="font-weight: 600">
+                                {{
+                                  card.text.length >= 32
+                                    ? card.text.substring(0, 32) + '..'
+                                    : card.text
+                                }}
+                              </h4>
+                              <h4 class="mt-2" style="font-weight: 600">
+                                {{
+                                  card.place.length >= 40
+                                    ? card.place.substring(0, 40) + '..'
+                                    : card.place
+                                }}
+                              </h4>
+
+                              <div class="mt-2" style="font-weight: 400">
+                                <p>{{ card.address }}</p>
+                              </div>
+                            </div>
+                            <div style="width: 30%">
+                              <v-btn
+                                elevation="4"
+                                style="
+                                  background-color: #0596d5;
+                                  border-radius: 5px;
+                                  padding-left: 8px;
+                                  padding-right: 6px;
+                                  padding-top: 4px;
+                                  padding-bottom: 4px;
+                                  font-weight: 600;
+                                  font-size: 10px;
+                                "
+                              >
+                                <span class="text-white" style=""
+                                  >View All</span
+                                >
+                              </v-btn>
+                            </div>
+                          </div>
+                        </div>
+                      </v-card>
+                    </v-lazy>
+                  </v-slide-group-item>
+                </v-slide-group>
+              </v-sheet>
+            </div>
+          </v-container>
+        </div>
+        <v-container class="d-flex w-100 justify-start">
+          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+            <v-card
+              class="my-4 card-cont pa-2"
+              :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+              :height="!isSmall ? 360 : 360"
+              :width="!isSmall ? 300 : 270"
+              elevation="1"
+              @click="toggle"
+            >
+              <h2 class="text-purple-darken-4 text-left">Platinum Partner</h2>
+              <div
+                v-if="isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2"
+              >
+                {{
+                  itemTry.text.length >= 28
+                    ? itemTry.text.substring(0, 28) + '..'
+                    : itemTry.text
+                }}
+              </div>
+              <div
+                v-if="!isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2 text-left"
+              >
+                {{
+                  itemTry.text.length >= 32
+                    ? itemTry.text.substring(0, 32) + '..'
+                    : itemTry.text
+                }}
+              </div>
+              <div
+                class="trending__app"
+                :class="{
+                  'card-image-cont-1': !isSmall,
+                  'card-image-cont-2': isSmall,
+                }"
+              >
+                <v-img
+                  :src="itemTry.image"
+                  class="card-image"
+                  :height="isSmall ? 170 : 220"
+                  cover
+                  transition="fade-transition"
+                >
+                  <template #placeholder>
+                    <div class="skeleton skeleton-category ml-2" />
+                  </template>
+                </v-img>
+              </div>
+              <v-btn
+                elevation="4"
+                :to="`/detail/${itemTry.id}`"
+                style="
+                  position: absolute;
+                  bottom: 110px;
+                  left: 15px;
+                  background-color: #fa2964;
+                  border-radius: 5px;
+                  padding-left: 8px;
+                  padding-right: 6px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  font-weight: 600;
+                  font-size: 12px;
+                "
+              >
+                <span class="text-white" style="">View Jobs</span>
+              </v-btn>
+
+              <div
+                class="card-description d-flex flex-column mt-6"
+                style="position: relative; gap: 10px"
+              >
+                <div
+                  class="card-address-info text-left mt-n4 mb-n2"
+                  style="font-weight: 400"
+                >
+                  <p>
+                    <span class="text-red">{{ itemTry.distanceText }}</span
+                    ><span class="text-muted"> away</span>
+                  </p>
+                </div>
+                <div class="card-address d-flex align-center">
+                  <div style="width: 25%">
+                    <v-img :src="itemTry.locationImg" height="35"
+                      ><template #placeholder>
+                        <div class="skeleton" /> </template
+                    ></v-img>
+                  </div>
+                  <div style="width: 75%" class="card-address-info text-left">
+                    <h4 class="mt-4" style="font-weight: 600">
+                      {{
+                        itemTry.place.length >= 32
+                          ? itemTry.place.substring(0, 32) + '..'
+                          : itemTry.place
+                      }}
+                    </h4>
+
+                    <div class="mt-2" style="font-weight: 400">
+                      <p>{{ itemTry.address }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-btn-container-1 d-flex justify-space-between">
+                <v-btn
+                  color="black"
+                  class="card-btn"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                  icon="mdi-share-variant-outline"
+                >
+                  <v-icon size="20" color="red">
+                    mdi-share-variant-outline
+                  </v-icon></v-btn
+                >
+                <v-btn
+                  class="card-btn"
+                  color="black"
+                  icon="mdi-heart-outline"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                >
+                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                </v-btn>
+              </div>
+            </v-card>
+          </v-lazy>
+        </v-container>
         <template v-if="isCardLoading">
           <v-container>
             <p class="ml-8 my-10">Loading...</p>
           </v-container>
         </template>
         <template v-if="!isCardLoading">
-          <v-container class="mt-n16">
+          <!-- <v-container class="mt-n16">
             <p class="font-weight-bold pb-4">
               In here you will find all
               <span class="text-blue-darken-4">{{ skillSlug.name }} Jobs</span>
@@ -362,8 +920,7 @@
                   : itemSelected2
               }}</span>
             </p>
-            <!-- <hr /> -->
-          </v-container>
+          </v-container> -->
           <div
             class="promotion-container"
             v-for="item in filteredItems"
@@ -866,6 +1423,120 @@ export default {
       trendingBtn: [],
       activeIndex: 1,
       // totalData: 0,
+      itemsTry: [
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+        {
+          id: 26,
+          text: 'Senior Physiotherapist',
+          image:
+            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+          path: 'ouedowntownjobs',
+          place: 'Strength Clinic Academy (SCA) - 2021',
+          distance: 889.6629191087611,
+          distanceText: '889.7 km',
+          locationImg:
+            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+          address: 'OUE Downtown (Central), Singapore City',
+          tag: 'Senior Physiotherapist',
+        },
+      ],
+      itemTry: {
+        id: 26,
+        text: 'Senior Physiotherapist',
+        image:
+          'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
+        path: 'ouedowntownjobs',
+        place: 'Strength Clinic Academy (SCA) - 2021',
+        distance: 889.6629191087611,
+        distanceText: '889.7 km',
+        locationImg:
+          'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
+        address: 'OUE Downtown (Central), Singapore City',
+        tag: 'Senior Physiotherapist',
+      },
     };
   },
   computed: {
@@ -1217,6 +1888,7 @@ export default {
                 }),
             };
           });
+          console.log(this.specificJobs);
 
           // console.log(this.specificJobs);
         })
@@ -1495,7 +2167,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 325px;
+  margin-top: 270px;
   position: relative;
 }
 .btn-container {
@@ -1540,6 +2212,10 @@ export default {
   color: black !important;
 }
 
+.international-cont {
+  background: #f8f8f8;
+}
+
 .card-item-2 {
   width: 95% !important;
 }
@@ -1573,6 +2249,10 @@ export default {
 
 .card-cont {
   position: relative;
+}
+
+.card-cont:hover {
+  background: white !important;
 }
 
 .card-img-container {
