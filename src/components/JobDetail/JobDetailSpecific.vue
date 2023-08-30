@@ -767,7 +767,7 @@
               class="my-4 card-cont pa-2"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
               :height="!isSmall ? 360 : 360"
-              :width="!isSmall ? 300 : 270"
+              :width="!isSmall ? 300 : 320"
               elevation="1"
               @click="toggle"
             >
@@ -872,7 +872,7 @@
                       }}
                     </h4>
 
-                    <div class="mt-2" style="font-weight: 400">
+                    <div class="mt-2 w-75" style="font-weight: 400">
                       <p>{{ itemTry.address }}</p>
                     </div>
                   </div>
@@ -2362,7 +2362,7 @@ export default {
   position: relative;
   overflow: hidden;
   height: 170px;
-  width: 250px;
+  width: 300px;
 }
 
 .card-btn-container-1 {
