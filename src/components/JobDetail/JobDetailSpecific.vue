@@ -296,7 +296,7 @@
               elevation="1"
               @click="toggle"
             >
-              <h3 class="text-purple-darken-4 text-center">
+              <h3 class="text-purple-darken-4 text-center mb-2">
                 Platinum Featured Job
               </h3>
               <div
@@ -848,14 +848,15 @@
             </div>
           </v-container>
         </div>
-        <v-container
+        <div
           v-if="!isCardLoading && platinumJob"
-          class="d-flex w-100 justify-start"
+          style="width: 100% !important"
+          class="px-2"
         >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
               class="my-4 card-cont"
-              :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+              :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
               :height="!isSmall ? 360 : 360"
               width="100%"
               elevation="0"
@@ -993,7 +994,7 @@
               </div>
             </v-card>
           </v-lazy>
-        </v-container>
+        </div>
         <template v-if="isCardLoading">
           <v-container>
             <p class="ml-8 my-10">Loading...</p>
