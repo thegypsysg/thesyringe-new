@@ -2292,9 +2292,8 @@ export default {
           const data = response.data.data;
           console.log('international ', data);
 
-          const allJobs = data
-            .filter((d) => d.country_id == this.itemSelectedComplete.id)
-            .reduce((accumulator, currentValue) => {
+          //.filter((d) => d.country_id == this.itemSelectedComplete.id)
+          const allJobs = data.reduce((accumulator, currentValue) => {
               const jobsWithInternationalData = currentValue.jobs.map((job) => {
                 return {
                   ...job,
