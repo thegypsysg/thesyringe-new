@@ -33,7 +33,7 @@
               />
             </v-col>
             <v-col cols="12">
-              <v-select
+              <v-autocomplete
                 :items="town"
                 v-model="selectedTown"
                 placeholder="---Select Town---"
@@ -79,7 +79,7 @@
                 />
               </v-col>
               <v-col cols="4">
-                <v-select
+                <v-autocomplete
                   :items="town"
                   v-model="selectedTown"
                   placeholder="---Select Town---"
@@ -296,6 +296,37 @@ export default {
       return this.screenWidth < 640;
     },
     filteredSkills() {
+      if (this.selectedSkill === null && this.selectedTown === null) {
+        return this.skillsCard;
+      } else if (this.selectedSkill !== null && this.selectedTown === null) {
+        const filteredData = this.skillsCard.filter((item) => {
+          return this.selectedSkill
+            ? item.text.toLowerCase() === this.selectedSkill.toLowerCase()
+            : true;
+        });
+        return filteredData;
+      } else if (this.selectedTown !== null && this.selectedSkill === null) {
+        const filteredData = this.skillsCard.filter((item) => {
+          return this.selectedTown
+            ? item.town.toLowerCase() === this.selectedTown.toLowerCase()
+            : true;
+        });
+        return filteredData;
+      } else {
+        const filteredData = this.skillsCard.filter((item) => {
+          return (
+            (this.selectedSkill
+              ? item.text.toLowerCase() === this.selectedSkill.toLowerCase()
+              : true) &&
+            (this.selectedTown
+              ? item.town.toLowerCase() === this.selectedTown.toLowerCase()
+              : true)
+          );
+        });
+        return filteredData;
+      }
+    },
+    filteredSkills2() {
       if (!this.selectedSkill) {
         return this.skillsCard;
       } else {
@@ -315,6 +346,7 @@ export default {
       skillId: localStorage.getItem('skill_id'),
     };
     this.getSpecificJobs();
+    this.getTown();
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -375,6 +407,8 @@ export default {
               distance: skill.distance || 0,
               distanceText: this.formatDistance(skill.distance),
               locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+              town: skill.town_name || '',
+              zone: skill.zone_name || '',
               address:
                 skill.location_name && skill.zone_name && skill.city_name
                   ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
@@ -408,22 +442,15 @@ export default {
           this.isLoading = false;
         });
     },
-    getSpecificJobs2() {
+    getTown() {
       this.isLoading = true;
       axios
-        .get(`/skills-by-groups/6/${this.$appId}`)
+        .get(
+          `/jobs/get-towns/${this.$route.params.id}/${this.itemData.skillId}/${this.itemSelectedComplete.id}`
+        )
         .then((response) => {
           const data = response.data.data;
-          const filterKey = this.$route.path.split('/')[1];
-          const filteredData = data.filter((d) => d.slug === filterKey);
-
-          this.itemData = {
-            id: filteredData[0].sgm_id || 1,
-            title: filteredData[0].group_name || '',
-            slug: filteredData[0].slug || '',
-            image: this.$fileURL + filteredData[0].image || '',
-          };
-          this.getListSkill(this.itemData.slug);
+          this.town = data.map((item) => item.town_name);
         })
         .catch((error) => {
           // eslint-disable-next-line

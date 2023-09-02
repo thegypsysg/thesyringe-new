@@ -102,15 +102,40 @@
             </v-slide-group>
           </div>
         </v-container>
-        <div class="international-cont w-100">
+        <div
+          v-if="!isCardLoading && internationalCountry.length > 0"
+          class="international-cont w-100"
+        >
           <v-container>
             <h3 class="ml-8">
-              International {{ skillSlug.name }} Jobs (<span>2</span>)
+              International {{ skillSlug.name }} Jobs (<span>{{
+                internationalCountry.length
+              }}</span
+              >)
             </h3>
             <div class="d-flex mt-4">
+              <v-btn
+                class="sub-menu-btn view-all-1"
+                :class="{
+                  active: isSelected,
+                  'py-4 px-4 mx-2': !isSmall,
+                }"
+                style="
+                  box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
+                  height: 40px !important;
+                "
+                @click="
+                  () => {
+                    filterInternationalCard('');
+                    toggle;
+                  }
+                "
+              >
+                <p style="font-size: 12px" elevation>View All</p>
+              </v-btn>
               <v-slide-group
                 v-if="!isSmall"
-                v-model="selectedTag"
+                v-model="selectedInter"
                 class="trending-slide my-slide"
               >
                 <template #prev="{ on, attrs }">
@@ -129,7 +154,7 @@
                 </template>
                 <template #next="{ on, attrs }">
                   <v-btn
-                    v-if="activeIndex + 1 <= trendingBtn.length / 4"
+                    v-if="activeIndex + 1 <= internationalCountry.length / 4"
                     color="#0596d5"
                     rounded
                     size="40"
@@ -142,17 +167,17 @@
                   </v-btn>
                 </template>
                 <v-slide-group-item
-                  v-for="btn in trendingBtn"
-                  :key="btn.tag"
+                  v-for="btn in internationalCountry"
+                  :key="btn.id"
                   v-slot="{ isSelected, toggle }"
-                  :value="btn.tag"
+                  :value="btn.id"
                   class="my-slide-item"
                 >
                   <v-btn
                     class="sub-menu-btn"
                     :class="{
                       active: isSelected,
-                      'py-4 px-2 mx-2': !isSmall,
+                      'py-4 px-4 mx-2': !isSmall,
                     }"
                     style="
                       box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
@@ -160,21 +185,26 @@
                     "
                     @click="
                       () => {
-                        filterSpecificJobs(btn.id);
+                        filterInternationalCard(btn.title);
                         toggle;
                       }
                     "
                   >
-                    <p style="font-size: 12px" elevation>{{ btn.title }} (2)</p>
+                    <p style="font-size: 12px" elevation>
+                      {{ btn.title }} ({{ btn.count }})
+                    </p>
                   </v-btn>
                 </v-slide-group-item>
               </v-slide-group>
             </div>
             <div>
-              <v-sheet class="d-flex justify-start" elevation="0">
-                <v-slide-group v-model="model" class="pa-4 international-cont">
+              <v-sheet
+                class="d-flex justify-start international-cont"
+                elevation="0"
+              >
+                <v-slide-group v-model="model" class="pa-4">
                   <v-slide-group-item
-                    v-for="card in itemsTry"
+                    v-for="card in filteredInternational"
                     :key="card"
                     v-slot="{ toggle }"
                     class="mx-4"
@@ -196,7 +226,7 @@
                             class="w-100 card-address d-flex justify-space-between align-center pa-4"
                           >
                             <div style="width: 15%" class="mr-2">
-                              <v-img :src="card.locationImg" height="35"
+                              <v-img :src="$fileURL + card.logo" height="35"
                                 ><template #placeholder>
                                   <div class="skeleton" /> </template
                               ></v-img>
@@ -253,7 +283,10 @@
             </div>
           </v-container>
         </div>
-        <v-container class="d-flex w-100 justify-start">
+        <v-container
+          v-if="!isCardLoading && platinumJob"
+          class="d-flex w-100 justify-start"
+        >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
               class="my-4 card-cont pa-2"
@@ -263,7 +296,9 @@
               elevation="1"
               @click="toggle"
             >
-              <h2 class="text-purple-darken-4 text-left">Platinum Partner</h2>
+              <h3 class="text-purple-darken-4 text-center">
+                Platinum Featured Job
+              </h3>
               <div
                 v-if="isSmall"
                 style="
@@ -275,9 +310,9 @@
                 class="pt-2"
               >
                 {{
-                  itemTry.text.length >= 28
-                    ? itemTry.text.substring(0, 28) + '..'
-                    : itemTry.text
+                  platinumJob?.text.length >= 28
+                    ? platinumJob?.text.substring(0, 28) + '..'
+                    : platinumJob?.text
                 }}
               </div>
               <div
@@ -291,9 +326,9 @@
                 class="pt-2 text-left"
               >
                 {{
-                  itemTry.text.length >= 32
-                    ? itemTry.text.substring(0, 32) + '..'
-                    : itemTry.text
+                  platinumJob?.text.length >= 32
+                    ? platinumJob?.text.substring(0, 32) + '..'
+                    : platinumJob?.text
                 }}
               </div>
               <div
@@ -304,7 +339,7 @@
                 }"
               >
                 <v-img
-                  :src="itemTry.image"
+                  :src="platinumJob?.image"
                   class="card-image"
                   :height="isSmall ? 170 : 220"
                   cover
@@ -317,7 +352,6 @@
               </div>
               <v-btn
                 elevation="4"
-                :to="`/detail/${itemTry.id}`"
                 style="
                   position: absolute;
                   bottom: 110px;
@@ -344,13 +378,13 @@
                   style="font-weight: 400"
                 >
                   <p>
-                    <span class="text-red">{{ itemTry.distanceText }}</span
+                    <span class="text-red">{{ platinumJob?.distanceText }}</span
                     ><span class="text-muted"> away</span>
                   </p>
                 </div>
                 <div class="card-address d-flex align-center">
                   <div style="width: 25%">
-                    <v-img :src="itemTry.locationImg" height="35"
+                    <v-img :src="platinumJob?.locationImg" height="35"
                       ><template #placeholder>
                         <div class="skeleton" /> </template
                     ></v-img>
@@ -358,14 +392,14 @@
                   <div style="width: 75%" class="card-address-info text-left">
                     <h4 class="mt-4" style="font-weight: 600">
                       {{
-                        itemTry.place.length >= 32
-                          ? itemTry.place.substring(0, 32) + '..'
-                          : itemTry.place
+                        platinumJob?.place.length >= 32
+                          ? platinumJob?.place.substring(0, 32) + '..'
+                          : platinumJob?.place
                       }}
                     </h4>
 
                     <div class="mt-2" style="font-weight: 400">
-                      <p>{{ itemTry.address }}</p>
+                      <p>{{ platinumJob?.address }}</p>
                     </div>
                   </div>
                 </div>
@@ -529,6 +563,28 @@
                       >
                         <span class="text-white" style="">View Jobs</span>
                       </v-btn>
+                      <div
+                        v-if="card.featured == 'Y'"
+                        style="
+                          position: absolute;
+                          top: 50px;
+                          right: 15px;
+                          background-color: #f69400;
+                          border-radius: 5px;
+                          padding-left: 10px;
+                          padding-right: 6px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                          width: 120px;
+                          text-align: left !important;
+                        "
+                      >
+                        <span class="text-white text-left" style=""
+                          >Featured</span
+                        >
+                      </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
@@ -638,21 +694,47 @@
       </template>
       <template v-if="isSmall">
         <div class="banner-container"></div>
-        <div class="international-cont w-100">
+        <div
+          v-if="!isCardLoading && internationalCountry.length > 0"
+          class="international-cont w-100"
+        >
           <v-container>
             <h4 class="ml-8">
-              International {{ skillSlug.name }} Jobs (<span>2</span>)
+              International {{ skillSlug.name }} Jobs (<span>{{
+                internationalCountry.length
+              }}</span
+              >)
             </h4>
             <div class="d-flex mt-4">
+              <v-btn
+                class="sub-menu-btn view-all-1"
+                height="30"
+                :class="{
+                  active: isSelected,
+                  'py-2 px-2 mx-2': !isSmall,
+                }"
+                style="
+                  box-shadow: 0 5px 25px rgba(0, 0, 0, 0);
+                  height: 30px !important;
+                "
+                @click="
+                  () => {
+                    filterInternationalCard('');
+                    toggle;
+                  }
+                "
+              >
+                <p style="font-size: 12px" elevation>View All</p>
+              </v-btn>
               <v-slide-group
                 v-model="selectedTag"
                 class="trending-slide my-slide"
               >
                 <v-slide-group-item
-                  v-for="btn in trendingBtn"
-                  :key="btn.tag"
+                  v-for="btn in internationalCountry"
+                  :key="btn.id"
                   v-slot="{ isSelected, toggle }"
-                  :value="btn.tag"
+                  :value="btn.id"
                   class="my-slide-item"
                 >
                   <v-btn
@@ -668,21 +750,26 @@
                     "
                     @click="
                       () => {
-                        filterSpecificJobs(btn.id);
+                        filterInternationalCard(btn.title);
                         toggle;
                       }
                     "
                   >
-                    <p style="font-size: 10px" elevation>{{ btn.title }} (2)</p>
+                    <p style="font-size: 10px" elevation>
+                      {{ btn.title }} ({{ btn.count }})
+                    </p>
                   </v-btn>
                 </v-slide-group-item>
               </v-slide-group>
             </div>
             <div>
-              <v-sheet class="d-flex justify-start mt-n16" elevation="0">
-                <v-slide-group v-model="model" class="pa-0 international-cont">
+              <v-sheet
+                class="d-flex justify-start mt-n16 international-cont"
+                elevation="0"
+              >
+                <v-slide-group v-model="model" class="pa-0">
                   <v-slide-group-item
-                    v-for="card in itemsTry"
+                    v-for="card in filteredInternational"
                     :key="card"
                     v-slot="{ toggle }"
                     class="mx-4"
@@ -694,7 +781,7 @@
                           'mx-3 text-center': !isSmall,
                           'mx-1': isSmall,
                         }"
-                        :height="!isSmall ? 140 : 120"
+                        :height="!isSmall ? 140 : 100"
                         :width="!isSmall ? 350 : 280"
                         elevation="0"
                         @click="toggle"
@@ -704,7 +791,7 @@
                             class="w-100 card-address d-flex justify-space-between align-center pa-2"
                           >
                             <div style="width: 15%" class="mr-2">
-                              <v-img :src="card.locationImg" height="35"
+                              <v-img :src="$fileURL + card.logo" height="35"
                                 ><template #placeholder>
                                   <div class="skeleton" /> </template
                               ></v-img>
@@ -761,17 +848,22 @@
             </div>
           </v-container>
         </div>
-        <v-container class="d-flex w-100 justify-start">
+        <v-container
+          v-if="!isCardLoading && platinumJob"
+          class="d-flex w-100 justify-start"
+        >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
-              class="my-4 card-cont pa-2"
+              class="my-4 card-cont"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
               :height="!isSmall ? 360 : 360"
-              :width="!isSmall ? 300 : 320"
-              elevation="1"
+              width="100%"
+              elevation="0"
               @click="toggle"
             >
-              <h2 class="text-purple-darken-4 text-left">Platinum Partner</h2>
+              <h3 class="text-purple-darken-4 text-center mb-2">
+                Platinum Featured Job
+              </h3>
               <div
                 v-if="isSmall"
                 style="
@@ -783,9 +875,9 @@
                 class="pt-2"
               >
                 {{
-                  itemTry.text.length >= 28
-                    ? itemTry.text.substring(0, 28) + '..'
-                    : itemTry.text
+                  platinumJob?.text.length >= 28
+                    ? platinumJob?.text.substring(0, 28) + '..'
+                    : platinumJob?.text
                 }}
               </div>
               <div
@@ -799,22 +891,22 @@
                 class="pt-2 text-left"
               >
                 {{
-                  itemTry.text.length >= 32
-                    ? itemTry.text.substring(0, 32) + '..'
-                    : itemTry.text
+                  platinumJob?.text.length >= 32
+                    ? platinumJob?.text.substring(0, 32) + '..'
+                    : platinumJob?.text
                 }}
               </div>
               <div
                 class="trending__app"
                 :class="{
                   'card-image-cont-1': !isSmall,
-                  'card-image-cont-2': isSmall,
+                  'card-image-cont-3': isSmall,
                 }"
               >
                 <v-img
-                  :src="itemTry.image"
+                  :src="platinumJob?.image"
                   class="card-image"
-                  :height="isSmall ? 170 : 220"
+                  :height="isSmall ? 200 : 220"
                   cover
                   transition="fade-transition"
                 >
@@ -825,7 +917,6 @@
               </div>
               <v-btn
                 elevation="4"
-                :to="`/detail/${itemTry.id}`"
                 style="
                   position: absolute;
                   bottom: 110px;
@@ -852,13 +943,13 @@
                   style="font-weight: 400"
                 >
                   <p>
-                    <span class="text-red">{{ itemTry.distanceText }}</span
+                    <span class="text-red">{{ platinumJob?.distanceText }}</span
                     ><span class="text-muted"> away</span>
                   </p>
                 </div>
                 <div class="card-address d-flex align-center">
                   <div style="width: 25%">
-                    <v-img :src="itemTry.locationImg" height="35"
+                    <v-img :src="platinumJob?.locationImg" height="35"
                       ><template #placeholder>
                         <div class="skeleton" /> </template
                     ></v-img>
@@ -866,14 +957,14 @@
                   <div style="width: 75%" class="card-address-info text-left">
                     <h4 class="mt-4" style="font-weight: 600">
                       {{
-                        itemTry.place.length >= 32
-                          ? itemTry.place.substring(0, 32) + '..'
-                          : itemTry.place
+                        platinumJob?.place.length >= 32
+                          ? platinumJob?.place.substring(0, 32) + '..'
+                          : platinumJob?.place
                       }}
                     </h4>
 
                     <div class="mt-2 w-75" style="font-weight: 400">
-                      <p>{{ itemTry.address }}</p>
+                      <p>{{ platinumJob?.address }}</p>
                     </div>
                   </div>
                 </div>
@@ -1098,6 +1189,27 @@
                       >
                         <span class="text-white" style="">View Jobs</span>
                       </v-btn>
+                      <div
+                        v-if="card.featured == 'Y'"
+                        style="
+                          width: 100px;
+                          position: absolute;
+                          top: 50px;
+                          right: 15px;
+                          background-color: #f79303;
+                          border-radius: 5px;
+                          padding-left: 8px;
+                          padding-right: 6px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                        "
+                      >
+                        <span class="text-white text-left" style=""
+                          >Featured</span
+                        >
+                      </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
@@ -1419,95 +1531,15 @@ export default {
       skillsGroup: [],
       skillsCard: [],
       selectedTag: null,
+      selectedInter: null,
       specificJobs: [],
       trendingBtn: [],
+      internationalCountry: [],
+      internationalCard: [],
+      platinumJob: null,
       activeIndex: 1,
       // totalData: 0,
       itemsTry: [
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
-        {
-          id: 26,
-          text: 'Senior Physiotherapist',
-          image:
-            'https://admin1.the-gypsy.sg/img/app/5f2cc8275573274ca36aa20178722e8f.jpg',
-          path: 'ouedowntownjobs',
-          place: 'Strength Clinic Academy (SCA) - 2021',
-          distance: 889.6629191087611,
-          distanceText: '889.7 km',
-          locationImg:
-            'https://admin1.the-gypsy.sg/img/app/44d7fbc9888f3b7f80f3ec115a8d0c78.jpg',
-          address: 'OUE Downtown (Central), Singapore City',
-          tag: 'Senior Physiotherapist',
-        },
         {
           id: 26,
           text: 'Senior Physiotherapist',
@@ -1588,6 +1620,15 @@ export default {
       //}
       return this.specificJobs;
     },
+    filteredInternational() {
+      if (!this.selectedInter || this.selectedInter == undefined) {
+        return this.internationalCard;
+      } else {
+        return this.internationalCard.filter((item) => {
+          return item.country.includes(this.selectedInter);
+        });
+      }
+    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -1595,6 +1636,7 @@ export default {
   mounted() {
     this.getSkillBySlug();
     this.checkDetail();
+
     app.config.globalProperties.$eventBus.$on(
       'filterSpecificJobs',
       this.filterSpecificJobs
@@ -1674,6 +1716,11 @@ export default {
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
+      this.getPlatinumJob2(
+        this.skillSlug.skills_id,
+        this.itemSelectedComplete.id,
+        this.itemSelected2Complete.id
+      );
     },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
@@ -1690,6 +1737,7 @@ export default {
             .map((country) => country.country_id)[0];
           this.getGroups(this.skillSlug.skills_id, this.countryId);
           this.getSpecificJobs(this.skillSlug.skills_id, this.countryId);
+          this.getPlatinumJob(this.skillSlug.skills_id, this.countryId);
           // console.log(this.countryId);
         })
         .catch((error) => {
@@ -1722,6 +1770,7 @@ export default {
           localStorage.setItem('skill_id', this.skillSlug.skills_id);
           localStorage.setItem('skill_image', this.skillSlug.image);
           this.getCountry();
+          this.getInternationalSkills();
           // console.log(this.skillSlug);
         })
         .catch((error) => {
@@ -1739,7 +1788,6 @@ export default {
         .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
 
           if (data == null) {
             this.specificJobs = [];
@@ -1763,6 +1811,10 @@ export default {
               this.itemSelectedComplete.id
             );
             this.getGroups(
+              this.skillSlug.skills_id,
+              this.itemSelectedComplete.id
+            );
+            this.getPlatinumJob(
               this.skillSlug.skills_id,
               this.itemSelectedComplete.id
             );
@@ -1856,6 +1908,7 @@ export default {
                       : skill.partners_image
                       ? this.$fileURL + skill.partners_image
                       : '',
+                    featured: skill.featured,
                     path: skill.location_name
                       ? skill.location_name.split(' ').join('').toLowerCase() +
                         'jobs'
@@ -1888,9 +1941,120 @@ export default {
                 }),
             };
           });
-          console.log(this.specificJobs);
 
           // console.log(this.specificJobs);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getPlatinumJob(skillId, countryId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log('platinum ', data);
+          this.platinumJob = data.map((skill) => {
+            return {
+              id: skill.job_id || 1,
+              text: skill.position_name || '',
+              image: skill.location_image
+                ? this.$fileURL + skill.location_image
+                : skill.partners_image
+                ? this.$fileURL + skill.partners_image
+                : '',
+              path: skill.location_name
+                ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
+                : '',
+              place: skill.partner_name || '',
+              distance: skill.distance || 0,
+              distanceText: this.formatDistance(skill.distance),
+              locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+              address:
+                skill.location_name && skill.zone_name && skill.city_name
+                  ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.town_name &&
+                    skill.zone_name &&
+                    skill.city_name &&
+                    skill.location_name == null
+                  ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.zone_name &&
+                    skill.location_name == null &&
+                    skill.town_name == null &&
+                    skill.city_name
+                  ? `${skill.city_name} (${skill.zone_name})`
+                  : skill.city_name &&
+                    skill.location_name == null &&
+                    skill.town_name &&
+                    skill.zone_name == null
+                  ? `${skill.town_name} , ${skill.city_name}`
+                  : '-',
+              tag: skill.position_name || '',
+            };
+          })[0];
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getPlatinumJob2(skillId, countryId, cityId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log('platinum ', data);
+          this.platinumJob = data.map((skill) => {
+            return {
+              id: skill.job_id || 1,
+              text: skill.position_name || '',
+              image: skill.location_image
+                ? this.$fileURL + skill.location_image
+                : skill.partners_image
+                ? this.$fileURL + skill.partners_image
+                : '',
+              path: skill.location_name
+                ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
+                : '',
+              place: skill.partner_name || '',
+              distance: skill.distance || 0,
+              distanceText: this.formatDistance(skill.distance),
+              locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+              address:
+                skill.location_name && skill.zone_name && skill.city_name
+                  ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.town_name &&
+                    skill.zone_name &&
+                    skill.city_name &&
+                    skill.location_name == null
+                  ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.zone_name &&
+                    skill.location_name == null &&
+                    skill.town_name == null &&
+                    skill.city_name
+                  ? `${skill.city_name} (${skill.zone_name})`
+                  : skill.city_name &&
+                    skill.location_name == null &&
+                    skill.town_name &&
+                    skill.zone_name == null
+                  ? `${skill.town_name} , ${skill.city_name}`
+                  : '-',
+              tag: skill.position_name || '',
+            };
+          })[0];
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -1975,6 +2139,7 @@ export default {
                       : skill.partners_image
                       ? this.$fileURL + skill.partners_image
                       : '',
+                    featured: skill.featured,
                     path: skill.location_name
                       ? skill.location_name.split(' ').join('').toLowerCase() +
                         'jobs'
@@ -2071,6 +2236,7 @@ export default {
                       : skill.partners_image
                       ? this.$fileURL + skill.partners_image
                       : '',
+                    featured: skill.featured,
                     path: skill.location_name
                       ? skill.location_name.split(' ').join('').toLowerCase() +
                         'jobs'
@@ -2114,43 +2280,72 @@ export default {
           this.isLoading = false;
         });
     },
-    // countCards(tag) {
-    //   const count = this.trendingCard.filter(
-    //     (trend) => trend.tag === tag
-    //   ).length;
-    //   return count;
-    // },
-    filterCards(tag) {
+    getInternationalSkills(positionId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          !positionId
+            ? `/job-international/skills/${this.skillSlug.skills_id}`
+            : `/job-international/skills/${this.skillSlug.skills_id}/${positionId}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log('international ', data);
+
+          const allJobs = data.reduce((accumulator, currentValue) => {
+            const jobsWithInternationalData = currentValue.jobs.map((job) => {
+              return {
+                ...job,
+              };
+            });
+            return accumulator.concat(jobsWithInternationalData);
+          }, []);
+
+          this.internationalCard = allJobs.map((job, index) => {
+            return {
+              id: index + 1,
+              text: job.position_name,
+              logo: job.logo,
+              locationImg: job.logo,
+              place: job.partner_name,
+              address: job.city_name + ', ' + job.country_name,
+              country: job.country_name,
+              positionId: job.position_id,
+              plId: job.pl_id,
+              partnerId: job.partner_id,
+            };
+          });
+          console.log(this.internationalCard);
+          this.internationalCountry = this.internationalCard.reduce(
+            (accumulator, currentValue) => {
+              const existingCountry = accumulator.find(
+                (item) => item.title === currentValue.country
+              );
+              if (existingCountry) {
+                existingCountry.count += 1;
+              } else {
+                accumulator.push({ title: currentValue.country, count: 1 });
+              }
+              return accumulator;
+            },
+            []
+          );
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    filterInternationalCard(name) {
       // console.log("ok");
-      this.selectedTag = tag;
+      this.selectedInter = name;
     },
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
-    //getListSkill(slug) {
-    //  this.isLoading = true;
-    //  axios
-    //    .get(`/skills/group/slug/${slug}`)
-    //    .then((response) => {
-    //      const data = response.data.data;
-    //      this.skillsGroup = data.map((item) => item.skills_name);
-    //      this.skillsCard = data.map((item) => {
-    //        return {
-    //          id: item.skills_id || 1,
-    //          text: item.skills_name || '',
-    //          jobs: 20,
-    //          image: item.image ? this.$fileURL + item.image : '',
-    //        };
-    //      });
-    //    })
-    //    .catch((error) => {
-    //      // eslint-disable-next-line
-    //      console.log(error);
-    //    })
-    //    .finally(() => {
-    //      this.isLoading = false;
-    //    });
-    //},
     previousSlide() {
       this.activeIndex--;
     },
@@ -2362,7 +2557,13 @@ export default {
   position: relative;
   overflow: hidden;
   height: 170px;
-  width: 300px;
+  width: 100%;
+}
+.card-image-cont-3 {
+  position: relative;
+  overflow: hidden;
+  height: 183px;
+  width: 100%;
 }
 
 .card-btn-container-1 {
