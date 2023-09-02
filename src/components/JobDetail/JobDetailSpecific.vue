@@ -1818,6 +1818,7 @@ export default {
               this.skillSlug.skills_id,
               this.itemSelectedComplete.id
             );
+            this.getInternationalSkills();
             //this.getGroups2(
             //  this.skillSlug.skills_id,
             //  this.itemSelectedComplete.id,
@@ -1960,7 +1961,6 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log('platinum ', data);
           this.platinumJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
@@ -2016,7 +2016,6 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log('platinum ', data);
           this.platinumJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
@@ -2292,14 +2291,16 @@ export default {
           const data = response.data.data;
           console.log('international ', data);
 
-          const allJobs = data.reduce((accumulator, currentValue) => {
-            const jobsWithInternationalData = currentValue.jobs.map((job) => {
-              return {
-                ...job,
-              };
-            });
-            return accumulator.concat(jobsWithInternationalData);
-          }, []);
+          const allJobs = data
+            .filter((d) => d.country_id == this.itemSelectedComplete.id)
+            .reduce((accumulator, currentValue) => {
+              const jobsWithInternationalData = currentValue.jobs.map((job) => {
+                return {
+                  ...job,
+                };
+              });
+              return accumulator.concat(jobsWithInternationalData);
+            }, []);
 
           this.internationalCard = allJobs.map((job, index) => {
             return {
@@ -2315,7 +2316,6 @@ export default {
               partnerId: job.partner_id,
             };
           });
-          console.log(this.internationalCard);
           this.internationalCountry = this.internationalCard.reduce(
             (accumulator, currentValue) => {
               const existingCountry = accumulator.find(
