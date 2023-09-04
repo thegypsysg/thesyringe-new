@@ -285,7 +285,12 @@
           >
             <v-list-item-title v-if="isSpecific"
               ><span class="text-blue-darken-4">{{ item.title }}</span
-              ><span class="text-red"> ({{ item.count }} Jobs)</span>
+              ><span class="text-red">
+                ({{ item.count }}
+                {{
+                  item.count == '1' || item.count == '0' ? 'Job' : 'Jobs'
+                }})</span
+              >
             </v-list-item-title>
             <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -314,7 +319,16 @@
             :value="index"
             @click="changeItemSelected2(item)"
           >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title v-if="isSpecific"
+              ><span class="text-blue-darken-4">{{ item.title }}</span
+              ><span class="text-black">
+                ({{ item.count }}
+                {{
+                  item.count == '1' || item.count == '0' ? 'Job' : 'Jobs'
+                }})</span
+              >
+            </v-list-item-title>
+            <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -378,7 +392,12 @@
               >
                 <v-list-item-title v-if="isSpecific"
                   ><span class="text-blue-darken-4">{{ item.title }}</span
-                  ><span class="text-red"> ({{ item.count }} Jobs)</span>
+                  ><span class="text-red">
+                    ({{ item.count }}
+                    {{
+                      item.count == '1' || item.count == '0' ? 'Job' : 'Jobs'
+                    }})</span
+                  >
                 </v-list-item-title>
                 <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -402,7 +421,16 @@
                 :value="index"
                 @click="changeItemSelected2(item)"
               >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title v-if="isSpecific"
+                  ><span class="text-blue-darken-4">{{ item.title }}</span
+                  ><span class="text-black">
+                    ({{ item.count }}
+                    {{
+                      item.count == '1' || item.count == '0' ? 'Job' : 'Jobs'
+                    }})</span
+                  >
+                </v-list-item-title>
+                <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -842,6 +870,7 @@ export default {
           // console.log(this.skillSlug);
           this.getHeaderDetail();
           this.getCountrySkill();
+          this.getCitySkill();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -876,13 +905,42 @@ export default {
         .get(`/jobs/get-countries/skills/${this.skillSlug.skills_id}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
           this.country = data.map((country) => {
             return {
               id: country.country_id,
               title: country.country_name,
               count: country.count,
               oneCity: country.one_city == 'Y' ? true : false,
+              path: '#',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getCitySkill() {
+      this.isLoading = true;
+      axios
+        .get(
+          `/jobs/get-country-cities/country/${
+            this.itemSelectedComplete.id || this.countryId
+          }/skills/${this.skillSlug.skills_id}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.city = data.map((city) => {
+            return {
+              id: city.city_id,
+              title: city.city_name,
+              count: city.count,
+              countryId: city.country_id,
               path: '#',
             };
           });
@@ -912,7 +970,7 @@ export default {
       this.setItemSelectedComplete(item);
       this.setItemSelected2('---Select City---');
       this.setItemSelected2Complete(null);
-      this.getCity();
+      this.getCitySkill();
       console.log(this.itemSelectedComplete);
       app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific1');
     },
@@ -1033,14 +1091,7 @@ export default {
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
-          this.city = data.map((city) => {
-            return {
-              id: city.city_id,
-              title: city.city_name,
-              countryId: city.country_id,
-              path: '#',
-            };
-          });
+
           this.cityId = data
             .filter((d) => d.city_name == this.itemSelected2)
             .map((city) => city.city_id)[0];
