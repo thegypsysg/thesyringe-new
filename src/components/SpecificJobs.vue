@@ -153,7 +153,7 @@
                     "
                     class="py-2 text-left"
                   >
-                    <span style="color: #fa2964">24</span> Jobs
+                    <span style="color: #fa2964">{{ card.count }}</span> Jobs
                   </div>
                   <div class="card-btn-container d-flex justify-space-between">
                     <v-btn

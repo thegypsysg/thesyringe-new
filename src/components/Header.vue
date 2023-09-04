@@ -267,6 +267,7 @@
       <v-menu>
         <template #activator="{ props }">
           <v-btn
+            v-if="!isLoading"
             style="font-size: 16px; color: #494949"
             v-bind="props"
             variant="text"
@@ -282,7 +283,11 @@
             :value="index"
             @click="changeItemSelected(item)"
           >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title v-if="isSpecific"
+              ><span class="text-blue-darken-4">{{ item.title }}</span
+              ><span class="text-red"> ({{ item.count }} Jobs)</span>
+            </v-list-item-title>
+            <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -352,9 +357,10 @@
           </h2>
         </div>
         <div class="d-flex flex-column mb-n4" v-if="isSpecific">
-          <v-menu>
+          <v-menu v-if="!isLoading">
             <template #activator="{ props }">
               <v-btn
+                v-if="!isLoading"
                 style="font-size: 16px; color: #494949"
                 v-bind="props"
                 variant="text"
@@ -363,14 +369,18 @@
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
             </template>
-            <v-list>
+            <v-list style="max-height: 50vh">
               <v-list-item
                 v-for="(item, index) in country"
                 :key="index"
                 :value="index"
                 @click="changeItemSelected(item)"
               >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title v-if="isSpecific"
+                  ><span class="text-blue-darken-4">{{ item.title }}</span
+                  ><span class="text-red"> ({{ item.count }} Jobs)</span>
+                </v-list-item-title>
+                <v-list-item-title v-else>{{ item.title }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -385,7 +395,7 @@
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
             </template>
-            <v-list>
+            <v-list style="max-height: 50vh">
               <v-list-item
                 v-for="(item, index) in city"
                 :key="index"
@@ -831,6 +841,7 @@ export default {
           };
           // console.log(this.skillSlug);
           this.getHeaderDetail();
+          this.getCountrySkill();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -857,6 +868,31 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
+        });
+    },
+    getCountrySkill() {
+      this.isLoading = true;
+      axios
+        .get(`/jobs/get-countries/skills/${this.skillSlug.skills_id}`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.country = data.map((country) => {
+            return {
+              id: country.country_id,
+              title: country.country_name,
+              count: country.count,
+              oneCity: country.one_city == 'Y' ? true : false,
+              path: '#',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     capitalizeFirstLetter(sentence) {
@@ -970,14 +1006,14 @@ export default {
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
-          this.country = data.map((country) => {
-            return {
-              id: country.country_id,
-              title: country.country_name,
-              oneCity: country.one_city == 'Y' ? true : false,
-              path: '#',
-            };
-          });
+          //this.country = data.map((country) => {
+          //  return {
+          //    id: country.country_id,
+          //    title: country.country_name,
+          //    oneCity: country.one_city == 'Y' ? true : false,
+          //    path: '#',
+          //  };
+          //});
           this.countryId = data
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];

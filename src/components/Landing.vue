@@ -101,6 +101,7 @@ export default {
                   id: skill.skills_id || 1,
                   text: skill.skills_name || '',
                   image: skill.image ? this.$fileURL + skill.image : '',
+                  count: skill.jobs_count != null ? skill.jobs_count : '-',
                   // path:
                   //   skill.description.split(' ').join('').toLowerCase() +
                   //   'jobs',
