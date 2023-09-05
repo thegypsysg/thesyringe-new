@@ -600,7 +600,10 @@
                             ><span class="text-muted"> away</span>
                           </p>
                         </div>
-                        <div class="card-address d-flex align-center">
+                        <div
+                          style="gap: 5px"
+                          class="card-address d-flex align-center"
+                        >
                           <div style="width: 25%">
                             <v-img :src="card.locationImg" height="35"
                               ><template #placeholder>
@@ -1227,7 +1230,10 @@
                             ><span class="text-muted"> away</span>
                           </p>
                         </div>
-                        <div class="card-address d-flex align-center">
+                        <div
+                          style="gap: 5px"
+                          class="card-address d-flex align-center"
+                        >
                           <div style="width: 25%">
                             <v-img :src="card.locationImg" height="35"
                               ><template #placeholder>
@@ -1939,6 +1945,11 @@ export default {
                           skill.town_name &&
                           skill.zone_name == null
                         ? `${skill.town_name} , ${skill.city_name}`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.zone_name == null
+                        ? `${skill.city_name}`
                         : '-',
                     tag: skill.position_name || '',
                   };
@@ -2168,6 +2179,11 @@ export default {
                           skill.town_name &&
                           skill.zone_name == null
                         ? `${skill.town_name} , ${skill.city_name}`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.zone_name == null
+                        ? `${skill.city_name}`
                         : '-',
                     tag: skill.position_name || '',
                   };
@@ -2265,6 +2281,11 @@ export default {
                           skill.town_name &&
                           skill.zone_name == null
                         ? `${skill.town_name} , ${skill.city_name}`
+                        : skill.city_name &&
+                          skill.location_name == null &&
+                          skill.town_name == null &&
+                          skill.zone_name == null
+                        ? `${skill.city_name}`
                         : '-',
                     tag: skill.position_name || '',
                   };
