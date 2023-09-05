@@ -799,6 +799,11 @@ export default {
                   data.town_name &&
                   data.zone_name == null
                 ? `${data.town_name} , ${data.city_name}`
+                : data.city_name &&
+                  data.location_name == null &&
+                  data.town_name == null &&
+                  data.zone_name == null
+                ? `${data.city_name}`
                 : '-',
             town: data.town_name || '',
             zone: data.zone_name || '',
