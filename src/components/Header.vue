@@ -268,11 +268,22 @@
         <template #activator="{ props }">
           <v-btn
             v-if="!isLoading"
-            style="font-size: 16px; color: #494949"
+            style="font-size: 15px; color: #494949"
             v-bind="props"
             variant="text"
           >
-            {{ itemSelected }}
+            <span class="text-blue-darken-4">{{
+              itemSelectedComplete.title
+            }}</span
+            ><span class="text-red">
+              ({{ itemSelectedComplete.count }}
+              {{
+                itemSelectedComplete.count == '1' ||
+                itemSelectedComplete.count == '0'
+                  ? 'Job'
+                  : 'Jobs'
+              }})</span
+            >
             <v-icon right dark> mdi-menu-down </v-icon>
           </v-btn>
         </template>
@@ -302,13 +313,30 @@
             style="
               margin-left: 10px;
               margin-right: 20px;
-              font-size: 16px;
+              font-size: 15px;
               color: #494949;
             "
             v-bind="props"
             variant="text"
           >
-            {{ isLoading ? 'loading...' : itemSelected2 }}
+            <!-- {{ isLoading ? 'loading...' : itemSelected2 }} -->
+            <span v-if="isLoading">loading...</span>
+            <template v-if="!isLoading && itemSelected2Complete == null">
+              <span>{{ itemSelected2 }}</span>
+            </template>
+            <template v-if="!isLoading && itemSelected2Complete != null">
+              <span class="text-blue-darken-4">
+                {{ itemSelected2Complete?.title }}</span
+              ><span class="text-black">
+                ({{ itemSelected2Complete?.count }}
+                {{
+                  itemSelected2Complete?.count == '1' ||
+                  itemSelected2Complete?.count == '0'
+                    ? 'Job'
+                    : 'Jobs'
+                }})</span
+              >
+            </template>
             <v-icon right dark> mdi-menu-down </v-icon>
           </v-btn>
         </template>
@@ -375,11 +403,22 @@
             <template #activator="{ props }">
               <v-btn
                 v-if="!isLoading"
-                style="font-size: 16px; color: #494949"
+                style="font-size: 15px; color: #494949"
                 v-bind="props"
                 variant="text"
               >
-                {{ itemSelected }}
+                <span class="text-blue-darken-4">{{
+                  itemSelectedComplete.title
+                }}</span
+                ><span class="text-red">
+                  ({{ itemSelectedComplete.count }}
+                  {{
+                    itemSelectedComplete.count == '1' ||
+                    itemSelectedComplete.count == '0'
+                      ? 'Job'
+                      : 'Jobs'
+                  }})</span
+                >
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
             </template>
@@ -406,11 +445,28 @@
           <v-menu v-if="itemSelectedComplete?.oneCity != true">
             <template #activator="{ props }">
               <v-btn
-                style="font-size: 16px; color: #494949"
+                style="font-size: 15px; color: #494949"
                 v-bind="props"
                 variant="text"
               >
-                {{ isLoading ? 'loading...' : itemSelected2 }}
+                <!-- {{ isLoading ? 'loading...' : itemSelected2 }} -->
+                <span v-if="isLoading">loading...</span>
+                <template v-if="!isLoading && itemSelected2Complete == null">
+                  <span>{{ itemSelected2 }}</span>
+                </template>
+                <template v-if="!isLoading && itemSelected2Complete != null">
+                  <span class="text-blue-darken-4">
+                    {{ itemSelected2Complete?.title }}</span
+                  ><span class="text-black">
+                    ({{ itemSelected2Complete?.count }}
+                    {{
+                      itemSelected2Complete?.count == '1' ||
+                      itemSelected2Complete?.count == '0'
+                        ? 'Job'
+                        : 'Jobs'
+                    }})</span
+                  >
+                </template>
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
             </template>

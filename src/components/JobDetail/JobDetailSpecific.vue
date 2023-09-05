@@ -109,7 +109,7 @@
           <v-container>
             <h3 class="ml-8">
               International {{ skillSlug.name }} Jobs (<span>{{
-                internationalCountry.length
+                internationalCard.length
               }}</span
               >)
             </h3>
@@ -256,6 +256,7 @@
                             </div>
                             <div style="width: 20%">
                               <v-btn
+                                :to="`/detail/${card.id}`"
                                 elevation="4"
                                 style="
                                   background-color: #0596d5;
@@ -701,7 +702,7 @@
           <v-container>
             <h4 class="ml-8">
               International {{ skillSlug.name }} Jobs (<span>{{
-                internationalCountry.length
+                internationalCard.length
               }}</span
               >)
             </h4>
@@ -821,6 +822,7 @@
                             </div>
                             <div style="width: 30%">
                               <v-btn
+                                :to="`/detail/${card.id}`"
                                 elevation="4"
                                 style="
                                   background-color: #0596d5;
@@ -2280,13 +2282,11 @@ export default {
           this.isLoading = false;
         });
     },
-    getInternationalSkills(positionId) {
+    getInternationalSkills() {
       this.isCardLoading = true;
       axios
         .get(
-          !positionId
-            ? `/job-international/skills/${this.skillSlug.skills_id}`
-            : `/job-international/skills/${this.skillSlug.skills_id}/${positionId}`
+          `/job-international/skills/${this.skillSlug.skills_id}/${this.itemSelectedComplete.id}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -2294,23 +2294,24 @@ export default {
 
           //.filter((d) => d.country_id == this.itemSelectedComplete.id)
           const allJobs = data.reduce((accumulator, currentValue) => {
-              const jobsWithInternationalData = currentValue.jobs.map((job) => {
-                return {
-                  ...job,
-                };
-              });
-              return accumulator.concat(jobsWithInternationalData);
-            }, []);
+            const jobsWithInternationalData = currentValue.jobs.map((job) => {
+              return {
+                ...job,
+              };
+            });
+            return accumulator.concat(jobsWithInternationalData);
+          }, []);
 
-          this.internationalCard = allJobs.map((job, index) => {
+          this.internationalCard = allJobs.map((job) => {
             return {
-              id: index + 1,
+              id: job.job_id,
               text: job.position_name,
               logo: job.logo,
               locationImg: job.logo,
               place: job.partner_name,
               address: job.city_name + ', ' + job.country_name,
               country: job.country_name,
+              countryId: job.country_id,
               positionId: job.position_id,
               plId: job.pl_id,
               partnerId: job.partner_id,
