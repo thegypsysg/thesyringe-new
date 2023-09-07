@@ -971,6 +971,7 @@ export default {
               path: '#',
             };
           });
+          this.setItemSelectedComplete(this.country[0]);
         })
         .catch((error) => {
           // eslint-disable-next-line

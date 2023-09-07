@@ -1327,7 +1327,7 @@
       </template>
       <template v-if="!isSmall && filteredItemsDesktop.length > 0">
         <v-container
-          v-if="skillSlug.countryRegistrable == 'Y'"
+          v-if="skillSlug2.countryRegistrable == 'Y'"
           :class="{ 'w-75 mx-auto': !isSmall }"
         >
           <div
@@ -1337,11 +1337,11 @@
             }"
           >
             <h1 v-if="!isSmall" class="registrable-title mb-4">
-              <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
+              <span class="text-blue-darken-4">{{ skillSlug2.name }}</span> is
               Registrable
             </h1>
             <h3 v-if="isSmall" class="registrable-title mb-4">
-              <span class="text-blue-darken-4">{{ skillSlug.name }}</span> is
+              <span class="text-blue-darken-4">{{ skillSlug2.name }}</span> is
               Registrable
             </h3>
             <div
@@ -1360,11 +1360,11 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.regulator
+                      skillSlug2.regulator
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
-                      >{{ skillSlug.name }} Job</span
+                      >{{ skillSlug2.name }} Job</span
                     >
                     in
                     <span class="text-blue-darken-4">{{ itemSelected }}</span>
@@ -1372,7 +1372,7 @@
                 </div>
                 <v-btn
                   to="/recognised-qualifications"
-                  @click="goToRecognised(skillSlug)"
+                  @click="goToRecognised(skillSlug2)"
                   elevation="1"
                   style="
                     background-color: #0865c2;
@@ -1408,7 +1408,7 @@
                     }"
                     :height="isSmall ? 145 : 250"
                     cover
-                    :src="skillSlug.mainImage"
+                    :src="skillSlug2.mainImage"
                   >
                     <template #placeholder>
                       <div class="skeleton" />
@@ -1422,7 +1422,7 @@
       </template>
       <template v-if="isSmall && filteredItems.length > 0">
         <v-container
-          v-if="skillSlug.countryRegistrable == 'Y'"
+          v-if="skillSlug2.countryRegistrable == 'Y'"
           :class="{ 'w-75': !isSmall }"
         >
           <div
@@ -1432,11 +1432,11 @@
             }"
           >
             <h1 v-if="!isSmall" class="registrable-title mb-4">
-              <span class="text-blue-darken-4">{{ skillSlug.name }}</span>
+              <span class="text-blue-darken-4">{{ skillSlug2.name }}</span>
               is Registrable
             </h1>
             <h3 v-if="isSmall" class="registrable-title mb-4">
-              <span class="text-blue-darken-4">{{ skillSlug.name }}</span>
+              <span class="text-blue-darken-4">{{ skillSlug2.name }}</span>
               is Registrable
             </h3>
             <div
@@ -1459,7 +1459,7 @@
                   }"
                   :height="isSmall ? 245 : 250"
                   cover
-                  :src="skillSlug.mainImage"
+                  :src="skillSlug2.mainImage"
                 >
                   <template #placeholder>
                     <div class="skeleton" />
@@ -1482,11 +1482,11 @@
                   <p :class="{ 'regist-desktop': !isSmall }">
                     Your Qualifications must be registrable with
                     <span class="text-blue-darken-4">{{
-                      skillSlug.regulator
+                      skillSlug2.regulator
                     }}</span>
                     in Order for you to apply for a
                     <span class="text-blue-darken-4"
-                      >{{ skillSlug.name }} Job</span
+                      >{{ skillSlug2.name }} Job</span
                     >
                     in
                     <span class="text-blue-darken-4">{{ itemSelected }}</span>
@@ -1494,7 +1494,7 @@
                 </div>
                 <v-btn
                   to="/recognised-qualifications"
-                  @click="goToRecognised(skillSlug)"
+                  @click="goToRecognised(skillSlug2)"
                   elevation="1"
                   style="
                     background-color: #0865c2;
@@ -1536,6 +1536,7 @@ export default {
       //latitude: null,
       //longitude: null,
       skillSlug: {},
+      skillSlug2: {},
       countryId: null,
       skillsGroup: [],
       skillsCard: [],
@@ -1643,6 +1644,7 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.getSkillBySlugFirst();
     this.getSkillBySlug();
     this.checkDetail();
 
@@ -1757,11 +1759,71 @@ export default {
           this.isLoading = false;
         });
     },
+    getSkillBySlugFirst() {
+      this.isDetail = true;
+      const slug = this.$route.params.name;
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.skillSlug = {
+            ...data,
+            image: this.$fileURL + data.image || '',
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
+            name: data.skills_name || '',
+            registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+          };
+          localStorage.setItem('skill_name', this.skillSlug.name);
+          localStorage.setItem('skill_id', this.skillSlug.skills_id);
+          localStorage.setItem('skill_image', this.skillSlug.image);
+          this.getCountry();
+          this.getInternationalSkills();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     getSkillBySlug() {
       const slug = this.$route.params.name;
       this.isLoading = true;
       axios
         .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          this.skillSlug2 = {
+            ...data,
+            image: this.$fileURL + data.image || '',
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
+            name: data.skills_name || '',
+            registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+          };
+
+          // console.log(this.skillSlug);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getSkillBySlugFromSearch() {
+      const slug = this.$route.params.name;
+      this.isLoading = true;
+      axios
+        .get(`/skills/slug/${slug}`)
         .then((response) => {
           const data = response.data.data;
           //console.log(data);

@@ -9,8 +9,6 @@ export default createStore({
     itemSelectedComplete: {
       id: 1,
       oneCity: true,
-      title: 'Singapore',
-      count: 32,
     },
     itemSelected2: '---Select City---',
     itemSelected2Complete: null,
