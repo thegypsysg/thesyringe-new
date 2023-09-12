@@ -1094,8 +1094,8 @@
                     <v-card
                       class="mt-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                      :height="!isSmall ? 300 : 300"
-                      :width="!isSmall ? 280 : 250"
+                      :height="!isSmall ? 300 : 320"
+                      :width="!isSmall ? 280 : 290"
                       elevation="0"
                       @click="toggle"
                     >
@@ -1167,7 +1167,7 @@
                         <v-img
                           :src="card.image"
                           class="card-image"
-                          :height="isSmall ? 170 : 220"
+                          :height="isSmall ? 190 : 220"
                           cover
                           transition="fade-transition"
                         >
@@ -1611,7 +1611,7 @@ export default {
       //    };
       //  });
       //}
-      return this.specificJobs;
+      return this.specificJobs.filter(j => j.list.length > 0);
     },
     filteredItemsDesktop() {
       // console.log(this.activeTag);
@@ -1628,7 +1628,7 @@ export default {
       //    };
       //  });
       //}
-      return this.specificJobs;
+      return this.specificJobs.filter(j => j.list.length > 0);
     },
     filteredInternational() {
       if (!this.selectedInter || this.selectedInter == undefined) {
@@ -1970,6 +1970,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
+              .filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -2204,6 +2205,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
+              .filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -2306,6 +2308,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
+              .filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -2640,7 +2643,7 @@ export default {
 .card-image-cont-2 {
   position: relative;
   overflow: hidden;
-  height: 170px;
+  height: 190px;
   width: 100%;
 }
 .card-image-cont-3 {
