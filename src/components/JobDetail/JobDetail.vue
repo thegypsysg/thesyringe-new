@@ -106,7 +106,7 @@
             >
               <v-lazy :options="{ threshold: 0.5 }" min-height="100">
                 <v-card
-                  :height="isSmall ? 290 : 250"
+                  :height="isSmall ? 320 : 250"
                   :width="isSmall ? '100%' : 300"
                   class="my-2 text-left card-cont"
                   :class="{ 'pa-2 mx-1': isSmall, ' mx-3': !isSmall }"
@@ -180,7 +180,7 @@
                     <div class="overlay"></div>
                     <v-img
                       :src="item.image"
-                      :height="isSmall ? 183 : 170"
+                      :height="isSmall ? 240 : 170"
                       cover
                       class="card-img"
                       transition="fade-transition"
@@ -437,7 +437,7 @@ export default {
 .card-img-container-2 {
   position: relative;
   overflow: hidden;
-  height: 183px;
+  height: 240px;
   width: 100%;
   margin: auto;
 }
@@ -464,7 +464,7 @@ export default {
 }
 .card-btn-container-2 {
   gap: 20px;
-  bottom: 40px;
+  bottom: 15px;
   right: 30px;
 }
 

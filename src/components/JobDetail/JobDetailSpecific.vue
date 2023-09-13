@@ -862,7 +862,7 @@
             <v-card
               class="my-4 card-cont"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
-              :height="!isSmall ? 360 : 360"
+              :height="!isSmall ? 360 : 420"
               width="100%"
               elevation="0"
               @click="toggle"
@@ -912,7 +912,7 @@
                 <v-img
                   :src="platinumJob?.image"
                   class="card-image"
-                  :height="isSmall ? 200 : 220"
+                  :height="isSmall ? 240 : 220"
                   cover
                   transition="fade-transition"
                 >
@@ -2649,7 +2649,7 @@ export default {
 .card-image-cont-3 {
   position: relative;
   overflow: hidden;
-  height: 183px;
+  height: 240px;
   width: 100%;
 }
 
