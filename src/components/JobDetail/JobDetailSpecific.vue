@@ -270,7 +270,7 @@
                                 "
                               >
                                 <span class="text-white" style=""
-                                  >View All</span
+                                  >View Job</span
                                 >
                               </v-btn>
                             </div>
@@ -353,6 +353,7 @@
               </div>
               <v-btn
                 elevation="4"
+                :to="`/detail/${platinumJob?.id}`"
                 style="
                   position: absolute;
                   bottom: 110px;
@@ -367,7 +368,7 @@
                   font-size: 12px;
                 "
               >
-                <span class="text-white" style="">View Jobs</span>
+                <span class="text-white" style="">View Job</span>
               </v-btn>
 
               <div
@@ -562,7 +563,7 @@
                           font-size: 12px;
                         "
                       >
-                        <span class="text-white" style="">View Jobs</span>
+                        <span class="text-white" style="">View Job</span>
                       </v-btn>
                       <div
                         v-if="card.featured == 'Y'"
@@ -839,7 +840,7 @@
                                 "
                               >
                                 <span class="text-white" style=""
-                                  >View All</span
+                                  >View Job</span
                                 >
                               </v-btn>
                             </div>
@@ -923,6 +924,7 @@
               </div>
               <v-btn
                 elevation="4"
+                :to="`/detail/${platinumJob?.id}`"
                 style="
                   position: absolute;
                   bottom: 110px;
@@ -937,7 +939,7 @@
                   font-size: 12px;
                 "
               >
-                <span class="text-white" style="">View Jobs</span>
+                <span class="text-white" style="">View Job</span>
               </v-btn>
 
               <div
@@ -1155,7 +1157,7 @@
                                 font-size: 12px;
                               "
                             >
-                              <span class="text-white" style="">View Jobs</span>
+                              <span class="text-white" style="">View Job</span>
                               <v-icon right style="color: #fff">
                                 mdi-chevron-right
                               </v-icon>
@@ -1193,7 +1195,7 @@
                           font-size: 12px;
                         "
                       >
-                        <span class="text-white" style="">View Jobs</span>
+                        <span class="text-white" style="">View Job</span>
                       </v-btn>
                       <div
                         v-if="card.featured == 'Y'"
@@ -2076,6 +2078,7 @@ export default {
               tag: skill.position_name || '',
             };
           })[0];
+         console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -2131,6 +2134,8 @@ export default {
               tag: skill.position_name || '',
             };
           })[0];
+          
+         console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
