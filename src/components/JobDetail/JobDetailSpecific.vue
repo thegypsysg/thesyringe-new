@@ -286,19 +286,19 @@
         </div>
         <v-container
           v-if="!isCardLoading && platinumJob"
-          class="d-flex w-100 justify-start"
+          class="d-flex w-100 justify-center"
         >
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
-              class="my-4 card-cont pa-2"
+              class="my-4 card-cont px-2 pb-2"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-              :height="!isSmall ? 360 : 320"
-              :width="!isSmall ? 300 : 270"
-              elevation="1"
+              :height="!isSmall ? 400 : 320"
+              :width="!isSmall ? 450 : 270"
+              elevation="0"
               @click="toggle"
             >
-              <h3 class="text-purple-darken-4 text-center mb-2">
-                Platinum Featured Job
+              <h3 class="text-purple-accent-4 text-center mb-4">
+                Privileged Partner Featured Job
               </h3>
               <div
                 v-if="isSmall"
@@ -342,7 +342,7 @@
                 <v-img
                   :src="platinumJob?.image"
                   class="card-image"
-                  :height="isSmall ? 170 : 220"
+                  :height="isSmall ? 170 : 260"
                   cover
                   transition="fade-transition"
                 >
@@ -351,12 +351,30 @@
                   </template>
                 </v-img>
               </div>
+              <div
+              style="
+                  position: absolute;
+                  top: 70px;
+                  right: 15px;
+                  background-color: #7C007C;
+                  padding-left: 6px;
+                  padding-right: 20px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px;
+                  font-size: 12px;
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <span class="text-white">Privileged Featured Job</span>
+          </div>
+
               <v-btn
                 elevation="4"
                 :to="`/detail/${platinumJob?.id}`"
                 style="
                   position: absolute;
-                  bottom: 110px;
+                  bottom: 120px;
                   left: 15px;
                   background-color: #fa2964;
                   border-radius: 5px;
@@ -372,18 +390,97 @@
               </v-btn>
 
               <div
+              style="
+                  position: absolute;
+                  bottom: 125px;
+                  right: 15px;
+                  background-color: #fff;
+                  padding-left: 6px;
+                  padding-right: 6px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <v-btn
+                :size="!isSmall ? '20' : '50'"
+                variant="text"
+                color="white"
+                style="background: transparent"
+                icon
+              >
+                <v-icon :size="!isSmall ? '15' : '40'">
+                  <v-img
+                    src="@/assets/google.png"
+                    alt="Google Logo"
+                  />
+                </v-icon>
+              </v-btn>
+              <!-- <v-btn
+                :size="!isSmall ? '40' : '50'"
+                variant="text"
+                style="background: #fc2145"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '18' : '24'">
+                  <i class="fa-brands fa-instagram" />
+                </v-icon>
+              </v-btn> -->
+
+              <v-btn
+                :size="!isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #4267b2"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-facebook-f" />
+                </v-icon>
+              </v-btn>
+
+              <v-btn
+                :size="!isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #0072b1"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-linkedin-in" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="!isSmall ? '20' : '50'"
+                variant="text"
+                style="background: black"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-tiktok" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="!isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #1c96e8"
+                color="white"
+                icon="mdi-twitter"
+              >
+              <v-icon :size="!isSmall ? '9' : '24'">
+                <i class="fa-brands fa-twitter" />
+              </v-icon>
+            </v-btn>
+            </div>
+
+              <div
                 class="card-description d-flex flex-column mt-6"
                 style="position: relative; gap: 10px"
               >
-                <div
-                  class="card-address-info text-left mt-n4 mb-n2"
-                  style="font-weight: 400"
-                >
-                  <p>
-                    <span class="text-red">{{ platinumJob?.distanceText }}</span
-                    ><span class="text-muted"> away</span>
-                  </p>
-                </div>
+                
                 <div class="card-address d-flex align-center">
                   <div style="width: 25%">
                     <v-img :src="platinumJob?.locationImg" height="35"
@@ -391,8 +488,9 @@
                         <div class="skeleton" /> </template
                     ></v-img>
                   </div>
-                  <div style="width: 75%" class="card-address-info text-left">
-                    <h4 class="mt-4" style="font-weight: 600">
+                  <div style="width: 50%" class="card-address-info pl-2 d-flex flex-column justify-center text-left">
+                    <div>
+                    <h4 class="" style="font-weight: 600">
                       {{
                         platinumJob?.place.length >= 32
                           ? platinumJob?.place.substring(0, 32) + '..'
@@ -403,10 +501,21 @@
                     <div class="mt-2" style="font-weight: 400">
                       <p>{{ platinumJob?.address }}</p>
                     </div>
+                    <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
                   </div>
+                  </div>
+                  <div
+                  class="card-address-info text-left mt-n4 mb-n2"
+                  style="font-weight: 400; width: 25%"
+                >
+                  <p>
+                    <span class="text-red">{{ platinumJob?.distanceText }}</span
+                    ><span class="text-muted"> away</span>
+                  </p>
+                </div>
                 </div>
               </div>
-              <div class="card-btn-container-1 d-flex justify-space-between">
+              <div class="card-btn-container-3 d-flex justify-space-between">
                 <v-btn
                   color="black"
                   class="card-btn"
@@ -431,6 +540,271 @@
             </v-card>
           </v-lazy>
         </v-container>
+        <v-container
+        v-if="!isCardLoading && platinumJob"
+        
+      >
+      <h3 style="color: #B2641D" class=" text-center my-2">
+        Platinum Partner Featured Job
+      </h3>
+      <div class="d-flex w-100 justify-center">
+      <template v-for="n in 3" :key="n">
+        <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+          <v-card
+            class="my-4 card-cont pa-2"
+            :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+            :height="!isSmall ? 450 : 320"
+            :width="!isSmall ? 300 : 270"
+            elevation="1"
+            @click="toggle"
+          >
+            <div
+              v-if="isSmall"
+              style="
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 10px;
+                line-height: 19.36px;
+              "
+              class="pt-2"
+            >
+              {{
+                platinumJob?.text.length >= 28
+                  ? platinumJob?.text.substring(0, 28) + '..'
+                  : platinumJob?.text
+              }}
+            </div>
+            <div
+              v-if="!isSmall"
+              style="
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 10px;
+                line-height: 19.36px;
+              "
+              class="pt-2 text-left"
+            >
+              {{
+                platinumJob?.text.length >= 32
+                  ? platinumJob?.text.substring(0, 32) + '..'
+                  : platinumJob?.text
+              }}
+            </div>
+            <div
+              class="trending__app"
+              :class="{
+                'card-image-cont-4': !isSmall,
+                'card-image-cont-2': isSmall,
+              }"
+            >
+              <v-img
+                :src="platinumJob?.image"
+                class="card-image"
+                :height="isSmall ? 170 : 220"
+                cover
+                transition="fade-transition"
+              >
+                <template #placeholder>
+                  <div class="skeleton skeleton-category ml-2" />
+                </template>
+              </v-img>
+            </div>
+                          <div
+              style="
+                  position: absolute;
+                  top: 30px;
+                  right: 15px;
+                  background-color: #E2FF02;
+                  padding-left: 15px;
+                  padding-right: 15px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px;
+                  font-size: 12px;
+                  font-weight: 600;
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <span >Platinum Partner Job</span>
+          </div>
+            <div
+              style="
+                position: absolute;
+                bottom: 240px;
+                left: 15px;
+                background-color: #fff;
+                padding-left: 8px;
+                padding-right: 20px;
+                padding-top: 4px;
+                padding-bottom: 4px;
+                font-weight: 600;
+                font-size: 12px;
+              "
+            >
+              <span class="text-brown" style="">Physio Clinic</span>
+            </div>
+
+            <div
+              class="card-description d-flex flex-column mt-6"
+              style="position: relative; gap: 10px"
+            >
+              <div
+                class="card-address-info text-left mt-n4 mb-n2"
+                style="font-weight: 400"
+              >
+                <p>
+                  <span class="text-red">{{ platinumJob?.distanceText }}</span
+                  ><span class="text-muted"> away</span>
+                </p>
+              </div>
+              <div class="card-address d-flex align-center">
+                <div style="width: 25%">
+                  <v-img :src="platinumJob?.locationImg" height="35"
+                    ><template #placeholder>
+                      <div class="skeleton" /> </template
+                  ></v-img>
+                </div>
+                <div style="width: 75%" class="card-address-info text-left">
+                  <h4 class="mt-4" style="font-weight: 600">
+                    {{
+                      platinumJob?.place.length >= 32
+                        ? platinumJob?.place.substring(0, 32) + '..'
+                        : platinumJob?.place
+                    }}
+                  </h4>
+
+                  <div class="mt-2" style="font-weight: 400">
+                    <p>{{ platinumJob?.address }}</p>
+                  </div>
+                  
+                  <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
+                </div>
+              </div>
+            </div>
+            <div
+            style="
+                gap:20px
+              "
+            class="w-100 d-flex justify-start mt-4 mb-8"
+          >
+            <v-btn
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              color="white"
+              style="background: transparent"
+              icon
+            >
+              <v-icon :size="!isSmall ? '25' : '40'">
+                <v-img
+                  src="@/assets/google.png"
+                  alt="Google Logo"
+                />
+              </v-icon>
+            </v-btn>
+            <!-- <v-btn
+              :size="!isSmall ? '40' : '50'"
+              variant="text"
+              style="background: #fc2145"
+              color="white"
+              icon
+            >
+              <v-icon :size="!isSmall ? '18' : '24'">
+                <i class="fa-brands fa-instagram" />
+              </v-icon>
+            </v-btn> -->
+
+            <v-btn
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              style="background: #4267b2"
+              color="white"
+              icon
+            >
+              <v-icon :size="!isSmall ? '20' : '24'">
+                <i class="fa-brands fa-facebook-f" />
+              </v-icon>
+            </v-btn>
+
+            <v-btn
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              style="background: #0072b1"
+              color="white"
+              icon
+            >
+              <v-icon :size="!isSmall ? '20' : '24'">
+                <i class="fa-brands fa-linkedin-in" />
+              </v-icon>
+            </v-btn>
+            <v-btn
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              style="background: black"
+              color="white"
+              icon
+            >
+              <v-icon :size="!isSmall ? '20' : '24'">
+                <i class="fa-brands fa-tiktok" />
+              </v-icon>
+            </v-btn>
+            <v-btn
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              style="background: #1c96e8"
+              color="white"
+              icon="mdi-twitter"
+            >
+            <v-icon :size="!isSmall ? '21' : '24'">
+              <i class="fa-brands fa-twitter" />
+            </v-icon>
+          </v-btn>
+          </div>
+          <div class="d-flex justify-center">
+          <v-btn
+          elevation="4"
+          :to="`/detail/${platinumJob?.id}`"
+          style="
+            
+            background-color: #fa2964;
+            border-radius: 5px;
+            padding-left: 8px;
+            padding-right: 6px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-weight: 600;
+            font-size: 12px;
+          "
+        >
+          <span class="text-white" style="">View Job</span>
+        </v-btn>
+      </div>
+            <div class="card-btn-container-4 d-flex justify-space-between">
+              <v-btn
+                color="black"
+                class="card-btn"
+                :width="isSmall ? 40 : 32"
+                :height="isSmall ? 40 : 32"
+                icon="mdi-share-variant-outline"
+              >
+                <v-icon size="20" color="red">
+                  mdi-share-variant-outline
+                </v-icon></v-btn
+              >
+              <v-btn
+                class="card-btn"
+                color="black"
+                icon="mdi-heart-outline"
+                :width="isSmall ? 40 : 32"
+                :height="isSmall ? 40 : 32"
+              >
+                <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+              </v-btn>
+            </div>
+          </v-card>
+        </v-lazy>
+      </template>
+    </div>
+      </v-container>
         <template v-if="isCardLoading">
           <v-container>
             <p class="ml-8 my-10">Loading...</p>
@@ -868,9 +1242,9 @@
               elevation="0"
               @click="toggle"
             >
-              <h3 class="text-purple-darken-4 text-center mb-2">
-                Platinum Featured Job
-              </h3>
+            <h2 class="text-purple-accent-4 text-center mb-2">
+              Privileged Partner Featured Job
+            </h2>
               <div
                 v-if="isSmall"
                 style="
@@ -922,12 +1296,29 @@
                   </template>
                 </v-img>
               </div>
+                            <div
+              style="
+                  position: absolute;
+                  top: 70px;
+                  right: 15px;
+                  background-color: #7C007C;
+                  padding-left: 6px;
+                  padding-right: 20px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px;
+                  font-size: 12px;
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <span class="text-white">Privileged Featured Job</span>
+          </div>
               <v-btn
                 elevation="4"
                 :to="`/detail/${platinumJob?.id}`"
                 style="
                   position: absolute;
-                  bottom: 110px;
+                  bottom: 120px;
                   left: 15px;
                   background-color: #fa2964;
                   border-radius: 5px;
@@ -941,6 +1332,93 @@
               >
                 <span class="text-white" style="">View Job</span>
               </v-btn>
+
+              <div
+              style="
+                  position: absolute;
+                  bottom: 123px;
+                  left: 95px;
+                  background-color: #fff;
+                  padding-left: 6px;
+                  padding-right: 6px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <v-btn
+                :size="isSmall ? '20' : '50'"
+                variant="text"
+                color="white"
+                style="background: transparent"
+                icon
+              >
+                <v-icon :size="isSmall ? '15' : '40'">
+                  <v-img
+                    src="@/assets/google.png"
+                    alt="Google Logo"
+                  />
+                </v-icon>
+              </v-btn>
+              <!-- <v-btn
+                :size="isSmall ? '40' : '50'"
+                variant="text"
+                style="background: #fc2145"
+                color="white"
+                icon
+              >
+                <v-icon :size="isSmall ? '18' : '24'">
+                  <i class="fa-brands fa-instagram" />
+                </v-icon>
+              </v-btn> -->
+
+              <v-btn
+                :size="isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #4267b2"
+                color="white"
+                icon
+              >
+                <v-icon :size="isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-facebook-f" />
+                </v-icon>
+              </v-btn>
+
+              <v-btn
+                :size="isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #0072b1"
+                color="white"
+                icon
+              >
+                <v-icon :size="isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-linkedin-in" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="isSmall ? '20' : '50'"
+                variant="text"
+                style="background: black"
+                color="white"
+                icon
+              >
+                <v-icon :size="isSmall ? '8' : '24'">
+                  <i class="fa-brands fa-tiktok" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="isSmall ? '20' : '50'"
+                variant="text"
+                style="background: #1c96e8"
+                color="white"
+                icon="mdi-twitter"
+              >
+              <v-icon :size="isSmall ? '9' : '24'">
+                <i class="fa-brands fa-twitter" />
+              </v-icon>
+            </v-btn>
+            </div>
 
               <div
                 class="card-description d-flex flex-column mt-6"
@@ -977,7 +1455,271 @@
                   </div>
                 </div>
               </div>
-              <div class="card-btn-container-1 d-flex justify-space-between">
+              <div class="card-btn-container-2 d-flex justify-space-between">
+                <v-btn
+                  color="black"
+                  class="card-btn"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                  icon="mdi-share-variant-outline"
+                >
+                  <v-icon size="20" color="red">
+                    mdi-share-variant-outline
+                  </v-icon></v-btn
+                >
+                <v-btn
+                  class="card-btn"
+                  color="black"
+                  icon="mdi-heart-outline"
+                  :width="isSmall ? 40 : 32"
+                  :height="isSmall ? 40 : 32"
+                >
+                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                </v-btn>
+              </div>
+            </v-card>
+          </v-lazy>
+        </div>
+        <div
+          v-if="!isCardLoading && platinumJob"
+          style="width: 100% !important"
+          class="px-2"
+        >
+          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+            <v-card
+              class="my-4 card-cont"
+              :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
+              :height="!isSmall ? 360 : 550"
+              width="100%"
+              elevation="0"
+              @click="toggle"
+            >
+            <h3 style="color: #B2641D" class=" text-center mb-2">
+              Platinum Partner Featured Job
+            </h3>
+              <div
+                v-if="isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2"
+              >
+                {{
+                  platinumJob?.text.length >= 28
+                    ? platinumJob?.text.substring(0, 28) + '..'
+                    : platinumJob?.text
+                }}
+              </div>
+              <div
+                v-if="!isSmall"
+                style="
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  line-height: 19.36px;
+                "
+                class="pt-2 text-left"
+              >
+                {{
+                  platinumJob?.text.length >= 32
+                    ? platinumJob?.text.substring(0, 32) + '..'
+                    : platinumJob?.text
+                }}
+              </div>
+              <div
+                class="trending__app"
+                :class="{
+                  'card-image-cont-1': !isSmall,
+                  'card-image-cont-3': isSmall,
+                }"
+              >
+                <v-img
+                  :src="platinumJob?.image"
+                  class="card-image"
+                  :height="isSmall ? 240 : 220"
+                  cover
+                  transition="fade-transition"
+                >
+                  <template #placeholder>
+                    <div class="skeleton skeleton-category ml-2" />
+                  </template>
+                </v-img>
+              </div>
+
+              <div
+              style="
+                  position: absolute;
+                  top: 60px;
+                  right: 15px;
+                  background-color: #E2FF02;
+                  padding-left: 15px;
+                  padding-right: 15px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  gap:10px;
+                  font-size: 12px;
+                  font-weight: 600;
+                "
+              class=" d-flex justify-start mt-8"
+            >
+              <span >Platinum Partner Job</span>
+          </div>
+            <div
+              style="
+                position: absolute;
+                bottom: 250px;
+                left: 15px;
+                background-color: #fff;
+                padding-left: 8px;
+                padding-right: 20px;
+                padding-top: 4px;
+                padding-bottom: 4px;
+                font-weight: 600;
+                font-size: 12px;
+              "
+            >
+              <span class="text-brown" style="">Physio Clinic</span>
+            </div>
+
+              <div
+                class="card-description d-flex flex-column mt-6"
+                style="position: relative; gap: 10px"
+              >
+                <div
+                  class="card-address-info text-left mt-n4 mb-n2"
+                  style="font-weight: 400"
+                >
+                  <p>
+                    <span class="text-red">{{ platinumJob?.distanceText }}</span
+                    ><span class="text-muted"> away</span>
+                  </p>
+                </div>
+                <div class="card-address d-flex align-center">
+                  <div style="width: 25%">
+                    <v-img :src="platinumJob?.locationImg" height="35"
+                      ><template #placeholder>
+                        <div class="skeleton" /> </template
+                    ></v-img>
+                  </div>
+                  <div style="width: 75%" class="card-address-info text-left">
+                    <h4 class="mt-4" style="font-weight: 600">
+                      {{
+                        platinumJob?.place.length >= 32
+                          ? platinumJob?.place.substring(0, 32) + '..'
+                          : platinumJob?.place
+                      }}
+                    </h4>
+
+                    <div class="mt-2 w-75" style="font-weight: 400">
+                      <p>{{ platinumJob?.address }}</p>
+                    </div>
+                                      <a class="text-decoration-none mt-4" href="">www.bmj-therapy.com</a>
+                  </div>
+                </div>
+              </div>
+
+              <div
+              style="
+                  gap:20px
+                "
+              class="w-100 d-flex justify-start mt-4 mb-8"
+            >
+              <v-btn
+                :size="!isSmall ? '35' : '50'"
+                variant="text"
+                color="white"
+                style="background: transparent"
+                icon
+              >
+                <v-icon :size="!isSmall ? '25' : '40'">
+                  <v-img
+                    src="@/assets/google.png"
+                    alt="Google Logo"
+                  />
+                </v-icon>
+              </v-btn>
+              <!-- <v-btn
+                :size="!isSmall ? '40' : '50'"
+                variant="text"
+                style="background: #fc2145"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '18' : '24'">
+                  <i class="fa-brands fa-instagram" />
+                </v-icon>
+              </v-btn> -->
+  
+              <v-btn
+                :size="!isSmall ? '35' : '50'"
+                variant="text"
+                style="background: #4267b2"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '20' : '24'">
+                  <i class="fa-brands fa-facebook-f" />
+                </v-icon>
+              </v-btn>
+  
+              <v-btn
+                :size="!isSmall ? '35' : '50'"
+                variant="text"
+                style="background: #0072b1"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '20' : '24'">
+                  <i class="fa-brands fa-linkedin-in" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="!isSmall ? '35' : '50'"
+                variant="text"
+                style="background: black"
+                color="white"
+                icon
+              >
+                <v-icon :size="!isSmall ? '20' : '24'">
+                  <i class="fa-brands fa-tiktok" />
+                </v-icon>
+              </v-btn>
+              <v-btn
+                :size="!isSmall ? '35' : '50'"
+                variant="text"
+                style="background: #1c96e8"
+                color="white"
+                icon="mdi-twitter"
+              >
+              <v-icon :size="!isSmall ? '21' : '24'">
+                <i class="fa-brands fa-twitter" />
+              </v-icon>
+            </v-btn>
+            </div>
+              
+              <div class="d-flex justify-center">
+                <v-btn
+                elevation="4"
+                :to="`/detail/${platinumJob?.id}`"
+                style="
+                  
+                  background-color: #fa2964;
+                  border-radius: 5px;
+                  padding-left: 8px;
+                  padding-right: 6px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                  font-weight: 600;
+                  font-size: 12px;
+                "
+              >
+                <span class="text-white" style="">View Job</span>
+              </v-btn>
+            </div>
+              <div class="card-btn-container-5 d-flex justify-space-between">
                 <v-btn
                   color="black"
                   class="card-btn"
@@ -2642,8 +3384,14 @@ export default {
 .card-image-cont-1 {
   position: relative;
   overflow: hidden;
+  height: 220px;
+  width: 100%;
+}
+.card-image-cont-4 {
+  position: relative;
+  overflow: hidden;
   height: 180px;
-  width: 280px;
+  width: 100%;
 }
 .card-image-cont-2 {
   position: relative;
@@ -2673,6 +3421,28 @@ export default {
   z-index: 100;
 }
 
+.card-btn-container-3 {
+  position: absolute;
+  gap: 10px;
+  bottom: 80px;
+  right: 30px;
+  z-index: 100;
+}
+.card-btn-container-4 {
+  position: absolute;
+  gap: 10px;
+  bottom: 210px;
+  right: 30px;
+  z-index: 100;
+}
+.card-btn-container-5 {
+  position: absolute;
+  gap: 10px;
+  bottom: 220px;
+  right: 30px;
+  z-index: 100;
+}
+
 .card-btn {
   background: #fff !important;
   border: none !important;
@@ -2688,6 +3458,9 @@ export default {
   transform: scale(1.2);
 }
 .card-image-cont-2:hover .card-image {
+  transform: scale(1.2);
+}
+.card-image-cont-4:hover .card-image {
   transform: scale(1.2);
 }
 .promotion-container {
