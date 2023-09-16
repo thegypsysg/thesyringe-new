@@ -287,18 +287,18 @@
         <v-container
           v-if="!isCardLoading && platinumJob"
         >
-        <h2 class="text-purple-accent-4 text-center mb-4">
+        <h1 class="text-purple-accent-4 text-center mb-4">
           Privileged Partner Featured Job
-        </h2>
-        <div class="d-flex w-100 justify-center flex-wrap">
+        </h1>
+        <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
           <template v-for="card in platinumJob" :key="card.id">
           
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
-              class="my-4 card-cont px-2 pb-2"
-              :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-              :height="!isSmall ? 420 : 320"
-              :width="!isSmall ? 450 : 270"
+              class="my-4 card-cont px-8 pb-2"
+              :class="{ 'mx-auto text-center': !isSmall, 'mx-1': isSmall }"
+              :height="!isSmall ? 500 : 320"
+              :width="!isSmall ? 650 : 270"
               elevation="1"
               @click="toggle"
             >
@@ -337,14 +337,14 @@
               <div
                 class="trending__app"
                 :class="{
-                  'card-image-cont-1': !isSmall,
+                  'card-image-cont-priv-desktop': !isSmall,
                   'card-image-cont-2': isSmall,
                 }"
               >
                 <v-img
                   :src="card.image"
                   class="card-image"
-                  :height="isSmall ? 170 : 260"
+                  :height="isSmall ? 170 : 300"
                   cover
                   transition="fade-transition"
                 >
@@ -357,7 +357,7 @@
               style="
                   position: absolute;
                   top: 30px;
-                  right: 15px;
+                  right: 55px;
                   background-color: #7C007C;
                   padding-left: 6px;
                   padding-right: 20px;
@@ -377,7 +377,7 @@
                 style="
                   position: absolute;
                   bottom: 180px;
-                  left: 15px;
+                  left: 55px;
                   background-color: #fa2964;
                   border-radius: 5px;
                   padding-left: 8px;
@@ -510,7 +510,7 @@
             </v-btn>
             </div>
 
-              <div class="card-btn-container-3 d-flex justify-space-between">
+              <div class="card-btn-container-priv-desktop d-flex justify-space-between">
                 <v-btn
                   color="black"
                   class="card-btn"
@@ -1231,7 +1231,7 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 class="text-purple-accent-4 text-center mb-2">
+        <h2 class="text-purple-accent-4 text-center mt-4 mb-6">
           Privileged Partner Featured Job
         </h2>
         <div class="d-flex justify-center flex-wrap">
@@ -1488,10 +1488,9 @@
           <template v-for="card in platinumJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
-              class="mb-4 card-cont"
+              class="mb-4 card-cont card-platinum"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
-              :height="!isSmall ? 360 : 510"
-              width="90%"
+              :height="!isSmall ? 360 : 570"
               elevation="1"
               @click="toggle"
             >
@@ -1531,7 +1530,7 @@
                 class="trending__app"
                 :class="{
                   'card-image-cont-1': !isSmall,
-                  'card-image-cont-3': isSmall,
+                  'card-image-cont-plat-mobile': isSmall,
                 }"
               >
                 <v-img
@@ -1568,7 +1567,7 @@
             <div
               style="
                 position: absolute;
-                bottom: 250px;
+                bottom: 350px;
                 left: 15px;
                 background-color: #fff;
                 padding-left: 8px;
@@ -1595,26 +1594,25 @@
                     ><span class="text-muted"> away</span>
                   </p>
                 </div>
-                <div class="card-address d-flex align-center">
-                  <div style="width: 25%">
-                    <v-img :src="card.locationImg" height="35"
+                <div class="card-address mt-4">
+                  <div style="width: 100%">
+                    <v-img :src="card.locationImg" height="50"
                       ><template #placeholder>
                         <div class="skeleton" /> </template
                     ></v-img>
                   </div>
-                  <div style="width: 75%" class="card-address-info text-left">
-                    <h4 class="mt-4" style="font-weight: 600">
+                  <div style="width: 100%" class="card-address-info text-center">
+                    <h2 class="mt-4" style="font-weight: 600">
                       {{
                         card.place.length >= 32
                           ? card.place.substring(0, 32) + '..'
                           : card.place
                       }}
-                    </h4>
+                    </h2>
 
-                    <div class="mt-2 w-75" style="font-weight: 400">
+                    <div class="mt-2" style="font-weight: 400">
                       <p>{{ card.address }}</p>
                     </div>
-                                      <a class="text-decoration-none mt-4" href="">www.bmj-therapy.com</a>
                   </div>
                 </div>
               </div>
@@ -1623,7 +1621,7 @@
               style="
                   gap:20px
                 "
-              class="w-100 px-2 d-flex justify-center mt-4 mb-4"
+              class="w-100 px-2 d-flex justify-center my-6"
             >
               <v-btn
                 :size="!isSmall ? '35' : '40'"
@@ -1697,8 +1695,10 @@
               </v-icon>
             </v-btn>
             </div>
-              
-              <div class="d-flex justify-center">
+                <div class="w-100 my-4 d-flex justify-center">
+                    <a class="text-decoration-none text-center" href="">www.bmj-therapy.com</a>
+                  </div>
+              <div class="d-flex mt-2 justify-center">
                 <v-btn
                 elevation="4"
                 :to="`/detail/${card.id}`"
@@ -1717,7 +1717,7 @@
                 <span class="text-white" style="">View Job</span>
               </v-btn>
             </div>
-              <div class="card-btn-container-5 d-flex justify-space-between">
+              <div class="card-btn-container-plat-mobile d-flex justify-space-between">
                 <v-btn
                   color="black"
                   class="card-btn"
@@ -3384,7 +3384,13 @@ export default {
 .card-image-cont-1 {
   position: relative;
   overflow: hidden;
-  height: 220px;
+  height: 180px;
+  width: 100%;
+}
+.card-image-cont-priv-desktop {
+  position: relative;
+  overflow: hidden;
+  height: 300px;
   width: 100%;
 }
 .card-image-cont-4 {
@@ -3403,6 +3409,12 @@ export default {
   position: relative;
   overflow: hidden;
   height: 240px;
+  width: 100%;
+}
+.card-image-cont-plat-mobile {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
   width: 100%;
 }
 
@@ -3428,6 +3440,13 @@ export default {
   right: 30px;
   z-index: 100;
 }
+.card-btn-container-priv-desktop {
+  position: absolute;
+  gap: 10px;
+  bottom: 145px;
+  right: 60px;
+  z-index: 100;
+}
 .card-btn-container-4 {
   position: absolute;
   gap: 10px;
@@ -3435,10 +3454,10 @@ export default {
   right: 30px;
   z-index: 100;
 }
-.card-btn-container-5 {
+.card-btn-container-plat-mobile {
   position: absolute;
   gap: 10px;
-  bottom: 220px;
+  bottom: 310px;
   right: 30px;
   z-index: 100;
 }
@@ -3464,10 +3483,16 @@ export default {
 .card-image-cont-1:hover .card-image {
   transform: scale(1.2);
 }
+.card-image-cont-priv-desktop:hover .card-image {
+  transform: scale(1.2);
+}
 .card-image-cont-2:hover .card-image {
   transform: scale(1.2);
 }
 .card-image-cont-3:hover .card-image {
+  transform: scale(1.2);
+}
+.card-image-cont-plat-mobile:hover .card-image {
   transform: scale(1.2);
 }
 .card-image-cont-4:hover .card-image {
@@ -3598,5 +3623,12 @@ export default {
 }
 .regist-btn-2 {
   font-size: 16px;
+}
+
+@media (max-width: 959px) {
+  .card-platinum {
+    max-width: 300px;
+    margin: 0 auto;
+  }
 }
 </style>
