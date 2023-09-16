@@ -541,9 +541,9 @@
         v-if="!isCardLoading && platinumJob"
         
       >
-      <h2 style="color: #B2641D" class=" text-center my-2">
+      <h1 style="color: #B2641D" class=" text-center my-2">
         Platinum Partner Featured Job
-      </h2>
+      </h1>
       <div class="d-flex w-100 justify-start flex-wrap">
         <template v-for="card in platinumJob" :key="card.id">
         
@@ -1240,7 +1240,7 @@
             <v-card
               class="mb-4 card-cont"
               :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
-              :height="!isSmall ? 360 : 440"
+              :height="!isSmall ? 360 : 455"
               width="90%"
               elevation="1"
               @click="toggle"
@@ -1319,7 +1319,7 @@
                 :to="`/detail/${card.id}`"
                 style="
                   position: absolute;
-                  bottom: 170px;
+                  bottom: 190px;
                   left: 15px;
                   background-color: #fa2964;
                   border-radius: 5px;
@@ -1366,6 +1366,7 @@
                     <div class="mt-2 w-75" style="font-weight: 400">
                       <p>{{ card.address }}</p>
                     </div>
+                    <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
                   </div>
                 </div>
               </div>
@@ -3464,7 +3465,7 @@ export default {
 .card-btn-container-6 {
   position: absolute;
   gap: 10px;
-  bottom: 135px;
+  bottom: 155px;
   right: 30px;
   z-index: 100;
 }
