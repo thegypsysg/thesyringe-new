@@ -291,7 +291,7 @@
           Privileged Partner Featured Job
         </h1>
         <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
-          <template v-for="card in platinumJob" :key="card.id">
+          <template v-for="card in privilegedJob" :key="card.id">
           
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
@@ -839,7 +839,6 @@
                 {{ item.title }}
               </h3>
               <router-link
-                v-if="item.list.length >= 4"
                 :to="`/view-all/${item.id}`"
                 class="text-decoration-none"
               >
@@ -1235,7 +1234,7 @@
           Privileged Partner Featured Job
         </h2>
         <div class="d-flex justify-center flex-wrap">
-          <template v-for="card in platinumJob" :key="card.id">
+          <template v-for="card in privilegedJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
             <v-card
               class="mb-4 card-cont"
@@ -2292,6 +2291,7 @@ export default {
       internationalCountry: [],
       internationalCard: [],
       platinumJob: null,
+      privilegedJob: null,
       activeIndex: 1,
       // totalData: 0,
       itemsTry: [
@@ -2477,6 +2477,11 @@ export default {
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
+      this.getPrivilegedJob2(
+        this.skillSlug.skills_id,
+        this.itemSelectedComplete.id,
+        this.itemSelected2Complete.id
+      );
     },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
@@ -2494,6 +2499,7 @@ export default {
           this.getGroups(this.skillSlug.skills_id, this.countryId);
           this.getSpecificJobs(this.skillSlug.skills_id, this.countryId);
           this.getPlatinumJob(this.skillSlug.skills_id, this.countryId);
+          this.getPrivilegedJob(this.skillSlug.skills_id, this.countryId);
           // console.log(this.countryId);
         })
         .catch((error) => {
@@ -2634,6 +2640,10 @@ export default {
               this.skillSlug.skills_id,
               this.itemSelectedComplete.id
             );
+            this.getPrivilegedJob(
+              this.skillSlug.skills_id,
+              this.itemSelectedComplete.id
+            );
             this.getInternationalSkills();
             //this.getGroups2(
             //  this.skillSlug.skills_id,
@@ -2766,6 +2776,119 @@ export default {
           });
 
           // console.log(this.specificJobs);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getPrivilegedJob(skillId, countryId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          this.privilegedJob = data.map((skill) => {
+            return {
+              id: skill.job_id || 1,
+              text: skill.position_name || '',
+              image: skill.location_image
+                ? this.$fileURL + skill.location_image
+                : skill.partners_image
+                ? this.$fileURL + skill.partners_image
+                : '',
+              path: skill.location_name
+                ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
+                : '',
+              place: skill.partner_name || '',
+              distance: skill.distance || 0,
+              distanceText: this.formatDistance(skill.distance),
+              locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+              address:
+                skill.location_name && skill.zone_name && skill.city_name
+                  ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.town_name &&
+                    skill.zone_name &&
+                    skill.city_name &&
+                    skill.location_name == null
+                  ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.zone_name &&
+                    skill.location_name == null &&
+                    skill.town_name == null &&
+                    skill.city_name
+                  ? `${skill.city_name} (${skill.zone_name})`
+                  : skill.city_name &&
+                    skill.location_name == null &&
+                    skill.town_name &&
+                    skill.zone_name == null
+                  ? `${skill.town_name} , ${skill.city_name}`
+                  : '-',
+              tag: skill.position_name || '',
+            };
+          });
+         console.log(this.privilegedJob)
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getPrivilegedJob2(skillId, countryId, cityId) {
+      this.isCardLoading = true;
+      axios
+        .get(
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          this.privilegedJob = data.map((skill) => {
+            return {
+              id: skill.job_id || 1,
+              text: skill.position_name || '',
+              image: skill.location_image
+                ? this.$fileURL + skill.location_image
+                : skill.partners_image
+                ? this.$fileURL + skill.partners_image
+                : '',
+              path: skill.location_name
+                ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
+                : '',
+              place: skill.partner_name || '',
+              distance: skill.distance || 0,
+              distanceText: this.formatDistance(skill.distance),
+              locationImg: skill.logo ? this.$fileURL + skill.logo : '',
+              address:
+                skill.location_name && skill.zone_name && skill.city_name
+                  ? `${skill.location_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.town_name &&
+                    skill.zone_name &&
+                    skill.city_name &&
+                    skill.location_name == null
+                  ? `${skill.town_name} (${skill.zone_name}), ${skill.city_name}`
+                  : skill.zone_name &&
+                    skill.location_name == null &&
+                    skill.town_name == null &&
+                    skill.city_name
+                  ? `${skill.city_name} (${skill.zone_name})`
+                  : skill.city_name &&
+                    skill.location_name == null &&
+                    skill.town_name &&
+                    skill.zone_name == null
+                  ? `${skill.town_name} , ${skill.city_name}`
+                  : '-',
+              tag: skill.position_name || '',
+            };
+          });
+          
+         console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
