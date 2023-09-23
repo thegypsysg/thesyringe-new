@@ -416,7 +416,7 @@
                     <div class="mt-2" style="font-weight: 400">
                       <p>{{ card.address }}</p>
                     </div>
-                    <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
+                    <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
                   </div>
                   </div>
                   <div
@@ -443,6 +443,7 @@
                 color="white"
                 style="background: transparent"
                 icon
+                :href="card.google"
               >
                 <v-icon :size="!isSmall ? '25' : '40'">
                   <v-img
@@ -469,6 +470,7 @@
                 style="background: #4267b2"
                 color="white"
                 icon
+                :href="card.facebook"
               >
                 <v-icon :size="!isSmall ? '20' : '24'">
                   <i class="fa-brands fa-facebook-f" />
@@ -481,6 +483,7 @@
                 style="background: #0072b1"
                 color="white"
                 icon
+                :href="card.linkedin"
               >
                 <v-icon :size="!isSmall ? '20' : '24'">
                   <i class="fa-brands fa-linkedin-in" />
@@ -492,6 +495,7 @@
                 style="background: black"
                 color="white"
                 icon
+                :href="card.tiktok"
               >
                 <v-icon :size="!isSmall ? '20' : '24'">
                   <i class="fa-brands fa-tiktok" />
@@ -503,6 +507,7 @@
                 style="background: #1c96e8"
                 color="white"
                 icon="mdi-twitter"
+                :href="card.twitter"
               >
               <v-icon :size="!isSmall ? '21' : '24'">
                 <i class="fa-brands fa-twitter" />
@@ -675,7 +680,7 @@
                     <p>{{ card.address }}</p>
                   </div>
                   
-                  <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
+                  <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
                 </div>
               </div>
             </div>
@@ -691,6 +696,7 @@
               color="white"
               style="background: transparent"
               icon
+              :href="card.google"
             >
               <v-icon :size="!isSmall ? '25' : '40'">
                 <v-img
@@ -717,6 +723,7 @@
               style="background: #4267b2"
               color="white"
               icon
+              :href="card.facebook"
             >
               <v-icon :size="!isSmall ? '20' : '24'">
                 <i class="fa-brands fa-facebook-f" />
@@ -729,6 +736,7 @@
               style="background: #0072b1"
               color="white"
               icon
+              :href="card.linkedin"
             >
               <v-icon :size="!isSmall ? '20' : '24'">
                 <i class="fa-brands fa-linkedin-in" />
@@ -740,6 +748,7 @@
               style="background: black"
               color="white"
               icon
+              :href="card.tiktok"
             >
               <v-icon :size="!isSmall ? '20' : '24'">
                 <i class="fa-brands fa-tiktok" />
@@ -751,6 +760,7 @@
               style="background: #1c96e8"
               color="white"
               icon="mdi-twitter"
+              :href="card.twitter"
             >
             <v-icon :size="!isSmall ? '21' : '24'">
               <i class="fa-brands fa-twitter" />
@@ -1365,7 +1375,7 @@
                     <div class="mt-2 w-75" style="font-weight: 400">
                       <p>{{ card.address }}</p>
                     </div>
-                    <a class="text-decoration-none mt-3" href="">www.bmj-therapy.com</a>
+                    <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
                   </div>
                 </div>
               </div>
@@ -1382,6 +1392,7 @@
                 color="white"
                 style="background: transparent"
                 icon
+                :href="card.google"
               >
                 <v-icon :size="!isSmall ? '25' : '30'">
                   <v-img
@@ -1408,6 +1419,7 @@
                 style="background: #4267b2"
                 color="white"
                 icon
+                :href="card.facebook"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-facebook-f" />
@@ -1420,6 +1432,7 @@
                 style="background: #0072b1"
                 color="white"
                 icon
+                :href="card.linkedin"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-linkedin-in" />
@@ -1431,6 +1444,7 @@
                 style="background: black"
                 color="white"
                 icon
+                :href="card.tiktok"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-tiktok" />
@@ -1442,6 +1456,7 @@
                 style="background: #1c96e8"
                 color="white"
                 icon="mdi-twitter"
+                :href="card.twitter"
               >
               <v-icon :size="!isSmall ? '21' : '19'">
                 <i class="fa-brands fa-twitter" />
@@ -1629,6 +1644,7 @@
                 color="white"
                 style="background: transparent"
                 icon
+                :href="card.google"
               >
                 <v-icon :size="!isSmall ? '25' : '30'">
                   <v-img
@@ -1655,6 +1671,7 @@
                 style="background: #4267b2"
                 color="white"
                 icon
+                :href="card.facebook"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-facebook-f" />
@@ -1667,6 +1684,7 @@
                 style="background: #0072b1"
                 color="white"
                 icon
+                :href="card.linkedin"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-linkedin-in" />
@@ -1678,6 +1696,7 @@
                 style="background: black"
                 color="white"
                 icon
+                :href="card.tiktok"
               >
                 <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-tiktok" />
@@ -1689,6 +1708,7 @@
                 style="background: #1c96e8"
                 color="white"
                 icon="mdi-twitter"
+                :href="card.twitter"
               >
               <v-icon :size="!isSmall ? '21' : '19'">
                 <i class="fa-brands fa-twitter" />
@@ -1696,7 +1716,7 @@
             </v-btn>
             </div>
                 <div class="w-100 my-4 d-flex justify-center">
-                    <a class="text-decoration-none text-center" href="">www.bmj-therapy.com</a>
+                    <a class="text-decoration-none text-center" :href="card.website">{{card.website}}</a>
                   </div>
               <div class="d-flex mt-2 justify-center">
                 <v-btn
@@ -2829,6 +2849,12 @@ export default {
                   ? `${skill.town_name} , ${skill.city_name}`
                   : '-',
               tag: skill.position_name || '',
+              website: skill.website || '',
+              google: skill.google || '',
+              facebook: skill.facebook || '',
+              linkedin: skill.linkedin || '',
+              tiktok: skill.tiktok || '',
+              twitter: skill.twitter || '',
             };
           });
          console.log(this.privilegedJob)
@@ -2885,6 +2911,12 @@ export default {
                   ? `${skill.town_name} , ${skill.city_name}`
                   : '-',
               tag: skill.position_name || '',
+              website: skill.website || '',
+              google: skill.google || '',
+              facebook: skill.facebook || '',
+              linkedin: skill.linkedin || '',
+              tiktok: skill.tiktok || '',
+              twitter: skill.twitter || '',
             };
           });
           
@@ -2942,6 +2974,12 @@ export default {
                   ? `${skill.town_name} , ${skill.city_name}`
                   : '-',
               tag: skill.position_name || '',
+              website: skill.website || '',
+              google: skill.google || '',
+              facebook: skill.facebook || '',
+              linkedin: skill.linkedin || '',
+              tiktok: skill.tiktok || '',
+              twitter: skill.twitter || '',
             };
           });
          console.log(this.platinumJob)
@@ -2998,6 +3036,12 @@ export default {
                   ? `${skill.town_name} , ${skill.city_name}`
                   : '-',
               tag: skill.position_name || '',
+              website: skill.website || '',
+              google: skill.google || '',
+              facebook: skill.facebook || '',
+              linkedin: skill.linkedin || '',
+              tiktok: skill.tiktok || '',
+              twitter: skill.twitter || '',
             };
           });
           

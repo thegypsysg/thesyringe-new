@@ -189,6 +189,28 @@
                   </v-btn>
 
                   <div
+                  v-if="card.featured == 'Y'"
+                  style="
+                    width: 100px;
+                    position: absolute;
+                    top: 50px;
+                    right: 15px;
+                    background-color: #f79303;
+                    border-radius: 5px;
+                    padding-left: 8px;
+                    padding-right: 6px;
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    font-weight: 600;
+                    font-size: 12px;
+                  "
+                >
+                  <span class="text-white text-left" style=""
+                    >Featured</span
+                  >
+                </div>
+
+                  <div
                     class="card-description d-flex flex-column mt-6"
                     style="position: relative; gap: 10px"
                   >
@@ -297,21 +319,33 @@ export default {
     },
     filteredSkills() {
       if (this.selectedSkill === null && this.selectedTown === null) {
-        return this.skillsCard;
+        //return this.skillsCard;
+        const featuredFirst = this.skillsCard.filter(item => item.featured === 'Y');
+      const featuredOther = this.skillsCard.filter(item => item.featured !== 'Y');
+
+      return featuredFirst.concat(featuredOther);
       } else if (this.selectedSkill !== null && this.selectedTown === null) {
         const filteredData = this.skillsCard.filter((item) => {
           return this.selectedSkill
             ? item.text.toLowerCase() === this.selectedSkill.toLowerCase()
             : true;
         });
-        return filteredData;
+        //return filteredData;
+        const featuredFirst = filteredData.filter(item => item.featured === 'Y');
+      const featuredOther = filteredData.filter(item => item.featured !== 'Y');
+
+      return featuredFirst.concat(featuredOther);
       } else if (this.selectedTown !== null && this.selectedSkill === null) {
         const filteredData = this.skillsCard.filter((item) => {
           return this.selectedTown
             ? item.town.toLowerCase() === this.selectedTown.toLowerCase()
             : true;
         });
-        return filteredData;
+        //return filteredData;
+        const featuredFirst = filteredData.filter(item => item.featured === 'Y');
+      const featuredOther = filteredData.filter(item => item.featured !== 'Y');
+
+      return featuredFirst.concat(featuredOther);
       } else {
         const filteredData = this.skillsCard.filter((item) => {
           return (
@@ -323,7 +357,11 @@ export default {
               : true)
           );
         });
-        return filteredData;
+        //return filteredData;
+        const featuredFirst = filteredData.filter(item => item.featured === 'Y');
+      const featuredOther = filteredData.filter(item => item.featured !== 'Y');
+
+      return featuredFirst.concat(featuredOther);
       }
     },
     filteredSkills2() {
@@ -400,6 +438,7 @@ export default {
                 : skill.partners_image
                 ? this.$fileURL + skill.partners_image
                 : '',
+              featured: skill.featured,
               path: skill.location_name
                 ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
                 : '',
