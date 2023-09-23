@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-container v-if="isLoading" class="text-center loading-page">
     <v-progress-circular :size="50" color="#fa2964" indeterminate />
   </v-container>
@@ -214,6 +215,7 @@
       </v-sheet>
     </div>
   </v-container>
+</div>
 </template>
 
 <script>
