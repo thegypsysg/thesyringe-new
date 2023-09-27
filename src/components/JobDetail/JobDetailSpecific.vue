@@ -438,6 +438,7 @@
               class=" d-flex justify-center mt-6"
             >
               <v-btn
+              v-if="card.google"
                 :size="!isSmall ? '35' : '50'"
                 variant="text"
                 color="white"
@@ -452,19 +453,22 @@
                   />
                 </v-icon>
               </v-btn>
-              <!-- <v-btn
-                :size="!isSmall ? '40' : '50'"
+              <v-btn
+              v-if="card.instagram"
+              :size="!isSmall ? '35' : '50'"
                 variant="text"
                 style="background: #fc2145"
                 color="white"
                 icon
+                :href="card.instagram"
               >
-                <v-icon :size="!isSmall ? '18' : '24'">
+              <v-icon :size="!isSmall ? '20' : '24'">
                   <i class="fa-brands fa-instagram" />
                 </v-icon>
-              </v-btn> -->
+              </v-btn>
 
               <v-btn
+              v-if="card.facebook"
                 :size="!isSmall ? '35' : '50'"
                 variant="text"
                 style="background: #4267b2"
@@ -478,6 +482,7 @@
               </v-btn>
 
               <v-btn
+              v-if="card.linkedin"
                 :size="!isSmall ? '35' : '50'"
                 variant="text"
                 style="background: #0072b1"
@@ -490,6 +495,7 @@
                 </v-icon>
               </v-btn>
               <v-btn
+              v-if="card.tiktok"
                 :size="!isSmall ? '35' : '50'"
                 variant="text"
                 style="background: black"
@@ -501,7 +507,23 @@
                   <i class="fa-brands fa-tiktok" />
                 </v-icon>
               </v-btn>
+
               <v-btn
+              v-if="card.youtube"
+              :size="!isSmall ? '35' : '50'"
+              variant="text"
+              style="background: #cd201f"
+              color="white"
+              icon
+              :href="card.youtube"
+            >
+            <v-icon :size="!isSmall ? '21' : '24'">
+                <i class="fa-brands fa-youtube" />
+              </v-icon>
+            </v-btn>
+
+              <v-btn
+              v-if="card.twitter"
                 :size="!isSmall ? '35' : '50'"
                 variant="text"
                 style="background: #1c96e8"
@@ -686,11 +708,12 @@
             </div>
             <div
             style="
-                gap:20px
+                gap:10px
               "
             class="w-100 d-flex justify-center mt-4 mb-8"
           >
             <v-btn
+            v-if="card.google"
               :size="!isSmall ? '35' : '50'"
               variant="text"
               color="white"
@@ -705,19 +728,23 @@
                 />
               </v-icon>
             </v-btn>
-            <!-- <v-btn
-              :size="!isSmall ? '40' : '50'"
+
+            <v-btn
+            v-if="card.instagram"
+              :size="!isSmall ? '35' : '50'"
               variant="text"
               style="background: #fc2145"
               color="white"
               icon
+              :href="card.instagram"
             >
-              <v-icon :size="!isSmall ? '18' : '24'">
+            <v-icon :size="!isSmall ? '20' : '24'">
                 <i class="fa-brands fa-instagram" />
               </v-icon>
-            </v-btn> -->
+            </v-btn>
 
             <v-btn
+            v-if="card.facebook"
               :size="!isSmall ? '35' : '50'"
               variant="text"
               style="background: #4267b2"
@@ -731,6 +758,7 @@
             </v-btn>
 
             <v-btn
+            v-if="card.linkedin"
               :size="!isSmall ? '35' : '50'"
               variant="text"
               style="background: #0072b1"
@@ -743,6 +771,7 @@
               </v-icon>
             </v-btn>
             <v-btn
+            v-if="card.tiktok"
               :size="!isSmall ? '35' : '50'"
               variant="text"
               style="background: black"
@@ -754,7 +783,23 @@
                 <i class="fa-brands fa-tiktok" />
               </v-icon>
             </v-btn>
+
             <v-btn
+            v-if="card.youtube"
+            :size="!isSmall ? '35' : '50'"
+            variant="text"
+            style="background: #cd201f"
+            color="white"
+            icon
+            :href="card.youtube"
+          >
+          <v-icon :size="!isSmall ? '21' : '24'">
+              <i class="fa-brands fa-youtube" />
+            </v-icon>
+          </v-btn>
+
+            <v-btn
+            v-if="card.twitter"
               :size="!isSmall ? '35' : '50'"
               variant="text"
               style="background: #1c96e8"
@@ -1382,11 +1427,12 @@
 
               <div
               style="
-                  gap:20px
+                  gap:10px
                 "
               class="w-100 px-2 d-flex justify-center mt-4 mb-4"
             >
               <v-btn
+              v-if="card.google"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 color="white"
@@ -1401,19 +1447,22 @@
                   />
                 </v-icon>
               </v-btn>
-              <!-- <v-btn
-                :size="!isSmall ? '40' : '50'"
+              <v-btn
+              v-if="card.instagram"
+              :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #fc2145"
                 color="white"
                 icon
+                :href="card.instagram"
               >
-                <v-icon :size="!isSmall ? '18' : '24'">
+              <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-instagram" />
                 </v-icon>
-              </v-btn> -->
+              </v-btn>
   
               <v-btn
+              v-if="card.facebook"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #4267b2"
@@ -1427,6 +1476,7 @@
               </v-btn>
   
               <v-btn
+              v-if="card.linkedin"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #0072b1"
@@ -1439,6 +1489,7 @@
                 </v-icon>
               </v-btn>
               <v-btn
+              v-if="card.tiktok"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: black"
@@ -1451,6 +1502,20 @@
                 </v-icon>
               </v-btn>
               <v-btn
+              v-if="card.youtube"
+              :size="!isSmall ? '35' : '40'"
+              variant="text"
+              style="background: #cd201f"
+              color="white"
+              icon
+              :href="card.youtube"
+            >
+            <v-icon :size="!isSmall ? '21' : '19'">
+                <i class="fa-brands fa-youtube" />
+              </v-icon>
+            </v-btn>
+              <v-btn
+              v-if="card.twitter"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #1c96e8"
@@ -1634,11 +1699,12 @@
 
               <div
               style="
-                  gap:20px
+                  gap:10px
                 "
               class="w-100 px-2 d-flex justify-center my-6"
             >
               <v-btn
+              v-if="card.google"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 color="white"
@@ -1653,19 +1719,22 @@
                   />
                 </v-icon>
               </v-btn>
-              <!-- <v-btn
-                :size="!isSmall ? '40' : '50'"
+              <v-btn
+              v-if="card.instagram"
+              :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #fc2145"
                 color="white"
                 icon
+                :href="card.instagram"
               >
-                <v-icon :size="!isSmall ? '18' : '24'">
+              <v-icon :size="!isSmall ? '20' : '18'">
                   <i class="fa-brands fa-instagram" />
                 </v-icon>
-              </v-btn> -->
-  
+              </v-btn>
+
               <v-btn
+              v-if="card.facebook"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #4267b2"
@@ -1679,6 +1748,7 @@
               </v-btn>
   
               <v-btn
+              v-if="card.linkedin"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #0072b1"
@@ -1691,6 +1761,7 @@
                 </v-icon>
               </v-btn>
               <v-btn
+              v-if="card.tiktok"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: black"
@@ -1702,7 +1773,25 @@
                   <i class="fa-brands fa-tiktok" />
                 </v-icon>
               </v-btn>
+
+              <!-- v-if="itemData.youtube != null"
+              :href="itemData.youtube" -->
               <v-btn
+              v-if="card.youtube"
+              :size="!isSmall ? '35' : '40'"
+              variant="text"
+              style="background: #cd201f"
+              color="white"
+              icon
+              :href="card.youtube"
+            >
+            <v-icon :size="!isSmall ? '20' : '18'">
+                <i class="fa-brands fa-youtube" />
+              </v-icon>
+            </v-btn>
+
+              <v-btn
+              v-if="card.twitter"
                 :size="!isSmall ? '35' : '40'"
                 variant="text"
                 style="background: #1c96e8"
@@ -2855,6 +2944,8 @@ export default {
               linkedin: skill.linkedin || '',
               tiktok: skill.tiktok || '',
               twitter: skill.twitter || '',
+              instagram: skill.instagram || '',
+              youtube: skill.youtube || '',
             };
           });
          console.log(this.privilegedJob)
@@ -2917,6 +3008,8 @@ export default {
               linkedin: skill.linkedin || '',
               tiktok: skill.tiktok || '',
               twitter: skill.twitter || '',
+              instagram: skill.instagram || '',
+              youtube: skill.youtube || '',
             };
           });
           
@@ -2980,6 +3073,8 @@ export default {
               linkedin: skill.linkedin || '',
               tiktok: skill.tiktok || '',
               twitter: skill.twitter || '',
+              instagram: skill.instagram || '',
+              youtube: skill.youtube || '',
             };
           });
          console.log(this.platinumJob)
@@ -3042,6 +3137,8 @@ export default {
               linkedin: skill.linkedin || '',
               tiktok: skill.tiktok || '',
               twitter: skill.twitter || '',
+              instagram: skill.instagram || '',
+              youtube: skill.youtube || '',
             };
           });
           
