@@ -287,7 +287,7 @@
         <v-container
           v-if="!isCardLoading && platinumJob"
         >
-        <h1 class="text-purple-accent-4 text-center mb-4">
+        <h1 class="text-blue-darken-4 text-center mb-4">
           Privileged Partner Featured Job
         </h1>
         <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
@@ -321,8 +321,8 @@
               <div
                 v-if="!isSmall"
                 style="
-                  font-size: 16px;
-                  font-weight: 600;
+                  font-size: 20px;
+                  font-weight: 700;
                   margin-bottom: 10px;
                   line-height: 19.36px;
                 "
@@ -370,6 +370,23 @@
             >
               <span class="text-white">Privileged Featured Job</span>
           </div>
+          <div
+          style="
+            position: absolute;
+            top: 30px;
+            left: 55px;
+            background-color: #fff;
+            padding-left: 8px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-weight: 600;
+            font-size: 12px;
+          "
+          class='mt-8'
+        >
+          <span class="text-brown" style="">Physio Clinic</span>
+        </div>
 
               <v-btn
                 elevation="4"
@@ -398,7 +415,7 @@
                 
                 <div class="card-address d-flex align-center">
                   <div style="width: 25%">
-                    <v-img :src="card.locationImg" height="35"
+                    <v-img :src="card.locationImg" height="60"
                       ><template #placeholder>
                         <div class="skeleton" /> </template
                     ></v-img>
@@ -413,10 +430,10 @@
                       }}
                     </h4>
 
-                    <div class="mt-2" style="font-weight: 400">
+                    <div class="my-2" style="font-weight: 400">
                       <p>{{ card.address }}</p>
                     </div>
-                    <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
+                    <a target="_blank" class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
                   </div>
                   </div>
                   <div
@@ -431,11 +448,12 @@
                 </div>
               </div>
 
+              <div class="w-25"></div>
               <div
               style="
                   gap:20px
                 "
-              class=" d-flex justify-center mt-6"
+              class=" d-flex justify-center w-75 mt-6"
             >
               <v-btn
               v-if="card.google"
@@ -541,22 +559,56 @@
                 <v-btn
                   color="black"
                   class="card-btn"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
+                  :width="isSmall ? 40 : 40"
+                  :height="isSmall ? 40 : 40"
                   icon="mdi-share-variant-outline"
                 >
-                  <v-icon size="20" color="red">
+                  <v-icon size="25" color="red">
                     mdi-share-variant-outline
-                  </v-icon></v-btn
+                  </v-icon>
+                  <v-menu activator="parent">
+                    <v-list>
+                      <v-list-item @click="console.log('share')">
+                        <v-list-item-title
+                          ><v-icon class="mr-4" color="black" size="18">
+                            mdi-email-outline </v-icon
+                          >Email</v-list-item-title
+                        >
+                      </v-list-item>
+                      <v-list-item @click="console.log('share')">
+                        <v-list-item-title
+                          ><v-icon class="mr-4" size="18">
+                            <i class="fa-brands fa-facebook-f" /> </v-icon
+                          >Facebook</v-list-item-title
+                        >
+                      </v-list-item>
+                      <v-list-item @click="console.log('share')">
+                        <v-list-item-title
+                          ><v-icon class="mr-4" color="black" size="18">
+                            mdi-twitter </v-icon
+                          >Twitter</v-list-item-title
+                        >
+                      </v-list-item>
+                      <v-list-item @click="console.log('share')">
+                        <v-list-item-title
+                          ><v-icon class="mr-4" size="18">
+                            <i class="fa-brands fa-linkedin-in" /> </v-icon
+                          >Linkedin</v-list-item-title
+                        >
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                  </v-btn
                 >
                 <v-btn
                   class="card-btn"
                   color="black"
                   icon="mdi-heart-outline"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
+                  :width="isSmall ? 40 : 40"
+                  :height="isSmall ? 40 : 40"
+                  @click="card.isFav = !card.isFav"
                 >
-                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                  <v-icon size="25" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
                 </v-btn>
               </div>
             </v-card>
@@ -578,7 +630,7 @@
           <v-card
             class="my-4 card-cont pa-2"
             :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-            :height="!isSmall ? 450 : 320"
+            :height="!isSmall ? 510 : 320"
             :width="!isSmall ? 300 : 270"
             elevation="1"
             @click="toggle"
@@ -603,7 +655,7 @@
               v-if="!isSmall"
               style="
                 font-size: 16px;
-                font-weight: 600;
+                font-weight: 700;
                 margin-bottom: 10px;
                 line-height: 19.36px;
               "
@@ -650,12 +702,12 @@
                 "
               class=" d-flex justify-start mt-8"
             >
-              <span >Platinum Partner Job</span>
+              <span >Platinum Featured Job</span>
           </div>
             <div
               style="
                 position: absolute;
-                bottom: 240px;
+                bottom: 300px;
                 left: 15px;
                 background-color: #fff;
                 padding-left: 8px;
@@ -682,14 +734,14 @@
                   ><span class="text-muted"> away</span>
                 </p>
               </div>
-              <div class="card-address d-flex align-center">
-                <div style="width: 25%">
-                  <v-img :src="card.locationImg" height="35"
+              <div class="card-address">
+                <div style="width: 100%">
+                  <v-img :src="card.locationImg" height="50"
                     ><template #placeholder>
                       <div class="skeleton" /> </template
                   ></v-img>
                 </div>
-                <div style="width: 75%" class="card-address-info text-left">
+                <div style="width: 100%" class="card-address-info text-center">
                   <h4 class="mt-4" style="font-weight: 600">
                     {{
                       card.place.length >= 32
@@ -841,7 +893,40 @@
               >
                 <v-icon size="20" color="red">
                   mdi-share-variant-outline
-                </v-icon></v-btn
+                </v-icon>
+                <v-menu activator="parent">
+                  <v-list>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title
+                        ><v-icon class="mr-4" color="black" size="18">
+                          mdi-email-outline </v-icon
+                        >Email</v-list-item-title
+                      >
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title
+                        ><v-icon class="mr-4" size="18">
+                          <i class="fa-brands fa-facebook-f" /> </v-icon
+                        >Facebook</v-list-item-title
+                      >
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title
+                        ><v-icon class="mr-4" color="black" size="18">
+                          mdi-twitter </v-icon
+                        >Twitter</v-list-item-title
+                      >
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title
+                        ><v-icon class="mr-4" size="18">
+                          <i class="fa-brands fa-linkedin-in" /> </v-icon
+                        >Linkedin</v-list-item-title
+                      >
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                </v-btn
               >
               <v-btn
                 class="card-btn"
@@ -849,8 +934,9 @@
                 icon="mdi-heart-outline"
                 :width="isSmall ? 40 : 32"
                 :height="isSmall ? 40 : 32"
+                @click="card.isFav = !card.isFav"
               >
-                <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                <v-icon size="20" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
               </v-btn>
             </div>
           </v-card>
@@ -1578,7 +1664,7 @@
                 v-if="isSmall"
                 style="
                   font-size: 16px;
-                  font-weight: 600;
+                  font-weight: 700;
                   margin-bottom: 10px;
                   line-height: 19.36px;
                 "
@@ -1642,7 +1728,7 @@
                 "
               class=" d-flex justify-start mt-8"
             >
-              <span >Platinum Partner Job</span>
+              <span >Platinum Featured Job</span>
           </div>
             <div
               style="
@@ -1836,7 +1922,40 @@
                 >
                   <v-icon size="20" color="red">
                     mdi-share-variant-outline
-                  </v-icon></v-btn
+                  </v-icon>
+                            <v-menu activator="parent">
+            <v-list>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" color="black" size="18">
+                    mdi-email-outline </v-icon
+                  >Email</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" size="18">
+                    <i class="fa-brands fa-facebook-f" /> </v-icon
+                  >Facebook</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" color="black" size="18">
+                    mdi-twitter </v-icon
+                  >Twitter</v-list-item-title
+                >
+              </v-list-item>
+              <v-list-item @click="console.log('share')">
+                <v-list-item-title
+                  ><v-icon class="mr-4" size="18">
+                    <i class="fa-brands fa-linkedin-in" /> </v-icon
+                  >Linkedin</v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+                  </v-btn
                 >
                 <v-btn
                   class="card-btn"
@@ -1844,8 +1963,9 @@
                   icon="mdi-heart-outline"
                   :width="isSmall ? 40 : 32"
                   :height="isSmall ? 40 : 32"
+                  @click="card.isFav = !card.isFav"
                 >
-                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                  <v-icon size="20" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
                 </v-btn>
               </div>
             </v-card>
@@ -2905,6 +3025,7 @@ export default {
           this.privilegedJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
+              isFav: false,
               text: skill.position_name || '',
               image: skill.location_image
                 ? this.$fileURL + skill.location_image
@@ -2969,6 +3090,7 @@ export default {
           this.privilegedJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
+              isFav: false,
               text: skill.position_name || '',
               image: skill.location_image
                 ? this.$fileURL + skill.location_image
@@ -3034,6 +3156,7 @@ export default {
           this.platinumJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
+              isFav: false,
               text: skill.position_name || '',
               image: skill.location_image
                 ? this.$fileURL + skill.location_image
@@ -3098,6 +3221,7 @@ export default {
           this.platinumJob = data.map((skill) => {
             return {
               id: skill.job_id || 1,
+              isFav: false,
               text: skill.position_name || '',
               image: skill.location_image
                 ? this.$fileURL + skill.location_image
@@ -3715,7 +3839,7 @@ export default {
 .card-btn-container-4 {
   position: absolute;
   gap: 10px;
-  bottom: 210px;
+  bottom: 270px;
   right: 30px;
   z-index: 100;
 }

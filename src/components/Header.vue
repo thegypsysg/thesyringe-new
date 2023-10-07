@@ -362,13 +362,21 @@
       </v-menu>
       <!-- </div> -->
     </div>
-    <v-btn
+    <!-- <v-btn
       v-if="!isWelcome && !isRecognised"
       elevation="0"
       class="btn_sign__up mr-4"
       to="/signup"
     >
       Sign up / Register
+    </v-btn> -->
+    <v-btn
+      v-if="!isWelcome && !isRecognised"
+      elevation="0"
+      class="btn_sign__up mr-4"
+      @click="loginGypsy"
+    >
+      Sign up / Sign In
     </v-btn>
     <v-btn v-if="!isRecognised" icon @click="drawer = !drawer">
       <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
@@ -694,8 +702,45 @@
     </template>
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" temporary location="right">
-    <div class="drawer__top">
-      <a style="font-size: 1.125rem; color: white">Sign up / Register</a>
+    <div class="drawer__top" 
+    :class="{ 'py-6': userName == null, 'py-2': userName != null }">
+      <a 
+      v-if="userName == null" style="font-size: 1.125rem; color: white">Sign up / Sign In</a>
+      <div v-else class="d-flex align-center">
+        <div style="width: 55px; height: 55px; border-radius: 50%">
+          <v-img
+            cover
+            style="border-radius: 50%; width: 100%; height: 100%"
+            :src="
+              userImage != null
+                ? userImage
+                : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+            "
+          >
+            <template #placeholder>
+              <div class="skeleton" />
+            </template>
+          </v-img>
+        </div>
+
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title style="font-size: 14px">
+              {{ userName }}
+            </v-list-item-title>
+            <v-list-item-subtitle style="font-size: 10px" class="mt-1">
+              Last Login: {{ userDated }}
+            </v-list-item-subtitle>
+            <div
+              class="text-red mt-1"
+              style="font-size: 12px; cursor: pointer"
+              @click="logout"
+            >
+              Logout
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+      </div>
     </div>
     <ul class="v-list-cont d-flex mt-4" nav dense>
       <li class="v-list-item">
@@ -856,6 +901,25 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    loginGypsy() {
+      axios
+        .post(`/gypsy-login/google`, {
+          app_id: 5,
+        })
+        .then((response) => {
+          console.log(response);
+          //if (response) {
+          //  window.location.assign(response.data.target_url);
+          //} else {
+          //  window.location.href = "/sign-in";
+          //}
+          //console.log(response.data.target_url);
+        })
+        .catch((error) => {
+          console.log(error);
+          //window.location.href = "/sign-in";
+        });
+    },
     getRegistrableCountrySkills() {
       this.isLoading = true;
       axios
