@@ -1086,19 +1086,34 @@
                           background-color: #f69400;
                           border-radius: 5px;
                           padding-left: 10px;
-                          padding-right: 6px;
+                          padding-right: 10px;
                           padding-top: 4px;
                           padding-bottom: 4px;
                           font-weight: 600;
                           font-size: 12px;
-                          width: 120px;
                           text-align: left !important;
                         "
                       >
                         <span class="text-white text-left" style=""
-                          >Featured</span
+                          >Featured Jobs</span
                         >
                       </div>
+                                <div
+          style="
+            position: absolute;
+            top: 50px;
+            left: 15px;
+            background-color: #fff;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-weight: 600;
+            font-size: 12px;
+          "
+        >
+          <span class="text-brown" style="">{{item.btn}}</span>
+        </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
@@ -2171,14 +2186,13 @@
                       <div
                         v-if="card.featured == 'Y'"
                         style="
-                          width: 100px;
                           position: absolute;
                           top: 50px;
                           right: 15px;
                           background-color: #f79303;
                           border-radius: 5px;
                           padding-left: 8px;
-                          padding-right: 6px;
+                          padding-right: 8px;
                           padding-top: 4px;
                           padding-bottom: 4px;
                           font-weight: 600;
@@ -2186,9 +2200,25 @@
                         "
                       >
                         <span class="text-white text-left" style=""
-                          >Featured</span
+                          >Featured Jobs</span
                         >
                       </div>
+                      <div
+                      style="
+                        position: absolute;
+                        top: 50px;
+                        left: 15px;
+                        background-color: #fff;
+                        padding-left: 8px;
+                        padding-right: 8px;
+                        padding-top: 4px;
+                        padding-bottom: 4px;
+                        font-weight: 600;
+                        font-size: 12px;
+                      "
+                    >
+                      <span class="text-brown" style="">{{item.btn}}</span>
+                    </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
