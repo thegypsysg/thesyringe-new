@@ -85,7 +85,13 @@
               >Which Country did you obtain your Physioterapist
               Qualifications</span
             >
-            <div class="w-100 d-flex justify-center mt-6">
+            <p
+            v-if="qualInfo.length == 0"
+              style="font-size: 16px;"
+              class="font-weight-black text-red text-left mt-8"
+              >No Registrable Qualifications is needed for a <span class="text-blue-darken-4">{{skillRecognised}}</span> looking for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
+            >
+            <div v-if="qualInfo.length > 0" class="w-100 d-flex justify-center mt-6">
               <v-menu height="400" max-height="400">
                 <template #activator="{ props }">
                   <v-btn
@@ -116,8 +122,8 @@
           </v-col>
         </v-row>
       </div>
-      <div v-if="isSmall" class="d-flex mt-4">
-        <div style="width: 43%">
+      <div v-if="isSmall" class="mt-4" :class="{'d-flex': qualInfo.length > 0}">
+        <div style="width: 43%" :class="{'w-100': qualInfo.length == 0}">
           <span
             style="font-size: 12px; line-height: 8px !important"
             class="text-grey"
@@ -125,7 +131,13 @@
             Qualifications</span
           >
         </div>
-        <div style="57%" class="text-center d-flex justify-center mx-auto">
+        <p
+            v-if="qualInfo.length == 0"
+            style="font-size: 10px; width: 100%"
+              class="font-weight-black text-red text-left mt-6"
+              >No Registrable Qualifications is needed for a <span class="text-blue-darken-4">{{skillRecognised}}</span> looking for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
+            >
+        <div v-if="qualInfo.length > 0" style="57%" class="text-center d-flex justify-center mx-auto">
           <v-menu height="400" max-height="400">
             <template #activator="{ props }">
               <v-btn
@@ -154,7 +166,7 @@
           </v-menu>
         </div>
       </div>
-      <v-sheet class="py-2 mt-4" width="100%">
+      <v-sheet v-if="qualInfo.length > 0" class="py-2 mt-4" width="100%">
         <v-row>
           <v-col :cols="isSmall ? 12 : 8">
             <v-table

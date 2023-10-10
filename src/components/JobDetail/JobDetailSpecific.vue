@@ -285,9 +285,9 @@
           </v-container>
         </div>
         <v-container
-          v-if="!isCardLoading && platinumJob"
+          v-if="!isCardLoading && privilegedJob"
         >
-        <h1 class="text-blue-darken-4 text-center mb-4">
+        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center mb-4">
           Privileged Partner Featured Job
         </h1>
         <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
@@ -620,7 +620,7 @@
         v-if="!isCardLoading && platinumJob"
         
       >
-      <h1 style="color: #B2641D" class=" text-center my-2">
+      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center my-2">
         Platinum Partner Featured Job
       </h1>
       <div class="d-flex w-100 justify-start flex-wrap">
@@ -1382,11 +1382,11 @@
           </v-container>
         </div>
         <div
-          v-if="!isCardLoading && platinumJob"
+          v-if="!isCardLoading && privilegedJob"
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 class="text-purple-accent-4 text-center mt-4 mb-6">
+        <h2 v-if="privilegedJob?.length > 0" class="text-purple-accent-4 text-center mt-4 mb-6">
           Privileged Partner Featured Job
         </h2>
         <div class="d-flex justify-center flex-wrap">
@@ -1662,7 +1662,7 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 style="color: #B2641D" class=" text-center my-4">
+        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center my-4">
           Platinum Partner Featured Job
         </h2>
         <div class="d-flex justify-center flex-wrap">
