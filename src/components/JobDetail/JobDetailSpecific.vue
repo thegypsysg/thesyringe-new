@@ -2984,7 +2984,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              .filter(i => i.featured == 'Y')
+              //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -3371,7 +3371,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              .filter(i => i.featured == 'Y')
+              //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -3474,7 +3474,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              .filter(i => i.featured == 'Y')
+              //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
