@@ -273,13 +273,13 @@
             variant="text"
           >
             <span class="text-blue-darken-4">{{
-              itemSelectedComplete.title
+              itemSelectedComplete?.title
             }}</span
             ><span class="text-red">
-              ({{ itemSelectedComplete.count }}
+              ({{ itemSelectedComplete?.count }}
               {{
-                itemSelectedComplete.count == '1' ||
-                itemSelectedComplete.count == '0'
+                itemSelectedComplete?.count == '1' ||
+                itemSelectedComplete?.count == '0'
                   ? 'Job'
                   : 'Jobs'
               }})</span
@@ -416,13 +416,13 @@
                 variant="text"
               >
                 <span class="text-blue-darken-4">{{
-                  itemSelectedComplete.title
+                  itemSelectedComplete?.title
                 }}</span
                 ><span class="text-red">
-                  ({{ itemSelectedComplete.count }}
+                  ({{ itemSelectedComplete?.count }}
                   {{
-                    itemSelectedComplete.count == '1' ||
-                    itemSelectedComplete.count == '0'
+                    itemSelectedComplete?.count == '1' ||
+                    itemSelectedComplete?.count == '0'
                       ? 'Job'
                       : 'Jobs'
                   }})</span

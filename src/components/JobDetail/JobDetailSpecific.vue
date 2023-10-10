@@ -2805,7 +2805,7 @@ export default {
       const slug = this.$route.params.name;
       this.isLoading = true;
       axios
-        .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
+        .get(`/skills/slug/${slug}/${this.itemSelectedComplete?.id}`)
         .then((response) => {
           const data = response.data.data;
           //console.log(data);
