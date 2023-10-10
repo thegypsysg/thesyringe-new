@@ -864,7 +864,7 @@ export default {
     );
     app.config.globalProperties.$eventBus.$on(
       'getRegistrableCountrySkills',
-      this.getRegistrableCountrySkills
+      this.getRegistrableData
     );
     app.config.globalProperties.$eventBus.$on(
       'getHeaderLanding',
@@ -886,7 +886,7 @@ export default {
     );
     app.config.globalProperties.$eventBus.$off(
       'getRegistrableCountrySkills',
-      this.getRegistrableCountrySkills
+      this.getRegistrableData
     );
     app.config.globalProperties.$eventBus.$off(
       'getHeaderLanding',
@@ -920,7 +920,11 @@ export default {
           //window.location.href = "/sign-in";
         });
     },
-    getRegistrableCountrySkills() {
+    getRegistrableData() {
+      this.getRegistrableCountry()
+      this.getRegistrableSkills()
+    },
+    getRegistrableCountry() {
       this.isLoading = true;
       axios
         .get(`/registrable-country/country-skills`)
@@ -934,10 +938,26 @@ export default {
               path: '#',
             };
           });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getRegistrableSkills() {
+      this.isLoading = true;
+      axios
+        .get(`/registrable-country/skills`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
           this.skillRegistrable = data.map((skills) => {
             return {
-              id: skills.skills[0].skills_id,
-              title: skills.skills[0].skills_name,
+              id: skills.skills_id,
+              title: skills.skills_name,
               path: '#',
             };
           });
@@ -1105,12 +1125,14 @@ export default {
       this.setIdCountryRecognised(item.id);
       app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
       app.config.globalProperties.$eventBus.$emit('getQualificationInfo');
+      app.config.globalProperties.$eventBus.$emit('getCountry');
     },
     changeSkillRecognised(item) {
       this.setSkillRecognised(item.title);
       this.setIdSkillRecognised(item.id);
       app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
       app.config.globalProperties.$eventBus.$emit('getQualificationInfo');
+      app.config.globalProperties.$eventBus.$emit('getCountry');
     },
     ...mapMutations([
       'setActiveTag',

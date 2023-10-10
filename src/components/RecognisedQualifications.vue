@@ -86,13 +86,19 @@
               Qualifications</span
             >
             <p
-            v-if="qualInfo.length == 0"
+            v-if="qualInfo.length == 0 && skillRecognised == '---Select Skills---'"
+              style="font-size: 16px;"
+              class="font-weight-black text-red text-left mt-8"
+              >No Registrable Qualifications is needed for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
+            >
+            <p
+            v-if="qualInfo.length == 0 && skillRecognised != '---Select Skills---'"
               style="font-size: 16px;"
               class="font-weight-black text-red text-left mt-8"
               >No Registrable Qualifications is needed for a <span class="text-blue-darken-4">{{skillRecognised}}</span> looking for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
             >
             <div v-if="qualInfo.length > 0" class="w-100 d-flex justify-center mt-6">
-              <v-menu height="400" max-height="400">
+              <v-menu max-height="400">
                 <template #activator="{ props }">
                   <v-btn
                     style="font-size: 16px; color: #8c8c8c; font-weight: 600"
@@ -112,9 +118,10 @@
                     :key="index"
                     :value="index"
                     @click="selectedCountry = item.title"
-                  >
+                    >
+                    <!-- @click="selectedCountry = `${item.title} (${item.count} Universities)`" -->
                     <!-- @click="changeItemSelected(item)" -->
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    <v-list-item-title>{{ item.title }} (<span class="text-red">{{item.count}}</span> Universities)</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -132,7 +139,13 @@
           >
         </div>
         <p
-            v-if="qualInfo.length == 0"
+            v-if="qualInfo.length == 0 && skillRecognised == '---Select Skills---'"
+            style="font-size: 10px; width: 100%"
+              class="font-weight-black text-red text-left mt-6"
+              >No Registrable Qualifications is needed for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
+            >
+        <p
+            v-if="qualInfo.length == 0 && skillRecognised != '---Select Skills---'"
             style="font-size: 10px; width: 100%"
               class="font-weight-black text-red text-left mt-6"
               >No Registrable Qualifications is needed for a <span class="text-blue-darken-4">{{skillRecognised}}</span> looking for a job in <span class="text-blue-darken-4">{{countryRecognised}}</span></p
@@ -158,9 +171,10 @@
                 :key="index"
                 :value="index"
                 @click="selectedCountry = item.title"
-              >
+                >
+                <!-- @click="selectedCountry = `${item.title} (${item.count} Universities)`" -->
                 <!-- @click="changeItemSelected(item)" -->
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title>{{ item.title }} (<span class="text-red">{{item.count}}</span> Universities)</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -285,6 +299,10 @@ export default {
       'getQualificationInfo',
       this.getQualificationInfo
     );
+    app.config.globalProperties.$eventBus.$on(
+      'getCountry',
+      this.getCountry
+    );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
@@ -294,6 +312,10 @@ export default {
     app.config.globalProperties.$eventBus.$off(
       'getQualificationInfo',
       this.getQualificationInfo
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getCountry',
+      this.getCountry
     );
   },
   unmounted() {
@@ -362,7 +384,7 @@ export default {
     getCountry() {
       this.isLoading = true;
       axios
-        .get(`/country`)
+        .get(`/courses/qualifications-countries/skill/${this.idSkillRecognised}/country/${this.idCountryRecognised}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -370,8 +392,7 @@ export default {
             return {
               id: country.country_id,
               title: country.country_name,
-              oneCity: country.one_city == 'Y' ? true : false,
-              path: '#',
+              count: country.university_count
             };
           });
         })
