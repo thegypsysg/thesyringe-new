@@ -272,6 +272,10 @@
             v-bind="props"
             variant="text"
           >
+          <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
+            <span>{{ itemSelected }}</span>
+          </template>
+          <template v-if="itemSelectedComplete || itemSelectedComplete != null">
             <span class="text-blue-darken-4">{{
               itemSelectedComplete?.title
             }}</span
@@ -284,6 +288,7 @@
                   : 'Jobs'
               }})</span
             >
+            </template>
             <v-icon right dark> mdi-menu-down </v-icon>
           </v-btn>
         </template>
@@ -415,6 +420,10 @@
                 v-bind="props"
                 variant="text"
               >
+              <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
+                <span>{{ itemSelected }}</span>
+              </template>
+              <template v-if="itemSelectedComplete || itemSelectedComplete != null">
                 <span class="text-blue-darken-4">{{
                   itemSelectedComplete?.title
                 }}</span
@@ -427,6 +436,7 @@
                       : 'Jobs'
                   }})</span
                 >
+                </template>
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
             </template>
@@ -1055,7 +1065,7 @@ export default {
               path: '#',
             };
           });
-          this.setItemSelectedComplete(this.country[0]);
+          //this.setItemSelectedComplete(this.country[0]);
         })
         .catch((error) => {
           // eslint-disable-next-line

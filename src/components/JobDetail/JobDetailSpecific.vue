@@ -287,9 +287,10 @@
         <v-container
           v-if="!isCardLoading && privilegedJob"
         >
-        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center mb-4">
+        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center">
           Privileged Partner Featured Job
         </h1>
+        <div v-if="privilegedJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
         <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
           <template v-for="card in privilegedJob" :key="card.id">
           
@@ -620,9 +621,11 @@
         v-if="!isCardLoading && platinumJob"
         
       >
-      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center my-2">
+      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center mt-2">
         Platinum Partner Featured Job
       </h1>
+      
+      <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-2 mx-auto" />
       <div class="d-flex w-100 justify-start flex-wrap">
         <template v-for="card in platinumJob" :key="card.id">
         
@@ -943,7 +946,7 @@
         </v-lazy>
       </template>
     </div>
-      </v-container>
+        </v-container>
         <template v-if="isCardLoading">
           <v-container>
             <p class="ml-8 my-10">Loading...</p>
@@ -1386,9 +1389,10 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="privilegedJob?.length > 0" class="text-purple-accent-4 text-center mt-4 mb-6">
+        <h2 v-if="privilegedJob?.length > 0" class="text-purple-accent-4 text-center mt-4">
           Privileged Partner Featured Job
         </h2>
+        <div v-if="privilegedJob?.length > 0" class="line-divider mt-2 mb-6 mx-auto" />
         <div class="d-flex justify-center flex-wrap">
           <template v-for="card in privilegedJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -1662,9 +1666,10 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center my-4">
+        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center mt-4">
           Platinum Partner Featured Job
         </h2>
+        <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
         <div class="d-flex justify-center flex-wrap">
           <template v-for="card in platinumJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -2370,7 +2375,7 @@
                       >{{ skillSlug2.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{ itemSelected == '---Select Country---' ? '-' : itemSelected }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -2492,7 +2497,7 @@
                       >{{ skillSlug2.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{ itemSelected == '---Select Country---' ? '-' : itemSelected }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -2539,6 +2544,7 @@ export default {
       //latitude: null,
       //longitude: null,
       skillSlug: {},
+      skillSlugId: null,
       skillSlug2: {},
       countryId: null,
       skillsGroup: [],
@@ -2666,6 +2672,10 @@ export default {
     );
   },
   beforeUnmount() {
+    this.setItemSelected('---Select Country---');
+    this.setItemSelectedComplete(null);
+    this.setItemSelected2('---Select City---');
+    this.setItemSelected2Complete(null);
     app.config.globalProperties.$eventBus.$off(
       'filterSpecificJobs',
       this.filterSpecificJobs
@@ -2680,6 +2690,10 @@ export default {
     );
   },
   unmounted() {
+    this.setItemSelected('---Select Country---');
+    this.setItemSelectedComplete(null);
+    this.setItemSelected2('---Select City---');
+    this.setItemSelected2Complete(null);
     window.removeEventListener('resize', this.handleResize);
     app.config.globalProperties.$eventBus.$emit('removeDetail');
   },
@@ -2690,6 +2704,10 @@ export default {
       'setIdCountryRecognised',
       'setIdSkillRecognised',
       'setSkillSLug',
+      'setItemSelected',
+      'setItemSelectedComplete',
+      'setItemSelected2',
+      'setItemSelected2Complete',
     ]),
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);
@@ -2715,29 +2733,29 @@ export default {
     getJobDetailSpecific1() {
       this.getSkillBySlug2();
       //this.getSpecificJobs(
-      //  this.skillSlug.skills_id,
+      //  this.skillSlugId,
       //  this.itemSelectedComplete.id
       //);
-      //this.getGroups(this.skillSlug.skills_id, this.itemSelectedComplete.id);
+      //this.getGroups(this.skillSlugId, this.itemSelectedComplete.id);
     },
     getJobDetailSpecific2() {
       this.getGroups2(
-        this.skillSlug.skills_id,
+        this.skillSlugId,
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
       this.getSpecificJobs2(
-        this.skillSlug.skills_id,
+        this.skillSlugId,
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
       this.getPlatinumJob2(
-        this.skillSlug.skills_id,
+        this.skillSlugId,
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
       this.getPrivilegedJob2(
-        this.skillSlug.skills_id,
+        this.skillSlugId,
         this.itemSelectedComplete.id,
         this.itemSelected2Complete.id
       );
@@ -2755,10 +2773,10 @@ export default {
           this.countryId = data
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
-          this.getGroups(this.skillSlug.skills_id, this.countryId);
-          this.getSpecificJobs(this.skillSlug.skills_id, this.countryId);
-          this.getPlatinumJob(this.skillSlug.skills_id, this.countryId);
-          this.getPrivilegedJob(this.skillSlug.skills_id, this.countryId);
+          this.getGroups(this.skillSlugId, this.countryId);
+          this.getSpecificJobs(this.skillSlugId, null);
+          this.getPlatinumJob(this.skillSlugId, null);
+          this.getPrivilegedJob(this.skillSlugId, null);
           // console.log(this.countryId);
         })
         .catch((error) => {
@@ -2778,6 +2796,8 @@ export default {
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
+
+          this.skillSlugId = data.skills_id
           this.skillSlug = {
             ...data,
             image: this.$fileURL + data.image || '',
@@ -2787,8 +2807,17 @@ export default {
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
           };
+                    this.skillSlug2 = {
+            ...data,
+            image: this.$fileURL + data.image || '',
+            mainImage: this.$fileURL + data.main_image || '',
+            regulator: data.partner_name || '',
+            name: data.skills_name || '',
+            registrable: data.registrable || 'N',
+            countryRegistrable: data.country_registrable || 'N',
+          };
           localStorage.setItem('skill_name', this.skillSlug.name);
-          localStorage.setItem('skill_id', this.skillSlug.skills_id);
+          localStorage.setItem('skill_id', this.skillSlugId);
           localStorage.setItem('skill_image', this.skillSlug.image);
           this.getCountry();
           this.getInternationalSkills();
@@ -2848,7 +2877,7 @@ export default {
           };
 
           localStorage.setItem('skill_name', this.skillSlug.name);
-          localStorage.setItem('skill_id', this.skillSlug.skills_id);
+          localStorage.setItem('skill_id', this.skillSlugId);
           localStorage.setItem('skill_image', this.skillSlug.image);
           this.getCountry();
           this.getInternationalSkills();
@@ -2869,52 +2898,53 @@ export default {
         .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
+          console.log(data)
 
-          if (data == null) {
-            this.specificJobs = [];
-            this.trendingBtn = [];
-            this.skillSlug = {};
-          } else {
-            this.skillSlug = {
-              ...data,
-              image: this.$fileURL + data.image || '',
-              mainImage: this.$fileURL + data.main_image || '',
-              regulator: data.partner_name || '',
-              name: data.skills_name || '',
-              registrable: data.registrable || 'N',
-              countryRegistrable: data.country_registrable || 'N',
-            };
+          //if (data == null) {
+          //  this.specificJobs = [];
+          //  this.trendingBtn = [];
+          //  this.skillSlug = {};
+          //} else {
+           // this.skillSlug = {
+           //   ...data,
+           //   image: this.$fileURL + data.image || '',
+           //   mainImage: this.$fileURL + data.main_image || '',
+           //   regulator: data.partner_name || '',
+           //   name: data.skills_name || '',
+           //   registrable: data.registrable || 'N',
+           //   countryRegistrable: data.country_registrable || 'N',
+           // };
             localStorage.setItem('skill_name', this.skillSlug.name);
-            localStorage.setItem('skill_id', this.skillSlug.skills_id);
+            localStorage.setItem('skill_id', this.skillSlugId);
             localStorage.setItem('skill_image', this.skillSlug.image);
             this.getSpecificJobs(
-              this.skillSlug.skills_id,
+              this.skillSlugId,
               this.itemSelectedComplete.id
             );
             this.getGroups(
-              this.skillSlug.skills_id,
+              this.skillSlugId,
               this.itemSelectedComplete.id
             );
             this.getPlatinumJob(
-              this.skillSlug.skills_id,
+              this.skillSlugId,
               this.itemSelectedComplete.id
             );
             this.getPrivilegedJob(
-              this.skillSlug.skills_id,
+              this.skillSlugId,
               this.itemSelectedComplete.id
             );
             this.getInternationalSkills();
             //this.getGroups2(
-            //  this.skillSlug.skills_id,
+            //  this.skillSlugId,
             //  this.itemSelectedComplete.id,
             //  ''
             //);
             //this.getSpecificJobs2(
-            //  this.skillSlug.skills_id,
+            //  this.skillSlugId,
             //  this.itemSelectedComplete.id,
             //  ''
             //);
-          }
+          //}
           // console.log(this.skillSlug);
         })
         .catch((error) => {
@@ -2957,9 +2987,12 @@ export default {
     },
     getSpecificJobs(skillId, countryId) {
       this.isCardLoading = true;
+      console.log(countryId)
       axios
         .get(
-          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+          countryId ? 
+          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
+          `/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3045,10 +3078,11 @@ export default {
         });
     },
     getPrivilegedJob(skillId, countryId) {
+      console.log(countryId)
       this.isCardLoading = true;
       axios
         .get(
-          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+          `/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3110,10 +3144,11 @@ export default {
         });
     },
     getPrivilegedJob2(skillId, countryId, cityId) {
+      console.log(countryId)
       this.isCardLoading = true;
       axios
         .get(
-          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
+          `/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/${cityId}/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3342,11 +3377,14 @@ export default {
     },
     getSpecificJobs2(skillId, countryId, cityId) {
       this.isCardLoading = true;
+      console.log(countryId)
       axios
         .get(
-          cityId != ''
+          cityId != '' && countryId
             ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
-            : `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+            : cityId != '' && !countryId ? `/sub-industries-jobs/${skillId}/-1/-1/${cityId}/${this.latitude}/${this.longitude}`
+            : cityId == '' && countryId ? `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+            : `/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3436,14 +3474,14 @@ export default {
       axios
         .get(
           positionId == ''
-            ? `/sub-industries-jobs/${this.skillSlug.skills_id}/${
+            ? `/sub-industries-jobs/${this.skillSlugId}/${
                 this.countryId
               }/-1/${
                 this.itemSelected2Complete
                   ? this.itemSelected2Complete.id
                   : '-1'
               }/${this.latitude}/${this.longitude}`
-            : `/sub-industries-jobs/${this.skillSlug.skills_id}/${
+            : `/sub-industries-jobs/${this.skillSlugId}/${
                 this.countryId
               }/${positionId}/${
                 this.itemSelected2Complete
@@ -3538,7 +3576,7 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          `/job-international/skills/${this.skillSlug.skills_id}/${this.itemSelectedComplete.id}`
+          `/job-international/skills/${this.skillSlugId}/${this.itemSelectedComplete.id}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3610,6 +3648,17 @@ export default {
 </script>
 
 <style scoped>
+.line-divider {
+  height: 2px;
+  width: 300px;
+  background: #fa2964;
+}
+.line-divider-2 {
+  height: 2px;
+  width: 150px;
+  background: #fa2964;
+}
+
 .banner-header {
   color: #fa2964;
   font-weight: 900;

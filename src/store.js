@@ -5,11 +5,8 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     activeTag: null, // Tag yang aktif
-    itemSelected: 'Singapore',
-    itemSelectedComplete: {
-      id: 1,
-      oneCity: true,
-    },
+    itemSelected: '---Select Country---',
+    itemSelectedComplete: null,
     itemSelected2: '---Select City---',
     itemSelected2Complete: null,
     detailHeader: {
