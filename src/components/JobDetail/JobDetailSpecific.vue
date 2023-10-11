@@ -625,7 +625,7 @@
         Platinum Partner Featured Job
       </h1>
       
-      <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-2 mx-auto" />
+      <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
       <div class="d-flex w-100 justify-start flex-wrap">
         <template v-for="card in platinumJob" :key="card.id">
         
@@ -959,7 +959,7 @@
             :key="item.id"
           >
             <div
-              class="w-100 d-flex justify-space-between"
+              class="w-100 d-flex flex-column justify-center"
               :class="{
                 'px-16': !isSmall,
                 'px-5 section-head mt-n8 mb-n4': isSmall,
@@ -968,10 +968,11 @@
               <h2
                 style="font-weight: 700"
                 v-if="!isSmall"
-                class="text-blue-darken-4"
+                class="text-center text-blue-darken-4"
               >
                 {{ item.title }}
               </h2>
+              <div class="line-divider-2 mt-2 mb-2 mx-auto" />
               <h3
                 style="
                   font-size: 16px !important;
@@ -982,12 +983,12 @@
               >
                 {{ item.title }}
               </h3>
-              <router-link
+              <!-- <router-link
                 :to="`/view-all/${item.id}`"
                 class="text-decoration-none"
               >
                 <h1 class="view-all">View all</h1>
-              </router-link>
+              </router-link> -->
             </div>
             <v-sheet
               class="d-flex justify-start"
@@ -1224,6 +1225,18 @@
                 </v-slide-group-item>
               </v-slide-group>
             </v-sheet>
+            <div
+              class="card-footer d-flex justify-center align-center"
+              :class="{ 'mt-n6 mb-14': !isSmall, 'my-4': isSmall }"
+            >
+              <v-btn
+              :to="`/view-all/${item.id}`"
+                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-16"
+                :class="{ 'btn-section-2': isSmall }"
+              >
+                <span>View All</span>
+              </v-btn>
+            </div>
           </div>
         </template>
       </template>
@@ -1392,7 +1405,7 @@
         <h2 v-if="privilegedJob?.length > 0" class="text-purple-accent-4 text-center mt-4">
           Privileged Partner Featured Job
         </h2>
-        <div v-if="privilegedJob?.length > 0" class="line-divider mt-2 mb-6 mx-auto" />
+        <div v-if="privilegedJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
         <div class="d-flex justify-center flex-wrap">
           <template v-for="card in privilegedJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -1669,7 +1682,7 @@
         <h2 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center mt-4">
           Platinum Partner Featured Job
         </h2>
-        <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
+        <div v-if="platinumJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
         <div class="d-flex justify-center flex-wrap">
           <template v-for="card in platinumJob" :key="card.id">
           <v-lazy :options="{ threshold: 0.5 }" min-height="100">
@@ -2018,7 +2031,7 @@
           >
             <hr />
             <div
-              class="w-100 d-flex justify-space-between mt-6"
+              class="w-100 d-flex flex-column justify-center mt-6"
               :class="{
                 'px-16': !isSmall,
                 'px-5 section-head mb-n4': isSmall,
@@ -2029,17 +2042,18 @@
               </h2>
               <h2
                 style="font-size: 20px !important; font-weight: 700"
-                class="text-blue-darken-4"
+                class="text-blue-darken-4 text-center"
                 v-if="isSmall"
               >
                 {{ item.title }}
               </h2>
-              <router-link
+              <div class="line-divider-2 mt-1 mb-2 mx-auto" />
+              <!-- <router-link
                 :to="`/view-all/${item.id}`"
                 class="text-decoration-none"
               >
                 <h1 class="view-all">View all</h1>
-              </router-link>
+              </router-link> -->
             </div>
             <v-sheet
               class="mx-auto mb-2"
@@ -2330,6 +2344,18 @@
                 </v-slide-group-item>
               </v-slide-group>
             </v-sheet>
+            <div
+              class="card-footer d-flex justify-center align-center"
+              :class="{ 'mt-n6 mb-14': !isSmall, 'mb-4': isSmall }"
+            >
+              <v-btn
+              :to="`/view-all/${item.id}`"
+                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-16"
+                :class="{ 'btn-section-2': isSmall }"
+              >
+                <span>View All</span>
+              </v-btn>
+            </div>
           </div>
         </template>
       </template>
@@ -2773,10 +2799,16 @@ export default {
           this.countryId = data
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
-          this.getGroups(this.skillSlugId, this.countryId);
+          this.getGroups(this.skillSlugId, null);
           this.getSpecificJobs(this.skillSlugId, null);
-          this.getPlatinumJob(this.skillSlugId, null);
-          this.getPrivilegedJob(this.skillSlugId, null);
+          this.getPlatinumJob(
+            this.skillSlugId,
+            null
+          );
+          this.getPrivilegedJob(
+            this.skillSlugId,
+            null
+          );
           // console.log(this.countryId);
         })
         .catch((error) => {
@@ -2933,7 +2965,7 @@ export default {
               this.skillSlugId,
               this.itemSelectedComplete.id
             );
-            this.getInternationalSkills();
+            this.getInternationalSkills2();
             //this.getGroups2(
             //  this.skillSlugId,
             //  this.itemSelectedComplete.id,
@@ -2965,7 +2997,11 @@ export default {
       //   },
       // ];
       axios
-        .get(`/job-positions/${skillId}/${countryId}`)
+        .get(
+          countryId ? 
+          `/job-positions/${skillId}/${countryId}`:
+          `/job-positions/${skillId}`
+          )
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -3011,7 +3047,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? item.sub_industry_name + ' Jobs'
+                ? 'Jobs in ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3082,6 +3118,8 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
+          countryId ? 
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
           `/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
@@ -3148,7 +3186,7 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          `/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/${cityId}/${this.latitude}/${this.longitude}`
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3214,7 +3252,9 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+        countryId ? 
+          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
+          `/jobs/get-jobs-by-type/platinum/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3403,7 +3443,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? item.sub_industry_name + ' Jobs'
+                ? 'Jobs in ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3506,7 +3546,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? item.sub_industry_name + ' Jobs'
+                ? 'Jobs in ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3573,6 +3613,64 @@ export default {
         });
     },
     getInternationalSkills() {
+      this.isCardLoading = true;
+      axios
+        .get(
+          `/job-international/skills/${this.skillSlugId}`
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log('international ', data);
+
+          //.filter((d) => d.country_id == this.itemSelectedComplete.id)
+          const allJobs = data.reduce((accumulator, currentValue) => {
+            const jobsWithInternationalData = currentValue.jobs.map((job) => {
+              return {
+                ...job,
+              };
+            });
+            return accumulator.concat(jobsWithInternationalData);
+          }, []);
+
+          this.internationalCard = allJobs.map((job) => {
+            return {
+              id: job.job_id,
+              text: job.position_name,
+              logo: job.logo,
+              locationImg: job.logo,
+              place: job.partner_name,
+              address: job.city_name + ', ' + job.country_name,
+              country: job.country_name,
+              countryId: job.country_id,
+              positionId: job.position_id,
+              plId: job.pl_id,
+              partnerId: job.partner_id,
+            };
+          });
+          this.internationalCountry = this.internationalCard.reduce(
+            (accumulator, currentValue) => {
+              const existingCountry = accumulator.find(
+                (item) => item.title === currentValue.country
+              );
+              if (existingCountry) {
+                existingCountry.count += 1;
+              } else {
+                accumulator.push({ title: currentValue.country, count: 1 });
+              }
+              return accumulator;
+            },
+            []
+          );
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isCardLoading = false;
+        });
+    },
+    getInternationalSkills2() {
       this.isCardLoading = true;
       axios
         .get(
@@ -3659,6 +3757,16 @@ export default {
   background: #fa2964;
 }
 
+.btn-section {
+  background-color: #fa2964;
+  border-color: #fa2964;
+  font-weight: 600;
+  font-size: 20px;
+  border-radius: 50px;
+}
+.btn-section-2 {
+  font-size: 14px;
+}
 .banner-header {
   color: #fa2964;
   font-weight: 900;
