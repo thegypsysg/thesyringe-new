@@ -287,10 +287,11 @@
         <v-container
           v-if="!isCardLoading && privilegedJob"
         >
-        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center">
+        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center" 
+          style="font-size: 56px; font-style: normal; font-weight: 700">
           Privileged Partner Featured Job
         </h1>
-        <div v-if="privilegedJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
+        <div v-if="privilegedJob?.length > 0" class="line-divider mt-1 mb-4 mx-auto" />
         <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
           <template v-for="card in privilegedJob" :key="card.id">
           
@@ -621,11 +622,11 @@
         v-if="!isCardLoading && platinumJob"
         
       >
-      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center mt-2">
+      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D; font-size: 56px; font-style: normal; font-weight: 700" class=" text-center mt-2">
         Platinum Partner Featured Job
       </h1>
       
-      <div v-if="platinumJob?.length > 0" class="line-divider mt-2 mb-4 mx-auto" />
+      <div v-if="platinumJob?.length > 0" class="line-divider mt-1 mb-4 mx-auto" />
       <div class="d-flex w-100 justify-start flex-wrap">
         <template v-for="card in platinumJob" :key="card.id">
         
@@ -966,13 +967,13 @@
               }"
             >
               <h2
-                style="font-weight: 700"
+              style="font-size: 56px; font-style: normal; font-weight: 700"
                 v-if="!isSmall"
                 class="text-center text-blue-darken-4"
               >
                 {{ item.title }}
               </h2>
-              <div class="line-divider-2 mt-2 mb-2 mx-auto" />
+              <div class="line-divider-2 mt-1 mb-2 mx-auto" />
               <h3
                 style="
                   font-size: 16px !important;
@@ -1231,7 +1232,7 @@
             >
               <v-btn
               :to="`/view-all/${item.id}`"
-                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-16"
+                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
                 :class="{ 'btn-section-2': isSmall }"
               >
                 <span>View All</span>
@@ -1402,7 +1403,8 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="privilegedJob?.length > 0" class="text-purple-accent-4 text-center mt-4">
+        <h2 v-if="privilegedJob?.length > 0" 
+          style="font-size: 24px; font-style: normal; font-weight: 700" class="text-purple-accent-4 text-center mt-4">
           Privileged Partner Featured Job
         </h2>
         <div v-if="privilegedJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
@@ -1697,7 +1699,7 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D" class=" text-center mt-4">
+        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D; font-size: 24px; font-style: normal; font-weight: 700" class=" text-center mt-4">
           Platinum Partner Featured Job
         </h2>
         <div v-if="platinumJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
@@ -2059,7 +2061,7 @@
                 {{ item.title }}
               </h2>
               <h2
-                style="font-size: 20px !important; font-weight: 700"
+              style="font-size: 24px; font-style: normal; font-weight: 700"
                 class="text-blue-darken-4 text-center"
                 v-if="isSmall"
               >
@@ -2368,7 +2370,7 @@
             >
               <v-btn
               :to="`/view-all/${item.id}`"
-                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-16"
+                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
                 :class="{ 'btn-section-2': isSmall }"
               >
                 <span>View All</span>
@@ -3021,7 +3023,7 @@ export default {
       axios
         .get(
           //countryId ? 
-          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}/featured` 
           //:
           //`/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
@@ -3419,8 +3421,8 @@ export default {
       axios
         .get(
           cityId != ''
-            ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
-            : `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
+            ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}/featured`
+            : `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}/featured`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3516,14 +3518,14 @@ export default {
                 this.itemSelected2Complete
                   ? this.itemSelected2Complete.id
                   : '-1'
-              }/${this.latitude}/${this.longitude}`
+              }/${this.latitude}/${this.longitude}/featured`
             : `/sub-industries-jobs/${this.skillSlugId}/${
                 this.countryId
               }/${positionId}/${
                 this.itemSelected2Complete
                   ? this.itemSelected2Complete.id
                   : '-1'
-              }/${this.latitude}/${this.longitude}`
+              }/${this.latitude}/${this.longitude}/featured`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3698,7 +3700,7 @@ export default {
 .btn-section {
   background-color: #fa2964;
   border-color: #fa2964;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 20px;
   border-radius: 50px;
 }
