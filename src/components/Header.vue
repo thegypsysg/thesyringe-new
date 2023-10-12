@@ -861,7 +861,7 @@ export default {
     this.search = null;
     this.getLogo();
     this.getCountry();
-    this.getCity();
+    //this.getCity();
     this.getTrendingCardData();
     this.getActiveSkills();
     // app.config.globalProperties.$eventBus.$on(
@@ -1019,7 +1019,6 @@ export default {
             name: `${data.skills_name} Jobs ` || '',
           };
           // console.log(this.skillSlug);
-          this.getHeaderDetail();
           this.getCountrySkill();
           this.getCitySkill();
         })
@@ -1031,9 +1030,9 @@ export default {
           this.isLoading = false;
         });
     },
-    getHeaderDetail() {
+    getHeaderDetail(countryId) {
       axios
-        .get(`/job-positions/${this.skillSlug.skills_id}/${this.countryId}`)
+        .get(`/job-positions/${this.skillSlug.skills_id}/${countryId}`)
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -1072,6 +1071,7 @@ export default {
           //  this.setItemSelectedComplete(this.country[0]);
           //  this.setItemSelected(this.country[0].title);
           //}
+          this.getHeaderDetail(this.country[0].id);
           this.setItemSelectedComplete(this.country[0]);
           this.setItemSelected(this.country[0].title);
           localStorage.setItem('itemSelectedObj', JSON.stringify(this.country[0]))
