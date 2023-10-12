@@ -142,9 +142,17 @@
     class="bg-black text-center footer__content"
     :class="{ 'footer-detail': isSmall && isDetailPage }"
   >
-    <v-spacer></v-spacer>
     <div class="footer_text">
       {{ footerData.copyright }}
+    </div>
+    <div v-if="isSmall" class="footer_text mt-4 mb-2">
+      <router-link class="text-decoration-none text-white" to="/privacy-policy">
+        Privacy Policy
+      </router-link>
+      |
+      <router-link class="text-decoration-none text-white" to="/our-terms">
+        Terms & Conditions
+      </router-link>
     </div>
     <div style="display: flex; justify-content: center">
       <v-btn
@@ -171,6 +179,15 @@
         color="#FA2964"
         icon="mdi-youtube"
       />
+    </div>
+    <div v-if="!isSmall" class="footer_text">
+      <router-link class="text-decoration-none text-white" to="/privacy-policy">
+        Privacy Policy
+      </router-link>
+      |
+      <router-link class="text-decoration-none text-white" to="/our-terms">
+        Terms & Conditions
+      </router-link>
     </div>
   </v-footer>
   <a
