@@ -2798,22 +2798,22 @@ export default {
           this.countryId = data
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
-            setTimeout(() => {
-            console.log(this.itemSelectedComplete)
-          this.getGroups(this.skillSlugId, this.itemSelectedComplete?.id);
-          this.getSpecificJobs(this.skillSlugId, this.itemSelectedComplete?.id);
-          this.getPlatinumJob(
-            this.skillSlugId,
-            this.itemSelectedComplete?.id
-          );
-          this.getPrivilegedJob(
-            this.skillSlugId,
-            this.itemSelectedComplete?.id
-          );
-      this.getSkillBySlug();
-          this.getInternationalSkills2();
-          // console.log(this.countryId);
-        }, 200)
+            const countryIdObj = JSON.parse(localStorage.getItem('itemSelectedObj'))
+          setTimeout(() => {
+            this.getGroups(this.skillSlugId, countryIdObj.id);
+            this.getSpecificJobs(this.skillSlugId, countryIdObj.id);
+            this.getPlatinumJob(
+              this.skillSlugId,
+              countryIdObj.id
+            );
+            this.getPrivilegedJob(
+              this.skillSlugId,
+              countryIdObj.id
+            );
+            this.getSkillBySlug(countryIdObj.id);
+            this.getInternationalSkills2(countryIdObj.id);
+            // console.log(this.countryId);
+          }, 200)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -2865,11 +2865,11 @@ export default {
           this.isLoading = false;
         });
     },
-    getSkillBySlug() {
+    getSkillBySlug(countryId) {
       const slug = this.$route.params.name;
       this.isCardLoading = true;
       axios
-        .get(`/skills/slug/${slug}/${this.itemSelectedComplete?.id}`)
+        .get(`/skills/registrable/slug/${slug}/${countryId}`)
         .then((response) => {
           const data = response.data.data;
           //console.log(data);
@@ -2893,44 +2893,11 @@ export default {
           this.isCardLoading = false;
         });
     },
-    getSkillBySlugFromSearch() {
-      const slug = this.$route.params.name;
-      this.isLoading = true;
-      axios
-        .get(`/skills/slug/${slug}`)
-        .then((response) => {
-          const data = response.data.data;
-          //console.log(data);
-          this.skillSlug = {
-            ...data,
-            image: this.$fileURL + data.image || '',
-            mainImage: this.$fileURL + data.main_image || '',
-            regulator: data.partner_name || '',
-            name: data.skills_name || '',
-            registrable: data.registrable || 'N',
-            countryRegistrable: data.country_registrable || 'N',
-          };
-
-          localStorage.setItem('skill_name', this.skillSlug.name);
-          localStorage.setItem('skill_id', this.skillSlugId);
-          localStorage.setItem('skill_image', this.skillSlug.image);
-          this.getCountry();
-          this.getInternationalSkills();
-          // console.log(this.skillSlug);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
     getSkillBySlug2() {
       const slug = this.$route.params.name;
       this.isLoading = true;
       axios
-        .get(`/skills/slug/${slug}/${this.itemSelectedComplete.id}`)
+        .get(`/skills/registrable/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
           console.log(data)
@@ -2968,7 +2935,7 @@ export default {
               this.skillSlugId,
               this.itemSelectedComplete.id
             );
-            this.getInternationalSkills2();
+            this.getInternationalSkills2(this.itemSelectedComplete.id);
             //this.getGroups2(
             //  this.skillSlugId,
             //  this.itemSelectedComplete.id,
@@ -3001,9 +2968,10 @@ export default {
       // ];
       axios
         .get(
-          countryId ? 
-          `/job-positions/${skillId}/${countryId}`:
-          `/job-positions/${skillId}`
+          //countryId ? 
+          `/job-positions/${skillId}/${countryId}`
+          //:
+          //`/job-positions/${skillId}`
           )
         .then((response) => {
           const data = response.data.data;
@@ -3028,9 +2996,10 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          countryId ? 
-          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
-          `/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
+          //countryId ? 
+          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          //:
+          //`/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3119,9 +3088,10 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          countryId ? 
-          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
-          `/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
+          //countryId ? 
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          //:
+          //`/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3252,9 +3222,10 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-        countryId ? 
-          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` :
-          `/jobs/get-jobs-by-type/platinum/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
+        //countryId ? 
+          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          //:
+          //`/jobs/get-jobs-by-type/platinum/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3419,11 +3390,9 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          cityId != '' && countryId
+          cityId != ''
             ? `/sub-industries-jobs/${skillId}/${countryId}/-1/${cityId}/${this.latitude}/${this.longitude}`
-            : cityId != '' && !countryId ? `/sub-industries-jobs/${skillId}/-1/-1/${cityId}/${this.latitude}/${this.longitude}`
-            : cityId == '' && countryId ? `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
-            : `/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
+            : `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
         )
         .then((response) => {
           const data = response.data.data;
@@ -3611,69 +3580,11 @@ export default {
           this.isLoading = false;
         });
     },
-    getInternationalSkills() {
+    getInternationalSkills2(countryId) {
       this.isCardLoading = true;
       axios
         .get(
-          `/job-international/skills/${this.skillSlugId}`
-        )
-        .then((response) => {
-          const data = response.data.data;
-         // console.log('international ', data);
-
-          //.filter((d) => d.country_id == this.itemSelectedComplete.id)
-          const allJobs = data.reduce((accumulator, currentValue) => {
-            const jobsWithInternationalData = currentValue.jobs.map((job) => {
-              return {
-                ...job,
-              };
-            });
-            return accumulator.concat(jobsWithInternationalData);
-          }, []);
-
-          this.internationalCard = allJobs.map((job) => {
-            return {
-              id: job.job_id,
-              text: job.position_name,
-              logo: job.logo,
-              locationImg: job.logo,
-              place: job.partner_name,
-              address: job.city_name + ', ' + job.country_name,
-              country: job.country_name,
-              countryId: job.country_id,
-              positionId: job.position_id,
-              plId: job.pl_id,
-              partnerId: job.partner_id,
-            };
-          });
-          this.internationalCountry = this.internationalCard.reduce(
-            (accumulator, currentValue) => {
-              const existingCountry = accumulator.find(
-                (item) => item.title === currentValue.country
-              );
-              if (existingCountry) {
-                existingCountry.count += 1;
-              } else {
-                accumulator.push({ title: currentValue.country, count: 1 });
-              }
-              return accumulator;
-            },
-            []
-          );
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isCardLoading = false;
-        });
-    },
-    getInternationalSkills2() {
-      this.isCardLoading = true;
-      axios
-        .get(
-          `/job-international/skills/${this.skillSlugId}/${this.itemSelectedComplete?.id}`
+          `/job-international/skills/${this.skillSlugId}/${countryId}`
         )
         .then((response) => {
           const data = response.data.data;

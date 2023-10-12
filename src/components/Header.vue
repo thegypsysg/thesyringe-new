@@ -1076,6 +1076,8 @@ export default {
           //}
           this.setItemSelectedComplete(this.country[0]);
           this.setItemSelected(this.country[0].title);
+          localStorage.setItem('itemSelectedObj', JSON.stringify(this.country[0]))
+          localStorage.setItem('itemSelectedTit', this.country[0].title)
         })
         .catch((error) => {
           // eslint-disable-next-line
