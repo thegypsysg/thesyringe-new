@@ -1005,6 +1005,7 @@ export default {
         });
     },
     getSkillBySlug() {
+      console.log('ok')
       this.isDetail = true;
       const slug = this.$route.params.name;
       this.isLoading = true;
@@ -1055,7 +1056,6 @@ export default {
         .get(`/jobs/get-countries/skills/${this.skillSlug.skills_id}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
           this.country = data.map((country) => {
             return {
               id: country.country_id,
@@ -1065,8 +1065,6 @@ export default {
               path: '#',
             };
           });
-          const isSingapore = data.filter(country => country.country_name == 'Singapore');
-          console.log(isSingapore)
           //if (isSingapore.length > 0) {
           //  this.setItemSelectedComplete(this.country[0]);
           //  this.setItemSelected(this.country[0].title);
@@ -1078,6 +1076,7 @@ export default {
           this.setItemSelected(this.country[0].title);
           localStorage.setItem('itemSelectedObj', JSON.stringify(this.country[0]))
           localStorage.setItem('itemSelectedTit', this.country[0].title)
+          app.config.globalProperties.$eventBus.$emit('getSkillBySlugFirst');
         })
         .catch((error) => {
           // eslint-disable-next-line

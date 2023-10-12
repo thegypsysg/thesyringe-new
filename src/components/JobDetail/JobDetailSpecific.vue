@@ -2680,9 +2680,12 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.getSkillBySlugFirst();
     this.checkDetail();
-
+    
+    app.config.globalProperties.$eventBus.$on(
+      'getSkillBySlugFirst',
+      this.getSkillBySlugFirst
+    );
     app.config.globalProperties.$eventBus.$on(
       'filterSpecificJobs',
       this.filterSpecificJobs
@@ -2799,19 +2802,21 @@ export default {
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
             const countryIdObj = JSON.parse(localStorage.getItem('itemSelectedObj'))
+            console.log(this.itemSelectedComplete);
+            console.log(countryIdObj);
           setTimeout(() => {
-            this.getGroups(this.skillSlugId, countryIdObj.id);
-            this.getSpecificJobs(this.skillSlugId, countryIdObj.id);
+            this.getGroups(this.skillSlugId, countryIdObj?.id);
+            this.getSpecificJobs(this.skillSlugId, countryIdObj?.id);
             this.getPlatinumJob(
               this.skillSlugId,
-              countryIdObj.id
+              countryIdObj?.id
             );
             this.getPrivilegedJob(
               this.skillSlugId,
-              countryIdObj.id
+              countryIdObj?.id
             );
-            this.getSkillBySlug(countryIdObj.id);
-            this.getInternationalSkills2(countryIdObj.id);
+            this.getSkillBySlug(countryIdObj?.id);
+            this.getInternationalSkills2(countryIdObj?.id);
             // console.log(this.countryId);
           }, 200)
         })
