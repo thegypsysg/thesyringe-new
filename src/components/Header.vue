@@ -1065,7 +1065,17 @@ export default {
               path: '#',
             };
           });
-          //this.setItemSelectedComplete(this.country[0]);
+          const isSingapore = data.filter(country => country.country_name == 'Singapore');
+          console.log(isSingapore)
+          //if (isSingapore.length > 0) {
+          //  this.setItemSelectedComplete(this.country[0]);
+          //  this.setItemSelected(this.country[0].title);
+          //} else {
+          //  this.setItemSelectedComplete(this.country[0]);
+          //  this.setItemSelected(this.country[0].title);
+          //}
+          this.setItemSelectedComplete(this.country[0]);
+          this.setItemSelected(this.country[0].title);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -1080,7 +1090,7 @@ export default {
       axios
         .get(
           `/jobs/get-country-cities/country/${
-            this.itemSelectedComplete.id || this.countryId
+            this.itemSelectedComplete?.id || this.countryId
           }/skills/${this.skillSlug.skills_id}`
         )
         .then((response) => {
