@@ -2698,6 +2698,7 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.isLoading = true;
     this.checkDetail();
 
     app.config.globalProperties.$eventBus.$on(
