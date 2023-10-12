@@ -1055,7 +1055,7 @@ export default {
         .get(`/jobs/get-countries/skills/${this.skillSlug.skills_id}`)
         .then((response) => {
           const data = response.data.data;
-          //console.log(data);
+          console.log(data);
           this.country = data.map((country) => {
             return {
               id: country.country_id,
@@ -1085,7 +1085,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
           this.city = data.map((city) => {
             return {
               id: city.city_id,
@@ -1122,7 +1122,7 @@ export default {
       this.setItemSelected2('---Select City---');
       this.setItemSelected2Complete(null);
       this.getCitySkill();
-      console.log(this.itemSelectedComplete);
+      //console.log(this.itemSelectedComplete);
       app.config.globalProperties.$eventBus.$emit('getJobDetailSpecific1');
     },
     changeItemSelected2(item) {

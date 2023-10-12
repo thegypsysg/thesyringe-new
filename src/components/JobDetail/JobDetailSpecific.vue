@@ -3023,7 +3023,6 @@ export default {
     },
     getSpecificJobs(skillId, countryId) {
       this.isCardLoading = true;
-      console.log(countryId)
       axios
         .get(
           countryId ? 
@@ -3114,7 +3113,6 @@ export default {
         });
     },
     getPrivilegedJob(skillId, countryId) {
-      console.log(countryId)
       this.isCardLoading = true;
       axios
         .get(
@@ -3171,7 +3169,7 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-         console.log(this.privilegedJob)
+         //console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3182,7 +3180,6 @@ export default {
         });
     },
     getPrivilegedJob2(skillId, countryId, cityId) {
-      console.log(countryId)
       this.isCardLoading = true;
       axios
         .get(
@@ -3238,7 +3235,7 @@ export default {
             };
           });
           
-         console.log(this.privilegedJob)
+         //console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3305,7 +3302,7 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-         console.log(this.platinumJob)
+         //console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3371,7 +3368,7 @@ export default {
             };
           });
           
-         console.log(this.platinumJob)
+        // console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3417,7 +3414,6 @@ export default {
     },
     getSpecificJobs2(skillId, countryId, cityId) {
       this.isCardLoading = true;
-      console.log(countryId)
       axios
         .get(
           cityId != '' && countryId
@@ -3620,7 +3616,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log('international ', data);
+         // console.log('international ', data);
 
           //.filter((d) => d.country_id == this.itemSelectedComplete.id)
           const allJobs = data.reduce((accumulator, currentValue) => {
@@ -3678,7 +3674,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log('international ', data);
+         // console.log('international ', data);
 
           //.filter((d) => d.country_id == this.itemSelectedComplete.id)
           const allJobs = data.reduce((accumulator, currentValue) => {

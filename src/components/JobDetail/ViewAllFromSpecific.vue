@@ -1916,7 +1916,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log(data)
+          //console.log(data)
           const filtered = data.filter(
             (i) => i.sub_industry_id == this.$route.params.id
           );
@@ -2036,7 +2036,7 @@ export default {
             };
           });
           
-         console.log(this.platinumJob)
+         //console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -2104,7 +2104,7 @@ export default {
             };
           });
           
-         console.log(this.privilegedJob)
+         //console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line

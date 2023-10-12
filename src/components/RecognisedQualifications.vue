@@ -338,7 +338,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
           this.reguInfo = {
             city: data?.city_name || '',
             name: data?.partner_name || '-',
@@ -371,7 +371,7 @@ export default {
               list,
             };
           });
-          console.log(this.qualInfo);
+          //console.log(this.qualInfo);
         })
         .catch((error) => {
           // eslint-disable-next-line
