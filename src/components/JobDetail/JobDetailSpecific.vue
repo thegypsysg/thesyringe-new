@@ -2681,7 +2681,6 @@ export default {
   },
   mounted() {
     this.getSkillBySlugFirst();
-    this.getSkillBySlug();
     this.checkDetail();
 
     app.config.globalProperties.$eventBus.$on(
@@ -2811,7 +2810,7 @@ export default {
             this.skillSlugId,
             this.itemSelectedComplete?.id
           );
-          
+      this.getSkillBySlug();
           this.getInternationalSkills2();
           // console.log(this.countryId);
         }, 200)
@@ -2844,7 +2843,7 @@ export default {
             registrable: data.registrable || 'N',
             countryRegistrable: data.country_registrable || 'N',
           };
-                    this.skillSlug2 = {
+          this.skillSlug2 = {
             ...data,
             image: this.$fileURL + data.image || '',
             mainImage: this.$fileURL + data.main_image || '',
@@ -2868,7 +2867,7 @@ export default {
     },
     getSkillBySlug() {
       const slug = this.$route.params.name;
-      this.isLoading = true;
+      this.isCardLoading = true;
       axios
         .get(`/skills/slug/${slug}/${this.itemSelectedComplete?.id}`)
         .then((response) => {
@@ -2891,7 +2890,7 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          this.isLoading = false;
+          this.isCardLoading = false;
         });
     },
     getSkillBySlugFromSearch() {
@@ -2941,15 +2940,15 @@ export default {
           //  this.trendingBtn = [];
           //  this.skillSlug = {};
           //} else {
-           // this.skillSlug = {
-           //   ...data,
-           //   image: this.$fileURL + data.image || '',
-           //   mainImage: this.$fileURL + data.main_image || '',
-           //   regulator: data.partner_name || '',
-           //   name: data.skills_name || '',
-           //   registrable: data.registrable || 'N',
-           //   countryRegistrable: data.country_registrable || 'N',
-           // };
+            this.skillSlug2 = {
+              ...data,
+              image: this.$fileURL + data?.image || '',
+              mainImage: this.$fileURL + data?.main_image || '',
+              regulator: data?.partner_name || '',
+              name: data?.skills_name || '',
+              registrable: data?.registrable || 'N',
+              countryRegistrable: data?.country_registrable || 'N',
+            };
             localStorage.setItem('skill_name', this.skillSlug.name);
             localStorage.setItem('skill_id', this.skillSlugId);
             localStorage.setItem('skill_image', this.skillSlug.image);
