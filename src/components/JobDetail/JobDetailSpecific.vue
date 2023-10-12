@@ -386,7 +386,7 @@
           "
           class='mt-8'
         >
-          <span class="text-brown" style="">Physio Clinic</span>
+          <span class="text-brown" style="">{{card.subIndustry}}</span>
         </div>
 
               <v-btn
@@ -721,7 +721,7 @@
                 font-size: 12px;
               "
             >
-              <span class="text-brown" style="">Physio Clinic</span>
+              <span class="text-brown" style="">{{card.subIndustry}}</span>
             </div>
 
             <div
@@ -1486,6 +1486,24 @@
             >
               <span class="text-white">Privileged Featured Job</span>
           </div>
+          
+          <div
+          style="
+            position: absolute;
+            top: 30px;
+            left: 15px;
+            background-color: #fff;
+            padding-left: 8px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-weight: 600;
+            font-size: 12px;
+          "
+          class=" d-flex justify-start mt-8"
+        >
+          <span class="text-brown" style="">{{card.subIndustry}}</span>
+        </div>
               <v-btn
                 elevation="4"
                 :to="`/detail/${card.id}`"
@@ -1777,7 +1795,7 @@
                 font-size: 12px;
               "
             >
-              <span class="text-brown" style="">Physio Clinic</span>
+              <span class="text-brown" style="">{{card.subIndustry}}</span>
             </div>
 
               <div
@@ -2681,7 +2699,7 @@ export default {
   },
   mounted() {
     this.checkDetail();
-    
+
     app.config.globalProperties.$eventBus.$on(
       'getSkillBySlugFirst',
       this.getSkillBySlugFirst
@@ -3114,6 +3132,7 @@ export default {
                 ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
                 : '',
               place: skill.partner_name || '',
+              subIndustry: skill.sub_industry_name || '',
               distance: skill.distance || 0,
               distanceText: this.formatDistance(skill.distance),
               locationImg: skill.logo ? this.$fileURL + skill.logo : '',
@@ -3179,6 +3198,7 @@ export default {
                 ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
                 : '',
               place: skill.partner_name || '',
+              subIndustry: skill.sub_industry_name || '',
               distance: skill.distance || 0,
               distanceText: this.formatDistance(skill.distance),
               locationImg: skill.logo ? this.$fileURL + skill.logo : '',
@@ -3248,6 +3268,7 @@ export default {
                 ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
                 : '',
               place: skill.partner_name || '',
+              subIndustry: skill.sub_industry_name || '',
               distance: skill.distance || 0,
               distanceText: this.formatDistance(skill.distance),
               locationImg: skill.logo ? this.$fileURL + skill.logo : '',
@@ -3313,6 +3334,7 @@ export default {
                 ? skill.location_name.split(' ').join('').toLowerCase() + 'jobs'
                 : '',
               place: skill.partner_name || '',
+              subIndustry: skill.sub_industry_name || '',
               distance: skill.distance || 0,
               distanceText: this.formatDistance(skill.distance),
               locationImg: skill.logo ? this.$fileURL + skill.logo : '',
