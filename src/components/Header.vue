@@ -912,23 +912,26 @@ export default {
   },
   methods: {
     loginGypsy() {
-      axios
-        .post(`/gypsy-login/google`, {
-          app_id: 5,
-        })
-        .then((response) => {
-          console.log(response);
-          //if (response) {
-          //  window.location.assign(response.data.target_url);
-          //} else {
-          //  window.location.href = "/sign-in";
-          //}
-          //console.log(response.data.target_url);
-        })
-        .catch((error) => {
-          console.log(error);
-          //window.location.href = "/sign-in";
-        });
+      
+      const externalURL = "https://www.the-gypsy.sg/sign-in";
+      window.location.href = externalURL;
+      //axios
+      //  .post(`/gypsy-login/google`, {
+      //    app_id: 5,
+      //  })
+      //  .then((response) => {
+      //    console.log(response);
+      //    //if (response) {
+      //    //  window.location.assign(response.data.target_url);
+      //    //} else {
+      //    //  window.location.href = "/sign-in";
+      //    //}
+      //    //console.log(response.data.target_url);
+      //  })
+      //  .catch((error) => {
+      //    console.log(error);
+      //    //window.location.href = "/sign-in";
+      //  });
     },
     getRegistrableData() {
       this.getRegistrableCountry()
