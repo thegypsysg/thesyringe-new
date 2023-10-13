@@ -1,12 +1,12 @@
 <template>
   <v-app-bar
     :class="{
-      'app-bar-mobile-1': isSmall && isHome,
-      'app-bar-mobile-2': isSmall && !isHome,
-      'app-bar-mobile-3': isSmall && isWelcome,
-      'app-bar-mobile-4': isSmall && isDetailPage,
-      'app-bar-mobile-5': isSmall && isSpecific,
-      'app-bar-mobile-6': isSmall && isRecognised,
+      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms,
+      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms,
+      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms,
+      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms,
     }"
     color="white"
     elevation="1"
@@ -14,7 +14,8 @@
   >
     <router-link to="/">
       <div class="logo-img-container d-flex align-center">
-        <v-img class="logo-img" :src="$fileURL + logo" height="50">
+        <v-img class="logo-img" :src="$fileURL + logo" height="50" 
+        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms }">
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -103,9 +104,19 @@
           : titleHeader
       }}</span>
     </div>
+    
+    <div v-if="isPrivacy" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+      <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
+      <span :class="{ 'header-info-span': isSmall }">Privacy Policy</span>
+    </div>
+    <div v-if="isTerms" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+      <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
+      <span :class="{ 'header-info-span-2': isSmall }">Terms & Conditions</span>
+    </div>
+    <v-spacer v-if="isPrivacy || isTerms" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail && !isRecognised"
+      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms"
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete
@@ -216,7 +227,7 @@
       </v-btn>
     </div>
     <div
-      v-if="isSpecific"
+      v-if="isSpecific && !isPrivacy && !isTerms"
       class="desktop__app"
       style="min-width: 600px !important"
     >
@@ -376,18 +387,19 @@
       Sign up / Register
     </v-btn> -->
     <v-btn
-      v-if="!isWelcome && !isRecognised"
+      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms"
       elevation="0"
       class="btn_sign__up mr-4"
       @click="loginGypsy"
     >
       Sign up / Sign In
     </v-btn>
-    <v-btn v-if="!isRecognised" icon @click="drawer = !drawer">
+    <v-btn 
+    :class="{ 'mr-2': isPrivacy || isTerms }" v-if="!isRecognised" icon @click="drawer = !drawer">
       <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
     </v-btn>
 
-    <template v-if="!isWelcome" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -714,8 +726,13 @@
   <v-navigation-drawer v-model="drawer" temporary location="right">
     <div class="drawer__top" 
     :class="{ 'py-6': userName == null, 'py-2': userName != null }">
-      <a 
-      v-if="userName == null" style="font-size: 1.125rem; color: white">Sign up / Sign In</a>
+      <p
+        v-if="userName == null"
+        class="text-decoration-none"
+        @click="loginGypsy"
+      >
+        <span style="font-size: 1.125rem; color: white">Sign up / Sign In</span>
+      </p>
       <div v-else class="d-flex align-center">
         <div style="width: 55px; height: 55px; border-radius: 50%">
           <v-img
@@ -752,21 +769,220 @@
         </v-list-item>
       </div>
     </div>
-    <ul class="v-list-cont d-flex mt-4" nav dense>
+    <div class="drawer__heading">
+      <div class="drawer-logo">
+        <v-img height="35" width="80" :src="$fileURL + logo" />
+      </div>
+      <v-menu contained style="z-index: 1000">
+        <template #activator="{ props }">
+          <v-btn
+            style="background: #f4f5f7; color: black"
+            variant="text"
+            color="black"
+            icon="mdi-share-outline"
+            width="30"
+            height="30"
+            class="mx-4"
+            v-bind="props"
+          >
+            <v-icon color="rgb(38, 38, 38)" size="15">
+              mdi-share-outline
+            </v-icon>
+          </v-btn>
+        </template>
+        <v-list style="z-index: 1000">
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" color="black" size="18">
+                mdi-email-outline </v-icon
+              >Email
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" size="18">
+                <i class="fa-brands fa-facebook-f" /> </v-icon
+              >Facebook
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" color="black" size="18"> mdi-twitter </v-icon
+              >Twitter
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" size="18">
+                <i class="fa-brands fa-linkedin-in" /> </v-icon
+              >Linkedin
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <div class="text-muted" style="font-size: 10px">Version 1.0</div>
+    </div>
+    <v-divider />
+    <ul class="pt-1" nav dense>
       <li class="v-list-item">
-        <router-link class="text-decoration-none text-black" to="/">
-          <v-list-item-title>Home</v-list-item-title>
+        <div class="v-list-item__icon">
+          <v-img height="20" width="30" src="@/assets/images/icons/home.png" />
+        </div>
+        <v-list-item-title style="font-size: 12px"> Home </v-list-item-title>
+      </li>
+
+      <li v-if="userName != null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img
+            height="18"
+            width="25"
+            src="@/assets/images/icons/menu-shopper.png"
+          />
+        </div>
+        <router-link class="text-decoration-none text-black" to="/my-profile">
+          <v-list-item-title style="font-size: 12px">
+            My Profile
+          </v-list-item-title>
         </router-link>
       </li>
 
-      <li class="v-list-item">
-        <v-list-item-title>Employer</v-list-item-title>
+      <li class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img height="18" width="25" src="@/assets/images/icons/shop.png" />
+        </div>
+        <v-list-item-title style="font-size: 12px"> My Cart </v-list-item-title>
       </li>
 
-      <li class="v-list-item">
-        <v-list-item-title>Agency</v-list-item-title>
+      <li v-if="userName != null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img src="" />
+        </div>
+        <v-list-item-title style="font-size: 12px">
+          My Vouchers
+        </v-list-item-title>
+      </li>
+      <li v-if="userName != null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img src="" />
+        </div>
+
+        <v-list-item-title style="font-size: 12px">
+          My Favorites
+        </v-list-item-title>
+      </li>
+      <li v-if="userName != null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img src="" />
+        </div>
+
+        <v-list-item-title style="font-size: 12px"> My Apps </v-list-item-title>
+      </li>
+      <li v-if="userName == null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img src="" />
+        </div>
+        <router-link
+          class="text-decoration-none text-black"
+          to="/privacy-policy"
+        >
+          <v-list-item-title style="font-size: 12px">
+            Privacy Policy
+          </v-list-item-title>
+        </router-link>
+      </li>
+      <li v-if="userName == null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img src="" />
+        </div>
+
+        <router-link class="text-decoration-none text-black" to="/our-terms">
+          <v-list-item-title style="font-size: 12px">
+            Terms & Conditions
+          </v-list-item-title>
+        </router-link>
       </li>
     </ul>
+    <div class="drawer__bottom">
+      <div class="text-center" style="width: 100%">
+        <p style="font-size: 13px" class="mb-1">Made in Singapore</p>
+        <h3 style="font-size: 13px">Get connected</h3>
+        <v-row
+          class="d-flex justify-center mt-1"
+          :class="{ 'mb-2': userName == null }"
+        >
+          <v-col cols="3" class="d-flex justify-end">
+            <v-img
+              src="@/assets/images/icons/facebook.png"
+              height="40"
+              width="32"
+            />
+          </v-col>
+          <v-col class="d-flex justify-center" cols="3">
+            <v-img
+              src="@/assets/images/icons/insta.png"
+              height="40"
+              width="32"
+            />
+          </v-col>
+          <v-col class="d-flex justify-start" cols="3">
+            <v-img
+              src="@/assets/images/icons/tiktok.png"
+              class="mt-1"
+              height="35"
+              width="35"
+            />
+          </v-col>
+        </v-row>
+        <div
+          v-if="userName != null"
+          style="font-size: 12px"
+          class="text-grey my-1"
+        >
+          <router-link
+            class="text-decoration-none text-grey"
+            to="/privacy-policy"
+          >
+            Privacy
+          </router-link>
+          |
+          <router-link class="text-decoration-none text-grey" to="/our-terms">
+            Terms
+          </router-link>
+        </div>
+        <div class="drawer-social d-flex" style="width: 100%">
+          <div>
+            <h5>WhatsApp</h5>
+            <a
+              style="text-decoration: none; font-size: 10px"
+              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=Hello!`"
+            >
+              {{ footerData?.whats_app }}
+            </a>
+          </div>
+          <div>
+            <h5>Contact us</h5>
+            <a
+              style="text-decoration: none; font-size: 10px"
+              :href="`mailto:${footerData?.email_id}`"
+              >{{ footerData?.email_id }}</a
+            >
+          </div>
+        </div>
+        <v-divider class="mt-2 mb-n2" />
+        <v-container class="footer-bottom pb-2 d-flex justify-center">
+          <div class="d-flag d-flex justify-space-between w-100 align-center">
+            <img
+              style="max-width: 40px; border: 1px solid black"
+              src="data:image/png;base64,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"
+              alt="Singapore"
+            />
+            <div id="footerCurrentTime" style="font-size: 0.7rem">
+              {{ currentTime }}
+            </div>
+          </div>
+        </v-container>
+      </div>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -777,6 +993,7 @@ import app from '@/util/eventBus';
 // import eventBus from "@/util/eventBus";
 // import eventBus from "@/util/eventBus";
 import axios from '@/util/axios';
+import moment from "moment-timezone";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -785,6 +1002,18 @@ export default {
   data() {
     return {
       // selectedTag: null,
+      footerData: {
+        company_name: '',
+        location: '',
+        mobile_number: '',
+        whats_app: '',
+        email_id: '',
+        copyright: '',
+        facebook: '',
+        twitter: '',
+        instagram: '',
+        youtube: '',
+      },
       isLoading: false,
       trendingBtn: [],
       isDetail: false,
@@ -804,6 +1033,7 @@ export default {
 
       logo: '',
       headerData: {},
+      currentTime: "",
 
       selectedType: 0,
       activeIndex: 1,
@@ -825,6 +1055,12 @@ export default {
     ...mapState(['idCountryRecognised']),
     ...mapState(['skillRecognised']),
     ...mapState(['idSkillRecognised']),
+    isPrivacy() {
+      return this.$route.path == "/privacy-policy";
+    },
+    isTerms() {
+      return this.$route.path == "/our-terms";
+    },
     isSmall() {
       return this.screenWidth < 640;
     },
@@ -856,11 +1092,13 @@ export default {
   },
   created() {
     window.addEventListener('resize', this.handleResize);
+    setInterval(this.updateTime, 1000);
   },
   mounted() {
     this.search = null;
     this.getLogo();
     this.getCountry();
+    this.getAppContact();
     //this.getCity();
     this.getTrendingCardData();
     this.getActiveSkills();
@@ -911,6 +1149,40 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getAppContact() {
+      // this.isLoading = true;
+      axios
+        .get(`/app/contact/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          this.footerData = {
+            company_name: data.company_name || '',
+            location: data.location || '',
+            mobile_number: data.mobile_number || '',
+            whats_app: data.whats_app || '',
+            email_id: data.email_id || '',
+            copyright: data.copyright || '',
+            facebook: data.facebook || '',
+            twitter: data.twitter || '',
+            instagram: data.instagram || '',
+            youtube: data.youtube || '',
+          };
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+      // .finally(() => {
+      //   this.isLoading = false;
+      // });
+    },
+    updateTime() {
+      // Ambil zona waktu Singapore
+      const singaporeTime = moment().tz("Asia/Singapore");
+      // Format waktu dalam hh:mm:ss
+      this.currentTime = singaporeTime.format("HH:mm:ss");
+    },
     loginGypsy() {
       
       const externalURL = "https://www.the-gypsy.sg/sign-in";

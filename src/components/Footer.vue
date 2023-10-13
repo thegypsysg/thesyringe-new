@@ -456,9 +456,9 @@ export default {
 
 .go-up {
   position: fixed;
-  bottom: 4.8rem;
+  bottom: 5.7rem;
   z-index: 99999;
-  right: 0.8rem;
+  right: 0.5rem;
   font-size: 1.5rem;
   background: #fa2964;
   padding: 0.4rem;

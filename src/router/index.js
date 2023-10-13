@@ -6,6 +6,7 @@ import ViewAllFromSpecific from '@/components/JobDetail/ViewAllFromSpecific.vue'
 import JobDetailEachSpecific from '@/components/JobDetail/JobDetailEachSpecific.vue';
 import RecognisedQualifications from '@/components/RecognisedQualifications.vue';
 import SignUp from '../views/SignUpForm.vue';
+import PrivacyTerms from "../views/PrivacyTerms.vue";
 
 const routes = [
   {
@@ -52,6 +53,16 @@ const routes = [
     name: 'recognised qualifications',
     path: '/recognised-qualifications',
     component: RecognisedQualifications,
+  },
+  {
+    path: "/privacy-policy",
+    name: "Privacy Policy",
+    component: PrivacyTerms,
+  },
+  {
+    path: "/our-terms",
+    name: "OurTerms",
+    component: PrivacyTerms,
   },
 ];
 
