@@ -394,10 +394,39 @@
     >
       Sign up / Sign In
     </v-btn>
-    <v-btn 
-    :class="{ 'mr-2': isPrivacy || isTerms }" v-if="!isRecognised" icon @click="drawer = !drawer">
-      <v-img src="@/assets/user_icon.png" style="height: 48px; width: auto" />
-    </v-btn>
+    <v-btn
+    v-if="!isWelcome && !isPrivacy && !isTerms && userName != null"
+    elevation="0"
+    class="btn_log__out"
+    @click="logout"
+  >
+    Logout
+  </v-btn>
+  <div
+    v-if="!isWelcome"
+    style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
+    icon
+    :class="{ 'mr-2': isPrivacy || isTerms }"
+    @click="drawer = !drawer"
+  >
+    <v-img
+      v-if="userImage != null"
+      :src="userImage"
+      cover
+      style="height: 100%; width: 100%; border-radius: 50%"
+    >
+      <template #placeholder>
+        <div class="skeleton" />
+      </template>
+    </v-img>
+    <v-img
+      v-else-if="userImage == null && !isLoading"
+      src="@/assets/user_icon.png"
+      cover
+      height="48"
+      style="height: 100%; width: 100%"
+    />
+  </div>
 
     <template v-if="!isWelcome && !isPrivacy && !isTerms" #extension>
       <div
@@ -1023,6 +1052,9 @@ export default {
       search: null,
       searchItems: [],
 
+      userImage: null,
+      userName: null,
+      userDated: null,
       drawer: false,
       // itemSelected: 'Singapore',
       country: [],
@@ -1055,6 +1087,22 @@ export default {
     ...mapState(['idCountryRecognised']),
     ...mapState(['skillRecognised']),
     ...mapState(['idSkillRecognised']),
+    tokenProvider() {
+      // Mendapatkan URL dari browser
+      const url = new URL(window.location.href);
+
+      // Mendapatkan nilai token dari parameter query 'token'
+      const tokenParam = url.searchParams.get("token");
+      if (tokenParam) {
+        localStorage.setItem("token", tokenParam);
+      }
+
+      // Mengupdate data 'token' dalam komponen dengan nilai yang ditemukan
+      return tokenParam;
+    },
+    token() {
+      return localStorage.getItem("token");
+    },
     isPrivacy() {
       return this.$route.path == "/privacy-policy";
     },
@@ -1095,6 +1143,12 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   mounted() {
+    const token = localStorage.getItem("token");
+    if (this.tokenProvider != null) {
+      this.getHeaderUserData();
+    } else if (token) {
+      this.getHeaderUserData();
+    }
     this.search = null;
     this.getLogo();
     this.getCountry();
@@ -1149,6 +1203,85 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    logout() {
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-logout`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          localStorage.setItem("name", null);
+          localStorage.setItem("g_id", null);
+          localStorage.setItem("user_image", null);
+          localStorage.setItem("token", null);
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    getHeaderUserData() {
+      this.isLoading = true;
+      console.log(this.tokenProvider);
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-user`, {
+          headers: {
+            Authorization: `Bearer ${
+              this.tokenProvider ? this.tokenProvider : token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+
+          this.userName = data.name;
+          this.userDated = data.last_login;
+          this.userImage =
+            data.image != null ? this.$fileURL + data.image : null;
+          // this.userImage = null;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getHeaderUserData2() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+
+          this.userName = data.name;
+          this.userDated = data.last_login;
+          this.userImage =
+            data.image != null ? this.$fileURL + data.image : null;
+          // this.userImage = null;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     getAppContact() {
       // this.isLoading = true;
       axios
