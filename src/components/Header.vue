@@ -387,7 +387,7 @@
       Sign up / Register
     </v-btn> -->
     <v-btn
-      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms"
+      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && userName == null"
       elevation="0"
       class="btn_sign__up mr-4"
       @click="loginGypsy"
