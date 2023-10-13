@@ -1185,7 +1185,7 @@ export default {
     },
     loginGypsy() {
       
-      const externalURL = "https://www.the-gypsy.sg/sign-in";
+      const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
       window.location.href = externalURL;
       //axios
       //  .post(`/gypsy-login/google`, {
