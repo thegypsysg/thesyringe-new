@@ -7,11 +7,16 @@ import JobDetailEachSpecific from '@/components/JobDetail/JobDetailEachSpecific.
 import RecognisedQualifications from '@/components/RecognisedQualifications.vue';
 import SignUp from '../views/SignUpForm.vue';
 import PrivacyTerms from "../views/PrivacyTerms.vue";
+import MyProfile from "../views/MyProfile.vue";
 
 const routes = [
   {
     path: '/',
     component: Home,
+  },
+  {
+    path: "/my-profile",
+    component: MyProfile,
   },
   {
     path: '/signup',

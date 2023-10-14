@@ -1,12 +1,12 @@
 <template>
   <v-app-bar
     :class="{
-      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms,
-      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms,
-      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms,
-      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms,
+      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isMyProfile,
     }"
     color="white"
     elevation="1"
@@ -15,7 +15,7 @@
     <router-link to="/">
       <div class="logo-img-container d-flex align-center">
         <v-img class="logo-img" :src="$fileURL + logo" height="50" 
-        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms }">
+        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isMyProfile }">
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -113,10 +113,14 @@
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span-2': isSmall }">Terms & Conditions</span>
     </div>
-    <v-spacer v-if="isPrivacy || isTerms" />
+    <div v-if="isMyProfile" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+      <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
+      <span :class="{ 'header-info-span-2': isSmall }">My Profile</span>
+    </div>
+    <v-spacer v-if="isPrivacy || isTerms || isMyProfile" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms"
+      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isMyProfile"
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete
@@ -227,7 +231,7 @@
       </v-btn>
     </div>
     <div
-      v-if="isSpecific && !isPrivacy && !isTerms"
+      v-if="isSpecific && !isPrivacy && !isTerms && !isMyProfile"
       class="desktop__app"
       style="min-width: 600px !important"
     >
@@ -387,7 +391,7 @@
       Sign up / Register
     </v-btn> -->
     <v-btn
-      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && userName == null"
+      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && !isMyProfile && userName == null"
       elevation="0"
       class="btn_sign__up mr-4"
       @click="loginGypsy"
@@ -395,7 +399,7 @@
       Sign up / Sign In
     </v-btn>
     <v-btn
-    v-if="!isWelcome && !isPrivacy && !isTerms && userName != null"
+    v-if="!isWelcome && !isPrivacy && !isTerms && !isMyProfile && userName != null"
     elevation="0"
     class="btn_log__out"
     @click="logout"
@@ -406,7 +410,7 @@
     v-if="!isWelcome"
     style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
     icon
-    :class="{ 'mr-2': isPrivacy || isTerms }"
+    :class="{ 'mr-2': isPrivacy || isTerms || isMyProfile }"
     @click="drawer = !drawer"
   >
     <v-img
@@ -428,7 +432,7 @@
     />
   </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isMyProfile" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -1108,6 +1112,9 @@ export default {
     },
     isTerms() {
       return this.$route.path == "/our-terms";
+    },
+    isMyProfile() {
+      return this.$route.path == "/my-profile";
     },
     isSmall() {
       return this.screenWidth < 640;

@@ -10,9 +10,11 @@ import router from './router';
 import store from './store';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 
+import "maz-ui/css/main.css";
 import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/brands.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 // Composables
 import { createApp } from 'vue';
