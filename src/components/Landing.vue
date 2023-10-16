@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
-    <div v-if="!isLoading">
+    <div v-if="!isLoading && !token">
       <Banner />
       <div style="background-color: #f5f6ff" class="mb-10">
         <JobCategories :trending-card="trendingCard" />
@@ -14,6 +14,9 @@
         <WhoWillUse />
       </div>
     </div>
+    <div v-if="!isLoading && token">
+      <SignUpForm />
+    </div>
   </div>
 </template>
 
@@ -23,6 +26,7 @@ import JobCategories from './JobCategories.vue';
 import CardItem from './CardItem.vue';
 import WhoWillUse from './whoWillUse.vue';
 import SpecificJobs from './SpecificJobs.vue';
+import SignUpForm from './SignUpForm.vue';
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
 </script>
@@ -39,17 +43,40 @@ export default {
       card1: [],
       card2: [],
       card3: [],
+      token: null,
     };
   },
   mounted() {
+    const url = new URL(window.location.href);
+      const tokenParam = url.searchParams.get("token");
+      this.token = tokenParam
+
     this.getTrendingCardData();
     this.getSpecificJobs();
     this.getHealthWeb();
     this.checkNotDetail();
+    app.config.globalProperties.$eventBus.$on(
+      'getTrendingCardData2',
+      this.getTrendingCardData2
+    );
+  },  
+  beforeUnmount() {
+    // app.config.globalProperties.$eventBus.$off(
+    //   'getHeaderDetail',
+    //   this.getHeaderDetail
+    // );
+    app.config.globalProperties.$eventBus.$off(
+      'getTrendingCardData2',
+      this.getTrendingCardData2
+    );
   },
   methods: {
     checkNotDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderLanding');
+    },
+    getTrendingCardData2() {
+      this.token = null;
+      this.getTrendingCardData()
     },
     getTrendingCardData() {
       this.isLoading = true;

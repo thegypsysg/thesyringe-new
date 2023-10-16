@@ -45,6 +45,7 @@
                     color="blue"
                     variant="outlined"
                     @click="$refs.filePickerField.click()"
+                    :disabled="image_path"
                   >
                     {{ !isSaveImage ? "Upload Picture" : "Saving Image" }}
                   </v-btn>
@@ -514,7 +515,6 @@
                       <MazSelect
                         v-slot="{ option }"
                         v-model="input.country"
-                        label="Select Country"
                         item-height="40"
                         :options="options"
                         search
@@ -582,7 +582,6 @@
                         clearable
                         class="mt-n1"
                         density="compact"
-                        :rules="rules.townRules"
                       />
                     </div>
                   </v-col>
@@ -700,6 +699,7 @@
                   color="blue"
                   variant="outlined"
                   @click="$refs.filePickerField.click()"
+                  :disabled="image_path"
                 >
                   {{ !isSaveImage ? "Upload Picture" : "Saving Image" }}
                 </v-btn>
@@ -1646,12 +1646,13 @@ export default {
         .get(`/country`)
         .then((response) => {
           const data = response.data.data;
-          this.resource.nationality = data.map((country) => {
+          this.resource.nationality = data.filter(c => c.nationality != '').map((country) => {
             return {
               id: country.country_id,
               title: country.nationality,
             };
           });
+          console.log(data)
 
           this.resource.country = data.map((country) => {
             return {
@@ -2112,6 +2113,9 @@ export default {
           console.log(data);
           this.isSuccess = true;
           this.successMessage = data.message;
+          app.config.globalProperties.$eventBus.$emit(
+            "getHeaderUserData"
+          );
           this.getUserData();
         })
         .catch((error) => {
@@ -2160,9 +2164,12 @@ export default {
         })
         .then((response) => {
           const data = response.data;
-          console.log(data);
+          console.log(data.data.image);
           this.isSuccess = true;
           this.successMessage = data.message;
+          app.config.globalProperties.$eventBus.$emit(
+            "changeHeaderImage", data.data.image
+          );
           // this.getUserData();
           // localStorage.setItem("name", data.data.name);
           // localStorage.setItem("email", data.data.email_id);

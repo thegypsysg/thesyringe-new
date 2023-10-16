@@ -17,11 +17,11 @@
               <v-row>
                 <v-col cols="12">
                   <h1
-                    class="mb-1"
+                    class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Step 6 - Select Skills
+                    Skills Group
                   </h1>
 
                   <v-form fast-fail @submit.prevent="login">
@@ -60,22 +60,6 @@
                       >
                         Next
                       </v-btn>
-                      <div
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        style="
-                          text-align: center;
-                          cursor: pointer;
-                          color: #2b0087;
-                          font-weight: 700;
-                          font-size: 20px;
-                        "
-                        @click="backStep"
-                      >
-                        Back
-                      </div>
                     </div>
                   </v-form>
                 </v-col>

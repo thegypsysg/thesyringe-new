@@ -1,7 +1,8 @@
 <template>
   <v-app-bar
     :class="{
-      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-start': isSmall && isHome && tokenStart,
+      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isMyProfile && !tokenStart,
       'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isMyProfile,
       'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isMyProfile,
       'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isMyProfile,
@@ -22,6 +23,48 @@
         </v-img>
       </div>
     </router-link>
+    <v-btn
+    v-if="isHome && !tokenStart"
+    style="background: #f4f5f7; color: black"
+    variant="text"
+    color="black"
+    icon="mdi-share-outline"
+    width="40"
+    height="40"
+  >
+    <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
+    <v-menu activator="parent">
+      <v-list>
+        <v-list-item @click="console.log('share')">
+          <v-list-item-title>
+            <v-icon class="mr-4" color="black" size="18">
+              mdi-email-outline </v-icon
+            >Email
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="console.log('share')">
+          <v-list-item-title>
+            <v-icon class="mr-4" size="18">
+              <i class="fa-brands fa-facebook-f" /> </v-icon
+            >Facebook
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="console.log('share')">
+          <v-list-item-title>
+            <v-icon class="mr-4" color="black" size="18"> mdi-twitter </v-icon
+            >Twitter
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="console.log('share')">
+          <v-list-item-title>
+            <v-icon class="mr-4" size="18">
+              <i class="fa-brands fa-linkedin-in" /> </v-icon
+            >Linkedin
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </v-btn>
     <div v-if="isWelcome" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
@@ -120,7 +163,7 @@
     <v-spacer v-if="isPrivacy || isTerms || isMyProfile" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isMyProfile"
+      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isMyProfile  && !tokenStart"
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete
@@ -390,6 +433,8 @@
     >
       Sign up / Register
     </v-btn> -->
+    
+  <v-spacer v-if="!isSmall && tokenStart"></v-spacer>
     <v-btn
       v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && !isMyProfile && userName == null"
       elevation="0"
@@ -403,6 +448,7 @@
     elevation="0"
     class="btn_log__out"
     @click="logout"
+    :class="{'mr-6': tokenStart}"
   >
     Logout
   </v-btn>
@@ -410,7 +456,7 @@
     v-if="!isWelcome"
     style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
     icon
-    :class="{ 'mr-2': isPrivacy || isTerms || isMyProfile }"
+    :class="{ 'mr-2': isPrivacy || isTerms || isMyProfile || tokenStart }"
     @click="drawer = !drawer"
   >
     <v-img
@@ -661,7 +707,7 @@
           </div>
         </div>
         <form
-          v-if="!isDetail && !isRecognised"
+          v-if="!isDetail && !isRecognised && !tokenStart"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -711,7 +757,7 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
-        <div v-if="isHome || isSpecific" class="my-slide d-flex">
+        <div v-if="(isHome && !tokenStart) || isSpecific" class="my-slide d-flex">
           <v-btn
             class="sub-menu-btn view-all"
             style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
@@ -878,6 +924,20 @@
           </v-list-item-title>
         </router-link>
       </li>
+      <li v-if="userName != null" class="v-list-item mt-n2">
+        <div class="v-list-item__icon">
+          <v-img
+            height="18"
+            width="25"
+            src="@/assets/images/icons/menu-shopper.png"
+          />
+        </div>
+        <router-link class="text-decoration-none text-black" to="/my-profile">
+          <v-list-item-title style="font-size: 12px">
+            Resume Profile
+          </v-list-item-title>
+        </router-link>
+      </li>
 
       <li class="v-list-item mt-n2">
         <div class="v-list-item__icon">
@@ -1035,6 +1095,7 @@ export default {
   data() {
     return {
       // selectedTag: null,
+      tokenStart: null,
       footerData: {
         company_name: '',
         location: '',
@@ -1150,6 +1211,10 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   mounted() {
+    const url = new URL(window.location.href);
+      const tokenParam = url.searchParams.get("token");
+      this.tokenStart = tokenParam
+
     const token = localStorage.getItem("token");
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
@@ -1167,6 +1232,18 @@ export default {
     //   'getHeaderDetail',
     //   this.getHeaderDetail
     // );
+    app.config.globalProperties.$eventBus.$on(
+      'getTrendingCardData2',
+      this.getTrendingCardData2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderImage',
+      this.changeHeaderImage
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'getHeaderUserData',
+      this.getHeaderUserData
+    );
     app.config.globalProperties.$eventBus.$on(
       'getHeaderDetail',
       this.getSkillBySlug
@@ -1190,6 +1267,18 @@ export default {
     //   this.getHeaderDetail
     // );
     app.config.globalProperties.$eventBus.$off(
+      'getTrendingCardData2',
+      this.getTrendingCardData2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'changeHeaderImage',
+      this.changeHeaderImage
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getHeaderUserData',
+      this.getHeaderUserData
+    );
+    app.config.globalProperties.$eventBus.$off(
       'getHeaderDetail',
       this.getSkillBySlug
     );
@@ -1210,6 +1299,13 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getTrendingCardData2() {
+      this.tokenStart = null;
+    },
+    changeHeaderImage(image) {
+      console.log(image)
+      this.userImage = this.$fileURL + image
+    },
     logout() {
       const token = localStorage.getItem("token");
       axios
@@ -1729,6 +1825,9 @@ export default {
 }
 .v-app-bar.v-toolbar {
   max-width: 100%;
+}
+.app-bar-mobile-start {
+  height: 8vh;
 }
 .app-bar-mobile-1 {
   height: 29vh;

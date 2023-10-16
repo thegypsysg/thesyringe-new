@@ -16,15 +16,43 @@
             >
               <v-row>
                 <v-col cols="12">
+                <div class="mb-8 d-flex justify-space-between align-center">
                   <h1
-                    class="mb-1"
+                    class=" text-red-darken-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Step 7 - Your Specialised Page (Any one)
+                    Nursing
                   </h1>
+                  <div
+                    :class="{
+                      'w-33 login-btn-mobile': isSmall,
+                      'w-25': !isSmall,
+                    }"
+                    style="
+                      text-align: center;
+                      cursor: pointer;
+                      color: #2b0087;
+                      font-weight: 700;
+                      font-size: 20px;
+                    "
+                    @click="backStep"
+                  >
+                    Back
+                  </div>
+                </div>
 
                   <v-form fast-fail @submit.prevent="login">
+                    <p>Please select any one your Main skills</p>
+                    <v-autocomplete
+                      v-model="country"
+                      :items="resource.skills"
+                      label="--- Search your Skills ---"
+                      class="mt-4 mb-6"
+                      :class="{'w-100': isSmall, 'w-50': !isSmall}"
+                      variant="outlined"
+                      clearable
+                    />
                     <v-radio-group class="w-100" v-model="skill" inline>
                       <v-radio
                         v-for="option in resource.skills"
@@ -34,25 +62,9 @@
                         :class="{ 'w-25': !isSmall, 'w-50': isSmall }"
                       >
                         <template #label>
-                          <div
-                            class="item-container w-100 text-center d-flex justify-center flex-column"
-                          >
-                            <span
-                              class="item-tag bg-white"
-                              style="color: rgb(108, 0, 0); font-size: 12px"
-                              >{{ option.tag }}</span
-                            >
-                            <v-img
-                              :src="option.image"
-                              height="100"
-                              class="item-image"
-                            ></v-img>
-                            <div
-                              class="item-title text-center mx-auto"
-                              style="background: rgba(0, 0, 0, 0.3)"
-                            >
-                              <span class="text-white">{{ option.label }}</span>
-                            </div>
+                          <div class="radio-label text-center">
+                            <span>{{ option.label }}</span>
+                            <v-img :src="option.image" max-height="100"></v-img>
                           </div>
                         </template>
                       </v-radio>
@@ -60,7 +72,10 @@
 
                     <v-spacer></v-spacer>
 
-                    <div class="d-flex align-center matop">
+                    <div
+                      class="d-flex align-center"
+                      :class="{ matop: !isSmall, 'matop-2': isSmall }"
+                    >
                       <v-btn
                         type="submit"
                         variant="outlined"
@@ -73,22 +88,6 @@
                       >
                         Next
                       </v-btn>
-                      <div
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        style="
-                          text-align: center;
-                          cursor: pointer;
-                          color: #2b0087;
-                          font-weight: 700;
-                          font-size: 20px;
-                        "
-                        @click="backStep"
-                      >
-                        Back
-                      </div>
                     </div>
                   </v-form>
                 </v-col>
@@ -118,7 +117,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'SpecialisedPage',
+  name: 'SelectSkills',
   data() {
     return {
       skill: '',
@@ -128,16 +127,24 @@ export default {
       resource: {
         skills: [
           {
-            label: 'Intensive Care Unit (ICU) Nurse Jobs',
-            value: 'icu nurse jobs',
+            label: 'Nursing Jobs',
+            value: 'nursing jobs',
             image: require('@/assets/nurse.png'),
-            tag: 'Nursing',
           },
           {
-            label: 'Dialysis Nurse Jobs',
-            value: 'dialysis nurse jobs',
+            label: 'Allied Health Jobs',
+            value: 'allied health jobs',
             image: require('@/assets/allied-jobs.jpg'),
-            tag: 'Nursing',
+          },
+          {
+            label: 'Medical/Doctor Jobs',
+            value: 'medical/doctor Jobs',
+            image: require('@/assets/doctor-jobs.jpg'),
+          },
+          {
+            label: 'Executives Jobs',
+            value: 'executives jobs',
+            image: require('@/assets/exec-jobs.jpg'),
           },
         ],
       },
@@ -191,39 +198,6 @@ export default {
 
 .section-mobile {
   font-size: 16px;
-}
-
-.item-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.item-title {
-  position: absolute;
-  bottom: -100px;
-  left: 0;
-  transition: all 0.5s;
-  width: 100%;
-}
-.item-tag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 100;
-}
-
-.item-container:hover .item-title {
-  bottom: 10px;
-}
-
-.item-image-cont {
-  max-height: 100px;
-}
-
-.item-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .login-input .v-text-field input:-webkit-autofill {
@@ -290,5 +264,8 @@ export default {
 
 .matop {
   margin-top: 150px;
+}
+.matop-2 {
+  margin-top: 250px;
 }
 </style>
