@@ -1221,9 +1221,6 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   mounted() {
-    const url = new URL(window.location.href);
-      const tokenParam = url.searchParams.get("token");
-      this.tokenStart = tokenParam
 
     const token = localStorage.getItem("token");
     if (this.tokenProvider != null) {
@@ -1242,6 +1239,10 @@ export default {
     //   'getHeaderDetail',
     //   this.getHeaderDetail
     // );
+    app.config.globalProperties.$eventBus.$on(
+      'getTokenStart',
+      this.getTokenStart
+    );
     app.config.globalProperties.$eventBus.$on(
       'getTrendingCardData2',
       this.getTrendingCardData2
@@ -1277,6 +1278,10 @@ export default {
     //   this.getHeaderDetail
     // );
     app.config.globalProperties.$eventBus.$off(
+      'getTokenStart',
+      this.getTokenStart
+    );
+    app.config.globalProperties.$eventBus.$off(
       'getTrendingCardData2',
       this.getTrendingCardData2
     );
@@ -1309,6 +1314,9 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getTokenStart(tokenParam) {
+      this.tokenStart = tokenParam;
+    },
     getTrendingCardData2() {
       this.tokenStart = null;
     },

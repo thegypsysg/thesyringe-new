@@ -47,10 +47,6 @@ export default {
     };
   },
   mounted() {
-    const url = new URL(window.location.href);
-      const tokenParam = url.searchParams.get("token");
-      this.token = tokenParam
-
     this.getTrendingCardData();
     this.getSpecificJobs();
     this.getHealthWeb();
@@ -58,6 +54,10 @@ export default {
     app.config.globalProperties.$eventBus.$on(
       'getTrendingCardData2',
       this.getTrendingCardData2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'getTokenStart',
+      this.getTokenStart
     );
   },  
   beforeUnmount() {
@@ -69,14 +69,24 @@ export default {
       'getTrendingCardData2',
       this.getTrendingCardData2
     );
+    app.config.globalProperties.$eventBus.$off(
+      'getTokenStart',
+      this.getTokenStart
+    );
   },
   methods: {
+    getTokenStart(tokenParam) {
+      this.token = tokenParam;
+    },
     checkNotDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderLanding');
     },
     getTrendingCardData2() {
       this.token = null;
-      this.getTrendingCardData()
+      this.getTrendingCardData();
+    this.getSpecificJobs();
+    this.getHealthWeb();
+    this.checkNotDetail();
     },
     getTrendingCardData() {
       this.isLoading = true;
