@@ -2823,8 +2823,8 @@ export default {
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
             const countryIdObj = JSON.parse(localStorage.getItem('itemSelectedObj'))
-            console.log(this.itemSelectedComplete);
-            console.log(countryIdObj);
+            //console.log(this.itemSelectedComplete);
+            //console.log(countryIdObj);
           setTimeout(() => {
             this.getGroups(this.skillSlugId, countryIdObj?.id);
             this.getSpecificJobs(this.skillSlugId, countryIdObj?.id);
@@ -2926,7 +2926,7 @@ export default {
         .get(`/skills/registrable/slug/${slug}/${this.itemSelectedComplete.id}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data)
+          //console.log(data)
 
           //if (data == null) {
           //  this.specificJobs = [];

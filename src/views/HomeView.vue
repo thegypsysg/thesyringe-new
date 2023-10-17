@@ -25,7 +25,7 @@ export default {
             if (position) {
               this.latitude = position.coords.latitude;
               this.longitude = position.coords.longitude;
-              console.log(this.latitude, this.longitude);
+              //console.log(this.latitude, this.longitude);
               localStorage.setItem('latitude', this.latitude);
               localStorage.setItem('longitude', this.longitude);
             }

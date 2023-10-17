@@ -1303,7 +1303,7 @@ export default {
       this.tokenStart = null;
     },
     changeHeaderImage(image) {
-      console.log(image)
+      //console.log(image)
       this.userImage = this.$fileURL + image
     },
     logout() {
@@ -1330,7 +1330,7 @@ export default {
     },
     getHeaderUserData() {
       this.isLoading = true;
-      console.log(this.tokenProvider);
+      //console.log(this.tokenProvider);
       const token = localStorage.getItem("token");
       axios
         .get(`/gypsy-user`, {
@@ -1342,7 +1342,7 @@ export default {
         })
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
 
           this.userName = data.name;
           this.userDated = data.last_login;
@@ -1369,7 +1369,7 @@ export default {
         })
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
 
           this.userName = data.name;
           this.userDated = data.last_login;
@@ -1516,7 +1516,7 @@ export default {
         });
     },
     getSkillBySlug() {
-      console.log('ok')
+      //console.log('ok')
       this.isDetail = true;
       const slug = this.$route.params.name;
       this.isLoading = true;
