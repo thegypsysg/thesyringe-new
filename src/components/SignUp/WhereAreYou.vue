@@ -11,7 +11,7 @@
               :elevation="!isSmall ? 1 : 0"
               :max-width="isSmall ? `${screenWidth - 30}px` : ''"
               class="mx-auto"
-              :class="{ 'login-card px-12': !isSmall, 'py-10 px-2': isSmall }"
+              :class="{ 'login-card px-12': !isSmall, 'py-10 pb-16 px-2': isSmall }"
             >
               <v-row>
                 <v-col cols="12">
@@ -196,6 +196,7 @@
 
 <script>
 import MazSelect from "maz-ui/components/MazSelect";
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'WhereAreYou',  
@@ -469,13 +470,56 @@ export default {
       return this.screenWidth < 640;
     },
   },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    country: function (newVal, oldVal) {
+      const country = this.options.filter((o) => o.value === newVal)[0];
+      console.log(country?.label);
+      this.getCity(country?.label);
+    },
+  },
   created() {
     window.addEventListener('resize', this.handleResize);
+  },
+  mounted() {
+    this.getCity()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getCity(country_name) {
+      axios
+        .get(`/city`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          if (country_name) {
+            this.resource.city = data
+              .filter((i) => i.country_name == country_name)
+              .map((city) => {
+                return {
+                  id: city.city_id,
+                  title: city.city_name,
+                  path: "#",
+                };
+              });
+          } else {
+            this.resource.city = data.map((city) => {
+              return {
+                id: city.city_id,
+                title: city.city_name,
+                prefix: city.prefix,
+                path: "#",
+              };
+            });
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
     nextStep() {
       this.$emit('nextStep');
     },

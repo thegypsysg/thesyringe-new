@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'SelectSkills',
@@ -130,28 +131,7 @@ export default {
       isSuccess: false,
       successMessage: '',
       resource: {
-        skills: [
-          {
-            label: 'Nursing Jobs',
-            value: 'nursing jobs',
-            image: require('@/assets/nurse.png'),
-          },
-          {
-            label: 'Allied Health Jobs',
-            value: 'allied health jobs',
-            image: require('@/assets/allied-jobs.jpg'),
-          },
-          {
-            label: 'Medical/Doctor Jobs',
-            value: 'medical/doctor Jobs',
-            image: require('@/assets/doctor-jobs.jpg'),
-          },
-          {
-            label: 'Executives Jobs',
-            value: 'executives jobs',
-            image: require('@/assets/exec-jobs.jpg'),
-          },
-        ],
+        skills: [],
       },
     };
   },
@@ -163,10 +143,36 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    this.getTrendingCardData()
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getTrendingCardData() {
+      this.isLoading = true;
+      axios
+        .get(`/skillgroups/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.resource.skills = data.map((item) => {
+            return {
+              value: item.sgm_id || 1,
+              image: this.$fileURL + item.image || '',
+              label: item.group_name + ' Jobs' || '',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     nextStep() {
       this.$emit('nextStep');
     },

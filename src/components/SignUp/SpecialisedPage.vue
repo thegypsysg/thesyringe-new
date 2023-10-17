@@ -53,15 +53,18 @@
                 </div>
 
                   <v-form fast-fail @submit.prevent="login">
-                    <div class="position-relative">
+                  <div class="position-relative" :class="{'scroll-mobile-2': isSmall && resource.skills.length > 8, 'scroll-mobile': isSmall && resource.skills.length > 4}">
                     <h4>Please select any one your Main skills</h4>
                     <v-autocomplete
-                      v-model="country"
+                      v-model="skill"
                       :items="resource.skills"
                       label="--- Search your Skills ---"
                       class="mt-4 mb-8"
                       :class="{'w-100': isSmall, 'w-50': !isSmall}"
                       variant="outlined"
+                      item-title="label"
+                      density="compact"
+                      item-value="value"
                       clearable
                     />
                     <v-radio-group class="w-100" v-model="skill" inline>
@@ -88,12 +91,12 @@
                         </template>
                       </v-radio>
                     </v-radio-group>
-                    </div>
+                  </div>
 
-                    <div
-                      class="d-flex align-center"
-                      :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
-                    >
+                  <div
+                    class="d-flex align-center"
+                    :class="{ 'matop-3': !isSmall && resource.skills.length > 8, 'matop-2': !isSmall && resource.skills.length > 4, 'matop': !isSmall && resource.skills.length <= 4, 'fixed-next w-100': isSmall }"
+                  >
                     <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
                       <v-btn
                         type="submit"
@@ -108,21 +111,21 @@
                         Next
                       </v-btn>
                       <!-- <div
-                    class="text-blue-darken-4"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    style="
-                      text-align: center;
-                      cursor: pointer;
-                      font-weight: 700;
-                      font-size: 20px;
-                    "
-                    @click="backStep"
-                  >
-                    Back
-                  </div> -->
+                        class="text-blue-darken-4"
+                        :class="{
+                          'w-33 login-btn-mobile': isSmall,
+                          'w-25': !isSmall,
+                        }"
+                        style="
+                          text-align: center;
+                          cursor: pointer;
+                          font-weight: 700;
+                          font-size: 20px;
+                        "
+                        @click="backStep"
+                      >
+                        Back
+                      </div> -->
                     </v-container>
                     <v-btn
                     v-if="!isSmall"
@@ -131,13 +134,13 @@
                     class="login-btn"
                     :class="{
                       'w-33 login-btn-mobile': isSmall,
-                      'w-25 mt-n4': !isSmall,
+                      'w-25 mt-16': !isSmall,
                     }"
                     @click="nextStep"
-                  >
-                    Next
-                  </v-btn>
-                    </div>
+                    >
+                      Next
+                    </v-btn>
+                  </div>
                   </v-form>
                 </v-col>
               </v-row>
@@ -164,38 +167,18 @@
 </template>
 
 <script>
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'SelectSkills',
   data() {
     return {
-      skill: '',
+      skill: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
       resource: {
-        skills: [
-          {
-            label: 'Nursing Jobs',
-            value: 'nursing jobs',
-            image: require('@/assets/nurse.png'),
-          },
-          {
-            label: 'Allied Health Jobs',
-            value: 'allied health jobs',
-            image: require('@/assets/allied-jobs.jpg'),
-          },
-          {
-            label: 'Medical/Doctor Jobs',
-            value: 'medical/doctor Jobs',
-            image: require('@/assets/doctor-jobs.jpg'),
-          },
-          {
-            label: 'Executives Jobs',
-            value: 'executives jobs',
-            image: require('@/assets/exec-jobs.jpg'),
-          },
-        ],
+        skills: [],
       },
     };
   },
@@ -207,10 +190,36 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    this.getTrendingCardData()
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getTrendingCardData() {
+    this.isLoading = true;
+    axios
+      .get(`/skills/group/4`)
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data);
+        this.resource.skills = data.sort((a,b) => a.skills_name.localeCompare(b.skills_name)).map((item) => {
+          return {
+            value: item.skills_id || 1,
+            image: this.$fileURL + item.image || '',
+            label: item.skills_name || '',
+          };
+        });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
     nextStep() {
       this.$emit('nextStep');
     },
@@ -332,6 +341,18 @@ export default {
 }
 .matop-2 {
   margin-top: 250px;
+}
+.matop-3 {
+  margin-top: 400px;
+}
+
+
+.scroll-mobile {
+  height: 95vh;
+}
+.scroll-mobile-2 {
+  height: 100vh;
+  margin-bottom: 100px;
 }
 
 .skeleton {
