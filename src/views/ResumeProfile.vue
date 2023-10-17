@@ -71,7 +71,7 @@
             </div>
             <v-row class="">
               <v-col>
-                <!-- <label>Gender</label>
+                <label>Gender</label>
 
                 <VueMultiselect
                   v-model="input.gender"
@@ -80,7 +80,7 @@
                   track-by="value"
                   label="title"
                   placeholder="Select Gender"
-                /> -->
+                />
 
                 <!-- <select v-model="input.gender" class="form-control mt-2">
                   <option disabled value="">Gender</option>
@@ -96,7 +96,7 @@
             </v-row>
             <v-row class="">
               <v-col>
-                <!-- <label>Marital Status</label>
+                <label>Marital Status</label>
                 <VueMultiselect
                   v-model="input.marital"
                   class="mt-2"
@@ -104,7 +104,7 @@
                   track-by="value"
                   label="title"
                   placeholder="Select Marital Status"
-                /> -->
+                />
                 <!-- <select v-model="input.marital" class="form-control mt-2">
                   <option disabled value="">--- Select ---</option>
                   <option
@@ -119,7 +119,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <!-- <label>Nationality</label>
+                <label>Nationality</label>
 
                 <VueMultiselect
                   v-model="input.nationality"
@@ -129,7 +129,7 @@
                   track-by="id"
                   label="title"
                   placeholder="Select Nationality"
-                /> -->
+                />
                 <!-- <select v-model="input.nationality" class="form-control mt-2">
                   <option disabled value="">--- Select ---</option>
                   <option
@@ -439,7 +439,7 @@
                   class="mb-4 pb-2"
                 >
                   <v-col cols="5">
-                    <!-- <label>Birth Date</label>
+                    <label>Birth Date</label>
                     <input
                       v-model="input.date"
                       required
@@ -448,13 +448,13 @@
                       id="dateInput"
                       placeholder="DD/MM/YYYY"
                       @input="onDateInput"
-                    /> -->
+                    />
                   </v-col>
                   <v-col cols="7">
-                    <!-- <label>Age</label>
+                    <label>Age</label>
                     <p class="mt-5">
                       {{ age }}
-                    </p> -->
+                    </p>
                   </v-col>
                 </v-row>
                 <!-- <hr class="my-4" /> -->
@@ -663,7 +663,7 @@
             hidden
             @change="launchCropper"
           />
-          <div class="image-container d-flex justify-center w-100 w-100 mb-4">
+          <div class="image-container d-flex justify-center w-100 w-100 mb-8">
             <!-- <v-img
                     style="width: 100%; height: 100%; border-radius: 20px"
                     :src="
@@ -723,6 +723,28 @@
               /> -->
             </div>
           </div>
+          <h1 class="text-center text-red-accent-4">Physiotherapist</h1>
+          <!-- <div v-if="(isHome && !tokenStart) || isSpecific" class="my-slide d-flex"> -->
+          <v-slide-group class="my-6" v-model="activeResume">
+            <v-slide-group-item
+              v-for="(btn, i) in itemsResume"
+              :key="i"
+            >
+              <!-- v-slot="{ isSelected }" -->
+              <v-btn
+                class="sub-menu-btn"
+                :class="{
+                  active: activeTag == i,
+                }"
+                style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
+              >
+                <p class="text-blue-accent-4" style="font-size: 12px" elevation>
+                  {{ btn }}
+                </p>
+              </v-btn>
+            </v-slide-group-item>
+          </v-slide-group>
+          <!-- </div> -->
           <v-row>
             <v-col>
               <label>Name</label>
@@ -733,6 +755,46 @@
                 class="form-control mt-2"
                 placeholder="Enter Your Full Name"
               />
+            </v-col>
+          </v-row>
+          <v-row>
+          <v-col cols="8">
+            <v-radio-group
+              v-model="input.gender2"
+              :rules="rules.genderRules"
+              inline
+              class="ml-n4"
+              style="font-size: 12px !important"
+            >
+              <v-radio
+                style="font-size: 10px !important"
+                label="Male"
+                value="M"
+              />
+              <v-radio
+                style="font-size: 10px !important"
+                label="Female"
+                value="F"
+              />
+            </v-radio-group>
+          </v-col>
+          </v-row>
+          <v-row class="mt-n10">
+            <v-col cols="8">
+              <label
+                >Date of Birth</label
+              >
+              <div class="d-flex align-center mt-2"> <input
+                v-model="input.date"
+                required
+                class="form-control w-66"
+                type="text"
+                id="dateInput"
+                placeholder="DD/MM/YYYY"
+                @input="onDateInput"
+              /> 
+              <span class="font-weight-bold ml-2 w-33">({{ age }} Years)</span>
+            </div>
             </v-col>
           </v-row>
           <v-row>
@@ -788,7 +850,7 @@
           <v-row>
             <v-col>
               <label
-                >Contact Number
+                >Mobile #
                 <span
                   :class="{
                     'text-red': !isPhoneVerified,
@@ -846,150 +908,66 @@
           </v-row>
           <v-row>
             <v-col>
-              <label>Password </label>
+              <label
+                >What's App
+                <span
+                  :class="{
+                    'text-red': !isPhoneVerified,
+                    'text-green': isPhoneVerified,
+                  }"
+                  >{{ isPhoneVerified ? "(Verified)" : "(Not Verified)" }}</span
+                ></label
+              >
               <div
                 class="d-flex align-center mt-2 py-0 back-grey"
                 style="border: 1px solid #ced4da; border-radius: 0.25rem"
               >
                 <input
-                  v-model="input.password"
-                  type="password"
+                  v-model="input.phone"
+                  type="text"
                   required
                   disabled
                   class="form-control"
-                  :class="{ 'w-66 mr-2': !input.password }"
                   style="border: none"
-                  placeholder="Enter Password"
-                  maxlength="8"
+                  placeholder="Phone Number"
                 />
                 <span
-                  v-if="!isLoading"
                   class="text-blue-darken-4 mx-2"
                   style="cursor: pointer"
-                  @click="isChangePassword = !isChangePassword"
+                  @click="isChangePhone = !isChangePhone"
                 >
-                  {{ input.password ? "Change" : "Create New" }}
+                  Change
                 </span>
               </div>
-              <div v-if="isChangePassword">
-                <div
-                  class="d-flex align-center mt-4 py-0"
-                  style="border: 1px solid #ced4da; border-radius: 0.25rem"
-                >
-                  <input
-                    v-model="input.passwordNew"
-                    :type="!showPassword1 ? 'password' : 'text'"
-                    required
-                    class="form-control"
-                    style="border: none"
-                    placeholder="Enter Password"
-                    maxlength="8"
-                  />
-                  <span
-                    class="toggle-password mr-4 ml-2 mdi"
-                    :class="{
-                      'mdi-eye': showPassword1,
-                      'mdi-eye-off': !showPassword1,
-                    }"
-                    style="cursor: pointer; font-size: 26px"
-                    @click="showPassword1 = !showPassword1"
-                  >
-                  </span>
-                </div>
-                <h6 v-if="isPassword1 == false" class="w-100 mb-2 text-red">
-                  Password must be 8 characters
-                </h6>
-                <template v-if="input.password">
-                  <div
-                    class="d-flex align-center mt-4 py-0"
-                    style="border: 1px solid #ced4da; border-radius: 0.25rem"
-                  >
-                    <input
-                      v-model="input.passwordNew"
-                      :type="!showPassword2 ? 'password' : 'text'"
-                      required
-                      class="form-control"
-                      style="border: none"
-                      placeholder="Re-enter Password"
-                      maxlength="8"
-                    />
-                    <span
-                      class="toggle-password mr-4 ml-2 mdi"
-                      :class="{
-                        'mdi-eye': showPassword2,
-                        'mdi-eye-off': !showPassword2,
-                      }"
-                      style="cursor: pointer; font-size: 26px"
-                      @click="showPassword2 = !showPassword2"
-                    >
-                    </span>
-                  </div>
-                  <h6 v-if="isPassword2 == false" class="w-100 mb-2 text-red">
-                    {{ password2Mes }}
-                  </h6>
-                </template>
+              <div v-if="isChangePhone" class="mt-2">
+                <MazPhoneNumberInput
+                  v-model="input.phoneNew"
+                  show-code-on-list
+                  color="info"
+                  :default-country-code="input.country ? input.country : 'SG'"
+                  :preferred-countries="['SG', 'BD', 'IN', 'MY', 'GB', 'PH']"
+                  @update="phoneEvent2 = $event"
+                />
                 <v-btn
-                  class="text-none text-subtitle-1"
-                  :class="{ 'mt-4': isPassword2, 'mt-n2': !isPassword2 }"
-                  color="success"
+                  class="text-none text-subtitle-1 text-white w-100 mt-3"
+                  color="#F0882D"
                   variant="flat"
-                  @click="changePassword()"
+                  @click="saveMobile()"
                 >
-                  Save Changes
+                  Save
                 </v-btn>
               </div>
-
               <v-alert
                 class="my-2"
-                v-model="isPasswordChanged"
+                v-model="isMobileChanged"
                 type="success"
                 :text="successMessage"
               ></v-alert>
             </v-col>
           </v-row>
-         <!-- <v-row>
-            <v-col cols="6">
-               <label
-                >Birth Date (<span>{{ age }} Years</span>)</label
-              >
-              <input
-                v-model="input.date"
-                required
-                class="form-control mt-2"
-                type="text"
-                id="dateInput"
-                placeholder="DD/MM/YYYY"
-                @input="onDateInput"
-              /> 
-            </v-col>-->
-            <!--<v-col cols="6">
-               <div class="w-100 text-center">
-                <label class="mx-auto">Gender</label>
-              </div>
-
-              <v-radio-group
-                v-model="input.gender2"
-                :rules="rules.genderRules"
-                inline
-                class="mt-3 ml-n4"
-                style="font-size: 12px !important"
-              >
-                <v-radio
-                  style="font-size: 10px !important"
-                  label="Male"
-                  value="M"
-                />
-                <v-radio
-                  style="font-size: 10px !important"
-                  label="Female"
-                  value="F"
-                />
-              </v-radio-group> 
-            </v-col>
-          </v-row>-->
-          <!--<v-row class="mt-n10">
+          <v-row>
             <v-col>
-               <label>Nationality</label>
+              <label>Nationality</label>
               <VueMultiselect
                 v-model="input.nationality"
                 @select="onInputNationality()"
@@ -998,7 +976,7 @@
                 track-by="id"
                 label="title"
                 placeholder="Select Nationality"
-              /> -->
+              />
               <!-- <v-select
                 v-model="input.nationality"
                 :items="resource.nationality"
@@ -1008,12 +986,12 @@
                 class="mt-2"
                 density="compact"
                 :rules="rules.nationalityRules"
-              /> 
+              /> -->
             </v-col>
-          </v-row>-->
-         <!-- <v-row>
+          </v-row>
+          <v-row>
             <v-col>
-               <label>Marital Status</label>
+              <label>Marital Status</label>
               <VueMultiselect
                 v-model="input.marital"
                 class="mt-2"
@@ -1021,23 +999,150 @@
                 track-by="value"
                 label="title"
                 placeholder="Select Marital Status"
-              /> 
+              />
             </v-col>
-          </v-row> -->
+          </v-row>
+            <div
+              class="d-flex w-100 mt-6 justify-space-between align-center"
+            >
+              <p class="title-card text-red-darken-4">Current Location</p>
+              <!-- <v-btn
+                class="text-none text-subtitle-1"
+                color="success"
+                size="large"
+                variant="flat"
+                @click="saveLocation()"
+              >
+                Save Changes
+              </v-btn> -->
+            </div>
+
+            <div style="height: 0.5px; background: black;" class="w-100 mt-2 mb-4"></div>
+            <v-row>
+              <v-col cols="10">
+                <!-- <VueMultiselect
+                  v-model="input.country"
+                  class="mt-2"
+                  :options="resource.country"
+                  placeholder="Current Country"
+                /> -->
+                <!-- <div class="location-input">
+                  <v-autocomplete
+                    v-model="input.country"
+                    :items="resource.country"
+                    variant="outlined"
+                    label="Current Country"
+                    clearable
+                    class="mt-n1"
+                    density="compact"
+                    :rules="rules.countryRules"
+                  />
+                </div> -->
+                <div class="w-100 d-flex align-center">
+                  <div
+                    v-if="input.country"
+                    style="
+                      border-top: 2px solid rgb(239, 239, 239);
+                      border-bottom: 2px solid rgb(239, 239, 239);
+                      border-left: 2px solid rgb(239, 239, 239);
+                      border-radius: 5px 0 0px 5px;
+                      height: 47px;
+                    "
+                    class="d-flex align-center justify-center"
+                  >
+                    <span
+                      class="fi ml-2 pr-4 mr-4"
+                      :class="['fi-' + input.country.toLowerCase()]"
+                    />
+                  </div>
+                  <MazSelect
+                    v-slot="{ option }"
+                    v-model="input.country"
+                    item-height="40"
+                    :options="options"
+                    search
+                    size="md"
+                    class="w-100"
+                    search-placeholder="Search in country"
+                    :class="{ 'ml-n1': input.country }"
+                  >
+                    <div
+                      class="flex items-center"
+                      style="
+                        padding-top: 0.5rem;
+                        padding-bottom: 0.5rem;
+                        width: 100%;
+                        gap: 1rem;
+                      "
+                    >
+                      <span
+                        class="fi"
+                        :class="['fi-' + option.value.toLowerCase()]"
+                      />
+                      <span class="pl-2">
+                        {{ option.label }}
+                      </span>
+                    </div>
+                  </MazSelect>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="10">
+                <!-- <VueMultiselect
+                  v-model="input.city"
+                  :options="resource.city"
+                  placeholder="Current City"
+                /> -->
+                <div class="location-input">
+                  <v-combobox
+                    v-model="input.city"
+                    :items="resource.city"
+                    variant="outlined"
+                    label="Select City"
+                    clearable
+                    class="mt-n1"
+                    density="compact"
+                    :rules="rules.cityRules"
+                  />
+                </div>
+              </v-col>
+            </v-row>
+            <v-row class="mb-8 pb-2">
+              <v-col cols="10">
+                <!-- <VueMultiselect
+                  v-model="input.town"
+                  class="mt-2"
+                  :options="resource.town"
+                  placeholder="Current Town"
+                /> -->
+                <div class="location-input">
+                  <v-combobox
+                    v-model="input.town"
+                    :items="resource.town"
+                    variant="outlined"
+                    label="Select Town (Optional)"
+                    clearable
+                    class="mt-n1"
+                    density="compact"
+                  />
+                </div>
+              </v-col>
+            </v-row>
+            <div class="w-100" style="background: #F3F3F3; position: fixed; bottom: 0; left: 0; z-index: 99999">
           <v-container
-            style="position: fixed; bottom: 1.5rem; left: 0; z-index: 99999"
             class="d-flex justify-center align-center"
           >
             <v-btn
               class="text-none text-subtitle-1"
-              color="success"
+              color="#0197D4"
               size="large"
               variant="flat"
-              @click="saveData()"
             >
-              Save Changes
+             <span class="text-white">View Full Profile</span>
             </v-btn>
           </v-container>
+        </div>
         </div>
       </template>
       <div class="crop-image-dialog">
@@ -1090,7 +1195,7 @@
     </v-container>
     <input
       ref="fileuploadinput"
-      style="opacity: 0; filter: alpha(opacity=0)"
+      style="display: none; filter: alpha(opacity=0)"
       type="file"
       accept="image/png, image/jpeg"
       @change="onFileChangeInput"
@@ -1100,7 +1205,7 @@
 
 <script>
 // import VueAvatarCropper from "vue-avatar-cropper";
-// import VueMultiselect from "vue-multiselect";
+import VueMultiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import app from "@/util/eventBus";
 // import ImageCropperDialog from "../components/ImageCropperDialog.vue";
@@ -1112,7 +1217,7 @@ import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import MazSelect from "maz-ui/components/MazSelect";
 export default {
   components: {
-    // VueMultiselect,
+    VueMultiselect,
     MazPhoneNumberInput,
     // ImageCropperDialog,
     MazSelect,
@@ -1395,6 +1500,8 @@ export default {
       image_path: "",
       image: null,
       imageSend: null,
+      activeResume: null,
+      itemsResume: ['Current Location', 'My Qualifications', 'Current Location', 'My Qualifications', 'Current Location'],
       input: {
         id: null,
         image_path: "",

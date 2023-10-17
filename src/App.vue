@@ -7,7 +7,7 @@
           <component :is="Component" />
         </Transition>
       </RouterView>
-      <Footer v-if="currentRoute !== '/signup' && !token" />
+      <Footer v-if="currentRoute !== '/signup' && currentRoute !== '/resume-profile' && !token" />
     </div>
   </v-app>
 </template>

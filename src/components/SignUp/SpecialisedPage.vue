@@ -79,7 +79,9 @@
                               <p class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</p>
                               </div>
                               <div class="img-cont">
-                                <v-img cover height="100" :src="option.image"></v-img>
+                                <v-img cover height="100" :src="option.image"><template #placeholder>
+                                  <div class="skeleton" /> </template
+                              ></v-img>
                               </div>
                             </v-card>
                           </div>
@@ -330,5 +332,22 @@ export default {
 }
 .matop-2 {
   margin-top: 250px;
+}
+
+.skeleton {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-90deg, #f2f2f2 0%, #e1e1e1 50%, #f2f2f2 100%);
+  background-size: 400% 400%;
+  animation: skeleton 1.6s ease infinite;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 </style>

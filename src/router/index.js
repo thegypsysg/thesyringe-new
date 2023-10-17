@@ -8,6 +8,7 @@ import RecognisedQualifications from '@/components/RecognisedQualifications.vue'
 import SignUp from '../views/SignUpForm.vue';
 import PrivacyTerms from "../views/PrivacyTerms.vue";
 import MyProfile from "../views/MyProfile.vue";
+import ResumeProfile from "../views/ResumeProfile.vue";
 
 const routes = [
   {
@@ -17,6 +18,10 @@ const routes = [
   {
     path: "/my-profile",
     component: MyProfile,
+  },
+  {
+    path: "/resume-profile",
+    component: ResumeProfile,
   },
   {
     path: '/signup',

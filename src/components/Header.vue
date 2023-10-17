@@ -2,12 +2,12 @@
   <v-app-bar
     :class="{
       'app-bar-mobile-start': isSmall && isHome && tokenStart,
-      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isMyProfile && !tokenStart,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isMyProfile,
-      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isMyProfile,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isMyProfile,
-      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isMyProfile,
-      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isMyProfile,
+      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
     }"
     color="white"
     elevation="1"
@@ -16,7 +16,7 @@
     <router-link to="/">
       <div class="logo-img-container d-flex align-center">
         <v-img class="logo-img" :src="$fileURL + logo" height="50" 
-        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isMyProfile }">
+        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isProfile }">
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -160,10 +160,14 @@
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span-2': isSmall }">My Profile</span>
     </div>
-    <v-spacer v-if="isPrivacy || isTerms || isMyProfile" />
+    <div v-if="isResumeProfile" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+      <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
+      <span class="text-blue-accent-4" :class="{ 'header-info-span-2': isSmall }">Resume Profile</span>
+    </div>
+    <v-spacer v-if="isPrivacy || isTerms || isProfile" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isMyProfile  && !tokenStart"
+      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isProfile  && !tokenStart"
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete
@@ -274,7 +278,7 @@
       </v-btn>
     </div>
     <div
-      v-if="isSpecific && !isPrivacy && !isTerms && !isMyProfile"
+      v-if="isSpecific && !isPrivacy && !isTerms && !isProfile"
       class="desktop__app"
       style="min-width: 600px !important"
     >
@@ -436,7 +440,7 @@
     
   <v-spacer v-if="!isSmall && tokenStart"></v-spacer>
     <v-btn
-      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && !isMyProfile && userName == null"
+      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && !isProfile && userName == null"
       elevation="0"
       class="btn_sign__up mr-4"
       @click="loginGypsy"
@@ -444,7 +448,7 @@
       Sign up / Sign In
     </v-btn>
     <v-btn
-    v-if="!isWelcome && !isPrivacy && !isTerms && !isMyProfile && userName != null"
+    v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && userName != null"
     elevation="0"
     class="btn_log__out"
     @click="logout"
@@ -456,7 +460,7 @@
     v-if="!isWelcome"
     style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
     icon
-    :class="{ 'mr-2': isPrivacy || isTerms || isMyProfile || tokenStart }"
+    :class="{ 'mr-2': isPrivacy || isTerms || isProfile || tokenStart }"
     @click="drawer = !drawer"
   >
     <v-img
@@ -478,7 +482,7 @@
     />
   </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isMyProfile" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -932,7 +936,7 @@
             src="@/assets/images/icons/menu-shopper.png"
           />
         </div>
-        <router-link class="text-decoration-none text-black" to="/my-profile">
+        <router-link class="text-decoration-none text-black" to="/resume-profile">
           <v-list-item-title style="font-size: 12px">
             Resume Profile
           </v-list-item-title>
@@ -1174,8 +1178,14 @@ export default {
     isTerms() {
       return this.$route.path == "/our-terms";
     },
+    isProfile() {
+      return this.$route.path == "/my-profile" || this.$route.path == "/resume-profile";
+    },
     isMyProfile() {
       return this.$route.path == "/my-profile";
+    },
+    isResumeProfile() {
+      return this.$route.path == "/resume-profile";
     },
     isSmall() {
       return this.screenWidth < 640;
