@@ -1613,7 +1613,7 @@ export default {
         .get(`/city`)
         .then((response) => {
           const data = response.data.data;
-          // console.log(data);
+          console.log(data);
           if (country_name) {
             this.resource.city = data
               .filter((i) => i.country_name == country_name)

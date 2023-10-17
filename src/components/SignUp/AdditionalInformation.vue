@@ -14,6 +14,17 @@
               :class="{ 'login-card px-12': !isSmall, 'py-10 px-2': isSmall }"
             >
               <v-row>
+                <v-col cols="12">
+                <div class="text-center">
+                <h1 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">Basic Profile Setup</h1>
+                <h1 class="text-red-darken-4" 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">Step 4 of 4</h1>
+              </div>
+              <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
+            </v-col>
                 <v-col class="pb-10" :cols="isSmall ? '12' : '6'">
                   <!-- <h1
                     class="mb-4"
@@ -24,7 +35,7 @@
                   </h1> -->
 
                   <v-form fast-fail @submit.prevent="login">
-                    <p class="mb-2">Born Country</p>
+                    <p class="mb-2">Which country you were born. ?</p>
                     <div class="w-75 mb-4 d-flex align-center">
                       <div
                         v-if="country"
@@ -138,36 +149,54 @@
                       clearable
                     /> -->
 
-                    <div class="d-flex align-center">
-                      <v-btn
-                        type="submit"
-                        variant="outlined"
-                        class="login-btn"
-                        :class="{
-                          'w-66 login-btn-mobile': isSmall,
-                          'w-75': !isSmall,
-                        }"
-                        @click="nextStep"
-                      >
-                        Next
-                      </v-btn>
-                      <div
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        style="
-                          text-align: center;
-                          cursor: pointer;
-                          color: #2b0087;
-                          font-weight: 700;
-                          font-size: 20px;
-                        "
-                        @click="backStep"
-                      >
-                        Back
-                      </div>
-                    </div>
+                    <div
+                    class="d-flex align-center"
+                    :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
+                  >
+                  <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
+                    <v-btn
+                      type="submit"
+                      variant="outlined"
+                      class="login-btn"
+                      :class="{
+                        'w-33 login-btn-mobile': isSmall,
+                        'w-25': !isSmall,
+                      }"
+                      @click="nextStep"
+                    >
+                      Next
+                    </v-btn>
+                    <!-- <div
+                  class="text-blue-darken-4"
+                  :class="{
+                    'w-33 login-btn-mobile': isSmall,
+                    'w-25': !isSmall,
+                  }"
+                  style="
+                    text-align: center;
+                    cursor: pointer;
+                    font-weight: 700;
+                    font-size: 20px;
+                  "
+                  @click="backStep"
+                >
+                  Back
+                </div> -->
+                  </v-container>
+                  <v-btn
+                  v-if="!isSmall"
+                  type="submit"
+                  variant="outlined"
+                  class="login-btn"
+                  :class="{
+                    'w-33 login-btn-mobile': isSmall,
+                    'w-25': !isSmall,
+                  }"
+                  @click="nextStep"
+                >
+                  Next
+                </v-btn>
+                  </div>
                   </v-form>
                 </v-col>
                 <v-col
@@ -176,6 +205,7 @@
                   class="d-flex align-center justify-center"
                 >
                   <h1 style="width: 80%">
+                    Where are you born, which Country, and what Nationality ?
                   </h1>
                 </v-col>
               </v-row>
@@ -512,6 +542,9 @@ export default {
 .header-mobile {
   font-size: 20px;
 }
+.header-mobile-2 {
+  font-size: 24px;
+}
 
 .section-desktop {
   font-size: 24px;
@@ -532,6 +565,12 @@ export default {
   -moz-text-fill-color: #333 !important;
 }
 
+.fixed-next {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #F3F3F3;
+}
 .login-btn {
   width: 400px;
   height: 50px;

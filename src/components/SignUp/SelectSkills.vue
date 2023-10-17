@@ -16,15 +16,28 @@
             >
               <v-row>
                 <v-col cols="12">
+                  <div class="text-center">
+                    <h1 
+                    :class="{ 'header-mobile-2': isSmall }" 
+                    style="font-family: Arial, Helvetica, sans-serif !important">Basic Profile Setup</h1>
+                    <h1 class="text-red-darken-4" 
+                    :class="{ 'header-mobile-2': isSmall }" 
+                    style="font-family: Arial, Helvetica, sans-serif !important">Step 1 of 4</h1>
+                  </div>
+                  </v-col>
+                  <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
+                  <v-col cols="12">
                   <h1
-                    class="mb-4"
+                    class="mb-2"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
                     Skills Group
                   </h1>
+                  <h4 class="mb-8">(Please select any one of the following)</h4>
 
-                  <v-form fast-fail @submit.prevent="login">
+                  <v-form  fast-fail @submit.prevent="login">
+                    <div class="position-relative">
                     <v-radio-group class="w-100" v-model="skill" inline>
                       <v-radio
                         v-for="option in resource.skills"
@@ -34,32 +47,50 @@
                         :class="{ 'w-25': !isSmall, 'w-50': isSmall }"
                       >
                         <template #label>
-                          <div class="radio-label text-center">
-                            <span>{{ option.label }}</span>
-                            <v-img :src="option.image" max-height="100"></v-img>
-                          </div>
+                          <v-card height="180" width="150" class="text-center" elevation="0">
+                            <div style="height: 40px;">
+                            <p class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</p>
+                            </div>
+                            <div class="img-cont">
+                              <v-img cover height="100" :src="option.image"></v-img>
+                            </div>
+                          </v-card>
                         </template>
                       </v-radio>
                     </v-radio-group>
-
-                    <v-spacer></v-spacer>
+                  </div>
 
                     <div
                       class="d-flex align-center"
-                      :class="{ matop: !isSmall, 'matop-2': isSmall }"
+                      :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
                     >
+                    <v-container v-if="isSmall">
                       <v-btn
                         type="submit"
                         variant="outlined"
                         class="login-btn"
                         :class="{
                           'w-33 login-btn-mobile': isSmall,
-                          'w-25 m': !isSmall,
+                          'w-25': !isSmall,
                         }"
                         @click="nextStep"
                       >
                         Next
                       </v-btn>
+                    </v-container>
+                    <v-btn
+                    v-if="!isSmall"
+                    type="submit"
+                    variant="outlined"
+                    class="login-btn"
+                    :class="{
+                      'w-33 login-btn-mobile': isSmall,
+                      'w-25 mt-n4': !isSmall,
+                    }"
+                    @click="nextStep"
+                  >
+                    Next
+                  </v-btn>
                     </div>
                   </v-form>
                 </v-col>
@@ -163,6 +194,9 @@ export default {
 .header-mobile {
   font-size: 20px;
 }
+.header-mobile-2 {
+  font-size: 24px;
+}
 
 .section-desktop {
   font-size: 24px;
@@ -183,12 +217,26 @@ export default {
   -moz-text-fill-color: #333 !important;
 }
 
+.img-cont {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100px;
+}
+
+.fixed-next {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #F3F3F3;
+}
+
 .login-btn {
   width: 400px;
   height: 50px;
 
   background: #fa2964;
-  border-radius: 10px;
+  border-radius: 5px;
   color: white !important;
   font-weight: 500;
   font-size: 14px;
