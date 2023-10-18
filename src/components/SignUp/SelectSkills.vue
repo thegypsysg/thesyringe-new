@@ -172,6 +172,9 @@ export default {
           this.isSuccess = true;
           this.successMessage = data.message;
           localStorage.setItem("sgm_id", data.data.sgm_id);
+          const sgmName = this.resource.skills.filter(sk => sk.value == data.data.sgm_id)[0].label
+          console.log(sgmName)
+          localStorage.setItem("sgm_name", sgmName);
           this.nextStep()
         })
         .catch((error) => {

@@ -33,7 +33,7 @@
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Nursing
+                    {{ sgmName }}
                   </h1>
                   <div
                     class="text-blue-darken-4"
@@ -175,6 +175,7 @@ export default {
   data() {
     return {
       sgmId: null,
+      sgmName: '',
       skill: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
@@ -194,6 +195,7 @@ export default {
   },
   mounted() {
     this.sgmId = parseInt(localStorage.getItem("sgm_id"));
+    this.sgmName = localStorage.getItem("sgm_name");
     this.getTrendingCardData()
   },
   unmounted() {
@@ -221,6 +223,7 @@ export default {
           this.isSuccess = true;
           this.successMessage = data.message;
           localStorage.setItem("sgm_id", null);
+          localStorage.setItem("sgm_name", null);
           this.nextStep()
         })
         .catch((error) => {
