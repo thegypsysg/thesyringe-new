@@ -23,6 +23,7 @@
 
                   <div class="d-flex mt-12 align-center w-100">
                     <v-btn
+                    :disabled="isLoading"
                       type="submit"
                       variant="outlined"
                       class="login-btn"
@@ -30,7 +31,7 @@
                         'w-50 login-btn-mobile': isSmall,
                         'w-33': !isSmall,
                       }"
-                      @click="changeHeader()"
+                      @click="goToPath()"
                     >
                       OK
                     </v-btn>
@@ -61,12 +62,15 @@
 
 <script>
 import app from '@/util/eventBus';
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "AdditionalSecurity",
   data() {
     return {
+      isLoading: false,
       name: "",
+      path: '',
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: "",
@@ -85,25 +89,50 @@ export default {
       ? localStorage.getItem("userName")
       : "";
     this.gId = localStorage.getItem("g_id") ? localStorage.getItem("g_id") : "";
+    this.getData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    changeHeader() {
-      // const appId = localStorage.getItem("app_id");
-      // const token = localStorage.getItem("token");
-      // if (appId == "") {
-      //   app.config.globalProperties.$eventBus.$emit(
-      //     "changeHeaderWelcome2",
-      //     "Sign-Up / Sign-in"
-      //   );
-      this.$router.push("/");
-      app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-      // } else {
-      //   const externalURL = `https://the-syringe.com?token=${token}`;
-      //   window.location.href = externalURL;
-      // }
+    goToPath() {
+      if (this.path != '/') {
+          this.$router.push(this.path);
+        } else {
+          this.$router.push(this.path);
+        app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+        }
+    },
+    getData() {
+      
+    this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+      .get(`/gypsy-applicant`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data);
+        if (data.slug) {
+          this.path = `/${data.slug}`;
+        } else {
+        this.path = "/";
+      }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        
+        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+
+      
     },
     nextStep() {
       this.$emit("nextStep");

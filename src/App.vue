@@ -36,6 +36,7 @@ export default {
   mounted() {
     const url = new URL(window.location.href);
       const tokenParam = url.searchParams.get("token");
+      localStorage.setItem('token', tokenParam);
       
     this.getApplicant(tokenParam)
 
