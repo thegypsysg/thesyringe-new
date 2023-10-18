@@ -25,7 +25,7 @@
               </div>
               <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
             </v-col>
-                <v-col class="pb-10" :cols="isSmall ? '12' : '6'">
+                <v-col class="pb-16 pb-md-10" :cols="isSmall ? '12' : '6'">
                   <!-- <h1
                     class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
@@ -34,7 +34,7 @@
                     Where are you now ?
                   </h1> -->
 
-                  <v-form fast-fail @submit.prevent="login">
+                  <!-- <v-form fast-fail @submit.prevent="login"> -->
                     <p class="mb-2">Which country you were born. ?</p>
                     <div class="w-75 mb-4 d-flex align-center">
                       <div
@@ -84,7 +84,7 @@
                       </MazSelect>
                     </div>
                     <p class="mb-2">Nationality</p>
-                    <div class="w-75 mb-8 d-flex align-center">
+                    <div class="w-75 mb-16 mb-md-8 d-flex align-center">
                       <div
                         v-if="nationality"
                         style="
@@ -131,6 +131,26 @@
                         </div>
                       </MazSelect>
                     </div>
+                    
+                    <div style="display: none;">
+                      <MazPhoneNumberInput
+                        show-code-on-list
+                        :default-country-code="
+                          country
+                        "
+                        @update="phoneEvent = $event"
+                      />
+                      </div>
+                      
+                    <div style="display: none;">
+                      <MazPhoneNumberInput
+                        show-code-on-list
+                        :default-country-code="
+                          nationality
+                        "
+                        @update="phoneEvent2 = $event"
+                      />
+                      </div>
                     <!-- <v-autocomplete
                       v-model="city"
                       :items="resource.cities"
@@ -162,7 +182,7 @@
                         'w-33 login-btn-mobile': isSmall,
                         'w-25': !isSmall,
                       }"
-                      @click="nextStep"
+                      @click="saveData"
                     >
                       Next
                     </v-btn>
@@ -192,12 +212,12 @@
                     'w-33 login-btn-mobile': isSmall,
                     'w-25': !isSmall,
                   }"
-                  @click="nextStep"
+                  @click="saveData"
                 >
                   Next
                 </v-btn>
                   </div>
-                  </v-form>
+                  <!-- </v-form> -->
                 </v-col>
                 <v-col
                   v-if="!isSmall"
@@ -233,11 +253,14 @@
 
 <script>
 import MazSelect from "maz-ui/components/MazSelect";
+import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'WhereAreYou',  
   components: {
     MazSelect,
+    MazPhoneNumberInput
   },
   data() {
     return {      
@@ -489,8 +512,11 @@ export default {
         { value: "ZW", label: "Zimbabwe" },
       ],
       country: null,
+      countryName: '',
       nationality: null,
-      town: null,
+      nationalityName: '',
+      phoneEvent: null,
+      phoneEvent2: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
@@ -505,6 +531,20 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
+  },  
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    country: function (newVal, oldVal) {
+      const country = this.options.filter((o) => o.value === newVal)[0];
+      //console.log(country?.label);
+      this.countryName = country?.label;
+    },
+    // eslint-disable-next-line no-unused-vars
+    nationality: function (newVal, oldVal) {
+      const nationality = this.options.filter((o) => o.value === newVal)[0];
+      //console.log(nationality?.label);
+      this.nationalityName = nationality?.label;
+    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -513,6 +553,59 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    saveData() {
+      const payload = {
+        // country_current: this.input.country.id,
+        born_country_prefix: this.country,
+        born_country_code: this.phoneEvent?.countryCallingCode
+          ? `+${this.phoneEvent.countryCallingCode}`
+          : "+65",
+        born_country: this.countryName,
+        born_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+        nationality_country_prefix: this.nationality,
+        nationality_country_code: this.phoneEvent?.countryCallingCode
+          ? `+${this.phoneEvent.countryCallingCode}`
+          : "+65",
+        nationality: this.nationalityName,
+        nationality_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.nationality.toLowerCase() +
+          ".svg",
+      };
+      //console.log(payload);
+      //console.log(this.phoneEvent);
+      const token = localStorage.getItem("token");
+      if(this.country && this.nationality) {
+      axios
+        .post(`/gypsy-applicant/save-born-country-and-nationality`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = data.message;
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+      }
+    },
     nextStep() {
       this.$emit('nextStep');
     },

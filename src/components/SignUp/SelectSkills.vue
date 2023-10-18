@@ -36,7 +36,7 @@
                   </h1>
                   <h4 class="mb-8">(Please select any one of the following)</h4>
 
-                  <v-form  fast-fail @submit.prevent="login">
+                  <!-- <v-form  fast-fail @submit.prevent="login"> -->
                     <div class="position-relative">
                     <v-radio-group class="w-100" v-model="skill" inline>
                       <v-radio
@@ -75,7 +75,7 @@
                           'w-33 login-btn-mobile': isSmall,
                           'w-25': !isSmall,
                         }"
-                        @click="nextStep"
+                        @click="saveData"
                       >
                         Next
                       </v-btn>
@@ -89,12 +89,12 @@
                       'w-33 login-btn-mobile': isSmall,
                       'w-25 mt-n4': !isSmall,
                     }"
-                    @click="nextStep"
+                    @click="saveData"
                   >
                     Next
                   </v-btn>
                     </div>
-                  </v-form>
+                  <!-- </v-form> -->
                 </v-col>
               </v-row>
             </v-card>
@@ -126,7 +126,7 @@ export default {
   name: 'SelectSkills',
   data() {
     return {
-      skill: '',
+      skill: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
@@ -144,19 +144,54 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.skill = parseInt(localStorage.getItem("sgm_id"));
     this.getTrendingCardData()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    saveData() {
+      const payload = {
+        sgm_id: this.skill,
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.skill) {
+      axios
+        .post(`/save-gypsy-applicant`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          //console.log(data);
+          this.isSuccess = true;
+          this.successMessage = data.message;
+          localStorage.setItem("sgm_id", data.data.sgm_id);
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message = error.response.data.message === ""
+            ? "Something Wrong!!!"
+            : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        });
+      }
+    },
     getTrendingCardData() {
       this.isLoading = true;
       axios
         .get(`/skillgroups/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
           this.resource.skills = data.map((item) => {
             return {
               value: item.sgm_id || 1,

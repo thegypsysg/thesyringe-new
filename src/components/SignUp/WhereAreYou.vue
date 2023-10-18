@@ -11,7 +11,7 @@
               :elevation="!isSmall ? 1 : 0"
               :max-width="isSmall ? `${screenWidth - 30}px` : ''"
               class="mx-auto"
-              :class="{ 'login-card px-12': !isSmall, 'py-10 pb-16 px-2': isSmall }"
+              :class="{ 'login-card px-12': !isSmall, 'pt-10 pb-16 px-2': isSmall }"
             >
               <v-row>
                 <v-col cols="12">
@@ -22,10 +22,10 @@
                 <h1 class="text-red-darken-4" 
                 :class="{ 'header-mobile-2': isSmall }" 
                 style="font-family: Arial, Helvetica, sans-serif !important">Step 3 of 4</h1>
-              </div>
-              <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
-            </v-col>
-                <v-col :cols="isSmall ? '12' : '6'">
+                  </div>
+                  <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
+                </v-col>
+                <v-col class="pb-16 pb-md-1" :cols="isSmall ? '12' : '6'">
                   <h1
                     class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
@@ -34,7 +34,7 @@
                     Where are you now ?
                   </h1>
 
-                  <v-form fast-fail @submit.prevent="login">
+                  <!-- <v-form fast-fail @submit.prevent="login"> -->
                     <p class="mb-2">Select Country</p>
                     <div class="w-75 mb-8 d-flex align-center">
                       <div
@@ -94,6 +94,15 @@
                         density="compact"
                       />
                     </div>
+                    <div style="display: none;">
+                      <MazPhoneNumberInput
+                        show-code-on-list
+                        :default-country-code="
+                          country
+                        "
+                        @update="phoneEvent = $event"
+                      />
+                      </div>
                     <!-- <v-autocomplete
                       v-model="city"
                       :items="resource.cities"
@@ -125,7 +134,7 @@
                         'w-33 login-btn-mobile': isSmall,
                         'w-25': !isSmall,
                       }"
-                      @click="nextStep"
+                      @click="saveData"
                     >
                       Next
                     </v-btn>
@@ -155,12 +164,12 @@
                     'w-33 login-btn-mobile': isSmall,
                     'w-25': !isSmall,
                   }"
-                  @click="nextStep"
+                  @click="saveData"
                 >
                   Next
                 </v-btn>
                   </div>
-                  </v-form>
+                  <!-- </v-form> -->
                 </v-col>
                 <v-col
                   v-if="!isSmall"
@@ -196,12 +205,14 @@
 
 <script>
 import MazSelect from "maz-ui/components/MazSelect";
+import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'WhereAreYou',  
   components: {
     MazSelect,
+    MazPhoneNumberInput
   },
   data() {
     return {      
@@ -454,7 +465,8 @@ export default {
       ],
       country: null,
       city: null,
-      town: null,
+      phoneEvent: null,
+        countryName: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
@@ -474,7 +486,8 @@ export default {
     // eslint-disable-next-line no-unused-vars
     country: function (newVal, oldVal) {
       const country = this.options.filter((o) => o.value === newVal)[0];
-      console.log(country?.label);
+      //console.log(country?.label);
+      this.countryName = country?.label;
       this.getCity(country?.label);
     },
   },
@@ -488,12 +501,58 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    saveData() {
+      const payload = {
+        // country_current: this.input.country.id,
+        country_prefix: this.country,
+        country_code: this.phoneEvent?.countryCallingCode
+          ? `+${this.phoneEvent.countryCallingCode}`
+          : "+65",
+        current_country: this.countryName,
+        current_city: this.city.title
+          ? this.city.title
+          : this.city,
+        flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+      };
+      //console.log(payload);
+      //console.log(this.phoneEvent);
+      const token = localStorage.getItem("token");
+      if(this.country && this.city) {
+      axios
+        .post(`/gypsy-applicant/save-current-location`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.isSuccess = true;
+          this.successMessage = data.message;
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+      }
+    },
     getCity(country_name) {
       axios
         .get(`/city`)
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+          //console.log(data);
           if (country_name) {
             this.resource.city = data
               .filter((i) => i.country_name == country_name)

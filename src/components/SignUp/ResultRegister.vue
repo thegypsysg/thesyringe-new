@@ -16,7 +16,7 @@
               <v-row>
                 <v-col cols="12">
                   <h2 class="mt-6">
-                    Hi {{ name || "" }}
+                    Hi {{ name }}
                   </h2>
                   <br />
                   <h2>You have successfully created your Basic Resume Profile .</h2>
@@ -66,7 +66,7 @@ export default {
   name: "AdditionalSecurity",
   data() {
     return {
-      name: "Charlton",
+      name: "",
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: "",
@@ -81,8 +81,8 @@ export default {
     window.addEventListener("resize", this.handleResize);
   },
   mounted() {
-    this.name = localStorage.getItem("name")
-      ? localStorage.getItem("name")
+    this.name = localStorage.getItem("userName")
+      ? localStorage.getItem("userName")
       : "";
     this.gId = localStorage.getItem("g_id") ? localStorage.getItem("g_id") : "";
   },

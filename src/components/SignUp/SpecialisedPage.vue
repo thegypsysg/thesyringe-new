@@ -47,12 +47,13 @@
                       font-weight: 700;
                       font-size: 20px;
                     "
+                    @click="backStep"
                   >
                     Change
                   </div>
                 </div>
 
-                  <v-form fast-fail @submit.prevent="login">
+                  <!-- <v-form fast-fail @submit.prevent="login"> -->
                   <div class="position-relative" :class="{'scroll-mobile-2': isSmall && resource.skills.length > 8, 'scroll-mobile': isSmall && resource.skills.length > 4}">
                     <h4>Please select any one your Main skills</h4>
                     <v-autocomplete
@@ -106,7 +107,7 @@
                           'w-33 login-btn-mobile': isSmall,
                           'w-25': !isSmall,
                         }"
-                        @click="nextStep"
+                        @click="saveData"
                       >
                         Next
                       </v-btn>
@@ -136,12 +137,12 @@
                       'w-33 login-btn-mobile': isSmall,
                       'w-25 mt-16': !isSmall,
                     }"
-                    @click="nextStep"
+                    @click="saveData"
                     >
                       Next
                     </v-btn>
                   </div>
-                  </v-form>
+                  <!-- </v-form> -->
                 </v-col>
               </v-row>
             </v-card>
@@ -173,6 +174,7 @@ export default {
   name: 'SelectSkills',
   data() {
     return {
+      sgmId: null,
       skill: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
@@ -191,19 +193,54 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
+    this.sgmId = parseInt(localStorage.getItem("sgm_id"));
     this.getTrendingCardData()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    saveData() {
+      const payload = {
+        sgm_id: this.sgmId,
+        main_skills_id: this.skill
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.skill) {
+      axios
+        .post(`/save-gypsy-applicant`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.isSuccess = true;
+          this.successMessage = data.message;
+          localStorage.setItem("sgm_id", null);
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message = error.response.data.message === ""
+            ? "Something Wrong!!!"
+            : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        });
+      }
+    },
     getTrendingCardData() {
     this.isLoading = true;
     axios
-      .get(`/skills/group/4`)
+      .get(`/skills/group/${this.sgmId}`)
       .then((response) => {
         const data = response.data.data;
-        console.log(data);
+        //console.log(data);
         this.resource.skills = data.sort((a,b) => a.skills_name.localeCompare(b.skills_name)).map((item) => {
           return {
             value: item.skills_id || 1,
