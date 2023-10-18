@@ -54,7 +54,7 @@
                 </div>
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
-                  <div class="position-relative" :class="{'scroll-mobile-2': isSmall && resource.skills.length > 8, 'scroll-mobile': isSmall && resource.skills.length > 4}">
+                  <div class="position-relative" >
                     <h4>Please select any one your Main skills</h4>
                     <v-autocomplete
                       v-model="skill"
@@ -68,30 +68,32 @@
                       item-value="value"
                       clearable
                     />
-                    <v-radio-group class="w-100" v-model="skill" inline>
-                      <v-radio
-                        v-for="option in resource.skills"
-                        :key="option.value"
-                        :label="option.label"
-                        :value="option.value"
-                        :class="{ 'w-25': !isSmall, 'w-50': isSmall }"
-                      >
-                        <template #label>
-                          <div class="radio-label text-center">
-                            <v-card height="180" width="150" class="text-center" elevation="0">
-                              <div style="height: 40px;">
-                              <p class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</p>
-                              </div>
-                              <div class="img-cont">
-                                <v-img cover height="100" :src="option.image"><template #placeholder>
-                                  <div class="skeleton" /> </template
-                              ></v-img>
-                              </div>
-                            </v-card>
-                          </div>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
+                    <div :class="{'scroll-mobile-2': isSmall && resource.skills.length > 8, 'scroll-mobile-1': isSmall && resource.skills.length > 4, 'scroll-mobile': isSmall && resource.skills.length <= 4}">
+                      <v-radio-group class="w-100" v-model="skill" inline>
+                        <v-radio
+                          v-for="option in resource.skills"
+                          :key="option.value"
+                          :label="option.label"
+                          :value="option.value"
+                          :class="{ 'w-25': !isSmall, 'w-50': isSmall }"
+                        >
+                          <template #label>
+                            <div class="radio-label text-center">
+                              <v-card height="180" width="150" class="text-center" elevation="0">
+                                <div style="height: 40px;">
+                                <p class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</p>
+                                </div>
+                                <div class="img-cont">
+                                  <v-img cover height="100" :src="option.image"><template #placeholder>
+                                    <div class="skeleton" /> </template
+                                ></v-img>
+                                </div>
+                              </v-card>
+                            </div>
+                          </template>
+                        </v-radio>
+                      </v-radio-group>
+                    </div>
                   </div>
 
                   <div
@@ -386,13 +388,15 @@ export default {
   margin-top: 400px;
 }
 
-
 .scroll-mobile {
+  height: 50vh;
+}
+.scroll-mobile-1 {
   height: 95vh;
 }
 .scroll-mobile-2 {
   height: 100vh;
-  margin-bottom: 100px;
+  margin-bottom: 150px;
 }
 
 .skeleton {

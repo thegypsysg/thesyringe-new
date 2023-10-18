@@ -853,9 +853,11 @@
       </div>
     </div>
     <div class="drawer__heading">
+      <router-link to="/">
       <div class="drawer-logo">
         <v-img height="35" width="80" :src="$fileURL + logo" />
       </div>
+    </router-link>
       <v-menu contained style="z-index: 1000">
         <template #activator="{ props }">
           <v-btn
@@ -911,7 +913,9 @@
         <div class="v-list-item__icon">
           <v-img height="20" width="30" src="@/assets/images/icons/home.png" />
         </div>
+        <router-link class="text-decoration-none text-black" to="/">
         <v-list-item-title style="font-size: 12px"> Home </v-list-item-title>
+      </router-link>
       </li>
 
       <li v-if="userName != null" class="v-list-item mt-n2">
