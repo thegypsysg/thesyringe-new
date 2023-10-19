@@ -13,7 +13,7 @@
     elevation="1"
     fixed
   >
-    <router-link to="/">
+    <router-link :to="path">
       <div class="logo-img-container d-flex align-center">
         <v-img class="logo-img" :src="$fileURL + logo" height="50" 
         :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isProfile }">
@@ -853,7 +853,7 @@
       </div>
     </div>
     <div class="drawer__heading">
-      <router-link to="/">
+      <router-link :to="path">
       <div class="drawer-logo">
         <v-img height="35" width="80" :src="$fileURL + logo" />
       </div>
@@ -913,7 +913,7 @@
         <div class="v-list-item__icon">
           <v-img height="20" width="30" src="@/assets/images/icons/home.png" />
         </div>
-        <router-link class="text-decoration-none text-black" to="/">
+        <router-link class="text-decoration-none text-black" :to="path">
         <v-list-item-title style="font-size: 12px"> Home </v-list-item-title>
       </router-link>
       </li>
@@ -1102,6 +1102,7 @@ export default {
   props: ['isWelcome'],
   data() {
     return {
+      path: '',
       // selectedTag: null,
       tokenStart: null,
       footerData: {
@@ -1225,7 +1226,6 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   mounted() {
-
     const token = localStorage.getItem("token");
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
@@ -1243,6 +1243,10 @@ export default {
     //   'getHeaderDetail',
     //   this.getHeaderDetail
     // );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderPath',
+      this.changeHeaderPath
+    );
     app.config.globalProperties.$eventBus.$on(
       'getTokenStart',
       this.getTokenStart
@@ -1282,6 +1286,10 @@ export default {
     //   this.getHeaderDetail
     // );
     app.config.globalProperties.$eventBus.$off(
+      'changeHeaderPath',
+      this.changeHeaderPath
+    );
+    app.config.globalProperties.$eventBus.$off(
       'getTokenStart',
       this.getTokenStart
     );
@@ -1318,6 +1326,10 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    changeHeaderPath(path) {
+      //console.log(image)
+      this.path = path
+    },
     getTokenStart(tokenParam) {
       this.tokenStart = tokenParam;
     },
@@ -1343,6 +1355,7 @@ export default {
           localStorage.setItem("g_id", null);
           localStorage.setItem("user_image", null);
           localStorage.setItem("token", null);
+          this.path = '/'
           window.location.href = "/";
         })
         .catch((error) => {

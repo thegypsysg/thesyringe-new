@@ -33,7 +33,6 @@ export default {
   components: {
     WhereAreYou,
     AdditionalInformation,
-    // AdditionalSecurity,
     SelectSkills,
     SpecialisedPage,
     ResultRegister
@@ -42,6 +41,19 @@ export default {
     return {
       currentStep: 1,
     };
+  },
+  mounted() {
+    const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
+    console.log(applicantData);
+    if(applicantData.sgm_id == null) {
+      this.currentStep = 1;
+    } else if(applicantData.sgm_id != null && applicantData.main_skills_id == null) {
+      this.currentStep = 2;
+    } else if (applicantData.sgm_id != null && applicantData.main_skills_id != null && (applicantData.current_country == null || applicantData.current_city == null)) {
+      this.currentStep = 3;
+    } else if (applicantData.sgm_id != null && applicantData.main_skills_id != null && applicantData.current_country != null && applicantData.current_city != null && (applicantData.born_country == null || applicantData.nationality == null)) {
+      this.currentStep = 4;
+    }
   },
   methods: {
     nextStep() {

@@ -144,7 +144,10 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.skill = parseInt(localStorage.getItem("sgm_id"));
+    
+    const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
+    const sgmId = parseInt(localStorage.getItem("sgm_id"));
+    this.skill = sgmId ? sgmId : applicantData.sgm_id;
     this.getTrendingCardData()
   },
   unmounted() {

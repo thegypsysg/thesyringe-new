@@ -59,19 +59,32 @@ export default {
   methods: {
     getApplicant(tokenParam) {
     this.isLoading = true;
+      const token = localStorage.getItem("token");
     axios
       .get(`/gypsy-applicant`, {
         headers: {
-          Authorization: `Bearer ${tokenParam}`,
+          Authorization: `Bearer ${tokenParam ? tokenParam : token}`,
         },
       })
       .then((response) => {
         const data = response.data.data;
         console.log(data);
-        if(data) {
+        if(data && data.basic_steps == null) {
         this.token = tokenParam
         app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam);
-        } 
+        localStorage.setItem('applicant_data', JSON.stringify(data))
+        } else if(data && data.basic_steps == 'C') {
+          this.$router.push(`/${data.slug}`);
+          app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+        }
+        
+        if (data.slug) {
+          this.path = `/${data.slug}`;
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
+        } else {
+        this.path = "/";
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+      }
         // else {
         //   app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
         // }

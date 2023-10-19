@@ -118,8 +118,10 @@ export default {
         console.log(data);
         if (data.slug) {
           this.path = `/${data.slug}`;
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
         } else {
         this.path = "/";
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
       }
       })
       .catch((error) => {

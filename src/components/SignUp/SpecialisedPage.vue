@@ -184,6 +184,7 @@ export default {
       successMessage: '',
       resource: {
         skills: [],
+        skills1: []
       },
     };
   },
@@ -196,8 +197,13 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.sgmId = parseInt(localStorage.getItem("sgm_id"));
-    this.sgmName = localStorage.getItem("sgm_name");
+    const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
+    const sgmId = parseInt(localStorage.getItem("sgm_id"));
+
+    this.sgmId = sgmId ? sgmId : applicantData.sgm_id;
+
+    this.sgmName = localStorage.getItem("sgm_name") ? localStorage.getItem("sgm_name") : this.resource.skills1.filter(sk => sk.value == this.sgmId)[0].label;
+    this.getTrendingCardData1()
     this.getTrendingCardData()
   },
   unmounted() {
@@ -238,6 +244,29 @@ export default {
           this.isError = true;
         });
       }
+    },
+    getTrendingCardData1() {
+      this.isLoading = true;
+      axios
+        .get(`/skillgroups/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          this.resource.skills1 = data.map((item) => {
+            return {
+              value: item.sgm_id || 1,
+              image: this.$fileURL + item.image || '',
+              label: item.group_name + ' Jobs' || '',
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     getTrendingCardData() {
     this.isLoading = true;
