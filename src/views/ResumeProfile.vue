@@ -94,6 +94,27 @@
                 </select> -->
               </v-col>
             </v-row>
+            <v-row
+                >
+                  <v-col cols="7">
+                    <label>Birth Date</label>
+                    <input
+                      v-model="input.date"
+                      required
+                      class="form-control mt-2"
+                      type="text"
+                      id="dateInput"
+                      placeholder="DD/MM/YYYY"
+                      @input="onDateInput"
+                    />
+                  </v-col>
+                  <v-col cols="5">
+                    <label>Age</label>
+                    <p class="mt-5">
+                      {{ age }}
+                    </p>
+                  </v-col>
+                </v-row>
             <v-row class="">
               <v-col>
                 <label>Marital Status</label>
@@ -129,6 +150,30 @@
                   track-by="id"
                   label="title"
                   placeholder="Select Nationality"
+                />
+                <!-- <select v-model="input.nationality" class="form-control mt-2">
+                  <option disabled value="">--- Select ---</option>
+                  <option
+                    v-for="nation in resource.nationality"
+                    :key="nation"
+                    :value="nation"
+                  >
+                    {{ nation }}
+                  </option>
+                </select> -->
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <label>Which Country were you Born. ?</label>
+
+                <VueMultiselect
+                  v-model="input.born"
+                  class="mt-2"
+                  :options="resource.country"
+                  track-by="id"
+                  label="title"
+                  placeholder="Select Country"
                 />
                 <!-- <select v-model="input.nationality" class="form-control mt-2">
                   <option disabled value="">--- Select ---</option>
@@ -434,36 +479,15 @@
                     ></v-alert>
                   </v-col>
                 </v-row>
-                <v-row
-                  style="border-bottom: 1px solid rgb(189, 189, 189)"
-                  class="mb-4 pb-2"
-                >
-                  <v-col cols="5">
-                    <label>Birth Date</label>
-                    <input
-                      v-model="input.date"
-                      required
-                      class="form-control mt-2"
-                      type="text"
-                      id="dateInput"
-                      placeholder="DD/MM/YYYY"
-                      @input="onDateInput"
-                    />
-                  </v-col>
-                  <v-col cols="7">
-                    <label>Age</label>
-                    <p class="mt-5">
-                      {{ age }}
-                    </p>
-                  </v-col>
-                </v-row>
+                
                 <!-- <hr class="my-4" /> -->
               </v-container>
               <v-container>
                 <div
-                  class="d-flex w-100 justify-space-between align-center mb-4 mt-n8"
+                style="border-top: 1px solid rgb(189, 189, 189)"
+                  class="d-flex w-100 justify-space-between align-center mt-4 pt-4 mb-4 "
                 >
-                  <p class="title-card">My Current Location</p>
+                  <p class="title-card">Where are you now . ?</p>
                   <v-btn
                     class="text-none text-subtitle-1"
                     color="success"
@@ -1510,6 +1534,7 @@ export default {
         gender2: null,
         marital: null,
         nationality: null,
+        born: null,
         name: "",
         email: "",
         emailNew: "",

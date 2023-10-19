@@ -69,9 +69,9 @@
                 /> -->
               </div>
             </div>
-            <v-row class="">
+            <!--<v-row class="">
               <v-col>
-                <!-- <label>Gender</label>
+                 <label>Gender</label>
 
                 <VueMultiselect
                   v-model="input.gender"
@@ -91,12 +91,12 @@
                   >
                     {{ gender }}
                   </option>
-                </select> -->
+                </select> 
               </v-col>
-            </v-row>
-            <v-row class="">
+            </v-row>-->
+            <!--<v-row class="">
               <v-col>
-                <!-- <label>Marital Status</label>
+                 <label>Marital Status</label>
                 <VueMultiselect
                   v-model="input.marital"
                   class="mt-2"
@@ -114,12 +114,12 @@
                   >
                     {{ marital }}
                   </option>
-                </select> -->
+                </select> 
               </v-col>
-            </v-row>
-            <v-row>
+            </v-row>-->
+           <!-- <v-row>
               <v-col>
-                <!-- <label>Nationality</label>
+                 <label>Nationality</label>
 
                 <VueMultiselect
                   v-model="input.nationality"
@@ -139,12 +139,12 @@
                   >
                     {{ nation }}
                   </option>
-                </select> -->
+                </select> 
               </v-col>
-            </v-row>
-            <v-row class="mb-2">
+            </v-row>-->
+            <!--<v-row class="mb-2">
               <v-col class="d-flex justify-center">
-                <v-btn
+                 <v-btn
                   class="text-none text-subtitle-1"
                   color="success"
                   size="large"
@@ -152,9 +152,9 @@
                   @click="saveDataDesktop1()"
                 >
                   Save Changes
-                </v-btn>
+                </v-btn> 
               </v-col>
-            </v-row>
+            </v-row>-->
           </v-card>
           <v-card class="second-section">
             <v-card-title
