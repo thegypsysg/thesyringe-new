@@ -36,7 +36,9 @@ export default {
   mounted() {
     const url = new URL(window.location.href);
       const tokenParam = url.searchParams.get("token");
+      if(tokenParam) {
       localStorage.setItem('token', tokenParam);
+      }
       
     this.getApplicant(tokenParam)
 
@@ -73,7 +75,7 @@ export default {
         this.token = tokenParam
         app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam);
         localStorage.setItem('applicant_data', JSON.stringify(data))
-        } else if(data && data.basic_steps == 'C') {
+        } else if(data && data.basic_steps == 'C' && this.currentRoute == '/') {
           this.$router.push(`/${data.slug}`);
           app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
         }

@@ -1770,12 +1770,12 @@ export default {
         name: this.input.name,
         // mobile_number: this.input.phoneNew || this.input.phone,
         // email_id: this.input.email,
-        gender: this.input.gender.value,
+        // gender: this.input.gender.value,
         app_id: this.$appId,
         // password: this.input.password,
-        marital_status: this.input.marital.value,
-        date_of_birth: this.input.date,
-        country_current: this.input.nationality.id,
+        // marital_status: this.input.marital.value,
+        // date_of_birth: this.input.date,
+        // country_current: this.input.nationality.id,
         // image: this.imageSend || null,
       };
       //console.log(payload);
@@ -1890,7 +1890,6 @@ export default {
         name: this.input.name,
         // mobile_number: this.input.phoneNew || this.input.phone,
         // email_id: this.input.email,
-        date_of_birth: this.input.date,
       };
       //console.log(payload);
       const token = localStorage.getItem("token");

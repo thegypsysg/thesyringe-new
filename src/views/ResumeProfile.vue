@@ -167,14 +167,53 @@
               <v-col>
                 <label>Which Country were you Born. ?</label>
 
-                <VueMultiselect
-                  v-model="input.born"
-                  class="mt-2"
-                  :options="resource.country"
-                  track-by="id"
-                  label="title"
-                  placeholder="Select Country"
-                />
+                <div class="w-100 d-flex align-center">
+                  <div
+                    v-if="input.born"
+                    style="
+                      border-top: 2px solid rgb(239, 239, 239);
+                      border-bottom: 2px solid rgb(239, 239, 239);
+                      border-left: 2px solid rgb(239, 239, 239);
+                      border-radius: 5px 0 0px 5px;
+                      height: 47px;
+                    "
+                    class="d-flex align-center justify-center"
+                  >
+                    <span
+                      class="fi ml-2 pr-4 mr-4"
+                      :class="['fi-' + input.born.toLowerCase()]"
+                    />
+                  </div>
+                  <MazSelect
+                    v-slot="{ option }"
+                    v-model="input.born"
+                    item-height="40"
+                    :options="options"
+                    search
+                    size="md"
+                    class="w-100"
+                    search-placeholder="Search in country"
+                    :class="{ 'ml-n1': input.born }"
+                  >
+                    <div
+                      class="flex items-center"
+                      style="
+                        padding-top: 0.5rem;
+                        padding-bottom: 0.5rem;
+                        width: 100%;
+                        gap: 1rem;
+                      "
+                    >
+                      <span
+                        class="fi"
+                        :class="['fi-' + option.value.toLowerCase()]"
+                      />
+                      <span class="pl-2">
+                        {{ option.label }}
+                      </span>
+                    </div>
+                  </MazSelect>
+                </div>
                 <!-- <select v-model="input.nationality" class="form-control mt-2">
                   <option disabled value="">--- Select ---</option>
                   <option
@@ -187,7 +226,7 @@
                 </select> -->
               </v-col>
             </v-row>
-            <v-row class="mb-2">
+            <v-row class="mb-6 mt-16">
               <v-col class="d-flex justify-center">
                 <v-btn
                   class="text-none text-subtitle-1"
@@ -747,7 +786,7 @@
               /> -->
             </div>
           </div>
-          <h1 class="text-center text-red-accent-4">Physiotherapist</h1>
+          <h1 class="text-center text-red-accent-4">{{skill}}</h1>
           <!-- <div v-if="(isHome && !tokenStart) || isSpecific" class="my-slide d-flex"> -->
           <v-slide-group class="my-6" v-model="activeResume">
             <v-slide-group-item
@@ -936,10 +975,10 @@
                 >What's App
                 <span
                   :class="{
-                    'text-red': !isPhoneVerified,
-                    'text-green': isPhoneVerified,
+                    'text-red': !isWhatsappVerified,
+                    'text-green': isWhatsappVerified,
                   }"
-                  >{{ isPhoneVerified ? "(Verified)" : "(Not Verified)" }}</span
+                  >{{ isWhatsappVerified ? "(Verified)" : "(Not Verified)" }}</span
                 ></label
               >
               <div
@@ -947,7 +986,7 @@
                 style="border: 1px solid #ced4da; border-radius: 0.25rem"
               >
                 <input
-                  v-model="input.phone"
+                  v-model="input.whatsapp"
                   type="text"
                   required
                   disabled
@@ -958,32 +997,32 @@
                 <span
                   class="text-blue-darken-4 mx-2"
                   style="cursor: pointer"
-                  @click="isChangePhone = !isChangePhone"
+                  @click="isChangeWhatsapp = !isChangeWhatsapp"
                 >
                   Change
                 </span>
               </div>
-              <div v-if="isChangePhone" class="mt-2">
+              <div v-if="isChangeWhatsapp" class="mt-2">
                 <MazPhoneNumberInput
-                  v-model="input.phoneNew"
+                  v-model="input.whatsappNew"
                   show-code-on-list
                   color="info"
                   :default-country-code="input.country ? input.country : 'SG'"
                   :preferred-countries="['SG', 'BD', 'IN', 'MY', 'GB', 'PH']"
-                  @update="phoneEvent2 = $event"
+                  @update="phoneEvent3 = $event"
                 />
                 <v-btn
                   class="text-none text-subtitle-1 text-white w-100 mt-3"
                   color="#F0882D"
                   variant="flat"
-                  @click="saveMobile()"
+                  @click="saveWhatsapp()"
                 >
                   Save
                 </v-btn>
               </div>
               <v-alert
                 class="my-2"
-                v-model="isMobileChanged"
+                v-model="isWhatsappChanged"
                 type="success"
                 :text="successMessage"
               ></v-alert>
@@ -1030,15 +1069,12 @@
               class="d-flex w-100 mt-6 justify-space-between align-center"
             >
               <p class="title-card text-red-darken-4">Current Location</p>
-              <!-- <v-btn
-                class="text-none text-subtitle-1"
-                color="success"
-                size="large"
-                variant="flat"
+              <span
+                class="text-none text-blue-darken-4 text-subtitle-1"
                 @click="saveLocation()"
               >
                 Save Changes
-              </v-btn> -->
+              </span>
             </div>
 
             <div style="height: 0.5px; background: black;" class="w-100 mt-2 mb-4"></div>
@@ -1162,8 +1198,9 @@
               color="#0197D4"
               size="large"
               variant="flat"
+              @click="saveData()"
             >
-             <span class="text-white">View Full Profile</span>
+             <span class="text-white">Save Changes</span>
             </v-btn>
           </v-container>
         </div>
@@ -1503,16 +1540,20 @@ export default {
       screenWidth: window.innerWidth,
       isEmailVerified: false,
       isPhoneVerified: false,
+      isWhatsappVerified: false,
       isChangePassword: false,
       isMobileChanged: false,
+      isWhatsappChanged: false,
       isPasswordChanged: false,
       isPassword1: true,
       isPassword2: true,
       password2Mes: "",
       phoneEvent: null,
       phoneEvent2: null,
+      phoneEvent3: null,
       isSaveImage: false,
       isChangePhone: false,
+      isChangeWhatsapp: false,
       isChangeEmail: false,
       showPassword1: false,
       showPassword2: false,
@@ -1522,6 +1563,7 @@ export default {
       errorMessage: "",
       successMessage: "",
       image_path: "",
+      skill: '',
       image: null,
       imageSend: null,
       activeResume: null,
@@ -1541,6 +1583,8 @@ export default {
         countryCode: null,
         phone: "",
         phoneNew: "",
+        whatsapp: "",
+        whatsappNew: "",
         password: "",
         passwordNew: "",
         passwordConfirm: "",
@@ -1550,6 +1594,7 @@ export default {
         town: null,
         city: null,
         country: null,
+        countryOld: null,
         countryName: null,
       },
       rules: {
@@ -1834,6 +1879,7 @@ export default {
 
           this.image_path =
             data.image != null ? this.$fileURL + data.image : null;
+            this.skill = data.skills_name || '',
           this.input = {
             id: data.gypsy_id,
             image_path: "",
@@ -1853,6 +1899,8 @@ export default {
             countryCode: null,
             phone: data.mobile_number,
             phoneNew: data.mobile_number,
+            whatsapp: data.whats_app,
+            whatsappNew: data.whats_app,
             password: data.password ? "xxxxxxxx" : "",
             date: data.date_of_birth,
             age: "",
@@ -1863,6 +1911,9 @@ export default {
             city: this.resource.city.filter(
               (i) => i.id == data.city_current
             )[0],
+            countryOld: this.options.filter(
+              (i) => i.label == data.current_country_name
+            )[0].value,
             country: this.options.filter(
               (i) => i.label == data.current_country_name
             )[0].value,
@@ -1965,6 +2016,7 @@ export default {
         // mobile_number: this.input.phoneNew || this.input.phone,
         // email_id: this.input.email,
         gender: this.input.gender.value,
+        date_of_birth: this.input.date,
         // app_id: this.$appId,
         // password: this.input.password,
         marital_status: this.input.marital.value,
@@ -2022,7 +2074,6 @@ export default {
         name: this.input.name,
         // mobile_number: this.input.phoneNew || this.input.phone,
         // email_id: this.input.email,
-        date_of_birth: this.input.date,
       };
       //console.log(payload);
       const token = localStorage.getItem("token");
@@ -2083,9 +2134,9 @@ export default {
         city_current: this.input.city.title
           ? this.input.city.title
           : this.input.city,
-        town_current: this.input.town.title
-          ? this.input.town.title
-          : this.input.town,
+        town_current: this.input.town?.title
+          ? this.input.town?.title
+          : this.input.town ? this.input.town : null,
       };
       //console.log(payload);
       //console.log(this.phoneEvent);
@@ -2219,6 +2270,54 @@ export default {
           console.log(error);
           const message = error.response.data.mobile_number
             ? error.response.data.mobile_number[0]
+            : error.response.data.message === ""
+            ? "Something Wrong!!!"
+            : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        .finally(() => {
+          this.isSending = false;
+        });
+    },
+    saveWhatsapp() {
+      this.isSending = true;
+      const payload = {
+        gypsy_id: this.input.id,
+        mobile_number: this.input.phoneNew || this.input.phone,
+        whats_app: this.input.whatsappNew || this.input.whatsapp,
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+
+      axios
+        .post(`/save-gypsy-user`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              this.tokenProvider ? this.tokenProvider : token
+            }`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          // this.isSuccess = true;
+          this.successMessage = "New Number Updated";
+          this.isWhatsappChanged = true;
+          this.isChangeWhatsapp = false;
+          this.input.whatsapp = this.input.whatsappNew;
+          setTimeout(() => {
+            this.isWhatsappChanged = false;
+            this.isSending = false;
+          }, 5000);
+          this.input.whatsappNew = "";
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message = error.response.data.whats_app
+            ? error.response.data.whats_app[0]
             : error.response.data.message === ""
             ? "Something Wrong!!!"
             : error.response.data.message;
