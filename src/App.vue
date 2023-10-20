@@ -72,12 +72,14 @@ export default {
         const data = response.data.data;
         console.log(data);
         if(data && data.basic_steps == null) {
-        this.token = tokenParam
-        app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam);
-        localStorage.setItem('applicant_data', JSON.stringify(data))
+          this.token = tokenParam
+          app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam);
+          localStorage.setItem('applicant_data', JSON.stringify(data))
         } else if(data && data.basic_steps == 'C' && this.currentRoute == '/') {
           this.$router.push(`/${data.slug}`);
           app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+        } else if(data == null) {
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
         }
         
         if (data.slug) {

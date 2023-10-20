@@ -374,19 +374,17 @@
                       <MazPhoneNumberInput
                         v-model="input.phoneNew"
                         show-code-on-list
-                        color="info"
-                        :default-country-code="
-                          input.country ? input.country : 'SG'
-                        "
-                        :preferred-countries="[
-                          'SG',
-                          'BD',
-                          'IN',
-                          'MY',
-                          'GB',
-                          'PH',
-                        ]"
-                        @update="phoneEvent = $event"
+                      color="info"
+                      :default-country-code="country ? country : 'SG'"
+                      :preferred-countries="[
+                        'SG',
+                        'BD',
+                        'IN',
+                        'MY',
+                        'GB',
+                        'PH',
+                      ]"
+                      @update="phoneEvent = $event"
                       />
                       <v-btn
                         class="text-none text-subtitle-1 text-white w-100 mt-3"
@@ -797,8 +795,9 @@
               <v-btn
                 class="sub-menu-btn"
                 :class="{
-                  active: activeTag == i,
+                  active: activeResume == btn,
                 }"
+                @click="activeResume = btn"
                 style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
               >
                 <p class="text-blue-accent-4" style="font-size: 12px" elevation>
@@ -808,6 +807,23 @@
             </v-slide-group-item>
           </v-slide-group>
           <!-- </div> -->
+          
+        <template v-if="activeResume == 'Personal Info'">
+          <div
+          style="background: #F7F7F7"
+            class="d-flex w-100 py-1 px-2 my-6 justify-space-between align-center"
+          >
+            <p class="title-card">Personal Information</p>
+            <v-btn
+                  class="text-none text-subtitle-1"
+                  color="success"
+                  size="large"
+                  variant="flat"
+                  @click="saveData()"
+                >
+                  Save Changes
+                </v-btn>
+          </div>
           <v-row>
             <v-col>
               <label>Name</label>
@@ -947,10 +963,17 @@
                 <MazPhoneNumberInput
                   v-model="input.phoneNew"
                   show-code-on-list
-                  color="info"
-                  :default-country-code="input.country ? input.country : 'SG'"
-                  :preferred-countries="['SG', 'BD', 'IN', 'MY', 'GB', 'PH']"
-                  @update="phoneEvent2 = $event"
+                      color="info"
+                      :default-country-code="country ? country : 'SG'"
+                      :preferred-countries="[
+                        'SG',
+                        'BD',
+                        'IN',
+                        'MY',
+                        'GB',
+                        'PH',
+                      ]"
+                      @update="phoneEvent2 = $event"
                 />
                 <v-btn
                   class="text-none text-subtitle-1 text-white w-100 mt-3"
@@ -1006,10 +1029,17 @@
                 <MazPhoneNumberInput
                   v-model="input.whatsappNew"
                   show-code-on-list
-                  color="info"
-                  :default-country-code="input.country ? input.country : 'SG'"
-                  :preferred-countries="['SG', 'BD', 'IN', 'MY', 'GB', 'PH']"
-                  @update="phoneEvent3 = $event"
+                      color="info"
+                      :default-country-code="country ? country : 'SG'"
+                      :preferred-countries="[
+                        'SG',
+                        'BD',
+                        'IN',
+                        'MY',
+                        'GB',
+                        'PH',
+                      ]"
+                      @update="phoneEvent3 = $event"
                 />
                 <v-btn
                   class="text-none text-subtitle-1 text-white w-100 mt-3"
@@ -1065,19 +1095,87 @@
               />
             </v-col>
           </v-row>
-            <div
-              class="d-flex w-100 mt-6 justify-space-between align-center"
-            >
-              <p class="title-card text-red-darken-4">Current Location</p>
-              <span
-                class="text-none text-blue-darken-4 text-subtitle-1"
-                @click="saveLocation()"
-              >
-                Save Changes
-              </span>
-            </div>
+          <v-row class="mb-16 pb-16">
+            <v-col>
+              <label>Which Country were you Born. ?</label>
 
-            <div style="height: 0.5px; background: black;" class="w-100 mt-2 mb-4"></div>
+              <div class="w-100 d-flex align-center">
+                <div
+                  v-if="input.born"
+                  style="
+                    border-top: 2px solid rgb(239, 239, 239);
+                    border-bottom: 2px solid rgb(239, 239, 239);
+                    border-left: 2px solid rgb(239, 239, 239);
+                    border-radius: 5px 0 0px 5px;
+                    height: 47px;
+                  "
+                  class="d-flex align-center justify-center"
+                >
+                  <span
+                    class="fi ml-2 pr-4 mr-4"
+                    :class="['fi-' + input.born.toLowerCase()]"
+                  />
+                </div>
+                <MazSelect
+                  v-slot="{ option }"
+                  v-model="input.born"
+                  item-height="40"
+                  :options="options"
+                  search
+                  size="md"
+                  class="w-100"
+                  search-placeholder="Search in country"
+                  :class="{ 'ml-n1': input.born }"
+                >
+                  <div
+                    class="flex items-center"
+                    style="
+                      padding-top: 0.5rem;
+                      padding-bottom: 0.5rem;
+                      width: 100%;
+                      gap: 1rem;
+                    "
+                  >
+                    <span
+                      class="fi"
+                      :class="['fi-' + option.value.toLowerCase()]"
+                    />
+                    <span class="pl-2">
+                      {{ option.label }}
+                    </span>
+                  </div>
+                </MazSelect>
+              </div>
+              <!-- <select v-model="input.nationality" class="form-control mt-2">
+                <option disabled value="">--- Select ---</option>
+                <option
+                  v-for="nation in resource.nationality"
+                  :key="nation"
+                  :value="nation"
+                >
+                  {{ nation }}
+                </option>
+              </select> -->
+            </v-col>
+          </v-row>
+          
+        </template>
+        <template v-if="activeResume == 'Current Location'">
+          <div
+          style="background: #F7F7F7"
+            class="d-flex w-100 py-1 px-2 my-6 justify-space-between align-center"
+          >
+            <p class="title-card">Current Location</p>
+            <v-btn
+                  class="text-none text-subtitle-1"
+                  color="success"
+                  size="large"
+                  variant="flat"
+                  @click="saveLocation()"
+                >
+                  Save Changes
+                </v-btn>
+          </div>
             <v-row>
               <v-col cols="10">
                 <!-- <VueMultiselect
@@ -1189,7 +1287,25 @@
                 </div>
               </v-col>
             </v-row>
-            <div class="w-100" style="background: #F3F3F3; position: fixed; bottom: 0; left: 0; z-index: 99999">
+        </template>
+        <template v-if="activeResume == 'My Qualifications'">
+          <div
+          style="background: #F7F7F7"
+            class="w-100 pt-2 pb-8 px-4 my-6"
+          >
+            <p class="title-card text-red-darken-4 mb-4">My Qualifications</p>
+            <v-card elevation="0" class="pa-4">
+              <div class="d-flex justify-space-between mb-2">
+                <span class="text-blue-darken-4"># 1</span>
+                <span style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+              </div>
+              <p>Bachelors Degree in Physioterapy</p>
+              <p>Singapore National University, Singapore</p>
+              <p>Year Passed : <span class="text-blue-darken-4">2016</span></p>
+            </v-card>
+          </div>
+          </template>
+        <div class="w-100" style="background: #F3F3F3; position: fixed; bottom: 0; left: 0; z-index: 99999">
           <v-container
             class="d-flex justify-center align-center"
           >
@@ -1198,9 +1314,8 @@
               color="#0197D4"
               size="large"
               variant="flat"
-              @click="saveData()"
             >
-             <span class="text-white">Save Changes</span>
+             <span class="text-white">View Full Profile</span>
             </v-btn>
           </v-container>
         </div>
@@ -1287,252 +1402,254 @@ export default {
   data() {
     return {
       options: [
-        { value: "SG", label: "Singapore" },
-        { value: "BD", label: "Bangladesh" },
-        { value: "IN", label: "India" },
-        { value: "MY", label: "Malaysia" },
-        { value: "GB", label: "United Kingdom" },
-        { value: "PH", label: "Philippines" },
-        { value: "AF", label: "Afghanistan" },
-        { value: "AX", label: "Aland Islands" },
-        { value: "AL", label: "Albania" },
-        { value: "DZ", label: "Algeria" },
-        { value: "AS", label: "American Samoa" },
-        { value: "AD", label: "Andorra" },
-        { value: "AO", label: "Angola" },
-        { value: "AI", label: "Anguilla" },
-        { value: "AQ", label: "Antarctica" },
-        { value: "AG", label: "Antigua And Barbuda" },
-        { value: "AR", label: "Argentina" },
-        { value: "AM", label: "Armenia" },
-        { value: "AW", label: "Aruba" },
-        { value: "AU", label: "Australia" },
-        { value: "AT", label: "Austria" },
-        { value: "AZ", label: "Azerbaijan" },
-        { value: "BS", label: "Bahamas" },
-        { value: "BH", label: "Bahrain" },
-        { value: "BB", label: "Barbados" },
-        { value: "BY", label: "Belarus" },
-        { value: "BE", label: "Belgium" },
-        { value: "BZ", label: "Belize" },
-        { value: "BJ", label: "Benin" },
-        { value: "BM", label: "Bermuda" },
-        { value: "BT", label: "Bhutan" },
-        { value: "BO", label: "Bolivia" },
-        { value: "BA", label: "Bosnia And Herzegovina" },
-        { value: "BW", label: "Botswana" },
-        { value: "BV", label: "Bouvet Island" },
-        { value: "BR", label: "Brazil" },
-        { value: "IO", label: "British Indian Ocean Territory" },
-        { value: "BN", label: "Brunei Darussalam" },
-        { value: "BG", label: "Bulgaria" },
-        { value: "BF", label: "Burkina Faso" },
-        { value: "BI", label: "Burundi" },
-        { value: "KH", label: "Cambodia" },
-        { value: "CM", label: "Cameroon" },
-        { value: "CA", label: "Canada" },
-        { value: "CV", label: "Cape Verde" },
-        { value: "KY", label: "Cayman Islands" },
-        { value: "CF", label: "Central African Republic" },
-        { value: "TD", label: "Chad" },
-        { value: "CL", label: "Chile" },
-        { value: "CN", label: "China" },
-        { value: "CX", label: "Christmas Island" },
-        { value: "CC", label: "Cocos (Keeling) Islands" },
-        { value: "CO", label: "Colombia" },
-        { value: "KM", label: "Comoros" },
-        { value: "CG", label: "Congo" },
-        { value: "CD", label: "Congo, Democratic Republic" },
-        { value: "CK", label: "Cook Islands" },
-        { value: "CR", label: "Costa Rica" },
-        { value: "CI", label: "Cote D'Ivoire" },
-        { value: "HR", label: "Croatia" },
-        { value: "CU", label: "Cuba" },
-        { value: "CY", label: "Cyprus" },
-        { value: "CZ", label: "Czech Republic" },
-        { value: "DK", label: "Denmark" },
-        { value: "DJ", label: "Djibouti" },
-        { value: "DM", label: "Dominica" },
-        { value: "DO", label: "Dominican Republic" },
-        { value: "EC", label: "Ecuador" },
-        { value: "EG", label: "Egypt" },
-        { value: "SV", label: "El Salvador" },
-        { value: "GQ", label: "Equatorial Guinea" },
-        { value: "ER", label: "Eritrea" },
-        { value: "EE", label: "Estonia" },
-        { value: "ET", label: "Ethiopia" },
-        { value: "FK", label: "Falkland Islands (Malvinas)" },
-        { value: "FO", label: "Faroe Islands" },
-        { value: "FJ", label: "Fiji" },
-        { value: "FI", label: "Finland" },
-        { value: "FR", label: "France" },
-        { value: "GF", label: "French Guiana" },
-        { value: "PF", label: "French Polynesia" },
-        { value: "TF", label: "French Southern Territories" },
-        { value: "GA", label: "Gabon" },
-        { value: "GM", label: "Gambia" },
-        { value: "GE", label: "Georgia" },
-        { value: "DE", label: "Germany" },
-        { value: "GH", label: "Ghana" },
-        { value: "GI", label: "Gibraltar" },
-        { value: "GR", label: "Greece" },
-        { value: "GL", label: "Greenland" },
-        { value: "GD", label: "Grenada" },
-        { value: "GP", label: "Guadeloupe" },
-        { value: "GU", label: "Guam" },
-        { value: "GT", label: "Guatemala" },
-        { value: "GG", label: "Guernsey" },
-        { value: "GN", label: "Guinea" },
-        { value: "GW", label: "Guinea-Bissau" },
-        { value: "GY", label: "Guyana" },
-        { value: "HT", label: "Haiti" },
-        { value: "HM", label: "Heard Island & Mcdonald Islands" },
-        { value: "VA", label: "Holy See (Vatican City State)" },
-        { value: "HN", label: "Honduras" },
-        { value: "HK", label: "Hong Kong" },
-        { value: "HU", label: "Hungary" },
-        { value: "IS", label: "Iceland" },
-        { value: "ID", label: "Indonesia" },
-        { value: "IR", label: "Iran, Islamic Republic Of" },
-        { value: "IQ", label: "Iraq" },
-        { value: "IE", label: "Ireland" },
-        { value: "IM", label: "Isle Of Man" },
-        { value: "IL", label: "Israel" },
-        { value: "IT", label: "Italy" },
-        { value: "JM", label: "Jamaica" },
-        { value: "JP", label: "Japan" },
-        { value: "JE", label: "Jersey" },
-        { value: "JO", label: "Jordan" },
-        { value: "KZ", label: "Kazakhstan" },
-        { value: "KE", label: "Kenya" },
-        { value: "KI", label: "Kiribati" },
-        { value: "KR", label: "Korea" },
-        { value: "KW", label: "Kuwait" },
-        { value: "KG", label: "Kyrgyzstan" },
-        { value: "LA", label: "Lao People's Democratic Republic" },
-        { value: "LV", label: "Latvia" },
-        { value: "LB", label: "Lebanon" },
-        { value: "LS", label: "Lesotho" },
-        { value: "LR", label: "Liberia" },
-        { value: "LY", label: "Libyan Arab Jamahiriya" },
-        { value: "LI", label: "Liechtenstein" },
-        { value: "LT", label: "Lithuania" },
-        { value: "LU", label: "Luxembourg" },
-        { value: "MO", label: "Macao" },
-        { value: "MK", label: "Macedonia" },
-        { value: "MG", label: "Madagascar" },
-        { value: "MW", label: "Malawi" },
-        { value: "MV", label: "Maldives" },
-        { value: "ML", label: "Mali" },
-        { value: "MT", label: "Malta" },
-        { value: "MH", label: "Marshall Islands" },
-        { value: "MQ", label: "Martinique" },
-        { value: "MR", label: "Mauritania" },
-        { value: "MU", label: "Mauritius" },
-        { value: "YT", label: "Mayotte" },
-        { value: "MX", label: "Mexico" },
-        { value: "FM", label: "Micronesia, Federated States Of" },
-        { value: "MD", label: "Moldova" },
-        { value: "MC", label: "Monaco" },
-        { value: "MN", label: "Mongolia" },
-        { value: "ME", label: "Montenegro" },
-        { value: "MS", label: "Montserrat" },
-        { value: "MA", label: "Morocco" },
-        { value: "MZ", label: "Mozambique" },
-        { value: "MM", label: "Myanmar" },
-        { value: "NA", label: "Namibia" },
-        { value: "NR", label: "Nauru" },
-        { value: "NP", label: "Nepal" },
-        { value: "NL", label: "Netherlands" },
-        { value: "AN", label: "Netherlands Antilles" },
-        { value: "NC", label: "New Caledonia" },
-        { value: "NZ", label: "New Zealand" },
-        { value: "NI", label: "Nicaragua" },
-        { value: "NE", label: "Niger" },
-        { value: "NG", label: "Nigeria" },
-        { value: "NU", label: "Niue" },
-        { value: "NF", label: "Norfolk Island" },
-        { value: "MP", label: "Northern Mariana Islands" },
-        { value: "NO", label: "Norway" },
-        { value: "OM", label: "Oman" },
-        { value: "PK", label: "Pakistan" },
-        { value: "PW", label: "Palau" },
-        { value: "PS", label: "Palestinian Territory, Occupied" },
-        { value: "PA", label: "Panama" },
-        { value: "PG", label: "Papua New Guinea" },
-        { value: "PY", label: "Paraguay" },
-        { value: "PE", label: "Peru" },
-        { value: "PN", label: "Pitcairn" },
-        { value: "PL", label: "Poland" },
-        { value: "PT", label: "Portugal" },
-        { value: "PR", label: "Puerto Rico" },
-        { value: "QA", label: "Qatar" },
-        { value: "RE", label: "Reunion" },
-        { value: "RO", label: "Romania" },
-        { value: "RU", label: "Russian Federation" },
-        { value: "RW", label: "Rwanda" },
-        { value: "BL", label: "Saint Barthelemy" },
-        { value: "SH", label: "Saint Helena" },
-        { value: "KN", label: "Saint Kitts And Nevis" },
-        { value: "LC", label: "Saint Lucia" },
-        { value: "MF", label: "Saint Martin" },
-        { value: "PM", label: "Saint Pierre And Miquelon" },
-        { value: "VC", label: "Saint Vincent And Grenadines" },
-        { value: "WS", label: "Samoa" },
-        { value: "SM", label: "San Marino" },
-        { value: "ST", label: "Sao Tome And Principe" },
-        { value: "SA", label: "Saudi Arabia" },
-        { value: "SN", label: "Senegal" },
-        { value: "RS", label: "Serbia" },
-        { value: "SC", label: "Seychelles" },
-        { value: "SL", label: "Sierra Leone" },
-        { value: "SK", label: "Slovakia" },
-        { value: "SI", label: "Slovenia" },
-        { value: "SB", label: "Solomon Islands" },
-        { value: "SO", label: "Somalia" },
-        { value: "ZA", label: "South Africa" },
-        { value: "GS", label: "South Georgia And Sandwich Isl." },
-        { value: "ES", label: "Spain" },
-        { value: "LK", label: "Sri Lanka" },
-        { value: "SD", label: "Sudan" },
-        { value: "SR", label: "Suriname" },
-        { value: "SJ", label: "Svalbard And Jan Mayen" },
-        { value: "SZ", label: "Swaziland" },
-        { value: "SE", label: "Sweden" },
-        { value: "CH", label: "Switzerland" },
-        { value: "SY", label: "Syrian Arab Republic" },
-        { value: "TW", label: "Taiwan" },
-        { value: "TJ", label: "Tajikistan" },
-        { value: "TZ", label: "Tanzania" },
-        { value: "TH", label: "Thailand" },
-        { value: "TL", label: "Timor-Leste" },
-        { value: "TG", label: "Togo" },
-        { value: "TK", label: "Tokelau" },
-        { value: "TO", label: "Tonga" },
-        { value: "TT", label: "Trinidad And Tobago" },
-        { value: "TN", label: "Tunisia" },
-        { value: "TR", label: "Turkey" },
-        { value: "TM", label: "Turkmenistan" },
-        { value: "TC", label: "Turks And Caicos Islands" },
-        { value: "TV", label: "Tuvalu" },
-        { value: "UG", label: "Uganda" },
-        { value: "UA", label: "Ukraine" },
-        { value: "AE", label: "United Arab Emirates" },
-        { value: "US", label: "United States" },
-        { value: "UM", label: "United States Outlying Islands" },
-        { value: "UY", label: "Uruguay" },
-        { value: "UZ", label: "Uzbekistan" },
-        { value: "VU", label: "Vanuatu" },
-        { value: "VE", label: "Venezuela" },
-        { value: "VN", label: "Viet Nam" },
-        { value: "VG", label: "Virgin Islands}, British" },
-        { value: "VI", label: "Virgin Islands}, U.S." },
-        { value: "WF", label: "Wallis And Futuna" },
-        { value: "EH", label: "Western Sahara" },
-        { value: "YE", label: "Yemen" },
-        { value: "ZM", label: "Zambia" },
-        { value: "ZW", label: "Zimbabwe" },
-      ],
+  { phoneNum: "+65", value: "SG", label: "Singapore" },
+  { phoneNum: "+880", value: "BD", label: "Bangladesh" },
+  { phoneNum: "+91", value: "IN", label: "India" },
+  { phoneNum: "+60", value: "MY", label: "Malaysia" },
+  { phoneNum: "+44", value: "GB", label: "United Kingdom" },
+  { phoneNum: "+63", value: "PH", label: "Philippines" },
+  { phoneNum: "+93", value: "AF", label: "Afghanistan" },
+  { phoneNum: "+358", value: "AX", label: "Aland Islands" },
+  { phoneNum: "+355", value: "AL", label: "Albania" },
+  { phoneNum: "+213", value: "DZ", label: "Algeria" },
+  { phoneNum: "+1", value: "AS", label: "American Samoa" },
+  { phoneNum: "+376", value: "AD", label: "Andorra" },
+  { phoneNum: "+244", value: "AO", label: "Angola" },
+  { phoneNum: "+1", value: "AI", label: "Anguilla" },
+  { phoneNum: "+672", value: "AQ", label: "Antarctica" },
+  { phoneNum: "+1", value: "AG", label: "Antigua And Barbuda" },
+  { phoneNum: "+54", value: "AR", label: "Argentina" },
+  { phoneNum: "+374", value: "AM", label: "Armenia" },
+  { phoneNum: "+297", value: "AW", label: "Aruba" },
+  { phoneNum: "+61", value: "AU", label: "Australia" },
+  { phoneNum: "+43", value: "AT", label: "Austria" },
+  { phoneNum: "+994", value: "AZ", label: "Azerbaijan" },
+  { phoneNum: "+1", value: "BS", label: "Bahamas" },
+  { phoneNum: "+973", value: "BH", label: "Bahrain" },
+  { phoneNum: "+1", value: "BB", label: "Barbados" },
+  { phoneNum: "+375", value: "BY", label: "Belarus" },
+  { phoneNum: "+32", value: "BE", label: "Belgium" },
+  { phoneNum: "+501", value: "BZ", label: "Belize" },
+  { phoneNum: "+229", value: "BJ", label: "Benin" },
+  { phoneNum: "+1", value: "BM", label: "Bermuda" },
+  { phoneNum: "+975", value: "BT", label: "Bhutan" },
+  { phoneNum: "+591", value: "BO", label: "Bolivia" },
+  { phoneNum: "+387", value: "BA", label: "Bosnia And Herzegovina" },
+  { phoneNum: "+267", value: "BW", label: "Botswana" },
+  { phoneNum: "N/A", value: "BV", label: "Bouvet Island" },
+  { phoneNum: "+55", value: "BR", label: "Brazil" },
+  { phoneNum: "N/A", value: "IO", label: "British Indian Ocean Territory" },
+  { phoneNum: "+673", value: "BN", label: "Brunei Darussalam" },
+  { phoneNum: "+359", value: "BG", label: "Bulgaria" },
+  { phoneNum: "+226", value: "BF", label: "Burkina Faso" },
+  { phoneNum: "+257", value: "BI", label: "Burundi" },
+  { phoneNum: "+855", value: "KH", label: "Cambodia" },
+  { phoneNum: "+237", value: "CM", label: "Cameroon" },
+  { phoneNum: "+1", value: "CA", label: "Canada" },
+  { phoneNum: "+238", value: "CV", label: "Cape Verde" },
+  { phoneNum: "+1", value: "KY", label: "Cayman Islands" },
+  { phoneNum: "+236", value: "CF", label: "Central African Republic" },
+  { phoneNum: "+235", value: "TD", label: "Chad" },
+  { phoneNum: "+56", value: "CL", label: "Chile" },
+  { phoneNum: "+86", value: "CN", label: "China" },
+  { phoneNum: "+61", value: "CX", label: "Christmas Island" },
+  { phoneNum: "+61", value: "CC", label: "Cocos (Keeling) Islands" },
+  { phoneNum: "+57", value: "CO", label: "Colombia" },
+  { phoneNum: "+269", value: "KM", label: "Comoros" },
+  { phoneNum: "+242", value: "CG", label: "Congo" },
+  { phoneNum: "+243", value: "CD", label: "Congo, Democratic Republic" },
+  { phoneNum: "+682", value: "CK", label: "Cook Islands" },
+  { phoneNum: "+506", value: "CR", label: "Costa Rica" },
+  { phoneNum: "+225", value: "CI", label: "Cote D'Ivoire" },
+  { phoneNum: "+385", value: "HR", label: "Croatia" },
+  { phoneNum: "+53", value: "CU", label: "Cuba" },
+  { phoneNum: "+357", value: "CY", label: "Cyprus" },
+  { phoneNum: "+420", value: "CZ", label: "Czech Republic" },
+  { phoneNum: "+45", value: "DK", label: "Denmark" },
+  { phoneNum: "+253", value: "DJ", label: "Djibouti" },
+  { phoneNum: "+1", value: "DM", label: "Dominica" },
+  { phoneNum: "+1", value: "DO", label: "Dominican Republic" },
+  { phoneNum: "+593", value: "EC", label: "Ecuador" },
+  { phoneNum: "+20", value: "EG", label: "Egypt" },
+  { phoneNum: "+503", value: "SV", label: "El Salvador" },
+  { phoneNum: "+240", value: "GQ", label: "Equatorial Guinea" },
+  { phoneNum: "+291", value: "ER", label: "Eritrea" },
+  { phoneNum: "+372", value: "EE", label: "Estonia" },
+  { phoneNum: "+251", value: "ET", label: "Ethiopia" },
+  { phoneNum: "+500", value: "FK", label: "Falkland Islands (Malvinas)" },
+  { phoneNum: "+298", value: "FO", label: "Faroe Islands" },
+  { phoneNum: "+679", value: "FJ", label: "Fiji" },
+  { phoneNum: "+358", value: "FI", label: "Finland" },
+  { phoneNum: "+33", value: "FR", label: "France" },
+  { phoneNum: "+594", value: "GF", label: "French Guiana" },
+  { phoneNum: "+689", value: "PF", label: "French Polynesia" },
+  { phoneNum: "N/A", value: "TF", label: "French Southern Territories" },
+  { phoneNum: "+241", value: "GA", label: "Gabon" },
+  { phoneNum: "+220", value: "GM", label: "Gambia" },
+  { phoneNum: "+995", value: "GE", label: "Georgia" },
+  { phoneNum: "+49", value: "DE", label: "Germany" },
+  { phoneNum: "+233", value: "GH", label: "Ghana" },
+  { phoneNum: "+350", value: "GI", label: "Gibraltar" },
+  { phoneNum: "+30", value: "GR", label: "Greece" },
+  { phoneNum: "+299", value: "GL", label: "Greenland" },
+  { phoneNum: "+1", value: "GD", label: "Grenada" },
+  { phoneNum: "+590", value: "GP", label: "Guadeloupe" },
+  { phoneNum: "+1", value: "GU", label: "Guam" },
+  { phoneNum: "+502", value: "GT", label: "Guatemala" },
+  { phoneNum: "+44", value: "GG", label: "Guernsey" },
+  { phoneNum: "+224", value: "GN", label: "Guinea" },
+  { phoneNum: "+245", value: "GW", label: "Guinea-Bissau" },
+  { phoneNum: "+592", value: "GY", label: "Guyana" },
+  { phoneNum: "+509", value: "HT", label: "Haiti" },
+  { phoneNum: "N/A", value: "HM", label: "Heard Island & Mcdonald Islands" },
+  { phoneNum: "+39", value: "VA", label: "Holy See (Vatican City State)" },
+  { phoneNum: "+504", value: "HN", label: "Honduras" },
+  { phoneNum: "+852", value: "HK", label: "Hong Kong" },
+  { phoneNum: "+36", value: "HU", label: "Hungary" },
+  { phoneNum: "+354", value: "IS", label: "Iceland" },
+  { phoneNum: "+62", value: "ID", label: "Indonesia" },
+  { phoneNum: "+98", value: "IR", label: "Iran, Islamic Republic Of" },
+  { phoneNum: "+964", value: "IQ", label: "Iraq" },
+  { phoneNum: "+353", value: "IE", label: "Ireland" },
+  { phoneNum: "+44", value: "IM", label: "Isle Of Man" },
+  { phoneNum: "+972", value: "IL", label: "Israel" },
+  { phoneNum: "+39", value: "IT", label: "Italy" },
+  { phoneNum: "+1", value: "JM", label: "Jamaica" },
+  { phoneNum: "+81", value: "JP", label: "Japan" },
+  { phoneNum: "+44", value: "JE", label: "Jersey" },
+  { phoneNum: "+962", value: "JO", label: "Jordan" },
+  { phoneNum: "+7", value: "KZ", label: "Kazakhstan" },
+  { phoneNum: "+254", value: "KE", label: "Kenya" },
+  { phoneNum: "+686", value: "KI", label: "Kiribati" },
+  { phoneNum: "+82", value: "KR", label: "Korea" },
+  { phoneNum: "+965", value: "KW", label: "Kuwait" },
+  { phoneNum: "+996", value: "KG", label: "Kyrgyzstan" },
+  { phoneNum: "+856", value: "LA", label: "Lao People's Democratic Republic" },
+  { phoneNum: "+371", value: "LV", label: "Latvia" },
+  { phoneNum: "+961", value: "LB", label: "Lebanon" },
+  { phoneNum: "+266", value: "LS", label: "Lesotho" },
+  { phoneNum: "+231", value: "LR", label: "Liberia" },
+  { phoneNum: "+218", value: "LY", label: "Libyan Arab Jamahiriya" },
+  { phoneNum: "+423", value: "LI", label: "Liechtenstein" },
+  { phoneNum: "+370", value: "LT", label: "Lithuania" },
+  { phoneNum: "+352", value: "LU", label: "Luxembourg" },
+  { phoneNum: "+853", value: "MO", label: "Macao" },
+  { phoneNum: "+389", value: "MK", label: "Macedonia" },
+  { phoneNum: "+261", value: "MG", label: "Madagascar" },
+  { phoneNum: "+265", value: "MW", label: "Malawi" },
+  { phoneNum: "+960", value: "MV", label: "Maldives" },
+  { phoneNum: "+223", value: "ML", label: "Mali" },
+  { phoneNum: "+356", value: "MT", label: "Malta" },
+  { phoneNum: "+692", value: "MH", label: "Marshall Islands" },
+  { phoneNum: "+596", value: "MQ", label: "Martinique" },
+  { phoneNum: "+222", value: "MR", label: "Mauritania" },
+  { phoneNum: "+230", value: "MU", label: "Mauritius" },
+  { phoneNum: "+262", value: "YT", label: "Mayotte" },
+  { phoneNum: "+52", value: "MX", label: "Mexico" },
+  { phoneNum: "+691", value: "FM", label: "Micronesia, Federated States Of" },
+  { phoneNum: "+373", value: "MD", label: "Moldova" },
+  { phoneNum: "+377", value: "MC", label: "Monaco" },
+  { phoneNum: "+976", value: "MN", label: "Mongolia" },
+  { phoneNum: "+382", value: "ME", label: "Montenegro" },
+  { phoneNum: "+1", value: "MS", label: "Montserrat" },
+  { phoneNum: "+212", value: "MA", label: "Morocco" },
+  { phoneNum: "+258", value: "MZ", label: "Mozambique" },
+  { phoneNum: "+95", value: "MM", label: "Myanmar" },
+  { phoneNum: "+264", value: "NA", label: "Namibia" },
+  { phoneNum: "+674", value: "NR", label: "Nauru" },
+  { phoneNum: "+977", value: "NP", label: "Nepal" },
+  { phoneNum: "+31", value: "NL", label: "Netherlands" },
+  { phoneNum: "N/A", value: "AN", label: "Netherlands Antilles" },
+  { phoneNum: "N/A", value: "NC", label: "New Caledonia" },
+  { phoneNum: "+64", value: "NZ", label: "New Zealand" },
+  { phoneNum: "+505", value: "NI", label: "Nicaragua" },
+  { phoneNum: "+227", value: "NE", label: "Niger" },
+  { phoneNum: "+234", value: "NG", label: "Nigeria" },
+  { phoneNum: "+683", value: "NU", label: "Niue" },
+  { phoneNum: "+672", value: "NF", label: "Norfolk Island" },
+  { phoneNum: "+1", value: "MP", label: "Northern Mariana Islands" },
+  { phoneNum: "+47", value: "NO", label: "Norway" },
+  { phoneNum: "+968", value: "OM", label: "Oman" },
+  { phoneNum: "+92", value: "PK", label: "Pakistan" },
+  { phoneNum: "+680", value: "PW", label: "Palau" },
+  { phoneNum: "N/A", value: "PS", label: "Palestinian Territory, Occupied" },
+  { phoneNum: "+507", value: "PA", label: "Panama" },
+  { phoneNum: "+675", value: "PG", label: "Papua New Guinea" },
+  { phoneNum: "+595", value: "PY", label: "Paraguay" },
+  { phoneNum: "+51", value: "PE", label: "Peru" },
+  { phoneNum: "+870", value: "PN", label: "Pitcairn" },
+  { phoneNum: "+48", value: "PL", label: "Poland" },
+  { phoneNum: "+351", value: "PT", label: "Portugal" },
+  { phoneNum: "+1", value: "PR", label: "Puerto Rico" },
+  { phoneNum: "+974", value: "QA", label: "Qatar" },
+  { phoneNum: "+262", value: "RE", label: "Reunion" },
+  { phoneNum: "+40", value: "RO", label: "Romania" },
+  { phoneNum: "+7", value: "RU", label: "Russian Federation" },
+  { phoneNum: "+250", value: "RW", label: "Rwanda" },
+  { phoneNum: "N/A", value: "BL", label: "Saint Barthelemy" },
+  { phoneNum: "N/A", value: "SH", label: "Saint Helena" },
+  { phoneNum: "N/A", value: "KN", label: "Saint Kitts And Nevis" },
+  { phoneNum: "N/A", value: "LC", label: "Saint Lucia" },
+  { phoneNum: "N/A", value: "MF", label: "Saint Martin" },
+  { phoneNum: "N/A", value: "PM", label: "Saint Pierre And Miquelon" },
+  { phoneNum: "N/A", value: "VC", label: "Saint Vincent And Grenadines" },
+  { phoneNum: "+685", value: "WS", label: "Samoa" },
+  { phoneNum: "+378", value: "SM", label: "San Marino" },
+  { phoneNum: "+239", value: "ST", label: "Sao Tome And Principe" },
+  { phoneNum: "+966", value: "SA", label: "Saudi Arabia" },
+  { phoneNum: "+221", value: "SN", label: "Senegal" },
+  { phoneNum: "+381", value: "RS", label: "Serbia" },
+  { phoneNum: "+248", value: "SC", label: "Seychelles" },
+  { phoneNum: "+232", value: "SL", label: "Sierra Leone" },
+  { phoneNum: "+65", value: "SG", label: "Singapore" },
+  { phoneNum: "+421", value: "SK", label: "Slovakia" },
+  { phoneNum: "+386", value: "SI", label: "Slovenia" },
+  { phoneNum: "+677", value: "SB", label: "Solomon Islands" },
+  { phoneNum: "+252", value: "SO", label: "Somalia" },
+  { phoneNum: "+27", value: "ZA", label: "South Africa" },
+  { phoneNum: "N/A", value: "GS", label: "South Georgia And Sandwich Isl." },
+  { phoneNum: "N/A", value: "ES", label: "Spain" },
+  { phoneNum: "+94", value: "LK", label: "Sri Lanka" },
+  { phoneNum: "+249", value: "SD", label: "Sudan" },
+  { phoneNum: "+597", value: "SR", label: "Suriname" },
+  { phoneNum: "+47", value: "SJ", label: "Svalbard And Jan Mayen" },
+  { phoneNum: "+268", value: "SZ", label: "Swaziland" },
+  { phoneNum: "+46", value: "SE", label: "Sweden" },
+  { phoneNum: "+41", value: "CH", label: "Switzerland" },
+  { phoneNum: "+963", value: "SY", label: "Syrian Arab Republic" },
+  { phoneNum: "+886", value: "TW", label: "Taiwan" },
+  { phoneNum: "+992", value: "TJ", label: "Tajikistan" },
+  { phoneNum: "+255", value: "TZ", label: "Tanzania" },
+  { phoneNum: "+66", value: "TH", label: "Thailand" },
+  { phoneNum: "+670", value: "TL", label: "Timor-Leste" },
+  { phoneNum: "+228", value: "TG", label: "Togo" },
+  { phoneNum: "+690", value: "TK", label: "Tokelau" },
+  { phoneNum: "+676", value: "TO", label: "Tonga" },
+  { phoneNum: "+1", value: "TT", label: "Trinidad And Tobago" },
+  { phoneNum: "+216", value: "TN", label: "Tunisia" },
+  { phoneNum: "+90", value: "TR", label: "Turkey" },
+  { phoneNum: "+993", value: "TM", label: "Turkmenistan" },
+  { phoneNum: "+1", value: "TC", label: "Turks And Caicos Islands" },
+  { phoneNum: "+688", value: "TV", label: "Tuvalu" },
+  { phoneNum: "+256", value: "UG", label: "Uganda" },
+  { phoneNum: "+380", value: "UA", label: "Ukraine" },
+  { phoneNum: "+971", value: "AE", label: "United Arab Emirates" },
+  { phoneNum: "+44", value: "GB", label: "United Kingdom" },
+  { phoneNum: "+1", value: "US", label: "United States" },
+  { phoneNum: "N/A", value: "UM", label: "United States Outlying Islands" },
+  { phoneNum: "+598", value: "UY", label: "Uruguay" },
+  { phoneNum: "+998", value: "UZ", label: "Uzbekistan" },
+  { phoneNum: "+678", value: "VU", label: "Vanuatu" },
+  { phoneNum: "+58", value: "VE", label: "Venezuela" },
+  { phoneNum: "+84", value: "VN", label: "Vietnam" },
+  { phoneNum: "+1", value: "VG", label: "Virgin Islands, British" },
+  { phoneNum: "+1", value: "VI", label: "Virgin Islands, U.S." },
+  { phoneNum: "+681", value: "WF", label: "Wallis And Futuna" },
+  { phoneNum: "N/A", value: "EH", label: "Western Sahara" },
+  { phoneNum: "+967", value: "YE", label: "Yemen" },
+  { phoneNum: "+260", value: "ZM", label: "Zambia" },
+  { phoneNum: "+263", value: "ZW", label: "Zimbabwe" }
+],
       chosenImage: null,
       showCropper: false,
       imageFileType: null,
@@ -1566,8 +1683,8 @@ export default {
       skill: '',
       image: null,
       imageSend: null,
-      activeResume: null,
-      itemsResume: ['Current Location', 'My Qualifications', 'Current Location', 'My Qualifications', 'Current Location'],
+      activeResume: 'Personal Info',
+      itemsResume: ['Personal Info','Current Location', 'My Qualifications'],
       input: {
         id: null,
         image_path: "",
@@ -1580,7 +1697,6 @@ export default {
         name: "",
         email: "",
         emailNew: "",
-        countryCode: null,
         phone: "",
         phoneNew: "",
         whatsapp: "",
@@ -1596,6 +1712,9 @@ export default {
         country: null,
         countryOld: null,
         countryName: null,
+        countryCode: null,
+        bornCountryName: null,
+        bornCountryCode: null,
       },
       rules: {
         nameRules: [
@@ -1652,7 +1771,6 @@ export default {
           { title: "Married", value: "M" },
         ],
         nationality: [],
-        countryCodes: [],
         favorite: [],
         town: [],
         city: ["Alexandra", "Ang Mo Kio", "Bedok", "Bukit Panjang"],
@@ -1692,7 +1810,15 @@ export default {
       const country = this.options.filter((o) => o.value === newVal)[0];
       console.log(country?.label);
       this.input.countryName = country?.label;
+      this.input.countryCode = country?.phoneNum;
       this.getCity(country?.label);
+    },
+    // eslint-disable-next-line no-unused-vars
+    "input.born": function (newVal, oldVal) {
+      const country = this.options.filter((o) => o.value === newVal)[0];
+      console.log(country?.label);
+      this.input.bornCountryName = country?.label;
+      this.input.bornCountryCode = country?.phoneNum;
     },
     // eslint-disable-next-line no-unused-vars
     "input.city": function (newVal, oldVal) {
@@ -1896,7 +2022,6 @@ export default {
             )[0],
             name: data.name,
             email: data.email_id,
-            countryCode: null,
             phone: data.mobile_number,
             phoneNew: data.mobile_number,
             whatsapp: data.whats_app,
@@ -1911,12 +2036,27 @@ export default {
             city: this.resource.city.filter(
               (i) => i.id == data.city_current
             )[0],
-            countryOld: this.options.filter(
+            countryOld: data.current_country_name ? this.options.filter(
               (i) => i.label == data.current_country_name
-            )[0].value,
-            country: this.options.filter(
+            )[0].value : null,
+            country: data.current_country_name ? this.options.filter(
               (i) => i.label == data.current_country_name
-            )[0].value,
+            )[0].value : null,
+            countryCode: data.current_country_name ? this.options.filter(
+              (i) => i.label == data.current_country_name
+            )[0].phoneNum : '',
+            countryName: data.current_country_name ? this.options.filter(
+              (i) => i.label == data.current_country_name
+            )[0].label : '',
+            born: data.born_country_name ? this.options.filter(
+              (i) => i.label == data.born_country_name
+            )[0].value : null,
+            bornCountryName: data.born_country_name ? this.options.filter(
+              (i) => i.label == data.born_country_name
+            )[0].label : '',
+            bornCountryCode: data.born_country_name ? this.options.filter(
+              (i) => i.label == data.born_country_name
+            )[0].phoneNum : '',
           };
           this.isEmailVerified =
             data.email_verified == "N"
@@ -1928,6 +2068,12 @@ export default {
             data.mobile_verified == "N"
               ? false
               : data.mobile_verified == "Y"
+              ? true
+              : null;
+          this.isWhatsappVerified =
+            data.whatsapp_verified == "N"
+              ? false
+              : data.whatsapp_verified == "Y"
               ? true
               : null;
           this.input.nationality = this.resource.nationality.filter(
@@ -1958,7 +2104,13 @@ export default {
         // password: this.input.password,
         marital_status: this.input.marital.value,
         date_of_birth: this.input.date,
-        country_current: this.input.nationality.id,
+        nationality: this.input.nationality.id ? this.input.nationality.id : this.input.nationality[0].id,
+        born_country_prefix: this.input.born,
+        born_country: this.input.bornCountryName,
+        born_country_code: this.input.bornCountryCode,
+        born_country_flag: "https://flagicons.lipis.dev/flags/4x3/" +
+          this.input.born.toLowerCase() +
+          ".svg",
         // image: this.imageSend || null,
       };
       //console.log(payload);
@@ -2021,7 +2173,13 @@ export default {
         // password: this.input.password,
         marital_status: this.input.marital.value,
         // date_of_birth: this.input.date,
-        nationality: this.input.nationality.id,
+        nationality: this.input.nationality.id ? this.input.nationality.id : this.input.nationality[0].id,
+        born_country_prefix: this.input.born,
+        born_country: this.input.bornCountryName,
+        born_country_code: this.input.bornCountryCode,
+        born_country_flag: "https://flagicons.lipis.dev/flags/4x3/" +
+          this.input.born.toLowerCase() +
+          ".svg",
         // image: this.imageSend || null,
       };
       //console.log(payload);
@@ -2120,13 +2278,15 @@ export default {
     },
     saveLocation() {
       this.isSending = true;
+      console.log(this.input.country)
+      console.log(this.phoneEvent)
+      console.log(this.phoneEvent2)
+      console.log(this.phoneEvent3)
       const payload = {
         // country_current: this.input.country.id,
         country_current: this.input.countryName,
         country_prefix: this.input.country,
-        country_code: this.phoneEvent?.countryCallingCode
-          ? `+${this.phoneEvent.countryCallingCode}`
-          : "+65",
+        country_code: this.input.countryCode,
         flag:
           "https://flagicons.lipis.dev/flags/4x3/" +
           this.input.country.toLowerCase() +
@@ -2594,7 +2754,7 @@ export default {
 
 .title-card {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .mobile-container {
