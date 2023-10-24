@@ -248,6 +248,7 @@
         font-size: 20px;
       "
       height="50"
+      @click="applyJob()"
     >
       Apply
     </v-btn>
@@ -356,6 +357,9 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    applyJob() {
+      app.config.globalProperties.$eventBus.$emit('applyJob');
+    },
     handleResize() {
       this.screenWidth = window.innerWidth;
     },

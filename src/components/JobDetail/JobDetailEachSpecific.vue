@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
-    <template v-if="!isLoading">
+    <template v-if="!isLoading && !isApply">
       <div v-if="isSmall" class="banner-container"></div>
       <div
         v-if="!isSmall"
@@ -604,6 +604,9 @@
         </template>
       </v-container>
     </template>
+    <template v-if="!isLoading && isApply">
+      <ApplyForm />
+    </template>
   </div>
 </template>
 
@@ -611,13 +614,17 @@
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
 import { mapState, mapMutations } from 'vuex';
+import ApplyForm from '@/components/ApplyForm.vue'
 import moment from 'moment';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
-
+  components: {
+    ApplyForm
+  },
   data() {
     return {
+      isApply: false,
       isLoading: false,
       screenWidth: window.innerWidth,
       itemData: {},
@@ -682,6 +689,16 @@ export default {
   mounted() {
     this.getSpecificJobs();
     this.checkDetail();
+    app.config.globalProperties.$eventBus.$on(
+      'applyJob',
+      this.applyJob
+    );
+  },
+  beforeUnmount() {
+    app.config.globalProperties.$eventBus.$off(
+      'applyJob',
+      this.applyJob
+    );
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -694,6 +711,9 @@ export default {
       'setIdCountryRecognised',
       'setIdSkillRecognised',
     ]),
+    applyJob() {
+      this.isApply = true;
+    },
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);
       this.setIdCountryRecognised(this.itemSelectedComplete.id);

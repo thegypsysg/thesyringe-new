@@ -1231,7 +1231,7 @@
               :class="{ 'mt-n6 mb-14': !isSmall, 'my-4': isSmall }"
             >
               <v-btn
-              :to="`/view-all/${item.id}`"
+              @click="goToViewAll(item.id)"
                 class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
                 :class="{ 'btn-section-2': isSmall }"
               >
@@ -2369,8 +2369,8 @@
               :class="{ 'mt-n6 mb-14': !isSmall, 'mb-4': isSmall }"
             >
               <v-btn
-              :to="`/view-all/${item.id}`"
-                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
+              @click="goToViewAll(item.id)"
+                class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-10"
                 :class="{ 'btn-section-2': isSmall }"
               >
                 <span>View All</span>
@@ -2568,6 +2568,14 @@
           </div>
         </v-container>
       </template>
+      <v-dialog v-model="isLogin" persistent width="auto">
+        <v-card :width="isSmall ? 300 :450">
+          <v-card-text class="text-center">
+            <h2 class="my-4">Please Sign up to View</h2>
+            <v-btn class="mb-4" @click="isLogin = false"> OK </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </template>
   </div>
 </template>
@@ -2582,6 +2590,7 @@ export default {
 
   data() {
     return {
+      isLogin: false,
       isLoading: false,
       isCardLoading: false,
       screenWidth: window.innerWidth,
@@ -2758,6 +2767,14 @@ export default {
       'setItemSelected2',
       'setItemSelected2Complete',
     ]),
+    goToViewAll(id) {
+      const userName = localStorage.getItem("userName")
+      if (userName == 'null' || userName == null) {
+        this.isLogin = true;
+      } else if(userName && (userName != null || userName != 'null')) {
+        this.$router.push(`/view-all/${id}`)
+      }
+    },
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);
       this.setIdCountryRecognised(this.itemSelectedComplete.id);

@@ -7,7 +7,7 @@
           <component :is="Component" />
         </Transition>
       </RouterView>
-      <Footer v-if="currentRoute !== '/signup' && currentRoute !== '/resume-profile' && !token" />
+      <Footer v-if="currentRoute !== '/signup' && currentRoute !== '/resume-profile' && !token && !isApply" />
     </div>
   </v-app>
 </template>
@@ -24,6 +24,7 @@ export default {
   components: { RouterView, Header, Footer },
   data() {
     return {
+      isApply: false,
       currentRoute: this.$route.path,
       token: null,
     };
@@ -47,6 +48,10 @@ export default {
       'getTrendingCardData2',
       this.getTrendingCardData2
     );
+    app.config.globalProperties.$eventBus.$on(
+      'applyJob',
+      this.applyJob
+    );
   },
   beforeUnmount() {
     // app.config.globalProperties.$eventBus.$off(
@@ -57,8 +62,15 @@ export default {
       'getTrendingCardData2',
       this.getTrendingCardData2
     );
+    app.config.globalProperties.$eventBus.$off(
+      'applyJob',
+      this.applyJob
+    );
   },
   methods: {
+    applyJob() {
+      this.isApply = true;
+    },
     getApplicant(tokenParam) {
     this.isLoading = true;
       const token = localStorage.getItem("token");
