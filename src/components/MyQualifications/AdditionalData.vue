@@ -11,138 +11,256 @@
               :elevation="!isSmall ? 1 : 0"
               :max-width="isSmall ? `${screenWidth - 30}px` : ''"
               class="mx-auto"
-              :class="{ 'login-card px-12': !isSmall, 'pt-10 pb-16 px-2': isSmall }"
+              :class="{ 'login-card px-12': !isSmall, 'py-10 px-2': isSmall }"
             >
               <v-row>
-                <div class="w-100 text-center d-flex flex-column justify-center">
-                  <h1 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Qualification Profile Setup</h1>
-                  <h1 class="text-red-darken-4" 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Step 2 of 4</h1>
-                </div>
-                <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
-                <v-col :cols="isSmall ? '12' : '7'">
-                <div class="mb-8 mt-4 d-flex justify-space-between align-center">
-                  <h1
-                    class=" text-red-darken-4"
-                    style="font-family: Arial, Helvetica, sans-serif !important"
-                    :class="{ 'header-mobile': isSmall }"
-                  >
-                    {{ qualificationType }}
-                  </h1>
+                <v-col cols="12">
+                <div class="d-flex align-center">
                   <div
-                    class="text-blue-darken-4"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    style="
-                      text-align: center;
-                      cursor: pointer;
-                      font-weight: 700;
-                      font-size: 20px;
-                    "
-                    @click="backStep"
-                  >
-                    Change
-                  </div>
-                </div>
-                </v-col>
-                </v-row>
-                <v-row>
-                <v-col class="pb-16 pb-md-1" :cols="isSmall ? '12' : '7'">
-                  <h3
+                        class="text-blue-darken-4 w-25"
+                        :class="{
+                          'login-btn-mobile': isSmall,
+                        }"
+                        style="
+                          text-align: lefts;
+                          cursor: pointer;
+                          font-weight: 700;
+                          font-size: 20px;
+                        "
+                        @click="backStep"
+                      >
+                        Back
+                      </div>
+                <h1 class="text-red-darken-4 w-75" 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">My Qualifications</h1>
+              </div>
+            </v-col>
+                <v-col class="pb-16 pb-md-10" :cols="isSmall ? '12' : '6'">
+                  <!-- <h1
                     class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Which Country did you obtain this Qualifications. ?
-                  </h3>
+                    Where are you now ?
+                  </h1> -->
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
-                    <div class="w-75 mb-8 d-flex align-center">
+                    <h4 class="mb-2">Is this your very first Qualifications. ?</h4>
+                    <div class="position-relative">
+                      <v-radio-group class="w-100" v-model="first" inline>
+                        <v-radio
+                          v-for="option in resource.first"
+                          :key="option.value"
+                          :label="option.label"
+                          :value="option.value"
+                          class="w-33 py-2"
+                        >
+                          <template #label>
+                            <span class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</span>
+                            <!--  <v-card height="180" width="150" class="text-center" elevation="0">
+                              <div style="height: 40px;">
+                              </div>
+                              <div class="img-cont">
+                                <v-img cover height="100" :src="option.image"><template #placeholder>
+                                  <div class="skeleton" /> </template
+                              ></v-img>
+                              </div>
+                            </v-card>-->
+                          </template> 
+                        </v-radio>
+                      </v-radio-group>
+                    </div>
+                    <h4 class="mb-2">Which University did you obtain this qualification. ?</h4>
+                    <div class="d-flex mt-4 mb-8  align-center justify-space-between">
+                    <div class="location-input w-75">
+                      <v-autocomplete
+                        v-model="university"
+                        :disabled="!isChangeUniversity"
+                        :items="resource.university"
+                        variant="outlined"
+                        item-value="label"
+                        item-title="label"
+                        label="--- Select University ---"
+                        clearable
+                        class="mt-n1"
+                        density="compact"
+                      />
+                    </div>
+                    <span
+                    v-if="!isChangeUniversity"
+                      class="text-blue-darken-4 mx-2"
+                      style="cursor: pointer"
+                      @click="isChangeUniversity = !isChangeUniversity"
+                    >
+                      Change
+                    </span>
+                      <v-btn
+                      v-else
+                      class="text-none text-subtitle-1"
+                      color="success"
+                      variant="flat"
+                      @click="isChangeUniversity = !isChangeUniversity"
+                      >
+                        Save
+                      </v-btn>
+                  </div>
+                    
+                  <h4
+                  class="mb-4"
+                  style="font-family: Arial, Helvetica, sans-serif !important"
+                >
+                  Which Country did you obtain this Qualifications. ?
+                </h4>
+
+                <!-- <v-form fast-fail @submit.prevent="login"> -->
+                  
+                  <div class="d-flex mt-4 mb-8  align-center justify-space-between">
+                  <div class="w-75 d-flex align-center">
+                    <div
+                      v-if="country"
+                      style="
+                        border-top: 2px solid rgb(239, 239, 239);
+                        border-bottom: 2px solid rgb(239, 239, 239);
+                        border-left: 2px solid rgb(239, 239, 239);
+                        border-radius: 5px 0 0px 5px;
+                        height: 47px;
+                      "
+                      class="d-flex align-center justify-center"
+                    >
+                      <span
+                        class="fi ml-2 pr-4 mr-4"
+                        :class="['fi-' + country.toLowerCase()]"
+                      />
+                    </div>
+                    <MazSelect
+                      v-slot="{ option }"
+                      :disabled="!isChangeCountry"
+                      v-model="country"
+                      item-height="40"
+                      :options="options"
+                      search
+                      size="md"
+                      class="w-100"
+                      search-placeholder="Search in country"
+                      :class="{ 'ml-n1': country }"
+                    >
                       <div
-                        v-if="country"
+                        class="flex items-center"
                         style="
-                          border-top: 2px solid rgb(239, 239, 239);
-                          border-bottom: 2px solid rgb(239, 239, 239);
-                          border-left: 2px solid rgb(239, 239, 239);
-                          border-radius: 5px 0 0px 5px;
-                          height: 47px;
+                          padding-top: 0.5rem;
+                          padding-bottom: 0.5rem;
+                          width: 100%;
+                          gap: 1rem;
                         "
-                        class="d-flex align-center justify-center"
                       >
                         <span
-                          class="fi ml-2 pr-4 mr-4"
-                          :class="['fi-' + country.toLowerCase()]"
+                          class="fi"
+                          :class="['fi-' + option.value.toLowerCase()]"
                         />
+                        <span class="pl-2">
+                          {{ option.label }}
+                        </span>
                       </div>
-                      <MazSelect
-                        v-slot="{ option }"
-                        v-model="country"
-                        item-height="40"
-                        :options="options"
-                        search
-                        size="md"
-                        class="w-100"
-                        search-placeholder="Search in country"
-                        :class="{ 'ml-n1': country }"
+                    </MazSelect>
+                  </div>
+                  <span
+                    v-if="!isChangeCountry"
+                      class="text-blue-darken-4 mx-2"
+                      style="cursor: pointer"
+                      @click="isChangeCountry = !isChangeCountry"
+                    >
+                      Change
+                    </span>
+                      <v-btn
+                      v-else
+                      class="text-none text-subtitle-1"
+                      color="success"
+                      variant="flat"
+                      @click="isChangeCountry = !isChangeCountry"
                       >
-                        <div
-                          class="flex items-center"
-                          style="
-                            padding-top: 0.5rem;
-                            padding-bottom: 0.5rem;
-                            width: 100%;
-                            gap: 1rem;
-                          "
-                        >
-                          <span
-                            class="fi"
-                            :class="['fi-' + option.value.toLowerCase()]"
-                          />
-                          <span class="pl-2">
-                            {{ option.label }}
-                          </span>
-                        </div>
-                      </MazSelect>
+                        Save
+                      </v-btn>
+                      </div>
+                    <h4 class="mb-2">Qualifications Name</h4>
+                    <div class="d-flex mt-4 mb-8  align-center justify-space-between">
+                    <div class="location-input w-75">
+                      <v-autocomplete
+                      :disabled="!isChangeQualification"
+                        v-model="qualification"
+                        :items="resource.qualifications"
+                        variant="outlined"
+                        item-value="value"
+                        item-title="label"
+                        label="--- Select Qualification ---"
+                        clearable
+                        class="mt-n1"
+                        density="compact"
+                      />
+                    </div>
+                  <span
+                  v-if="!isChangeQualification"
+                    class="text-blue-darken-4 mx-2"
+                    style="cursor: pointer"
+                    @click="isChangeQualification = !isChangeQualification"
+                  >
+                    Change
+                  </span>
+                    <v-btn
+                    v-else
+                    class="text-none text-subtitle-1"
+                    color="success"
+                    variant="flat"
+                    @click="isChangeQualification = !isChangeQualification"
+                    >
+                      Save
+                    </v-btn>
+                    </div>
+                    <h4>Year Passed</h4>
+                    <div class="d-flex mt-4 mb-8align-center">
+                    <div class="location-input w-33">
+                      <v-text-field
+                        v-model="year"
+                        :disabled="!isChangeYear"
+                        type="number"
+                        class="mt-n1"
+                        variant="outlined"
+                        density="compact"
+                      />
+                    </div>
+                    <span
+                  v-if="!isChangeYear"
+                    class="text-blue-darken-4 ml-4 mr-2"
+                    style="cursor: pointer"
+                    @click="isChangeYear = !isChangeYear"
+                  >
+                    Change
+                  </span>
+                    <v-btn
+                    v-else
+                    class="text-none text-subtitle-1 ml-4"
+                    color="success"
+                    variant="flat"
+                    @click="isChangeYear = !isChangeYear"
+                    >
+                      Save
+                    </v-btn>
                     </div>
 
                     <div
                     class="d-flex align-center"
                     :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
                   >
-                  <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
-                    <v-btn
-                      type="submit"
-                      variant="outlined"
-                      class="login-btn"
-                      :class="{
-                        'w-33 login-btn-mobile': isSmall,
-                        'w-25': !isSmall,
-                      }"
-                      @click="saveData"
-                    >
-                      Next
-                    </v-btn>
-                  </v-container>
-                  <v-btn
-                  v-if="!isSmall"
-                  type="submit"
-                  variant="outlined"
-                  class="login-btn"
-                  :class="{
-                    'w-33 login-btn-mobile': isSmall,
-                    'w-25': !isSmall,
-                  }"
-                  @click="saveData"
-                >
-                  Next
-                </v-btn>
                   </div>
                   <!-- </v-form> -->
+                </v-col>
+                <v-col
+                  v-if="!isSmall"
+                  cols="6"
+                  class="d-flex align-center justify-center"
+                >
+                  <h1 style="width: 80%">
+                  </h1>
                 </v-col>
               </v-row>
             </v-card>
@@ -172,7 +290,7 @@ import MazSelect from "maz-ui/components/MazSelect";
 import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'WhereAreYou',  
+  name: 'WhereAreYou',
   components: {
     MazSelect,
   },
@@ -427,19 +545,35 @@ export default {
   { phoneNum: "+260", value: "ZM", label: "Zambia" },
   { phoneNum: "+263", value: "ZW", label: "Zimbabwe" }
       ],
-      qualificationType: '',
-      country: null,
-      city: null,
-      countryCode: null,
-        countryName: null,
+      isChangeUniversity: false,
+      isChangeCountry: false,
+      isChangeQualification: false,
+      isChangeYear: false,
+      first: null,
+      university: null,
+      qualification: null,
+      year: null,
+      countryName: '',
+      nationality: null,
+      nationalityName: '',
+      phoneEvent: null,
+      phoneEvent2: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
       resource: {
-        countries: ['Singapore', 'India', 'Indonesia'],
-        city: ['Singapore', 'India', 'Indonesia'],
-        towns: ['Marine Drive', 'Delhi', 'Jakarta'],
-        qualifications: []
+        qualifications: [],
+        university: [],
+        first: [
+          {
+            value: 'Y',
+            label:'Yes'
+          },
+          {
+            value: 'N',
+            label:'No'
+          },
+        ]
       },
     };
   },
@@ -448,27 +582,12 @@ export default {
       return this.screenWidth < 640;
     },
   },
-  watch: {
-    // eslint-disable-next-line no-unused-vars
-    country: function (newVal, oldVal) {
-      const country = this.options.filter((o) => o.value === newVal)[0];
-      //console.log(country?.label);
-      this.countryName = country?.label;
-      this.countryCode = country?.phoneNum;
-    },
-  },
   created() {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    // const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
-    const qtId = parseInt(localStorage.getItem("qt_id"));
-
-    // this.sgmId = sgmId ? sgmId : applicantData.sgm_id;
-    this.qtId = qtId;
-
-    this.qualificationType = localStorage.getItem("qualification_type") ? localStorage.getItem("qualification_type") : this.resource.qualifications.filter(sk => sk.value == this.qtId)[0].label;
-    this.getQualificationsData()
+    this.getQualifications()
+    this.getUniversity()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -477,20 +596,31 @@ export default {
     saveData() {
       const payload = {
         // country_current: this.input.country.id,
-        qualification_country: this.countryName,
-        qualification_country_prefix: this.country,
-        qualification_country_code: this.countryCode,
-        qualification_country_flag:
+        born_country_prefix: this.country,
+        born_country_code: this.phoneEvent?.countryCallingCode
+          ? `+${this.phoneEvent.countryCallingCode}`
+          : "+65",
+        born_country: this.countryName,
+        born_country_flag:
           "https://flagicons.lipis.dev/flags/4x3/" +
           this.country.toLowerCase() +
+          ".svg",
+        nationality_country_prefix: this.nationality,
+        nationality_country_code: this.phoneEvent?.countryCallingCode
+          ? `+${this.phoneEvent.countryCallingCode}`
+          : "+65",
+        nationality: this.nationalityName,
+        nationality_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.nationality.toLowerCase() +
           ".svg",
       };
       //console.log(payload);
       //console.log(this.phoneEvent);
       const token = localStorage.getItem("token");
-      if(this.country) {
+      if(this.country && this.nationality) {
       axios
-        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+        .post(`/gypsy-applicant/save-born-country-and-nationality`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -499,14 +629,13 @@ export default {
         })
         .then((response) => {
           const data = response.data;
-          console.log(data);
+          console.log(data)
           this.isSuccess = true;
-          this.successMessage = "Success save qualification country";
-          // localStorage.setItem("qt_id", null);
-          // localStorage.setItem("qualification_type", null);
+          this.successMessage = data.message;
           this.nextStep()
         })
         .catch((error) => {
+          // eslint-disable-next-line
           console.log(error);
           const message =
             error.response.data.message === ""
@@ -517,22 +646,53 @@ export default {
         })
       }
     },
-    getQualificationsData() {
+    getUniversity() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/qualification-type-list`, {
+        .get(`/university-list`, 
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+        }
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.resource.university = data.map((item) => {
+            return {
+              value: item.university_id || 1,
+              label: item.partner_name || '',
+            };
+          });
         })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getQualifications() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/qualification-list`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        )
         .then((response) => {
           const data = response.data.data;
           console.log(data);
           this.resource.qualifications = data.map((item) => {
             return {
-              value: item.qt_id || 1,
-              label: item.qualification_type || '',
+              value: item.qualification_id || 1,
+              label: item.qualification_name || '',
             };
           });
         })
@@ -602,8 +762,6 @@ export default {
   left: 0;
   background: #F3F3F3;
 }
-
-
 .login-btn {
   width: 400px;
   height: 50px;

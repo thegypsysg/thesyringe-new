@@ -29,21 +29,22 @@ export default {
       token: null,
     };
   },
+  created() {
+
+    const url = new URL(window.location.href);
+    const tokenParam = url.searchParams.get("token");
+    if(tokenParam) {
+      localStorage.setItem('token', tokenParam);
+    }
+    
+    this.getApplicant(tokenParam)
+  },
   watch: {
     $route: function () {
       this.currentRoute = this.$route.path;
     },
   },
   mounted() {
-    const url = new URL(window.location.href);
-      const tokenParam = url.searchParams.get("token");
-      if(tokenParam) {
-      localStorage.setItem('token', tokenParam);
-      }
-      
-    this.getApplicant(tokenParam)
-
-      
     app.config.globalProperties.$eventBus.$on(
       'getTrendingCardData2',
       this.getTrendingCardData2
@@ -51,6 +52,10 @@ export default {
     app.config.globalProperties.$eventBus.$on(
       'applyJob',
       this.applyJob
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'applyJobFalse',
+      this.applyJobFalse
     );
   },
   beforeUnmount() {
@@ -66,15 +71,22 @@ export default {
       'applyJob',
       this.applyJob
     );
+    app.config.globalProperties.$eventBus.$off(
+      'applyJobFalse',
+      this.applyJobFalse
+    );
   },
   methods: {
     applyJob() {
       this.isApply = true;
     },
+    applyJobFalse() {
+      this.isApply = false;
+    },
     getApplicant(tokenParam) {
     this.isLoading = true;
       const token = localStorage.getItem("token");
-    axios
+      axios
       .get(`/gypsy-applicant`, {
         headers: {
           Authorization: `Bearer ${tokenParam ? tokenParam : token}`,
@@ -84,8 +96,8 @@ export default {
         const data = response.data.data;
         console.log(data);
         if(data && data.basic_steps == null) {
-          this.token = tokenParam
-          app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam);
+          this.token = tokenParam ? tokenParam : token;
+          app.config.globalProperties.$eventBus.$emit('getTokenStart', tokenParam ? tokenParam : token);
           localStorage.setItem('applicant_data', JSON.stringify(data))
         } else if(data && data.basic_steps == 'C' && this.currentRoute == '/') {
           this.$router.push(`/${data.slug}`);

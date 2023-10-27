@@ -28,6 +28,7 @@ import AdditionalInformation from '@/components/SignUp/AdditionalInformation.vue
 import SelectSkills from '@/components/SignUp/SelectSkills.vue';
 import SpecialisedPage from '@/components/SignUp/SpecialisedPage.vue';
 import ResultRegister from './SignUp/ResultRegister.vue';
+import app from '@/util/eventBus';
 
 export default {
   components: {
@@ -54,6 +55,9 @@ export default {
     } else if (applicantData.sgm_id != null && applicantData.main_skills_id != null && applicantData.current_country != null && applicantData.current_city != null && (applicantData.born_country == null || applicantData.nationality == null)) {
       this.currentStep = 4;
     }
+  },
+  unmounted() {
+    app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
   },
   methods: {
     nextStep() {

@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="primary" indeterminate />
     </div>
-    <v-container v-if="!isLoading">
+    <v-container v-if="!isLoading && !isMyQualification">
       <template v-if="!isSmall">
         <div class="card-container d-flex flex-wrap justify-space-between">
           <v-card class="first-section px-16 py-2">
@@ -1297,7 +1297,7 @@
             <v-card elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
-                <span style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
               </div>
               <p>Bachelors Degree in Physioterapy</p>
               <p>Singapore National University, Singapore</p>
@@ -1369,6 +1369,9 @@
         </template>
       </v-snackbar>
     </v-container>
+    <div v-if="!isLoading && isMyQualification" >
+      <AdditionalData @backStep="backStep" />
+    </div>
     <input
       ref="fileuploadinput"
       style="display: none; filter: alpha(opacity=0)"
@@ -1391,12 +1394,14 @@ import "cropperjs/dist/cropper.css";
 
 import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import MazSelect from "maz-ui/components/MazSelect";
+import AdditionalData from '@/components/MyQualifications/AdditionalData.vue'
 export default {
   components: {
     VueMultiselect,
     MazPhoneNumberInput,
     // ImageCropperDialog,
     MazSelect,
+    AdditionalData,
     VueCropper,
   },
   data() {
@@ -1653,6 +1658,7 @@ export default {
       chosenImage: null,
       showCropper: false,
       imageFileType: null,
+      isMyQualification: false,
       isLoading: false,
       screenWidth: window.innerWidth,
       isEmailVerified: false,
@@ -1852,6 +1858,9 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    backStep() {
+      this.isMyQualification = false;
+    },
     async initCropper(imageFileType) {
       this.showCropper = true;
       this.imageFileType = imageFileType;
@@ -1964,6 +1973,28 @@ export default {
             };
           });
           this.getUserData();
+          this.getApplicantData()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
         })
         .catch((error) => {
           // eslint-disable-next-line

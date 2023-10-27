@@ -358,7 +358,43 @@ export default {
   },
   methods: {
     applyJob() {
-      app.config.globalProperties.$eventBus.$emit('applyJob');
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+      .get(`/gypsy-applicant`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data);
+        if(data && data.basic_steps == null) {
+          app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
+          localStorage.setItem('applicant_data', JSON.stringify(data))
+          window.location.href = '/'
+        } else if(data && data.basic_steps == 'C') {
+          app.config.globalProperties.$eventBus.$emit('applyJob');
+          app.config.globalProperties.$eventBus.$emit('applyJob2');
+        } else if(data == null) {
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+        }
+        
+        if (data.slug) {
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
+        } else {
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        
+        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
     },
     handleResize() {
       this.screenWidth = window.innerWidth;

@@ -693,11 +693,19 @@ export default {
       'applyJob',
       this.applyJob
     );
+    app.config.globalProperties.$eventBus.$on(
+      'applyJobFalse',
+      this.applyJobFalse
+    );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
       'applyJob',
       this.applyJob
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'applyJobFalse',
+      this.applyJobFalse
     );
   },
   unmounted() {
@@ -713,6 +721,9 @@ export default {
     ]),
     applyJob() {
       this.isApply = true;
+    },
+    applyJobFalse() {
+      this.isApply = false;
     },
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);

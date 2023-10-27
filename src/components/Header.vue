@@ -1,9 +1,10 @@
 <template>
   <v-app-bar
     :class="{
-      'app-bar-mobile-start': (isSmall && isHome && tokenStart) || (isSmall && isDetailPage && isApply),
+      'app-bar-mobile-start': isSmall && isHome && tokenStart,
+      'app-bar-mobile-start': isSmall && isDetailPage && isApply,
       'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply,
       'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
       'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply,
       'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
@@ -64,7 +65,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  </v-btn>
+    </v-btn>
     <div v-if="isWelcome" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
@@ -483,7 +484,7 @@
     />
   </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !tokenStart" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -495,7 +496,7 @@
         <div
           class="mb-n2"
           :class="{ 'mt-1': isDetailPage && !isApply, 'mt-n10': isSpecific }"
-          v-if="isDetail"
+          v-if="isDetail && !isApply"
         >
           <h2>
             {{
@@ -712,7 +713,7 @@
           </div>
         </div>
         <form
-          v-if="!isDetail && !isRecognised && !tokenStart"
+          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply)"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -1103,7 +1104,7 @@ export default {
   props: ['isWelcome'],
   data() {
     return {
-      isApply: true,
+      isApply: false,
       path: '',
       // selectedTag: null,
       tokenStart: null,
@@ -1246,6 +1247,14 @@ export default {
     //   this.getHeaderDetail
     // );
     app.config.globalProperties.$eventBus.$on(
+      'applyJob2',
+      this.applyJob2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'applyJobFalse2',
+      this.applyJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$on(
       'changeHeaderPath',
       this.changeHeaderPath
     );
@@ -1288,6 +1297,14 @@ export default {
     //   this.getHeaderDetail
     // );
     app.config.globalProperties.$eventBus.$off(
+      'applyJob2',
+      this.applyJob2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'applyJobFalse2',
+      this.applyJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$off(
       'changeHeaderPath',
       this.changeHeaderPath
     );
@@ -1329,8 +1346,52 @@ export default {
   },
   methods: {
     applyJob() {
-      app.config.globalProperties.$eventBus.$emit('applyJob');
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+      .get(`/gypsy-applicant`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data);
+        if(data && data.basic_steps == null) {
+          this.tokenStart = token
+          app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
+          localStorage.setItem('applicant_data', JSON.stringify(data))
+          window.location.href = '/'
+        } else if(data && data.basic_steps == 'C') {
+          app.config.globalProperties.$eventBus.$emit('applyJob');
+          this.isApply = true;
+        } else if(data == null) {
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+        }
+        
+        if (data.slug) {
+          this.path = `/${data.slug}`;
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
+        } else {
+          this.path = "/";
+          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        
+        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+    },
+    applyJob2() {
       this.isApply = true;
+    },
+    applyJobFalse2() {
+      this.isApply = false;
     },
     changeHeaderPath(path) {
       //console.log(image)
