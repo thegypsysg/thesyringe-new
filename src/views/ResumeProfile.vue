@@ -1294,14 +1294,14 @@
             class="w-100 pt-2 pb-8 px-4 my-6"
           >
             <p class="title-card text-red-darken-4 mb-4">My Qualifications</p>
-            <v-card elevation="0" class="pa-4">
+            <v-card  elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
                 <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
               </div>
-              <p>Bachelors Degree in Physioterapy</p>
-              <p>Singapore National University, Singapore</p>
-              <p>Year Passed : <span class="text-blue-darken-4">2016</span></p>
+              <p>{{qualificationData.qualification}}</p>
+              <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
+              <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
             </v-card>
           </div>
           </template>
@@ -1691,6 +1691,7 @@ export default {
       imageSend: null,
       activeResume: 'Personal Info',
       itemsResume: ['Personal Info','Current Location', 'My Qualifications'],
+      qualificationData: null,
       input: {
         id: null,
         image_path: "",
@@ -1853,6 +1854,7 @@ export default {
     this.getCity();
     this.getTown();
     this.getNationality();
+      this.getApplicantData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
@@ -1860,6 +1862,8 @@ export default {
   methods: {
     backStep() {
       this.isMyQualification = false;
+      
+      this.getApplicantData()
     },
     async initCropper(imageFileType) {
       this.showCropper = true;
@@ -1973,7 +1977,6 @@ export default {
             };
           });
           this.getUserData();
-          this.getApplicantData()
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -1995,6 +1998,14 @@ export default {
         .then((response) => {
           const data = response.data.data;
           console.log(data);
+          this.qualificationData = {
+            ...data,
+            step: data.qualifications_steps,
+            year: data.year_passed,
+            qualification: data.qualification_name,
+            qualificationCountry: data.qualifications_country_name,
+            university: data.partner_name,
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line

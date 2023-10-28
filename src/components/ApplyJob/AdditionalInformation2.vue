@@ -51,12 +51,10 @@
                     </div>
                     <p>Year Passed</p>
                     <div class="location-input mt-4 mb-8 w-33">
-                      <v-text-field
+                      <input
                         v-model="year"
-                        type="number"
-                        class="mt-n1"
-                        variant="outlined"
-                        density="compact"
+                        type="number" pattern="/^-?\d+\.?\d*$/" onkeypress="if(this.value.length==4) return false;"
+                        style="height: 37px"
                       />
                     </div>
 
@@ -199,11 +197,12 @@ export default {
     saveData() {
       const payload = {
         qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
-        year_passed: this.year,
+        year_passed: this.year.toString(),
       };
       //console.log(payload);
       const token = localStorage.getItem("token");
-      if(this.qualification && this.year) {
+      const yearString  = this.year.toString()
+      if(this.qualification && yearString.length == 4) {
       axios
         .post(`/gypsy-applicant/save-qualification`, payload, {
           headers: {

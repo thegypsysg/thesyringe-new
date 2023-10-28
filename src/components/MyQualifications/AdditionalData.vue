@@ -1,6 +1,10 @@
 <template>
   <div>
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="primary" indeterminate />
+    </div>
     <div
+    v-else
       class="d-flex align-center"
       :class="{ 'login-container': !isSmall, 'mt-10': isSmall }"
     >
@@ -48,7 +52,7 @@
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
                     <h4 class="mb-2">Is this your very first Qualifications. ?</h4>
                     <div class="position-relative">
-                      <v-radio-group class="w-100" v-model="first" inline>
+                      <v-radio-group class="w-100" @change="saveFirst" v-model="first" inline>
                         <v-radio
                           v-for="option in resource.first"
                           :key="option.value"
@@ -82,7 +86,6 @@
                         item-value="label"
                         item-title="label"
                         label="--- Select University ---"
-                        clearable
                         class="mt-n1"
                         density="compact"
                       />
@@ -100,9 +103,9 @@
                       class="text-none text-subtitle-1"
                       color="success"
                       variant="flat"
-                      @click="isChangeUniversity = !isChangeUniversity"
+                      @click="saveUniversity"
                       >
-                        Save
+                        {{ isSave ? "Saving..." : 'Save' }}
                       </v-btn>
                   </div>
                     
@@ -177,23 +180,22 @@
                       class="text-none text-subtitle-1"
                       color="success"
                       variant="flat"
-                      @click="isChangeCountry = !isChangeCountry"
+                      @click="saveCountry"
                       >
-                        Save
+                      {{ isSave ? "Saving..." : 'Save' }}
                       </v-btn>
                       </div>
                     <h4 class="mb-2">Qualifications Name</h4>
                     <div class="d-flex mt-4 mb-8  align-center justify-space-between">
                     <div class="location-input w-75">
-                      <v-autocomplete
+                      <v-combobox
                       :disabled="!isChangeQualification"
                         v-model="qualification"
                         :items="resource.qualifications"
                         variant="outlined"
-                        item-value="value"
+                        item-value="label"
                         item-title="label"
                         label="--- Select Qualification ---"
-                        clearable
                         class="mt-n1"
                         density="compact"
                       />
@@ -211,21 +213,19 @@
                     class="text-none text-subtitle-1"
                     color="success"
                     variant="flat"
-                    @click="isChangeQualification = !isChangeQualification"
+                    @click="saveQualification"
                     >
-                      Save
+                    {{ isSave ? "Saving..." : 'Save' }}
                     </v-btn>
                     </div>
                     <h4>Year Passed</h4>
                     <div class="d-flex mt-4 mb-8align-center">
                     <div class="location-input w-33">
-                      <v-text-field
+                      <input
                         v-model="year"
                         :disabled="!isChangeYear"
-                        type="number"
-                        class="mt-n1"
-                        variant="outlined"
-                        density="compact"
+                        type="number" pattern="/^-?\d+\.?\d*$/" onkeypress="if(this.value.length==4) return false;"
+                        style="height: 37px"
                       />
                     </div>
                     <span
@@ -241,9 +241,9 @@
                     class="text-none text-subtitle-1 ml-4"
                     color="success"
                     variant="flat"
-                    @click="isChangeYear = !isChangeYear"
+                    @click="saveYear"
                     >
-                      Save
+                    {{ isSave ? "Saving..." : 'Save' }}
                     </v-btn>
                     </div>
 
@@ -276,6 +276,15 @@
 
           <template v-slot:actions>
             <v-btn color="white" variant="text" @click="isSuccess = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <v-snackbar v-model="isError" location="top" color="red" :timeout="3000">
+          {{ errorMessage }}
+  
+          <template #actions>
+            <v-btn color="white" variant="text" @click="isError = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </template>
@@ -545,22 +554,28 @@ export default {
   { phoneNum: "+260", value: "ZM", label: "Zambia" },
   { phoneNum: "+263", value: "ZW", label: "Zimbabwe" }
       ],
+      isSave: false,
+      isLoading: false,
       isChangeUniversity: false,
       isChangeCountry: false,
       isChangeQualification: false,
       isChangeYear: false,
       first: null,
       university: null,
+      country: null,
+      countryCode: null,
+        countryName: null,
       qualification: null,
       year: null,
-      countryName: '',
       nationality: null,
       nationalityName: '',
       phoneEvent: null,
       phoneEvent2: null,
       screenWidth: window.innerWidth,
+      isError: false,
       isSuccess: false,
-      successMessage: '',
+      errorMessage: "",
+      successMessage: "",
       resource: {
         qualifications: [],
         university: [],
@@ -582,45 +597,38 @@ export default {
       return this.screenWidth < 640;
     },
   },
+  
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    country: function (newVal, oldVal) {
+      const country = this.options.filter((o) => o.value === newVal)[0];
+      //console.log(country?.label);
+      this.countryName = country?.label;
+      this.countryCode = country?.phoneNum;
+    },
+  },
   created() {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
     this.getQualifications()
+    this.getApplicantData()
     this.getUniversity()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    saveData() {
+    saveFirst() {
+      this.isSave = true;
       const payload = {
-        // country_current: this.input.country.id,
-        born_country_prefix: this.country,
-        born_country_code: this.phoneEvent?.countryCallingCode
-          ? `+${this.phoneEvent.countryCallingCode}`
-          : "+65",
-        born_country: this.countryName,
-        born_country_flag:
-          "https://flagicons.lipis.dev/flags/4x3/" +
-          this.country.toLowerCase() +
-          ".svg",
-        nationality_country_prefix: this.nationality,
-        nationality_country_code: this.phoneEvent?.countryCallingCode
-          ? `+${this.phoneEvent.countryCallingCode}`
-          : "+65",
-        nationality: this.nationalityName,
-        nationality_country_flag:
-          "https://flagicons.lipis.dev/flags/4x3/" +
-          this.nationality.toLowerCase() +
-          ".svg",
+        first: this.first,
       };
       //console.log(payload);
-      //console.log(this.phoneEvent);
       const token = localStorage.getItem("token");
-      if(this.country && this.nationality) {
+      if(this.first) {
       axios
-        .post(`/gypsy-applicant/save-born-country-and-nationality`, payload, {
+        .post(`/gypsy-applicant/save-qualification-first-status`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -631,8 +639,7 @@ export default {
           const data = response.data;
           console.log(data)
           this.isSuccess = true;
-          this.successMessage = data.message;
-          this.nextStep()
+          this.successMessage = "Success Save Is First Qualification";
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -644,7 +651,194 @@ export default {
           this.errorMessage = message;
           this.isError = true;
         })
+        .finally(() => this.isSave = false);
       }
+    },
+    saveUniversity() {
+      this.isSave = true;
+      const payload = {
+        partner_name: this.university,
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.university) {
+      axios
+        .post(`/gypsy-applicant/save-university`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save University";
+          this.isChangeUniversity = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveCountry() {
+      this.isSave = true;
+      const payload = {
+        // country_current: this.input.country.id,
+        qualification_country: this.countryName,
+        qualification_country_prefix: this.country,
+        qualification_country_code: this.countryCode,
+        qualification_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+      };
+      //console.log(payload);
+      //console.log(this.phoneEvent);
+      const token = localStorage.getItem("token");
+      if(this.country) {
+      axios
+        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          this.isSuccess = true;
+          this.successMessage = "Success save qualification country";
+          this.isChangeCountry = false
+        })
+        .catch((error) => {
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveQualification() {
+      this.isSave = true;
+      const payload = {
+        qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
+        year_passed: this.year.toString(),
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.qualification) {
+      axios
+        .post(`/gypsy-applicant/save-qualification`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Qualification";
+          this.isChangeQualification = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveYear() {
+      this.isSave = true;
+      const payload = {
+        qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
+        year_passed: this.year.toString(),
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      const yearString  = this.year.toString()
+      if(yearString.length == 4) {
+      axios
+        .post(`/gypsy-applicant/save-qualification`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Year Passed";
+          this.isChangeYear = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        
+        .finally(() => this.isSave = false);
+      }
+    },
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.first = data.first == 'Y' ? 'Y' : data.first == 'N' ? 'N' : 'N';
+          this.university = data.partner_name || '';
+          this.country = data.qualifications_country_name ? this.options.filter(
+            (i) => i.label == data.qualifications_country_name
+            )[0].value : null;
+          this.qualification = data.qualification_name || '';
+          this.year = data.year_passed
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     getUniversity() {
       this.isLoading = true;
@@ -689,7 +883,7 @@ export default {
         .then((response) => {
           const data = response.data.data;
           console.log(data);
-          this.resource.qualifications = data.map((item) => {
+          this.resource.qualifications = data.sort((a,b) => a.qualification_name.localeCompare(b.qualification_name)).map((item) => {
             return {
               value: item.qualification_id || 1,
               label: item.qualification_name || '',
