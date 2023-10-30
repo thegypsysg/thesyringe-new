@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="primary" indeterminate />
     </div>
-    <v-container v-if="!isLoading && !isMyQualification">
+    <v-container v-if="!isLoading && !isMyQualification && !isMyEmployment">
       <template v-if="!isSmall">
         <div class="card-container d-flex flex-wrap justify-space-between">
           <v-card class="first-section px-16 py-2">
@@ -1304,7 +1304,26 @@
               <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
             </v-card>
           </div>
-          </template>
+        </template>
+        <template v-if="activeResume == 'My Employment'">
+          <div
+          style="background: #F7F7F7"
+            class="w-100 pt-2 pb-8 px-4 my-6"
+          >
+            <p class="title-card text-red-darken-4 mb-4">My Employment</p>
+            <v-card  elevation="0" class="pa-4">
+              <div class="d-flex justify-space-between mb-2">
+                <span class="text-blue-darken-4"># 1</span>
+                <span @click="isMyEmployment = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+              </div>
+              <p class="text-blue-darken-4">{{employmentData.position}}</p>
+              <p >{{employmentData.name}}</p>
+              <p >{{employmentData.country}}</p>
+              <p >{{employmentData.start}}</p>
+              <p >{{employmentData.end}}</p>
+            </v-card>
+          </div>
+        </template>
         <div class="w-100" style="background: #F3F3F3; position: fixed; bottom: 0; left: 0; z-index: 99999">
           <v-container
             class="d-flex justify-center align-center"
@@ -1372,6 +1391,9 @@
     <div v-if="!isLoading && isMyQualification" >
       <AdditionalData @backStep="backStep" />
     </div>
+    <div v-if="!isLoading && isMyEmployment" >
+      <AdditionalData2 @backStep="backStep" />
+    </div>
     <input
       ref="fileuploadinput"
       style="display: none; filter: alpha(opacity=0)"
@@ -1395,6 +1417,7 @@ import "cropperjs/dist/cropper.css";
 import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import MazSelect from "maz-ui/components/MazSelect";
 import AdditionalData from '@/components/MyQualifications/AdditionalData.vue'
+import AdditionalData2 from '@/components/MyEmployment/AdditionalData.vue'
 export default {
   components: {
     VueMultiselect,
@@ -1402,6 +1425,7 @@ export default {
     // ImageCropperDialog,
     MazSelect,
     AdditionalData,
+    AdditionalData2,
     VueCropper,
   },
   data() {
@@ -1659,6 +1683,7 @@ export default {
       showCropper: false,
       imageFileType: null,
       isMyQualification: false,
+      isMyEmployment: false,
       isLoading: false,
       screenWidth: window.innerWidth,
       isEmailVerified: false,
@@ -1690,8 +1715,9 @@ export default {
       image: null,
       imageSend: null,
       activeResume: 'Personal Info',
-      itemsResume: ['Personal Info','Current Location', 'My Qualifications'],
+      itemsResume: ['Personal Info','Current Location', 'My Qualifications', 'My Employment'],
       qualificationData: null,
+      employmentData: null,
       input: {
         id: null,
         image_path: "",
@@ -1770,6 +1796,20 @@ export default {
           { title: "Male", value: "M" },
           { title: "Female", value: "F" },
         ],
+        month: [
+        { value: '01', label: 'January' },
+        { value: '02', label: 'February' },
+        { value: '03', label: 'March' },
+        { value: '04', label: 'April' },
+        { value: '05', label: 'May' },
+        { value: '06', label: 'June' },
+        { value: '07', label: 'July' },
+        { value: '08', label: 'August' },
+        { value: '09', label: 'September' },
+        { value: '10', label: 'October' },
+        { value: '11', label: 'November' },
+        { value: '12', label: 'December' }
+      ],
         marital: [
           // "Single",
           // "Married",
@@ -1862,6 +1902,7 @@ export default {
   methods: {
     backStep() {
       this.isMyQualification = false;
+      this.isMyEmployment = false;
       
       this.getApplicantData()
     },
@@ -2005,6 +2046,14 @@ export default {
             qualification: data.qualification_name,
             qualificationCountry: data.qualifications_country_name,
             university: data.partner_name,
+          }
+          this.employmentData = {
+            ...data,
+            position: data.position_name,
+            name: data.employer_name,
+            country: data.employer_country_name,
+            start: `From ${this.resource.month.filter(item => item.value == data.month_start)[0].label} ${data.year_start}`,
+            end: data.month_end ?  `Till ${this.resource.month.filter(item => item.value == data.month_end)[0].label} ${data.year_end}` :  'Till Date'
           }
         })
         .catch((error) => {

@@ -18,10 +18,10 @@
                 <div class="text-center">
                 <h1 
                 :class="{ 'header-mobile-2': isSmall }" 
-                style="font-family: Arial, Helvetica, sans-serif !important">Qualification Profile Setup</h1>
+                style="font-family: Arial, Helvetica, sans-serif !important">Employment Profile</h1>
                 <h1 class="text-red-darken-4" 
                 :class="{ 'header-mobile-2': isSmall }" 
-                style="font-family: Arial, Helvetica, sans-serif !important">Step 3 of 4</h1>
+                style="font-family: Arial, Helvetica, sans-serif !important">Step 3 of 5</h1>
               </div>
               <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
             </v-col>
@@ -35,27 +35,62 @@
                   </h1> -->
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
-                    <p class="mb-2">Which University did you obtain this qualification. ?</p>
+                    <h2
+                    class="mb-4"
+                    style="font-family: Arial, Helvetica, sans-serif !important"
+                    :class="{ 'header-mobile': isSmall }"
+                  >
+                    Position Held
+                  </h2>
+
+                  <!-- <v-form fast-fail @submit.prevent="login"> -->
                     <div class="location-input mt-4 mb-8 w-100">
                       <v-combobox
-                        v-model="university"
-                        :items="resource.university"
-                        variant="outlined"
-                        item-value="label"
+                        v-model="position"
+                        :items="resource.positions"
                         item-title="label"
-                        label="--- Select University ---"
+                        variant="outlined"
+                        placeholder="Type Position Name"
                         clearable
                         class="mt-n1"
                         density="compact"
                       />
                     </div>
-                    
+                    <!-- <v-autocomplete
+                      v-model="city"
+                      :items="resource.cities"
+                      label="Enter City"
+                      class="mt-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
+                    <v-autocomplete
+                      v-model="town"
+                      :items="resource.towns"
+                      label="Enter Town"
+                      class="mt-6 w-50"
+                      :class="{ 'mb-6': !isSmall }"
+                      variant="outlined"
+                      clearable
+                    /> -->
+                    <v-row class="mb-6" v-if="!isSmall">
+                      <v-col>
+                        <h4>{{employerName || ''}}</h4>
+                        <h4>{{employerCountry =='null' ?  '' : employerCountry}}</h4>
+                      </v-col>
+                    </v-row>
 
+                    <v-container class="fixed-desc w-100" v-if="isSmall">
+                        <h4>{{employerName || ''}}</h4>
+                        <h4>{{employerCountry =='null' ?  '' : employerCountry}}</h4>
+                    </v-container>
                     <div
                     class="d-flex align-center"
                     :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
                   >
+                  
                   <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
+                    
                     <v-btn
                       type="submit"
                       variant="outlined"
@@ -85,37 +120,38 @@
                   Back
                 </div>
                   </v-container>
-                    <div 
+                  <div 
                     v-if="!isSmall" class="w-100 d-flex justify-space-between align-center mt-12">
-                      <v-btn
-                        type="submit"
-                        variant="outlined"
-                        class="login-btn"
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        @click="saveData"
-                      >
-                          Next
-                      </v-btn>
-                      <div
-                        class="text-blue-darken-4"
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        style="
-                          text-align: center;
-                          cursor: pointer;
-                          font-weight: 700;
-                          font-size: 20px;
-                        "
-                        @click="backStep"
-                      >
-                        Back
-                      </div>
-                    </div>
+                  <v-btn
+                  type="submit"
+                  variant="outlined"
+                  class="login-btn"
+                  :class="{
+                    'w-33 login-btn-mobile': isSmall,
+                    'w-25': !isSmall,
+                  }"
+                  @click="saveData"
+                >
+                  Next
+                </v-btn>
+                
+                <div
+                class="text-blue-darken-4"
+                :class="{
+                  'w-33 login-btn-mobile': isSmall,
+                  'w-25': !isSmall,
+                }"
+                style="
+                  text-align: center;
+                  cursor: pointer;
+                  font-weight: 700;
+                  font-size: 20px;
+                "
+                @click="backStep"
+              >
+                Back
+              </div>
+              </div>
                   </div>
                   <!-- </v-form> -->
                 </v-col>
@@ -128,9 +164,12 @@
                   </h1>
                 </v-col>
               </v-row>
+              
+              
             </v-card>
           </v-col>
         </v-row>
+        
         <v-snackbar
           location="top"
           color="green"
@@ -157,17 +196,14 @@ export default {
   name: 'WhereAreYou',
   data() {
     return {
-      university: null,
-      countryName: '',
-      nationality: null,
-      nationalityName: '',
-      phoneEvent: null,
-      phoneEvent2: null,
+      position: null,
+      employerName: null,
+      employerCountry : null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
       resource: {
-        university: []
+        positions: []
       },
     };
   },
@@ -180,22 +216,30 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.getUniversity()
-    this.university = localStorage.getItem('qualification_university')
+    this.employerName = localStorage.getItem('employer_name');
+    this.employerCountry = localStorage.getItem('employer_country');
+    this.getPositionList()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     saveData() {
-      const payload = {
-        partner_name: this.university.label ? this.university.label : this.university,
-      };
-      //console.log(payload);
+      let payload = {}
+      if(this.position.value) {
+       payload = {
+        position_id: this.position.value,
+        };
+      } else {
+       payload = {
+        position_name: this.position,
+      }
+    }
+      // console.log(payload);
       const token = localStorage.getItem("token");
-      if(this.university) {
+      if(this.position) {
       axios
-        .post(`/gypsy-applicant/save-university`, payload, {
+        .post(`/gypsy-applicant/save-position`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -206,9 +250,10 @@ export default {
           const data = response.data;
           console.log(data)
           this.isSuccess = true;
-          this.successMessage = "Success Save University";
-          localStorage.setItem("qualification_university", this.university.label ? this.university.label : this.university)
-          this.nextStep()
+          this.successMessage = "Success Save Position";
+          localStorage.setItem('employer_position', data.data.position_id);
+          localStorage.setItem('position_name', this.position.label ? this.position.label : this.position);
+          this.nextStep();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -222,11 +267,11 @@ export default {
         })
       }
     },
-    getUniversity() {
+    getPositionList() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/university-list`, 
+        .get(`/position-list`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -236,12 +281,14 @@ export default {
         .then((response) => {
           const data = response.data.data;
           console.log(data);
-          this.resource.university = data.map((item) => {
+          this.resource.positions = data.map((item) => {
             return {
-              value: item.university_id || 1,
-              label: item.partner_name || '',
+              value: item.position_id,
+              label: item.position_name,
             };
           });
+          
+    this.position = localStorage.getItem('employer_position') ? this.resource.positions.filter(item => item.value == localStorage.getItem('employer_position'))[0] : null
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -303,6 +350,11 @@ export default {
   -moz-text-fill-color: #333 !important;
 }
 
+.fixed-desc {
+  position: fixed;
+  bottom: 100px;
+  left: 0;
+}
 .fixed-next {
   position: fixed;
   bottom: 0;

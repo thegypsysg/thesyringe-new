@@ -1,6 +1,10 @@
 <template>
   <div>
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="primary" indeterminate />
+    </div>
     <div
+    v-else
       class="d-flex align-center"
       :class="{ 'login-container': !isSmall, 'mt-10': isSmall }"
     >
@@ -11,57 +15,110 @@
               :elevation="!isSmall ? 1 : 0"
               :max-width="isSmall ? `${screenWidth - 30}px` : ''"
               class="mx-auto"
-              :class="{ 'login-card px-12': !isSmall, 'pt-10 pb-16 px-2': isSmall }"
+              :class="{ 'login-card px-12': !isSmall, 'py-10 px-2': isSmall }"
             >
               <v-row>
-                <div class="w-100 text-center d-flex flex-column justify-center">
-                  <h1 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Qualification Profile Setup</h1>
-                  <h1 class="text-red-darken-4" 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Step 2 of 4</h1>
-                </div>
-                <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
-                <v-col :cols="isSmall ? '12' : '7'">
-                <div class="mb-8 mt-4 d-flex justify-space-between align-center">
-                  <h1
-                    class=" text-red-darken-4"
-                    style="font-family: Arial, Helvetica, sans-serif !important"
-                    :class="{ 'header-mobile': isSmall }"
-                  >
-                    {{ qualificationType }}
-                  </h1>
+                <v-col cols="12">
+                <div class="d-flex align-center">
                   <div
-                    class="text-blue-darken-4"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    style="
-                      text-align: center;
-                      cursor: pointer;
-                      font-weight: 700;
-                      font-size: 20px;
-                    "
-                    @click="backStep"
-                  >
-                    Change
-                  </div>
-                </div>
+                        class="text-blue-darken-4 w-25"
+                        :class="{
+                          'login-btn-mobile': isSmall,
+                        }"
+                        style="
+                          text-align: lefts;
+                          cursor: pointer;
+                          font-weight: 700;
+                          font-size: 20px;
+                        "
+                        @click="backStep"
+                      >
+                        Back
+                      </div>
+                <h1 class="text-red-darken-4 w-75" 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">Employment Steps</h1>
+              </div>
                 </v-col>
-                </v-row>
-                <v-row>
-                <v-col class="pb-16 pb-md-1" :cols="isSmall ? '12' : '7'">
-                  <h3
+                <v-col class="pb-16 pb-md-10" :cols="isSmall ? '12' : '6'">
+                  <!-- <h1
                     class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Which Country did you obtain this Qualifications. ?
-                  </h3>
+                    Where are you now ?
+                  </h1> -->
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
+                    <h4 class="mb-2">What is your Employment Status</h4>
+                    <div class="position-relative">
+                      <v-radio-group class="w-100" @change="saveStatus" v-model="status" inline>
+                        <v-radio
+                          v-for="option in resource.status"
+                          :key="option.value"
+                          :label="option.label"
+                          :value="option.value"
+                          class="w-50 py-2"
+                        >
+                          <template #label>
+                            <span class="font-weight-bold" style="line-height: 18px;">{{ option.label }}</span>
+                            <!--  <v-card height="180" width="150" class="text-center" elevation="0">
+                              <div style="height: 40px;">
+                              </div>
+                              <div class="img-cont">
+                                <v-img cover height="100" :src="option.image"><template #placeholder>
+                                  <div class="skeleton" /> </template
+                              ></v-img>
+                              </div>
+                            </v-card>-->
+                          </template> 
+                        </v-radio>
+                      </v-radio-group>
+                    </div>
+                    <h4 class="mb-2">Current / Past Employer Name</h4>
+                    <div class="d-flex mt-4 mb-8  align-center justify-space-between">
+                    <div class="location-input w-75">
+                      <v-combobox
+                      :disabled="!isChangeEmployerName"
+                      v-model="name"
+                      :items="resource.name"
+                      item-title="label"
+                      variant="outlined"
+                      placeholder="Type Employer Name"
+                      clearable
+                      class="mt-n1"
+                      density="compact"
+                    />
+                    </div>
+                    <span
+                    v-if="!isChangeEmployerName"
+                      class="text-blue-darken-4 mx-2"
+                      style="cursor: pointer"
+                      @click="isChangeEmployerName = !isChangeEmployerName"
+                    >
+                      Change
+                    </span>
+                      <v-btn
+                      v-else
+                      class="text-none text-subtitle-1"
+                      color="success"
+                      variant="flat"
+                      @click="saveEmployerName"
+                      >
+                        {{ isSave ? "Saving..." : 'Save' }}
+                      </v-btn>
+                    </div>
+                    
+                  <h4
+                  class="mb-4"
+                  style="font-family: Arial, Helvetica, sans-serif !important"
+                >
+                Employer Country
+                </h4>
+
+                <!-- <v-form fast-fail @submit.prevent="login"> -->
+                  
+                  <div class="d-flex mt-4 mb-2  align-center justify-space-between">
                     <div class="w-75 mb-8 d-flex align-center">
                       <div
                         v-if="country"
@@ -84,6 +141,8 @@
                         v-model="country"
                         item-height="40"
                         :options="options"
+                        :disabled="!isChangeCountry"
+                        label="Select Country"
                         search
                         size="md"
                         class="w-100"
@@ -109,40 +168,145 @@
                         </div>
                       </MazSelect>
                     </div>
+                  <span
+                    v-if="!isChangeCountry"
+                      class="text-blue-darken-4 mx-2"
+                      style="cursor: pointer"
+                      @click="isChangeCountry = !isChangeCountry"
+                    >
+                      Change
+                    </span>
+                      <v-btn
+                      v-else
+                      class="text-none text-subtitle-1"
+                      color="success"
+                      variant="flat"
+                      @click="saveEmployerCountry"
+                      >
+                      {{ isSave ? "Saving..." : 'Save' }}
+                      </v-btn>
+                      </div>
+                    <h4 class="mb-2">Position Held</h4>
+                    <div class="d-flex mt-4 mb-8  align-center justify-space-between">
+                    <div class="location-input w-75">
+                      <v-combobox
+                      :disabled="!isChangePosition"
+                        v-model="position"
+                        :items="resource.positions"
+                        item-title="label"
+                        variant="outlined"
+                        placeholder="Type Position Name"
+                        clearable
+                        class="mt-n1"
+                        density="compact"
+                      />
+                    </div>
+                  <span
+                  v-if="!isChangePosition"
+                    class="text-blue-darken-4 mx-2"
+                    style="cursor: pointer"
+                    @click="isChangePosition = !isChangePosition"
+                  >
+                    Change
+                  </span>
+                    <v-btn
+                    v-else
+                    class="text-none text-subtitle-1"
+                    color="success"
+                    variant="flat"
+                    @click="savePosition"
+                    >
+                    {{ isSave ? "Saving..." : 'Save' }}
+                    </v-btn>
+                    </div>
+                    <h4
+                    class="mb-4 text-blue-accent-4"
+                    style="font-family: Arial, Helvetica, sans-serif !important"
+                  >
+                    Month Start
+                  </h4>
+
+                    <div class="location-input d-flex mt-4 mb-8 w-66">
+                      <v-autocomplete
+                        v-model="startMonth"
+                        @blur="saveEmploymentMonth"
+                        :items="resource.month"
+                        variant="outlined"
+                        item-title="label"
+                        class="mt-n1 w-75"
+                        density="compact"
+                      />
+                      <input
+                        @blur="saveEmploymentMonth"
+                        v-model="startYear"
+                        class="w-25 pl-2"
+                        type="number" pattern="/^-?\d+\.?\d*$/" onkeypress="if(this.value.length==4) return false;"
+                        style="height: 37px"
+                      />
+                    </div>
+
+                  <div
+                      class="d-flex align-center mb-n2 justify-space-between w-50"
+                    >
+                      <v-checkbox
+                      v-model="still"
+                      @change="saveEmploymentMonth"
+                        class=" font-weight-bold text-success"
+                        label="Still Working"
+                      ></v-checkbox>
+                      <!-- <label
+                        style="font-weight: 600"
+                        class="w-50"
+                        :class="{
+                          'section-mobile': isSmall,
+                          'section-desktop': !isSmall,
+                        }"
+                        >Still Working</label
+                      > -->
+                    </div>
+                    
+                    <h4
+                    class="my-4 text-blue-accent-4"
+                    style="font-family: Arial, Helvetica, sans-serif !important"
+                  >
+                    End Month
+                  </h4>
+
+                  <div class="location-input d-flex mt-4 mb-8 w-66">
+                    <v-autocomplete
+                    @blur="saveEmploymentMonth"
+                      v-model="endMonth"
+                      :items="resource.month"
+                      :disabled="still"
+                      variant="outlined"
+                      item-title="label"
+                      class="mt-n1 w-75"
+                      density="compact"
+                    />
+                    <input
+                    @blur="saveEmploymentMonth"
+                    :disabled="still"
+                      v-model="endYear"
+                      class="w-25 pl-2"
+                      type="number" pattern="/^-?\d+\.?\d*$/" onkeypress="if(this.value.length==4) return false;"
+                      style="height: 37px"
+                    />
+                  </div>
 
                     <div
                     class="d-flex align-center"
                     :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
                   >
-                  <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
-                    <v-btn
-                      type="submit"
-                      variant="outlined"
-                      class="login-btn"
-                      :class="{
-                        'w-33 login-btn-mobile': isSmall,
-                        'w-25': !isSmall,
-                      }"
-                      @click="saveData"
-                    >
-                      Next
-                    </v-btn>
-                  </v-container>
-                  <v-btn
-                  v-if="!isSmall"
-                  type="submit"
-                  variant="outlined"
-                  class="login-btn"
-                  :class="{
-                    'w-33 login-btn-mobile': isSmall,
-                    'w-25': !isSmall,
-                  }"
-                  @click="saveData"
-                >
-                  Next
-                </v-btn>
                   </div>
                   <!-- </v-form> -->
+                </v-col>
+                <v-col
+                  v-if="!isSmall"
+                  cols="6"
+                  class="d-flex align-center justify-center"
+                >
+                  <h1 style="width: 80%">
+                  </h1>
                 </v-col>
               </v-row>
             </v-card>
@@ -162,6 +326,15 @@
             </v-btn>
           </template>
         </v-snackbar>
+        <v-snackbar v-model="isError" location="top" color="red" :timeout="3000">
+          {{ errorMessage }}
+  
+          <template #actions>
+            <v-btn color="white" variant="text" @click="isError = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-container>
     </div>
   </div>
@@ -172,7 +345,7 @@ import MazSelect from "maz-ui/components/MazSelect";
 import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'WhereAreYou',  
+  name: 'WhereAreYou',
   components: {
     MazSelect,
   },
@@ -427,19 +600,57 @@ export default {
   { phoneNum: "+260", value: "ZM", label: "Zambia" },
   { phoneNum: "+263", value: "ZW", label: "Zimbabwe" }
       ],
-      qualificationType: '',
+      isSave: false,
+      isLoading: false,
+      isChangeEmployerName: false,
+      isChangeCountry: false,
+      isChangePosition: false,
+      isChangeYear: false,
+
+      status: null,
+      name: null,
       country: null,
-      city: null,
       countryCode: null,
-        countryName: null,
+      countryName: null,
+      position: null,
+      startMonth: null,
+      startYear: null,
+      endMonth: null,
+      endYear: null,
+      still: null,
+
       screenWidth: window.innerWidth,
+      isError: false,
       isSuccess: false,
-      successMessage: '',
+      errorMessage: "",
+      successMessage: "",
       resource: {
-        countries: ['Singapore', 'India', 'Indonesia'],
-        city: ['Singapore', 'India', 'Indonesia'],
-        towns: ['Marine Drive', 'Delhi', 'Jakarta'],
-        qualifications: []
+        status: [
+          {
+            value: 'Y',
+            label: 'Employed'
+          },
+          {
+            value: 'N',
+            label: 'Unemployed'
+          },
+        ],
+        name: [],
+        positions: [],
+        month: [
+        { value: '01', label: 'January' },
+        { value: '02', label: 'February' },
+        { value: '03', label: 'March' },
+        { value: '04', label: 'April' },
+        { value: '05', label: 'May' },
+        { value: '06', label: 'June' },
+        { value: '07', label: 'July' },
+        { value: '08', label: 'August' },
+        { value: '09', label: 'September' },
+        { value: '10', label: 'October' },
+        { value: '11', label: 'November' },
+        { value: '12', label: 'December' }
+      ]
       },
     };
   },
@@ -461,36 +672,23 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    // const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
-    const qtId = parseInt(localStorage.getItem("qt_id"));
-    this.country = localStorage.getItem('qualification_country') || null;
-    // this.sgmId = sgmId ? sgmId : applicantData.sgm_id;
-    this.qtId = qtId;
-
-    this.qualificationType = localStorage.getItem("qualification_type") ? localStorage.getItem("qualification_type") : this.resource.qualifications.filter(sk => sk.value == this.qtId)[0].label;
-    this.getQualificationsData()
+    this.getApplicantData()
+    this.getPartnerList()
+    this.getPositionList()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    saveData() {
+    saveStatus() {
       const payload = {
-        // country_current: this.input.country.id,
-        qualification_country: this.countryName,
-        qualification_country_prefix: this.country,
-        qualification_country_code: this.countryCode,
-        qualification_country_flag:
-          "https://flagicons.lipis.dev/flags/4x3/" +
-          this.country.toLowerCase() +
-          ".svg",
+        employed: this.status,
       };
       //console.log(payload);
-      //console.log(this.phoneEvent);
       const token = localStorage.getItem("token");
-      if(this.country) {
+      if(this.status) {
       axios
-        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+        .post(`/gypsy-applicant/save-employment-status`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -501,12 +699,200 @@ export default {
           const data = response.data;
           console.log(data);
           this.isSuccess = true;
-          this.successMessage = "Success save qualification country";
-          localStorage.setItem("qualification_country", this.country);
-          // localStorage.setItem("qualification_type", null);
-          this.nextStep()
+          this.successMessage = "Success Save Employment Status";
         })
         .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message = error.response.data.message === ""
+            ? "Something Wrong!!!"
+            : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        });
+      }
+    },
+    saveEmployerName() {
+      this.isSave = true
+      let payload = {}
+      if(this.name.value) {
+       payload = {
+        partner_id: this.name.value,
+        };
+      } else {
+       payload = {
+        partner_name: this.name,
+        country_prefix: this.country,
+        country_code: this.countryCode,
+        country_name: this.countryName,
+        flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+        };
+      }
+      // console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.name) {
+      axios
+        .post(`/gypsy-applicant/save-employer`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Employer";
+          this.isChangeEmployerName = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveEmployerCountry() {
+      this.isSave = true
+      let payload = {}
+      if(this.name.value) {
+       payload = {
+        partner_id: this.name.value,
+        };
+      } else {
+       payload = {
+        partner_name: this.name,
+        country_prefix: this.country,
+        country_code: this.countryCode,
+        country_name: this.countryName,
+        flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+        };
+      }
+      // console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.name) {
+      axios
+        .post(`/gypsy-applicant/save-employer`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Country";
+          this.isChangeCountry = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        .finally(() => this.isSave = false);
+      }
+    },
+    savePosition() {
+      this.isSave = true
+      let payload = {}
+      if(this.position.value) {
+       payload = {
+        position_id: this.position.value,
+        };
+      } else {
+       payload = {
+        position_name: this.position,
+      }
+    }
+      // console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.position) {
+      axios
+        .post(`/gypsy-applicant/save-position`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Position";
+          this.isChangePosition = false
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveEmploymentMonth() {
+      console.log(this.startMonth);
+      console.log(this.endMonth);
+      let payload = {}
+      if(this.still == true) {
+       payload = {
+        month_start: this.startMonth,
+        year_start: this.startYear.toString(),
+        still_working: 'Y'
+        };
+      } else {
+       payload = {
+        month_start: this.startMonth,
+        year_start: this.startYear.toString(),
+        still_working: 'N',
+        month_end: this.endMonth,
+        year_end: this.endYear.toString(),
+      }
+    }
+      // console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.startYear && this.startMonth) {
+      axios
+        .post(`/gypsy-applicant/save-employment-month-details`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = "Success Save Work Duration";
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
           console.log(error);
           const message =
             error.response.data.message === ""
@@ -517,11 +903,12 @@ export default {
         })
       }
     },
-    getQualificationsData() {
+
+    getApplicantData() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/qualification-type-list`, {
+        .get(`/gypsy-applicant`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -529,10 +916,53 @@ export default {
         .then((response) => {
           const data = response.data.data;
           console.log(data);
-          this.resource.qualifications = data.map((item) => {
+          this.status = data.employed == 'Y' ? 'Y' : data.employed == 'N' ? 'N' : 'N';
+          this.name = {
+            value: data.employer_id,
+            name: data.employer_name,
+            label: `${data.employer_name} (${data.employer_country_name})`,
+          }
+          this.country = data.employer_country_name ? this.options.filter(
+            (i) => i.label == data.employer_country_name
+
+            )[0].value : null;
+            this.position = {
+              value: data.position_id,
+              label: data.position_name,
+            }
+            this.still = data.still_working == 'Y' ? true : false;
+            this.startMonth = data.month_start
+            this.endMonth = data.month_end
+            this.startYear = data.year_start
+            this.endYear = data.year_end
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getPartnerList() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/partner-list`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.resource.name = data.map((item) => {
             return {
-              value: item.qt_id || 1,
-              label: item.qualification_type || '',
+              value: item.partner_id,
+              name: item.partner_name,
+              label: `${item.partner_name} (${item.country_name})`  || '',
             };
           });
         })
@@ -544,6 +974,36 @@ export default {
           this.isLoading = false;
         });
     },
+    getPositionList() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/position-list`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        )
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.resource.positions = data.map((item) => {
+            return {
+              value: item.position_id,
+              label: item.position_name,
+            };
+          });
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+
     nextStep() {
       this.$emit('nextStep');
     },
@@ -602,8 +1062,6 @@ export default {
   left: 0;
   background: #F3F3F3;
 }
-
-
 .login-btn {
   width: 400px;
   height: 50px;

@@ -373,9 +373,12 @@ export default {
           app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
           localStorage.setItem('applicant_data', JSON.stringify(data))
           window.location.href = '/'
-        } else if(data && data.basic_steps == 'C') {
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == null) {
           app.config.globalProperties.$eventBus.$emit('applyJob');
           app.config.globalProperties.$eventBus.$emit('applyJob2');
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
+          app.config.globalProperties.$eventBus.$emit('employmentJob');
+          app.config.globalProperties.$eventBus.$emit('employmentJob2');
         } else if(data == null) {
           app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
         }

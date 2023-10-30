@@ -3,10 +3,13 @@
     :class="{
       'app-bar-mobile-start': isSmall && isHome && tokenStart,
       'app-bar-mobile-start': isSmall && isDetailPage && isApply,
+      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment,
       'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
       'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isEmployment,
       'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
       'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isEmployment,
       'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
       'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
     }"
@@ -214,7 +217,7 @@
     <div
       class="mr-10 d-flex justify-space-between"
       style="min-width: 500px"
-      v-if="isDetailPage && !isSmall && !isApply"
+      v-if="isDetailPage && !isSmall && !isApply && !isEmployment"
     >
       <div class="d-flex align-center">
         <v-btn
@@ -484,7 +487,7 @@
     />
   </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !tokenStart" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !isEmployment && !tokenStart" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -495,8 +498,8 @@
       >
         <div
           class="mb-n2"
-          :class="{ 'mt-1': isDetailPage && !isApply, 'mt-n10': isSpecific }"
-          v-if="isDetail && !isApply"
+          :class="{ 'mt-1': isDetailPage && !isApply && !isEmployment, 'mt-n10': isSpecific }"
+          v-if="isDetail && !isApply && !isEmployment"
         >
           <h2>
             {{
@@ -661,7 +664,7 @@
           </v-menu>
         </div>
 
-        <div v-if="isDetailPage && !isApply">
+        <div v-if="isDetailPage && !isApply && !isEmployment">
           <span>{{ detailHeader.address }}</span>
         </div>
         <!-- <div v-if="isHome">
@@ -694,7 +697,7 @@
           </v-menu>
         </div> -->
         <div
-          v-if="isDetailPage && !isApply"
+          v-if="isDetailPage && !isApply && !isEmployment"
           style="height: 50px"
           class="info-title d-flex align-center mb-4 mt-n4"
         >
@@ -713,7 +716,7 @@
           </div>
         </div>
         <form
-          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply)"
+          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply) || (!isDetail && !isRecognised && !isEmployment)"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -1105,6 +1108,7 @@ export default {
   data() {
     return {
       isApply: false,
+      isEmployment: false,
       path: '',
       // selectedTag: null,
       tokenStart: null,
@@ -1255,6 +1259,14 @@ export default {
       this.applyJobFalse2
     );
     app.config.globalProperties.$eventBus.$on(
+      'employmentJob2',
+      this.employmentJob2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'employmentJobFalse2',
+      this.employmentJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$on(
       'changeHeaderPath',
       this.changeHeaderPath
     );
@@ -1303,6 +1315,14 @@ export default {
     app.config.globalProperties.$eventBus.$off(
       'applyJobFalse2',
       this.applyJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'employmentJob2',
+      this.employmentJob2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'employmentJobFalse2',
+      this.employmentJobFalse2
     );
     app.config.globalProperties.$eventBus.$off(
       'changeHeaderPath',
@@ -1362,9 +1382,12 @@ export default {
           app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
           localStorage.setItem('applicant_data', JSON.stringify(data))
           window.location.href = '/'
-        } else if(data && data.basic_steps == 'C') {
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == null) {
           app.config.globalProperties.$eventBus.$emit('applyJob');
-          this.isApply = true;
+          app.config.globalProperties.$eventBus.$emit('applyJob2');
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
+          app.config.globalProperties.$eventBus.$emit('employmentJob');
+          app.config.globalProperties.$eventBus.$emit('employmentJob2');
         } else if(data == null) {
           app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
         }
@@ -1392,6 +1415,12 @@ export default {
     },
     applyJobFalse2() {
       this.isApply = false;
+    },
+    employmentJob2() {
+      this.isEmployment = true;
+    },
+    employmentJobFalse2() {
+      this.isEmployment = false;
     },
     changeHeaderPath(path) {
       //console.log(image)

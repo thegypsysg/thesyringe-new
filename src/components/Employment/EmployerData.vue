@@ -14,54 +14,46 @@
               :class="{ 'login-card px-12': !isSmall, 'pt-10 pb-16 px-2': isSmall }"
             >
               <v-row>
-                <div class="w-100 text-center d-flex flex-column justify-center">
-                  <h1 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Qualification Profile Setup</h1>
-                  <h1 class="text-red-darken-4" 
-                  :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Step 2 of 4</h1>
-                </div>
-                <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
-                <v-col :cols="isSmall ? '12' : '7'">
-                <div class="mb-8 mt-4 d-flex justify-space-between align-center">
-                  <h1
-                    class=" text-red-darken-4"
-                    style="font-family: Arial, Helvetica, sans-serif !important"
-                    :class="{ 'header-mobile': isSmall }"
-                  >
-                    {{ qualificationType }}
-                  </h1>
-                  <div
-                    class="text-blue-darken-4"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    style="
-                      text-align: center;
-                      cursor: pointer;
-                      font-weight: 700;
-                      font-size: 20px;
-                    "
-                    @click="backStep"
-                  >
-                    Change
+                <v-col cols="12">
+                <div class="text-center">
+                <h1 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">Employment Profile</h1>
+                <h1 class="text-red-darken-4" 
+                :class="{ 'header-mobile-2': isSmall }" 
+                style="font-family: Arial, Helvetica, sans-serif !important">Step 2 of 5</h1>
                   </div>
-                </div>
+                  <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
                 </v-col>
-                </v-row>
-                <v-row>
-                <v-col class="pb-16 pb-md-1" :cols="isSmall ? '12' : '7'">
-                  <h3
+                <v-col class="pb-16 pb-md-1" :cols="isSmall ? '12' : '6'">
+                  <h2
                     class="mb-4"
                     style="font-family: Arial, Helvetica, sans-serif !important"
                     :class="{ 'header-mobile': isSmall }"
                   >
-                    Which Country did you obtain this Qualifications. ?
-                  </h3>
+                    Current / Past Employer Name
+                  </h2>
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
+                    <div class="location-input mt-4 mb-8 w-100">
+                      <v-combobox
+                        v-model="name"
+                        :items="resource.name"
+                        item-title="label"
+                        variant="outlined"
+                        placeholder="Type Employer Name"
+                        clearable
+                        class="mt-n1"
+                        density="compact"
+                      />
+                    </div>
+                    <h2
+                      class="mb-4"
+                      style="font-family: Arial, Helvetica, sans-serif !important"
+                      :class="{ 'header-mobile': isSmall }"
+                    >
+                      Employer Country
+                    </h2>
                     <div class="w-75 mb-8 d-flex align-center">
                       <div
                         v-if="country"
@@ -84,6 +76,7 @@
                         v-model="country"
                         item-height="40"
                         :options="options"
+                        label="Select Country"
                         search
                         size="md"
                         class="w-100"
@@ -109,6 +102,23 @@
                         </div>
                       </MazSelect>
                     </div>
+                    <!-- <v-autocomplete
+                      v-model="city"
+                      :items="resource.cities"
+                      label="Enter City"
+                      class="mt-6 w-50"
+                      variant="outlined"
+                      clearable
+                    />
+                    <v-autocomplete
+                      v-model="town"
+                      :items="resource.towns"
+                      label="Enter Town"
+                      class="mt-6 w-50"
+                      :class="{ 'mb-6': !isSmall }"
+                      variant="outlined"
+                      clearable
+                    /> -->
 
                     <div
                     class="d-flex align-center"
@@ -127,9 +137,26 @@
                     >
                       Next
                     </v-btn>
+                    <div
+                  class="text-blue-darken-4"
+                  :class="{
+                    'w-33 login-btn-mobile': isSmall,
+                    'w-25': !isSmall,
+                  }"
+                  style="
+                    text-align: center;
+                    cursor: pointer;
+                    font-weight: 700;
+                    font-size: 20px;
+                  "
+                  @click="backStep"
+                >
+                  Back
+                </div>
                   </v-container>
+                  <div 
+                    v-if="!isSmall" class="w-100 d-flex justify-space-between align-center mt-12">
                   <v-btn
-                  v-if="!isSmall"
                   type="submit"
                   variant="outlined"
                   class="login-btn"
@@ -141,8 +168,34 @@
                 >
                   Next
                 </v-btn>
+                
+                <div
+                class="text-blue-darken-4"
+                :class="{
+                  'w-33 login-btn-mobile': isSmall,
+                  'w-25': !isSmall,
+                }"
+                style="
+                  text-align: center;
+                  cursor: pointer;
+                  font-weight: 700;
+                  font-size: 20px;
+                "
+                @click="backStep"
+              >
+                Back
+              </div>
+              </div>
                   </div>
                   <!-- </v-form> -->
+                </v-col>
+                <v-col
+                  v-if="!isSmall"
+                  cols="6"
+                  class="d-flex align-center justify-center"
+                >
+                  <h1 style="width: 80%">
+                  </h1>
                 </v-col>
               </v-row>
             </v-card>
@@ -162,6 +215,16 @@
             </v-btn>
           </template>
         </v-snackbar>
+        
+        <v-snackbar v-model="isError" location="top" color="red" :timeout="3000">
+          {{ errorMessage }}
+  
+          <template #actions>
+            <v-btn color="white" variant="text" @click="isError = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-container>
     </div>
   </div>
@@ -169,12 +232,14 @@
 
 <script>
 import MazSelect from "maz-ui/components/MazSelect";
+// import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'WhereAreYou',  
+  name: 'EmployerData',  
   components: {
     MazSelect,
+    // MazPhoneNumberInput
   },
   data() {
     return {
@@ -427,19 +492,17 @@ export default {
   { phoneNum: "+260", value: "ZM", label: "Zambia" },
   { phoneNum: "+263", value: "ZW", label: "Zimbabwe" }
       ],
-      qualificationType: '',
+      name: null,
       country: null,
-      city: null,
-      countryCode: null,
         countryName: null,
+        countryCode: null,
       screenWidth: window.innerWidth,
+      isError: false,
       isSuccess: false,
-      successMessage: '',
+      errorMessage: "",
+      successMessage: "",
       resource: {
-        countries: ['Singapore', 'India', 'Indonesia'],
-        city: ['Singapore', 'India', 'Indonesia'],
-        towns: ['Marine Drive', 'Delhi', 'Jakarta'],
-        qualifications: []
+        name: []
       },
     };
   },
@@ -461,36 +524,37 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    // const applicantData = JSON.parse(localStorage.getItem('applicant_data'));
-    const qtId = parseInt(localStorage.getItem("qt_id"));
-    this.country = localStorage.getItem('qualification_country') || null;
-    // this.sgmId = sgmId ? sgmId : applicantData.sgm_id;
-    this.qtId = qtId;
-
-    this.qualificationType = localStorage.getItem("qualification_type") ? localStorage.getItem("qualification_type") : this.resource.qualifications.filter(sk => sk.value == this.qtId)[0].label;
-    this.getQualificationsData()
+        
+         this.country =  localStorage.getItem('employer_country_prefix') || null
+    this.getPartnerList()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     saveData() {
-      const payload = {
-        // country_current: this.input.country.id,
-        qualification_country: this.countryName,
-        qualification_country_prefix: this.country,
-        qualification_country_code: this.countryCode,
-        qualification_country_flag:
+      let payload = {}
+      if(this.name.value) {
+       payload = {
+        partner_id: this.name.value,
+        };
+      } else {
+       payload = {
+        partner_name: this.name,
+        country_prefix: this.country,
+        country_code: this.countryCode,
+        country_name: this.countryName,
+        flag:
           "https://flagicons.lipis.dev/flags/4x3/" +
           this.country.toLowerCase() +
           ".svg",
-      };
-      //console.log(payload);
-      //console.log(this.phoneEvent);
+        };
+      }
+      // console.log(payload);
       const token = localStorage.getItem("token");
-      if(this.country) {
+      if(this.name) {
       axios
-        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+        .post(`/gypsy-applicant/save-employer`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -499,14 +563,16 @@ export default {
         })
         .then((response) => {
           const data = response.data;
-          console.log(data);
+          console.log(data)
           this.isSuccess = true;
-          this.successMessage = "Success save qualification country";
-          localStorage.setItem("qualification_country", this.country);
-          // localStorage.setItem("qualification_type", null);
+          this.successMessage = "Success Save Employer";
+          localStorage.setItem('employer_name', this.name.name ? this.name.name : this.name)
+          localStorage.setItem('employer_country', this.countryName)
+          localStorage.setItem('employer_country_prefix', this.country)
           this.nextStep()
         })
         .catch((error) => {
+          // eslint-disable-next-line
           console.log(error);
           const message =
             error.response.data.message === ""
@@ -517,24 +583,28 @@ export default {
         })
       }
     },
-    getQualificationsData() {
+    getPartnerList() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/qualification-type-list`, {
+        .get(`/partner-list`, 
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        }
+        )
         .then((response) => {
           const data = response.data.data;
           console.log(data);
-          this.resource.qualifications = data.map((item) => {
+          this.resource.name = data.map((item) => {
             return {
-              value: item.qt_id || 1,
-              label: item.qualification_type || '',
+              value: item.partner_id,
+              name: item.partner_name,
+              label: `${item.partner_name} (${item.country_name})`  || '',
             };
           });
+          this.name = localStorage.getItem('employer_name') ? this.resource.name.filter(item => item.name == localStorage.getItem('employer_name'))[0] : null
         })
         .catch((error) => {
           // eslint-disable-next-line
