@@ -123,7 +123,17 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    goToPath() {
+    goToPath() {          
+      localStorage.removeItem("employment_status");
+      localStorage.removeItem('employer_name')
+          localStorage.removeItem('employer_country')
+          localStorage.removeItem('employer_country_prefix')
+          localStorage.removeItem('employer_position')
+          localStorage.removeItem('position_name')          
+          localStorage.removeItem('start_month')
+          localStorage.removeItem('start_year')
+            localStorage.removeItem('end_month')
+            localStorage.removeItem('end_year')
       app.config.globalProperties.$eventBus.$emit('employmentJobFalse');
       app.config.globalProperties.$eventBus.$emit('employmentJobFalse2');
       if (this.path != '/') {

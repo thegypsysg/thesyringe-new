@@ -519,9 +519,30 @@
                 
                 <!-- <hr class="my-4" /> -->
               </v-container>
+              </v-card-text>
+              <v-card-title
+              style="border-bottom: 1px solid rgb(227, 227, 227)"
+              class="card-title"
+            >
+              <v-container
+                class="d-flex align-center justify-space-between my-n4"
+              >
+              <p class="title-card">Where are you now . ?</p>
+              <v-btn
+                class="text-none text-subtitle-1"
+                color="success"
+                size="large"
+                variant="flat"
+                @click="saveLocation()"
+              >
+                Save Changes
+              </v-btn>
+              </v-container>
+            </v-card-title>
+            <v-card-text>
               <v-container>
-                <div
-                style="border-top: 1px solid rgb(189, 189, 189)"
+                <!-- <div
+                style="border-top: 1px solid rgb(189, 189, 189); background: #F7F7F7"
                   class="d-flex w-100 justify-space-between align-center mt-4 pt-4 mb-4 "
                 >
                   <p class="title-card">Where are you now . ?</p>
@@ -534,7 +555,7 @@
                   >
                     Save Changes
                   </v-btn>
-                </div>
+                </div> -->
 
                 <v-row>
                   <v-col cols="6">
@@ -645,6 +666,136 @@
                         density="compact"
                       />
                     </div>
+                  </v-col>
+                </v-row>
+                <hr class="mt-8" />
+              </v-container>
+              <!-- <v-container>
+                <div
+                  class="d-flex w-100 justify-space-between align-center mb-4 mt-n4"
+                >
+                  <p class="title-card">Nearest Mall</p>
+                  <v-btn
+                    class="text-none text-subtitle-1"
+                    color="success"
+                    size="large"
+                    variant="flat"
+                  >
+                    Save Changes
+                  </v-btn>
+                </div>
+                <v-row
+                  style="border-bottom: 1px solid rgb(189, 189, 189)"
+                  class="mb-2 pb-2"
+                >
+                  <v-col cols="6">
+                    <VueMultiselect
+                      v-model="input.nearest"
+                      class="mt-2"
+                      :options="resource.nearest"
+                      placeholder="Select Nearest Mall"
+                    />
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-container>
+                <div
+                  class="d-flex w-100 justify-space-between align-center mb-4 mt-n4"
+                >
+                  <p class="title-card">Favorite Malls</p>
+                  <v-spacer />
+                </div>
+                <v-row>
+                  <v-col cols="4">
+                    <VueMultiselect
+                      v-model="input.favorite1"
+                      class="mt-2"
+                      :options="resource.favorite"
+                      placeholder="Select Mall"
+                    />
+                  </v-col>
+                  <v-col cols="4">
+                    <VueMultiselect
+                      v-model="input.favorite2"
+                      class="mt-2"
+                      :options="resource.favorite"
+                      placeholder="Select Mall"
+                    />
+                  </v-col>
+                  <v-col cols="4">
+                    <VueMultiselect
+                      v-model="input.favorite3"
+                      class="mt-2"
+                      :options="resource.favorite"
+                      placeholder="Select Mall"
+                    />
+                  </v-col>
+                </v-row>
+              </v-container> -->
+            </v-card-text>
+              <v-card-title
+              style="border-bottom: 1px solid rgb(227, 227, 227)"
+              class="card-title"
+            >
+              <v-container
+                class="d-flex align-center justify-space-between my-n4"
+              >
+              <p class="title-card">Qualification Steps</p>
+              <!-- <v-btn
+                class="text-none text-subtitle-1"
+                color="success"
+                size="large"
+                variant="flat"
+                @click="saveLocation()"
+              >
+                Save Changes
+              </v-btn> -->
+              </v-container>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="6">
+                    <v-card  elevation="0" class="pa-4">
+                      <div class="d-flex justify-space-between mb-2">
+                        <span class="text-blue-darken-4"># 1</span>
+                        <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                      </div>
+                      <p>{{qualificationData.qualification}}</p>
+                      <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
+                      <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
+                    </v-card>
+                  </v-col>
+                </v-row>
+                <hr class="mt-8" />
+              </v-container>
+              
+            </v-card-text>
+              <v-card-title
+              style="border-bottom: 1px solid rgb(227, 227, 227)"
+              class="card-title"
+            >
+              <v-container
+                class="d-flex align-center justify-space-between my-n4"
+              >
+              <p class="title-card">Employment Steps</p>
+              </v-container>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="6">
+                    <v-card  elevation="0" class="pa-4">
+                      <div class="d-flex justify-space-between mb-2">
+                        <span class="text-blue-darken-4"># 1</span>
+                        <span @click="isMyEmployment = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                      </div>
+                      <p class="text-blue-darken-4">{{employmentData.position}}</p>
+                      <p >{{employmentData.name}}</p>
+                      <p >{{employmentData.country}}</p>
+                      <p >{{employmentData.start}}</p>
+                      <p >{{employmentData.end}}</p>
+                    </v-card>
                   </v-col>
                 </v-row>
                 <hr class="mt-8" />
@@ -1294,7 +1445,7 @@
             class="w-100 pt-2 pb-8 px-4 my-6"
           >
             <p class="title-card text-red-darken-4 mb-4">My Qualifications</p>
-            <v-card  elevation="0" class="pa-4">
+             <v-card  elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
                 <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
@@ -1716,8 +1867,12 @@ export default {
       imageSend: null,
       activeResume: 'Personal Info',
       itemsResume: ['Personal Info','Current Location', 'My Qualifications', 'My Employment'],
-      qualificationData: null,
-      employmentData: null,
+      qualificationData: {
+        qualification: ''
+      },
+      employmentData: {
+        position: ''
+      },
       input: {
         id: null,
         image_path: "",
@@ -1894,7 +2049,7 @@ export default {
     this.getCity();
     this.getTown();
     this.getNationality();
-      this.getApplicantData()
+    this.getApplicantData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);

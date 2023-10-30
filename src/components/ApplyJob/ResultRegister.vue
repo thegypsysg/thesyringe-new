@@ -96,6 +96,10 @@ export default {
   },
   methods: {
     goToPath() {
+          localStorage.removeItem("qt_id")
+          localStorage.removeItem("qualification_type")
+          localStorage.removeItem("qualification_country")
+          localStorage.removeItem("qualification_university")
       app.config.globalProperties.$eventBus.$emit('applyJobFalse');
       app.config.globalProperties.$eventBus.$emit('applyJobFalse2');
     },

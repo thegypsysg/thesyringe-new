@@ -2,14 +2,12 @@
   <v-app-bar
     :class="{
       'app-bar-mobile-start': isSmall && isHome && tokenStart,
-      'app-bar-mobile-start': isSmall && isDetailPage && isApply,
-      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment,
+      'app-bar-mobile-start': isSmall && isDetailPage && isApply && !isEmployment,
+      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment && !isApply,
       'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isEmployment,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment,
       'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isEmployment,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment,
       'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
       'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
     }"
@@ -217,7 +215,7 @@
     <div
       class="mr-10 d-flex justify-space-between"
       style="min-width: 500px"
-      v-if="isDetailPage && !isSmall && !isApply && !isEmployment"
+      v-if="(isDetailPage && !isSmall && !isApply) || (isDetailPage && !isSmall && !isEmployment)"
     >
       <div class="d-flex align-center">
         <v-btn
@@ -498,8 +496,8 @@
       >
         <div
           class="mb-n2"
-          :class="{ 'mt-1': isDetailPage && !isApply && !isEmployment, 'mt-n10': isSpecific }"
-          v-if="isDetail && !isApply && !isEmployment"
+          :class="{ 'mt-1': (isDetailPage && !isApply) || (isDetailPage && !isEmployment), 'mt-n10': isSpecific }"
+          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)"
         >
           <h2>
             {{
@@ -664,7 +662,7 @@
           </v-menu>
         </div>
 
-        <div v-if="isDetailPage && !isApply && !isEmployment">
+        <div v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)">
           <span>{{ detailHeader.address }}</span>
         </div>
         <!-- <div v-if="isHome">
@@ -697,7 +695,7 @@
           </v-menu>
         </div> -->
         <div
-          v-if="isDetailPage && !isApply && !isEmployment"
+          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)"
           style="height: 50px"
           class="info-title d-flex align-center mb-4 mt-n4"
         >
