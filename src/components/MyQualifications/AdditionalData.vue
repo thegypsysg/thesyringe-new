@@ -77,7 +77,7 @@
                     </div>
                     <h4 class="mb-2">Which University did you obtain this qualification. ?</h4>
                     <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                    <div class="location-input w-75">
+                    <div class="location-input w-75" :class="{'disabled-input': !isChangeUniversity}">
                       <v-autocomplete
                         v-model="university"
                         :disabled="!isChangeUniversity"
@@ -119,7 +119,7 @@
                 <!-- <v-form fast-fail @submit.prevent="login"> -->
                   
                   <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                  <div class="w-75 d-flex align-center">
+                  <div class="w-75 d-flex align-center location-input" :class="{'disabled-input': !isChangeCountry}">
                     <div
                       v-if="country"
                       style="
@@ -187,7 +187,7 @@
                       </div>
                     <h4 class="mb-2">Qualifications Name</h4>
                     <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                    <div class="location-input w-75">
+                    <div class="location-input w-75" :class="{'disabled-input': !isChangeQualification}">
                       <v-combobox
                       :disabled="!isChangeQualification"
                         v-model="qualification"
@@ -219,11 +219,12 @@
                     </v-btn>
                     </div>
                     <h4>Year Passed</h4>
-                    <div class="d-flex mt-4 mb-8align-center">
-                    <div class="location-input w-33">
+                    <div class="d-flex mt-4 mb-8 align-center">
+                    <div class="location-input w-25" :class="{'disabled-input': !isChangeYear}">
                       <input
                         v-model="year"
                         :disabled="!isChangeYear"
+                        class="pl-2"
                         type="number" pattern="/^-?\d+\.?\d*$/" onkeypress="if(this.value.length==4) return false;"
                         style="height: 37px"
                       />
@@ -1015,5 +1016,9 @@ export default {
 }
 .login-footer-btn-mobile {
   gap: 40px;
+}
+
+.disabled-input {
+  background: #F2F2F2 !important;
 }
 </style>

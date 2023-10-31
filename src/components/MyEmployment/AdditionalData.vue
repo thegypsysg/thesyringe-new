@@ -77,7 +77,7 @@
                     </div>
                     <h4 class="mb-2">Current / Past Employer Name</h4>
                     <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                    <div class="location-input w-75">
+                    <div class="location-input w-75" :class="{'disabled-input': !isChangeEmployerName}">
                       <v-combobox
                       :disabled="!isChangeEmployerName"
                       v-model="name"
@@ -119,7 +119,7 @@
                 <!-- <v-form fast-fail @submit.prevent="login"> -->
                   
                   <div class="d-flex mt-4 mb-2  align-center justify-space-between">
-                    <div class="w-75 mb-8 d-flex align-center">
+                    <div class="w-75 mb-8 d-flex align-center location-input" :class="{'disabled-input': !isChangeCountry}">
                       <div
                         v-if="country"
                         style="
@@ -188,7 +188,7 @@
                       </div>
                     <h4 class="mb-2">Position Held</h4>
                     <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                    <div class="location-input w-75">
+                    <div class="location-input w-75" :class="{'disabled-input': !isChangePosition}">
                       <v-combobox
                       :disabled="!isChangePosition"
                         v-model="position"
@@ -1121,5 +1121,9 @@ export default {
 }
 .login-footer-btn-mobile {
   gap: 40px;
+}
+
+.disabled-input {
+  background: #F2F2F2 !important;
 }
 </style>
