@@ -7,7 +7,7 @@
           <component :is="Component" />
         </Transition>
       </RouterView>
-      <Footer v-if="currentRoute !== '/signup' && currentRoute !== '/resume-profile' && !token && !isApply && !isEmployment" />
+      <Footer v-if="currentRoute !== '/signup' && currentRoute !== '/resume-profile' && !token && !isApply && !isEmployment && !isCheck" />
     </div>
   </v-app>
 </template>
@@ -26,6 +26,7 @@ export default {
     return {
       isApply: false,
       isEmployment: false,
+      isCheck: false,
       currentRoute: this.$route.path,
       token: null,
     };
@@ -66,6 +67,14 @@ export default {
       'employmentJobFalse',
       this.employmentJobFalse
     );
+    app.config.globalProperties.$eventBus.$on(
+      'checkJob',
+      this.checkJob
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'checkJobFalse',
+      this.checkJobFalse
+    );
   },
   beforeUnmount() {
     // app.config.globalProperties.$eventBus.$off(
@@ -92,6 +101,14 @@ export default {
       'employmentJobFalse',
       this.employmentJobFalse
     );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJob',
+      this.checkJob
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJobFalse',
+      this.checkJobFalse
+    );
   },
   methods: {
     applyJob() {
@@ -105,6 +122,12 @@ export default {
     },
     employmentJobFalse() {
       this.isEmployment = false;
+    },
+    checkJob() {
+      this.isCheck = true;
+    },
+    checkJobFalse() {
+      this.isCheck = false;
     },
     getApplicant(tokenParam) {
     this.isLoading = true;

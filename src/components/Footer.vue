@@ -379,6 +379,10 @@ export default {
         } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
           app.config.globalProperties.$eventBus.$emit('employmentJob');
           app.config.globalProperties.$eventBus.$emit('employmentJob2');
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == "C" ) {
+          // console.log('OK')
+          app.config.globalProperties.$eventBus.$emit('checkJob');
+          app.config.globalProperties.$eventBus.$emit('checkJob2');
         } else if(data == null) {
           app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
         }

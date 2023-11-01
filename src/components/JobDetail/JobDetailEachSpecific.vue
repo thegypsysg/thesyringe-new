@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
-    <template v-if="!isLoading && !isApply && !isEmployment">
+    <template v-if="!isLoading && !isApply && !isEmployment && !isCheck">
       <div v-if="isSmall" class="banner-container"></div>
       <div
         v-if="!isSmall"
@@ -604,11 +604,14 @@
         </template>
       </v-container>
     </template>
-    <template v-if="!isLoading && isApply && !isEmployment">
+    <template v-if="!isLoading && isApply && !isEmployment && !isCheck">
       <ApplyForm />
     </template>
-    <template v-if="!isLoading && isEmployment && !isApply">
+    <template v-if="!isLoading && isEmployment && !isApply && !isCheck">
       <EmploymentForm />
+    </template>
+    <template v-if="!isLoading && !isEmployment && !isApply && isCheck">
+      <CheckForm />
     </template>
   </div>
 </template>
@@ -619,18 +622,21 @@ import app from '@/util/eventBus';
 import { mapState, mapMutations } from 'vuex';
 import ApplyForm from '@/components/ApplyForm.vue'
 import EmploymentForm from '@/components/EmploymentForm.vue'
+import CheckForm from '@/components/CheckForm.vue'
 import moment from 'moment';
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
   components: {
     ApplyForm,
-    EmploymentForm
+    EmploymentForm,
+    CheckForm
   },
   data() {
     return {
       isApply: false,
       isEmployment: false,
+      isCheck: false,
       isLoading: false,
       screenWidth: window.innerWidth,
       itemData: {},
@@ -696,6 +702,10 @@ export default {
     this.getSpecificJobs();
     this.checkDetail();
     app.config.globalProperties.$eventBus.$on(
+      'goToRecognised2',
+      this.goToRecognised2
+    );
+    app.config.globalProperties.$eventBus.$on(
       'applyJob',
       this.applyJob
     );
@@ -710,10 +720,22 @@ export default {
     app.config.globalProperties.$eventBus.$on(
       'employmentJobFalse',
       this.employmentJobFalse
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'checkJob',
+      this.checkJob
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'checkJobFalse',
+      this.checkJobFalse
     );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
+      'goToRecognised2',
+      this.goToRecognised2
+    );
+    app.config.globalProperties.$eventBus.$off(
       'applyJob',
       this.applyJob
     );
@@ -728,6 +750,14 @@ export default {
     app.config.globalProperties.$eventBus.$off(
       'employmentJobFalse',
       this.employmentJobFalse
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJob',
+      this.checkJob
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJobFalse',
+      this.checkJobFalse
     );
   },
   unmounted() {
@@ -753,12 +783,26 @@ export default {
     employmentJobFalse() {
       this.isEmployment = false;
     },
+    checkJob() {
+      this.isCheck = true;
+    },
+    checkJobFalse() {
+      this.isCheck = false;
+    },
     goToRecognised(skillSlug) {
       this.setCountryRecognised(this.itemSelected);
       this.setIdCountryRecognised(this.itemSelectedComplete.id);
       this.setSkillRecognised(skillSlug.name);
       this.setIdSkillRecognised(skillSlug.skills_id);
       app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+    },
+    goToRecognised2() {
+      this.setCountryRecognised(this.itemSelected);
+      this.setIdCountryRecognised(this.itemSelectedComplete.id);
+      this.setSkillRecognised(this.skillSlug.name);
+      this.setIdSkillRecognised(this.skillSlug.skills_id);
+      app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
+      this.$router.push('/recognised-qualifications')
     },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');

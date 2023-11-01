@@ -2,12 +2,13 @@
   <v-app-bar
     :class="{
       'app-bar-mobile-start': isSmall && isHome && tokenStart,
-      'app-bar-mobile-start': isSmall && isDetailPage && isApply && !isEmployment,
-      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment && !isApply,
+      'app-bar-mobile-start': isSmall && isDetailPage && isApply && !isEmployment && !isCheck,
+      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment && !isApply && !isCheck,
+      'app-bar-mobile-start': isSmall && isDetailPage && !isEmployment && !isApply && isCheck,
       'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment,
+      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment && !isCheck,
       'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment,
+      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment && !isCheck,
       'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
       'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
     }"
@@ -215,7 +216,7 @@
     <div
       class="mr-10 d-flex justify-space-between"
       style="min-width: 500px"
-      v-if="(isDetailPage && !isSmall && !isApply) || (isDetailPage && !isSmall && !isEmployment)"
+      v-if="(isDetailPage && !isSmall && !isApply) || (isDetailPage && !isSmall && !isEmployment) || (isDetailPage && !isSmall && !isCheck)"
     >
       <div class="d-flex align-center">
         <v-btn
@@ -485,7 +486,7 @@
     />
   </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !isEmployment && !tokenStart" #extension>
+    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !isEmployment && !isCheck && !tokenStart" #extension>
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
@@ -496,8 +497,8 @@
       >
         <div
           class="mb-n2"
-          :class="{ 'mt-1': (isDetailPage && !isApply) || (isDetailPage && !isEmployment), 'mt-n10': isSpecific }"
-          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)"
+          :class="{ 'mt-1': (isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck), 'mt-n10': isSpecific }"
+          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)"
         >
           <h2>
             {{
@@ -662,7 +663,7 @@
           </v-menu>
         </div>
 
-        <div v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)">
+        <div v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)">
           <span>{{ detailHeader.address }}</span>
         </div>
         <!-- <div v-if="isHome">
@@ -695,7 +696,7 @@
           </v-menu>
         </div> -->
         <div
-          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment)"
+          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)"
           style="height: 50px"
           class="info-title d-flex align-center mb-4 mt-n4"
         >
@@ -714,7 +715,7 @@
           </div>
         </div>
         <form
-          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply) || (!isDetail && !isRecognised && !isEmployment)"
+          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply) || (!isDetail && !isRecognised && !isEmployment) || (!isDetailPage && !isRecognised && !isCheck)"
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -1107,6 +1108,7 @@ export default {
     return {
       isApply: false,
       isEmployment: false,
+      isCheck: false,
       path: '',
       // selectedTag: null,
       tokenStart: null,
@@ -1265,6 +1267,14 @@ export default {
       this.employmentJobFalse2
     );
     app.config.globalProperties.$eventBus.$on(
+      'checkJob2',
+      this.checkJob2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'checkJobFalse2',
+      this.checkJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$on(
       'changeHeaderPath',
       this.changeHeaderPath
     );
@@ -1321,6 +1331,14 @@ export default {
     app.config.globalProperties.$eventBus.$off(
       'employmentJobFalse2',
       this.employmentJobFalse2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJob2',
+      this.checkJob2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'checkJobFalse2',
+      this.checkJobFalse2
     );
     app.config.globalProperties.$eventBus.$off(
       'changeHeaderPath',
@@ -1386,6 +1404,10 @@ export default {
         } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
           app.config.globalProperties.$eventBus.$emit('employmentJob');
           app.config.globalProperties.$eventBus.$emit('employmentJob2');
+        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == "C" ) {
+          //console.log('OK')
+          app.config.globalProperties.$eventBus.$emit('checkJob');
+          app.config.globalProperties.$eventBus.$emit('checkJob2');
         } else if(data == null) {
           app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
         }
@@ -1419,6 +1441,12 @@ export default {
     },
     employmentJobFalse2() {
       this.isEmployment = false;
+    },
+    checkJob2() {
+      this.isCheck = true;
+    },
+    checkJobFalse2() {
+      this.isCheck = false;
     },
     changeHeaderPath(path) {
       //console.log(image)

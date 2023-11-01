@@ -102,6 +102,8 @@ export default {
           localStorage.removeItem("qualification_university")
       app.config.globalProperties.$eventBus.$emit('applyJobFalse');
       app.config.globalProperties.$eventBus.$emit('applyJobFalse2');
+          app.config.globalProperties.$eventBus.$emit('employmentJob');
+          app.config.globalProperties.$eventBus.$emit('employmentJob2');
     },
     nextStep() {
       this.$emit("nextStep");
