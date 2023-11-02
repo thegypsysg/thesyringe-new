@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="text-center loading-page">
       <v-progress-circular :size="50" color="primary" indeterminate />
     </div>
-    <v-container v-if="!isLoading && !isMyQualification && !isMyEmployment">
+    <v-container v-if="!isLoading && !isMyQualification && !isAddQualification && !isMyEmployment">
       <template v-if="!isSmall">
         <div class="card-container d-flex flex-wrap justify-space-between">
           <v-card class="first-section px-16 py-2">
@@ -740,7 +740,8 @@
               <v-container
                 class="d-flex align-center justify-space-between my-n4"
               >
-              <p class="title-card">Qualification Steps</p>
+              <p class="title-card">Qualification Steps</p> 
+              <span class="text-blue-darken-4" style="cursor: pointer" @click="isAddQualification = true">Add More</span>
               <!-- <v-btn
                 class="text-none text-subtitle-1"
                 color="success"
@@ -765,6 +766,17 @@
                       <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
                       <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
                     </v-card>
+                    <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
+                      <v-card  elevation="0" class="pa-4 mt-2">
+                        <div class="d-flex justify-space-between mb-2">
+                          <span class="text-blue-darken-4"># {{index +2}}</span>
+                          <span @click="openMyQualificationDetail2(qualificationData)" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                        </div>
+                        <p>{{qualificationData.qualification}}</p>
+                        <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
+                        <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
+                      </v-card>
+                    </template>
                   </v-col>
                 </v-row>
                 <hr class="mt-8" />
@@ -885,7 +897,7 @@
                               <!-- <v-form fast-fail @submit.prevent="login"> -->
                                 
                                 <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                                <div class="location-input w-75 d-flex align-center" :class="{'disabled-input': !isChangeCountry1}">
+                                <div class=" w-75 d-flex align-center">
                                   <div
                                     v-if="country"
                                     style="
@@ -1203,7 +1215,7 @@
                             {{ isSave ? "Saving..." : 'Save' }}
                             </v-btn>
                         </div>
-                        <div class="mb-8 d-flex align-center location-input" :class="{'disabled-input': !isChangeCountry2}">
+                        <div class="mb-8 d-flex align-center" >
                           <div
                             v-if="country"
                             style="
@@ -1972,7 +1984,10 @@
           style="background: #F7F7F7"
             class="w-100 pt-2 pb-8 px-4 my-6"
           >
-            <p class="title-card text-red-darken-4 mb-4">My Qualifications</p>
+          <div class="d-flex align-center justify-space-between mb-4">
+            <p class="title-card text-red-darken-4 ">My Qualifications</p>
+            <span class="text-blue-darken-4" @click="isAddQualification = true">Add More</span>
+          </div>
              <v-card  elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
@@ -1982,6 +1997,17 @@
               <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
               <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
             </v-card>
+            <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
+              <v-card elevation="0" class="pa-4 mt-2">
+                <div class="d-flex justify-space-between mb-2">
+                  <span class="text-blue-darken-4"># {{index + 2}}</span>
+                  <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                </div>
+                <p>{{qualificationData.qualification}}</p>
+                <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
+                <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
+              </v-card>
+            </template>
           </div>
         </template>
         <template v-if="activeResume == 'My Employment'">
@@ -2067,11 +2093,14 @@
         </template>
       </v-snackbar>
     </v-container>
+    <div v-if="!isLoading && isAddQualification" >
+      <AdditionalData1 @backStep="backStep" />
+    </div>
     <div v-if="!isLoading && isMyQualification" >
-      <AdditionalData @backStep="backStep" />
+      <AdditionalData2 @backStep="backStep" />
     </div>
     <div v-if="!isLoading && isMyEmployment" >
-      <AdditionalData2 @backStep="backStep" />
+      <AdditionalData3 @backStep="backStep" />
     </div>
     <input
       ref="fileuploadinput"
@@ -2095,16 +2124,18 @@ import "cropperjs/dist/cropper.css";
 
 import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import MazSelect from "maz-ui/components/MazSelect";
-import AdditionalData from '@/components/MyQualifications/AdditionalData.vue'
-import AdditionalData2 from '@/components/MyEmployment/AdditionalData.vue'
+import AdditionalData1 from '@/components/AddQualifications/AdditionalData.vue'
+import AdditionalData2 from '@/components/MyQualifications/AdditionalData.vue'
+import AdditionalData3 from '@/components/MyEmployment/AdditionalData.vue'
 export default {
   components: {
     VueMultiselect,
     MazPhoneNumberInput,
     // ImageCropperDialog,
     MazSelect,
-    AdditionalData,
+    AdditionalData1,
     AdditionalData2,
+    AdditionalData3,
     VueCropper,
   },
   data() {
@@ -2362,7 +2393,9 @@ export default {
       showCropper: false,
       imageFileType: null,
       isQualificationDetail: false,
+      isQualificationDetail2: false,
       isEmploymentDetail: false,
+      isAddQualification: false,
       isMyQualification: false,
       isMyEmployment: false,
       isLoading: false,
@@ -2403,6 +2436,7 @@ export default {
       employmentData: {
         position: ''
       },
+      applicantQualification: [],
       input: {
         id: null,
         image_path: "",
@@ -2647,6 +2681,7 @@ export default {
     this.getTown();
     this.getNationality();
     this.getApplicantData()
+    this.getApplicantQualificationsData()
 
     // Qualifications
     this.getQualifications()
@@ -2664,8 +2699,18 @@ export default {
     openMyQualificationDetail() {
       this.isQualificationDetail = true;
     },
+    openMyQualificationDetail2(data) {
+      this.isQualificationDetail = true;
+      this.isQualificationDetail2 = true;
+      this.first = data.first;
+      this.university = data.university;
+      this.country = data.country;
+      this.qualification = data.qualification;
+      this.year = data.year
+    },
     closeMyQualificationDetail() { 
       this.isQualificationDetail = false
+      this.isQualificationDetail2 = false
       this.isChangeUniversity=false;
       this.isChangeCountry1=false;
       this.isChangeQualification=false;
@@ -2681,10 +2726,12 @@ export default {
       this.isChangeCountry2 = false
     },
     backStep() {
+      this.isAddQualification = false;
       this.isMyQualification = false;
       this.isMyEmployment = false;
       
       this.getApplicantData()
+      this.getApplicantQualificationsData()
     },
     async initCropper(imageFileType) {
       this.showCropper = true;
@@ -2863,6 +2910,41 @@ export default {
             this.endMonth = data.month_end
             this.startYear = data.year_start
             this.endYear = data.year_end
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getApplicantQualificationsData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/applicant-qualifications/list`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.applicantQualification = data.map(item => {
+          return {
+            ...item,
+            id: item.aq_id,
+            first: item.first == 'Y' ? 'Y' : item.first == 'N' ? 'N' : 'N',
+            country: item.qualifications_country_name ? this.options.filter(
+            (i) => i.label == item.qualifications_country_name
+            )[0].value : null,
+            year: item.year_passed,
+            qualification: item.qualification_name,
+            qualificationCountry: item.country_name,
+            university: item.partner_name,
+          }
+          })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3808,34 +3890,6 @@ export default {
         .finally(() => this.isSave = false);
       }
     },
-    getApplicantDataQ() {
-      this.isLoading = true;
-      const token = localStorage.getItem("token");
-      axios
-        .get(`/gypsy-applicant`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const data = response.data.data;
-          console.log(data);
-          this.first = data.first == 'Y' ? 'Y' : data.first == 'N' ? 'N' : 'N';
-          this.university = data.partner_name || '';
-          this.country = data.qualifications_country_name ? this.options.filter(
-            (i) => i.label == data.qualifications_country_name
-            )[0].value : null;
-          this.qualification = data.qualification_name || '';
-          this.year = data.year_passed
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
     getUniversity() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
@@ -4119,47 +4173,6 @@ export default {
           this.isError = true;
         })
       }
-    },
-
-    getApplicantDataE() {
-      this.isLoading = true;
-      const token = localStorage.getItem("token");
-      axios
-        .get(`/gypsy-applicant`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const data = response.data.data;
-          console.log(data);
-          this.status = data.employed == 'Y' ? 'Y' : data.employed == 'N' ? 'N' : 'N';
-          this.name = {
-            value: data.employer_id,
-            name: data.employer_name,
-            label: `${data.employer_name} (${data.employer_country_name})`,
-          }
-          this.country = data.employer_country_name ? this.options.filter(
-            (i) => i.label == data.employer_country_name
-
-            )[0].value : null;
-            this.position = {
-              value: data.position_id,
-              label: data.position_name,
-            }
-            this.still = data.still_working == 'Y' ? true : false;
-            this.startMonth = data.month_start
-            this.endMonth = data.month_end
-            this.startYear = data.year_start
-            this.endYear = data.year_end
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
     },
     getPartnerList() {
       this.isLoading = true;

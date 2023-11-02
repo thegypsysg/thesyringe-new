@@ -119,7 +119,7 @@
                 <!-- <v-form fast-fail @submit.prevent="login"> -->
                   
                   <div class="d-flex mt-4 mb-8  align-center justify-space-between">
-                  <div class="w-75 d-flex align-center location-input" :class="{'disabled-input': !isChangeCountry}">
+                  <div class="w-75 d-flex align-center" >
                     <div
                       v-if="country"
                       style="
