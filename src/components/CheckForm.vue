@@ -4,15 +4,15 @@
       <SelectStatus @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 2">
-      <EmployerData @nextStep="nextStep" @backStep="backStep" />
+      <EmployerData @isMatch="isMatch" @isNotMatch="isNotMatch" @nextStep="nextStep" @backStep="backStep" />
     </div>
-    <div v-else-if="currentStep === 3">
+    <div v-else-if="currentStep === 3 && match">
       <AdditionalInformation @nextStep="nextStep" @backStep="backStep" />
     </div>
     <!-- <div v-else-if="currentStep === 4">
       <PersonalDetails @nextStep="nextStep" @backStep="backStep" />
     </div> -->
-    <div v-else-if="currentStep === 4">
+    <div v-else-if="currentStep === 3 && !match">
       <ResultRegister @nextStep="nextStep" @backStep="backStep" />
     </div>
   </div>
@@ -37,6 +37,7 @@ export default {
 },
   data() {
     return {
+      match: false,
       currentStep: 1,
     };
   },
@@ -57,6 +58,12 @@ export default {
     app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
   },
   methods: {
+    isMatch() {
+      this.match = true;
+    },
+    isNotMatch() {
+      this.match = false;
+    },
     nextStep() {
       this.currentStep++;
     },

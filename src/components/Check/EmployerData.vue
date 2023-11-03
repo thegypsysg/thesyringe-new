@@ -56,7 +56,7 @@
                           'w-33 login-btn-mobile': isSmall,
                           'w-25': !isSmall,
                         }"
-                        @click="nextStep"
+                        @click="checkMatch"
                       >
                         Next
                       </v-btn>
@@ -87,7 +87,7 @@
                       'w-33 login-btn-mobile': isSmall,
                       'w-25': !isSmall,
                     }"
-                    @click="nextStep"
+                    @click="checkMatch"
                   >
                     Next
                   </v-btn>
@@ -129,6 +129,15 @@
             </v-btn>
           </template>
         </v-snackbar>
+        <v-snackbar v-model="isError" location="top" color="red" :timeout="3000">
+          {{ errorMessage }}
+  
+          <template #actions>
+            <v-btn color="white" variant="text" @click="isError = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-container>
     </div>
   </div>
@@ -148,7 +157,9 @@ export default {
       name: "",
       path: '',
       screenWidth: window.innerWidth,
+      isError: false,
       isSuccess: false,
+      errorMessage: "",
       successMessage: "",
     };
   },
@@ -161,29 +172,63 @@ export default {
     window.addEventListener("resize", this.handleResize);
   },
   mounted() {
-    this.getData()
+    this.getApplicantData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    getData() {
-      this.isLoading = true;
+    saveApplication() {
+      const payload = {
+        job_id: this.$route.params.id,
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      axios
+        .post(`/save-application`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = data.message || 'Successfully created';
+          this.isNotMatch()
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+    },
+    checkMatch() {
       const token = localStorage.getItem("token");
       const jobId = this.$route.params.id
       axios
-      .get(`/registrable-skill-job-detail/${jobId}`, {
+      .get(`/gypsy-applicant/check-qualification-matches/${jobId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
         const data = response.data.data;
-        // this.qualificationName = data.skills_name;
-        this.qualificationName = 'Bachelors of Physiotherapy';
-        this.countryName = data.country_name;
-        // this.universityName = data.regulator;
-        this.universityName = 'Singapore Management University';
+        console.log(data);
+        if(data == true) {
+          this.isMatch()
+          this.nextStep()
+        } else {
+          this.saveApplication()
+        }
       })
       .catch((error) => {
         // eslint-disable-next-line
@@ -191,9 +236,36 @@ export default {
         
         // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
       })
-      .finally(() => {
-        this.isLoading = false;
-      });
+    },
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+        this.countryName = data.qualifications_country_name;
+        this.qualificationName = data.qualification_name;
+        this.universityName = data.partner_name;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    isMatch() {
+      this.$emit("isMatch");
+    },
+    isNotMatch() {
+      this.$emit("isNotMatch");
     },
     nextStep() {
       this.$emit("nextStep");

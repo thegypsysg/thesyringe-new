@@ -54,7 +54,7 @@
                           'w-33 login-btn-mobile': isSmall,
                           'w-25': !isSmall,
                         }"
-                        @click="nextStep"
+                        @click="saveApplication"
                       >
                         Next
                       </v-btn>
@@ -85,7 +85,7 @@
                       'w-33 login-btn-mobile': isSmall,
                       'w-25': !isSmall,
                     }"
-                    @click="nextStep"
+                    @click="saveApplication"
                   >
                     Next
                   </v-btn>
@@ -127,12 +127,22 @@
             </v-btn>
           </template>
         </v-snackbar>
+        <v-snackbar v-model="isError" location="top" color="red" :timeout="3000">
+          {{ errorMessage }}
+  
+          <template #actions>
+            <v-btn color="white" variant="text" @click="isError = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-container>
     </div>
   </div>
 </template>
 
 <script>
+import app from '@/util/eventBus';
 import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -147,7 +157,9 @@ export default {
       name: "",
       path: '',
       screenWidth: window.innerWidth,
+      isError: false,
       isSuccess: false,
+      errorMessage: "",
       successMessage: "",
     };
   },
@@ -160,12 +172,46 @@ export default {
     window.addEventListener("resize", this.handleResize);
   },
   mounted() {
+    this.getApplicantData()
     this.getData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    saveApplication() {
+      const payload = {
+        job_id: this.$route.params.id,
+      };
+      //console.log(payload);
+      const token = localStorage.getItem("token");
+      axios
+        .post(`/save-application`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = data.message || 'Successfully created';
+      app.config.globalProperties.$eventBus.$emit('checkJobFalse');
+      app.config.globalProperties.$eventBus.$emit('checkJobFalse2');
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+    },
     getData() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
@@ -180,9 +226,6 @@ export default {
         const data = response.data.data;
         // this.qualificationName = data.skills_name;
         this.regulatorName = data.regulator;
-        this.qualificationName = 'Bachelors Degree of Physiotherapy';
-        this.countryName = data.country_name;
-        this.universityName = 'Singapore Management University';
       })
       .catch((error) => {
         // eslint-disable-next-line
@@ -193,6 +236,30 @@ export default {
       .finally(() => {
         this.isLoading = false;
       });
+    },
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+        this.countryName = data.qualifications_country_name;
+        this.qualificationName = data.qualification_name;
+        this.universityName = data.partner_name;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     nextStep() {
       this.$emit("nextStep");

@@ -43,73 +43,21 @@
                   <br />
                   <h2 class="mb-10">For full list of Qualifications please</h2>
                   <h2 class="text-blue-accent-4" style="cursor: pointer;" @click="goToRecognised()">Check Here</h2>
-                </div>
-                  <div
-                  class="d-flex align-center"
-                  :class="{ matop: !isSmall, 'fixed-next w-100': isSmall }"
-                  >
-                    <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
-                      <v-btn
-                        type="submit"
-                        variant="outlined"
-                        class="login-btn"
-                        :class="{
-                          'w-33 login-btn-mobile': isSmall,
-                          'w-25': !isSmall,
-                        }"
-                        @click="nextStep"
-                      >
-                        Next
-                      </v-btn>
-                      <div
-                    class="text-blue-darken-4"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    style="
-                      text-align: center;
-                      cursor: pointer;
-                      font-weight: 700;
-                      font-size: 20px;
-                    "
-                    @click="backStep"
-                  >
-                    Back
-                  </div>
-                    </v-container>
-                    <div 
-                      v-if="!isSmall" class="w-100 d-flex justify-space-between align-center mt-12">
+                  <div class="d-flex mt-12 align-center w-100">
                     <v-btn
-                    type="submit"
-                    variant="outlined"
-                    class="login-btn"
-                    :class="{
-                      'w-33 login-btn-mobile': isSmall,
-                      'w-25': !isSmall,
-                    }"
-                    @click="nextStep"
-                  >
-                    Next
-                  </v-btn>
-                  
-                  <div
-                  class="text-blue-darken-4"
-                  :class="{
-                    'w-33 login-btn-mobile': isSmall,
-                    'w-25': !isSmall,
-                  }"
-                  style="
-                    text-align: center;
-                    cursor: pointer;
-                    font-weight: 700;
-                    font-size: 20px;
-                  "
-                  @click="backStep"
-                >
-                  Back
-                </div>
-                    </div>
+                    :disabled="isLoading"
+                      type="submit"
+                      variant="outlined"
+                      class="login-btn"
+                      :class="{
+                        'w-50 login-btn-mobile': isSmall,
+                        'w-33': !isSmall,
+                      }"
+                      @click="goToHome()"
+                    >
+                      OK
+                    </v-btn>
+                  </div>
                   </div>
                 </v-col>
               </v-row>
@@ -164,12 +112,17 @@ export default {
     window.addEventListener("resize", this.handleResize);
   },
   mounted() {
+    this.getApplicantData()
     this.getData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    goToHome() {
+      app.config.globalProperties.$eventBus.$emit('checkJobFalse');
+      app.config.globalProperties.$eventBus.$emit('checkJobFalse2');
+    },
     goToRecognised() {
       app.config.globalProperties.$eventBus.$emit('checkJobFalse');
       app.config.globalProperties.$eventBus.$emit('checkJobFalse2');
@@ -189,9 +142,6 @@ export default {
         const data = response.data.data;
         // this.qualificationName = data.skills_name;
         this.regulatorName = data.regulator;
-        this.qualificationName = 'Bachelors Degree of Physiotherapy';
-        this.countryName = data.country_name;
-        this.universityName = 'Singapore Management University';
       })
       .catch((error) => {
         // eslint-disable-next-line
@@ -202,6 +152,30 @@ export default {
       .finally(() => {
         this.isLoading = false;
       });
+    },
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+        this.countryName = data.qualifications_country_name;
+        this.qualificationName = data.qualification_name;
+        this.universityName = data.partner_name;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     nextStep() {
       this.$emit("nextStep");
