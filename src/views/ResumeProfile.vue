@@ -741,7 +741,7 @@
                 class="d-flex align-center justify-space-between my-n4"
               >
               <p class="title-card">Qualification Steps</p> 
-              <span class="text-blue-darken-4" style="cursor: pointer" @click="isAddQualification = true">Add More</span>
+              <span v-if="qualificationData.step == 'C'" class="text-blue-darken-4" style="cursor: pointer" @click="isAddQualification = true">Add More</span>
               <!-- <v-btn
                 class="text-none text-subtitle-1"
                 color="success"
@@ -757,7 +757,8 @@
               <v-container v-if="!isQualificationDetail">
                 <v-row>
                   <v-col cols="6">
-                    <v-card  elevation="0" class="pa-4">
+                  <template v-if="qualificationData.step == 'C'">
+                    <v-card   elevation="0" class="pa-4">
                       <div class="d-flex justify-space-between mb-2">
                         <span class="text-blue-darken-4"># 1</span>
                         <span @click="openMyQualificationDetail" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
@@ -766,6 +767,10 @@
                       <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
                       <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
                     </v-card>
+                  </template>
+                  <template v-else>
+                    <p>No Qualifications Data</p>
+                  </template>
                     <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
                       <v-card  elevation="0" class="pa-4 mt-2">
                         <div class="d-flex justify-space-between mb-2">
@@ -1071,6 +1076,7 @@
               <v-container v-if="!isEmploymentDetail">
                 <v-row>
                   <v-col cols="6">
+                    <template v-if="employmentData.step == 'C'">
                     <v-card  elevation="0" class="pa-4">
                       <div class="d-flex justify-space-between mb-2">
                         <span class="text-blue-darken-4"># 1</span>
@@ -1082,6 +1088,10 @@
                       <p >{{employmentData.start}}</p>
                       <p >{{employmentData.end}}</p>
                     </v-card>
+                  </template>
+                  <template v-else>
+                    <p>No Employment Data</p>
+                  </template>
                   </v-col>
                 </v-row>
                 <hr class="mt-8" />
@@ -1986,9 +1996,10 @@
           >
           <div class="d-flex align-center justify-space-between mb-4">
             <p class="title-card text-red-darken-4 ">My Qualifications</p>
-            <span class="text-blue-darken-4" @click="isAddQualification = true">Add More</span>
+            <span v-if="qualificationData.step == 'C'" class="text-blue-darken-4" @click="isAddQualification = true">Add More</span>
           </div>
-             <v-card  elevation="0" class="pa-4">
+          <template v-if="qualificationData.step == 'C'">
+            <v-card   elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
                 <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
@@ -1997,6 +2008,10 @@
               <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
               <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
             </v-card>
+          </template>
+            <template v-else>
+              <p>No Qualifications Data</p>
+            </template>
             <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
               <v-card elevation="0" class="pa-4 mt-2">
                 <div class="d-flex justify-space-between mb-2">
@@ -2016,6 +2031,7 @@
             class="w-100 pt-2 pb-8 px-4 my-6"
           >
             <p class="title-card text-red-darken-4 mb-4">My Employment</p>
+            <template v-if="employmentData.step == 'C'">
             <v-card  elevation="0" class="pa-4">
               <div class="d-flex justify-space-between mb-2">
                 <span class="text-blue-darken-4"># 1</span>
@@ -2027,6 +2043,10 @@
               <p >{{employmentData.start}}</p>
               <p >{{employmentData.end}}</p>
             </v-card>
+          </template>
+            <template v-else>
+              <p>No Employment Data</p>
+            </template>
           </div>
         </template>
         <div class="w-100" style="background: #F3F3F3; position: fixed; bottom: 0; left: 0; z-index: 99999">
@@ -2874,6 +2894,7 @@ export default {
           }
           this.employmentData = {
             ...data,
+            step: data.employment_step,
             position: data.position_name,
             name: data.employer_name,
             country: data.employer_country_name,

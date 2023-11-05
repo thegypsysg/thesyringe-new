@@ -22,7 +22,7 @@
                     style="font-family: Arial, Helvetica, sans-serif !important">Basic Profile Setup</h1>
                     <h1 class="text-red-darken-4" 
                     :class="{ 'header-mobile-2': isSmall }" 
-                    style="font-family: Arial, Helvetica, sans-serif !important">Step 1 of 4</h1>
+                    style="font-family: Arial, Helvetica, sans-serif !important">Step 1 of 5</h1>
                   </div>
                   </v-col>
                   <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>

@@ -475,7 +475,7 @@ export default {
   { phoneNum: "+688", value: "TV", label: "Tuvalu" },
   { phoneNum: "+256", value: "UG", label: "Uganda" },
   { phoneNum: "+380", value: "UA", label: "Ukraine" },
-  { phoneNum: "+971", value: "AE", label: "United Arab Emirates" },
+  { phoneNum: "+971", value: "AE", label: "United Arab Emirates (U.A.E)" },
   { phoneNum: "+44", value: "GB", label: "United Kingdom" },
   { phoneNum: "+1", value: "US", label: "United States" },
   { phoneNum: "N/A", value: "UM", label: "United States Outlying Islands" },
@@ -518,6 +518,12 @@ export default {
       //console.log(country?.label);
       this.countryName = country?.label;
       this.countryCode = country?.phoneNum;
+    },
+    // eslint-disable-next-line no-unused-vars
+    name: function (newVal, oldVal) {
+      console.log(newVal.countryName)
+      const country = this.options.filter((o) => o.label === newVal.countryName)[0];
+      this.country = country?.value;
     },
   },
   created() {
@@ -602,6 +608,8 @@ export default {
               value: item.partner_id,
               name: item.partner_name,
               label: `${item.partner_name} (${item.country_name})`  || '',
+              countryName: item.country_name,
+              countryId: item.country_id,
             };
           });
           this.name = localStorage.getItem('employer_name') ? this.resource.name.filter(item => item.name == localStorage.getItem('employer_name'))[0] : null

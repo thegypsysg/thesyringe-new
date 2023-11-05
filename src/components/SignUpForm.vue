@@ -12,10 +12,10 @@
     <div v-else-if="currentStep === 4">
       <AdditionalInformation @nextStep="nextStep" @backStep="backStep" />
     </div>
-    <!-- <div v-else-if="currentStep === 5">
-      <AdditionalSecurity @nextStep="nextStep" @backStep="backStep" />
-    </div> -->
     <div v-else-if="currentStep === 5">
+      <AdditionalSecurity @nextStep="nextStep" @backStep="backStep" />
+    </div>
+    <div v-else-if="currentStep === 6">
       <ResultRegister @nextStep="nextStep" @backStep="backStep" />
     </div>
   </div>
@@ -24,7 +24,7 @@
 <script>
 import WhereAreYou from '@/components/SignUp/WhereAreYou.vue';
 import AdditionalInformation from '@/components/SignUp/AdditionalInformation.vue';
-// import AdditionalSecurity from '@/components/SignUp/AdditionalSecurity.vue';
+import AdditionalSecurity from '@/components/SignUp/AdditionalSecurity.vue';
 import SelectSkills from '@/components/SignUp/SelectSkills.vue';
 import SpecialisedPage from '@/components/SignUp/SpecialisedPage.vue';
 import ResultRegister from './SignUp/ResultRegister.vue';
@@ -34,6 +34,7 @@ export default {
   components: {
     WhereAreYou,
     AdditionalInformation,
+    AdditionalSecurity,
     SelectSkills,
     SpecialisedPage,
     ResultRegister
