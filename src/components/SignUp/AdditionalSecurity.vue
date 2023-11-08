@@ -21,7 +21,7 @@
                 style="font-family: Arial, Helvetica, sans-serif !important">Basic Profile Setup</h1>
                 <h1 class="text-red-darken-4" 
                 :class="{ 'header-mobile-2': isSmall }" 
-                style="font-family: Arial, Helvetica, sans-serif !important">Step 5 of 5</h1>
+                style="font-family: Arial, Helvetica, sans-serif !important">Step 1 of 5</h1>
               </div>
               <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
             </v-col>
@@ -161,7 +161,7 @@
 <script>
 import VueMultiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
-// import axios from '@/util/axios';
+import axios from '@/util/axios';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'WhereAreYou',  
@@ -211,20 +211,6 @@ export default {
 
       return age;
     },
-  },  
-  watch: {
-    // eslint-disable-next-line no-unused-vars
-    country: function (newVal, oldVal) {
-      const country = this.options.filter((o) => o.value === newVal)[0];
-      //console.log(country?.label);
-      this.countryName = country?.label;
-    },
-    // eslint-disable-next-line no-unused-vars
-    nationality: function (newVal, oldVal) {
-      const nationality = this.options.filter((o) => o.value === newVal)[0];
-      //console.log(nationality?.label);
-      this.nationalityName = nationality?.label;
-    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -251,41 +237,39 @@ export default {
       //console.log(this.input.date);
     },
     saveData() {
-      this.nextStep()
-      // const payload = {
-        // country_current: this.input.country.id,
-        
-      // };
-      //console.log(payload);
-      //console.log(this.phoneEvent);
-      // const token = localStorage.getItem("token");
-      // if(this.country && this.nationality) {
-      // axios
-      //   .post(`/gypsy-applicant/save-born-country-and-nationality`, payload, {
-      //     headers: {
-      //       Authorization: `Bearer ${
-      //         token
-      //       }`,
-      //     },
-      //   })
-      //   .then((response) => {
-      //     const data = response.data;
-      //     console.log(data)
-      //     this.isSuccess = true;
-      //     this.successMessage = data.message;
-      //     this.nextStep()
-      //   })
-      //   .catch((error) => {
-      //     // eslint-disable-next-line
-      //     console.log(error);
-      //     const message =
-      //       error.response.data.message === ""
-      //         ? "Something Wrong!!!"
-      //         : error.response.data.message;
-      //     this.errorMessage = message;
-      //     this.isError = true;
-      //   })
-      // }
+      const payload = {
+        date_of_birth: this.date,
+        marital_status: this.marital.value,
+      };
+      console.log(payload);
+      const token = localStorage.getItem("token");
+      if(this.date && this.marital) {
+      axios
+        .post(`/gypsy-applicant/save-date-of-birth-and-marital-status`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data)
+          this.isSuccess = true;
+          this.successMessage = data.message;
+          this.nextStep()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+      }
     },
     nextStep() {
       this.$emit('nextStep');

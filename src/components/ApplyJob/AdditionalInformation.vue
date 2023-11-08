@@ -37,17 +37,60 @@
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
                     <p class="mb-2">Which University did you obtain this qualification. ?</p>
                     <div class="location-input mt-4 mb-8 w-100">
-                      <v-combobox
+                      <!-- <v-combobox
                         v-model="university"
                         :items="resource.university"
                         variant="outlined"
                         item-value="label"
                         item-title="label"
+                        :item-children="resource.university"
                         label="--- Select University ---"
                         clearable
                         class="mt-n1"
                         density="compact"
-                      />
+                      /> -->
+                      <v-combobox
+                      v-model="university"
+                      :items="resource.university"
+                      variant="outlined"
+                      item-value="label"
+                      item-title="label"
+                      clearable
+                        label="--- Select University ---"
+                        class="mt-n1"
+                        density="compact"
+                      >
+                        <template v-slot:item="{ props, item }">
+                          <div v-if="item?.raw?.label == 'Registrable' ||  item?.raw?.label == 'Non Registrable'">
+                            <p class="py-4 pl-2 text-blue-darken-4">{{ item?.raw?.label }}</p>
+                          </div>
+                          <div v-else v-bind="props">
+                            <p class="py-2 pl-2 custom-list">{{ item?.raw?.label }}</p>
+                          </div>
+                        </template>
+                        <!-- <template v-slot:item="{ props, item }">
+                          <div v-bind="props">
+                            <router-link
+                              class="text-decoration-none text-black font-weight-bold"
+                              :to="item.raw.slug"
+                            >
+                              <div class="d-flex align-center w-100">
+                                <div class="w-25 py-1">
+                                  <div style="width: 100px">
+                                    <v-img height="40" :src="item?.raw?.image">
+                                      <template #placeholder>
+                                        <div class="skeleton" /> </template
+                                    ></v-img>
+                                  </div>
+                                </div>
+                                <div class="w-75">
+                                  <p>{{ item?.raw?.name }}</p>
+                                </div>
+                              </div>
+                            </router-link>
+                          </div>
+                        </template> -->
+                      </v-combobox>
                     </div>
                     
 
@@ -167,6 +210,8 @@ export default {
       isSuccess: false,
       successMessage: '',
       resource: {
+        universityRegis: [],
+        universityNonRegis: [],
         university: []
       },
     };
@@ -180,7 +225,8 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.getUniversity()
+    this.getUniversityRegistrable()
+    this.getUniversityNonRegistrable()
     this.university = localStorage.getItem('qualification_university')
   },
   unmounted() {
@@ -188,6 +234,7 @@ export default {
   },
   methods: {
     saveData() {
+      console.log(this.university)
       const payload = {
         partner_name: this.university.label ? this.university.label : this.university,
       };
@@ -208,6 +255,7 @@ export default {
           this.isSuccess = true;
           this.successMessage = "Success Save University";
           localStorage.setItem("qualification_university", this.university.label ? this.university.label : this.university)
+          localStorage.setItem("qualification_university_id", this.university.value)
           this.nextStep()
         })
         .catch((error) => {
@@ -222,11 +270,11 @@ export default {
         })
       }
     },
-    getUniversity() {
+    getUniversityRegistrable() {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/university-list`, 
+        .get(`/university-list/registrable/${this.$route.params.id}`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -235,8 +283,8 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
-          this.resource.university = data.map((item) => {
+          //console.log(data);
+          this.resource.universityRegis = data.map((item) => {
             return {
               value: item.university_id || 1,
               label: item.partner_name || '',
@@ -250,6 +298,53 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    getUniversityNonRegistrable() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      setTimeout(() => {
+      axios
+        .get(`/university-list/non-registrable/${this.$route.params.id}`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        )
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+          this.resource.universityNonRegis = data.map((item) => {
+            return {
+              value: item.university_id || 1,
+              label: item.partner_name || '',
+            };
+          });
+          const joinedData = [
+            { label: 'Registrable' },
+            [...this.resource.universityRegis],
+            { label: 'Non Registrable' },
+            [...this.resource.universityNonRegis],
+          ]
+          const transformedData = joinedData.reduce((result, item) => {
+            if (Array.isArray(item)) {
+              result = [...result, ...item];
+            } else {
+              result.push(item);
+            }
+            return result;
+          }, []);
+          console.log(transformedData)
+         this.resource.university = transformedData
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+      },500)
     },
     nextStep() {
       this.$emit('nextStep');
@@ -368,5 +463,10 @@ export default {
 }
 .login-footer-btn-mobile {
   gap: 40px;
+}
+
+.custom-list:hover {
+  background: rgb(248, 248, 248);
+  cursor: pointer;
 }
 </style>

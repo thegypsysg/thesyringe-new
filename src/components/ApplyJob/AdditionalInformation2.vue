@@ -165,6 +165,7 @@ export default {
   name: 'WhereAreYou',
   data() {
     return {
+      universityId: null,
       qualification: null,
       year: null,
       countryName: '',
@@ -187,6 +188,7 @@ export default {
   },
   created() {
     window.addEventListener('resize', this.handleResize);
+    this.universityId = localStorage.getItem('qualification_university_id')
   },
   mounted() {
     this.getQualifications()
@@ -235,7 +237,7 @@ export default {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/qualification-list`, 
+        .get(`/qualification-list/registrable/${this.$route.params.id}/${this.universityId}`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -36,7 +36,7 @@
                   <h2>{{employerName}}</h2>
                   <h2>{{employerCountry}}</h2>
                   <h2>From {{startMonth + ' ' + startYear}}</h2>
-                  <h2>Till {{endMonth ? endMonth + ' ' + startYear : 'Date'}}</h2>
+                  <h2>Till {{endMonth ? endMonth + ' ' + endYear : 'Date'}}</h2>
                   <br />
                   <h2>You can modify / update this in your Resume Profile .</h2>
                   <div class="d-flex mt-12 align-center w-100">
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     goToPath() {          
-      localStorage.removeItem("employment_status");
+      localStorage.removeItem('employment_status');
       localStorage.removeItem('employer_name')
           localStorage.removeItem('employer_country')
           localStorage.removeItem('employer_country_prefix')

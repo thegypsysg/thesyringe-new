@@ -22,7 +22,7 @@
                   style="font-family: Arial, Helvetica, sans-serif !important">Basic Profile Setup</h1>
                   <h1 class="text-red-darken-4" 
                   :class="{ 'header-mobile-2': isSmall }" 
-                  style="font-family: Arial, Helvetica, sans-serif !important">Step 2 of 5</h1>
+                  style="font-family: Arial, Helvetica, sans-serif !important">Step 3 of 5</h1>
                 </div>
                 </v-col>
                 <div style="height: 0.5px; background: black;" class="w-100 my-2"></div>
@@ -57,21 +57,20 @@
                   <div class="position-relative" >
                     <h4>Please select any one your Main skills</h4>
                     <v-autocomplete
-                      v-model="skill"
+                      v-model="filterSkill"
                       :items="resource.skills"
-                      label="--- Search your Skills ---"
+                      placeholder="--- Search your Skills ---"
                       class="mt-4 mb-8"
                       :class="{'w-100': isSmall, 'w-50': !isSmall}"
                       variant="outlined"
                       item-title="label"
-                      density="compact"
                       item-value="value"
                       clearable
                     />
-                    <div :class="{'scroll-mobile-2': isSmall && resource.skills.length > 8, 'scroll-mobile-1': isSmall && resource.skills.length > 4, 'scroll-mobile': isSmall && resource.skills.length <= 4}">
+                    <div :class="{'scroll-mobile-2': isSmall && listItem.length > 8, 'scroll-mobile-1': isSmall && listItem.length > 4, 'scroll-mobile': isSmall && listItem.length <= 4}">
                       <v-radio-group class="w-100" v-model="skill" inline>
                         <v-radio
-                          v-for="option in resource.skills"
+                          v-for="option in listItem"
                           :key="option.value"
                           :label="option.label"
                           :value="option.value"
@@ -98,7 +97,7 @@
 
                   <div
                     class="d-flex align-center"
-                    :class="{ 'matop-3': !isSmall && resource.skills.length > 8, 'matop-2': !isSmall && resource.skills.length > 4, 'matop': !isSmall && resource.skills.length <= 4, 'fixed-next w-100': isSmall }"
+                    :class="{ 'matop-3': !isSmall && listItem.length > 8, 'matop-2': !isSmall && listItem.length > 4, 'matop': !isSmall && listItem.length <= 4, 'fixed-next w-100': isSmall }"
                   >
                     <v-container class="d-flex justify-space-between align-center" v-if="isSmall">
                       <v-btn
@@ -179,6 +178,7 @@ export default {
       sgmId: null,
       sgmName: '',
       skill: null,
+      filterSkill: null,
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: '',
@@ -192,6 +192,13 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
+    listItem() {
+      if (!this.filterSkill) {
+        return this.resource.skills
+      } else {
+        return this.resource.skills.filter(item => item.value == this.filterSkill)
+      }
+    }
   },
   created() {
     window.addEventListener('resize', this.handleResize);

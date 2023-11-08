@@ -1,19 +1,19 @@
 <template>
   <div>
     <div v-if="currentStep === 1">
-      <SelectSkills @nextStep="nextStep" @backStep="backStep" />
+      <AdditionalSecurity @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 2">
-      <SpecialisedPage @nextStep="nextStep" @backStep="backStep" />
+      <SelectSkills @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 3">
-      <WhereAreYou @nextStep="nextStep" @backStep="backStep" />
+      <SpecialisedPage @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 4">
-      <AdditionalInformation @nextStep="nextStep" @backStep="backStep" />
+      <WhereAreYou @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 5">
-      <AdditionalSecurity @nextStep="nextStep" @backStep="backStep" />
+      <AdditionalInformation @nextStep="nextStep" @backStep="backStep" />
     </div>
     <div v-else-if="currentStep === 6">
       <ResultRegister @nextStep="nextStep" @backStep="backStep" />

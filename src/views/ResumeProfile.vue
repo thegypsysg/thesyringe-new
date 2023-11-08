@@ -758,30 +758,21 @@
                 <v-row>
                   <v-col cols="6">
                   <template v-if="qualificationData.step == 'C'">
-                    <v-card   elevation="0" class="pa-4">
-                      <div class="d-flex justify-space-between mb-2">
-                        <span class="text-blue-darken-4"># 1</span>
-                        <span @click="openMyQualificationDetail" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
-                      </div>
-                      <p>{{qualificationData.qualification}}</p>
-                      <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
-                      <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
-                    </v-card>
-                  </template>
-                  <template v-else>
-                    <p>No Qualifications Data</p>
-                  </template>
-                    <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
+                    <div v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
                       <v-card  elevation="0" class="pa-4 mt-2">
                         <div class="d-flex justify-space-between mb-2">
-                          <span class="text-blue-darken-4"># {{index +2}}</span>
+                          <span class="text-blue-darken-4"># {{index +1}}</span>
                           <span @click="openMyQualificationDetail2(qualificationData)" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
                         </div>
                         <p>{{qualificationData.qualification}}</p>
                         <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
                         <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
                       </v-card>
-                    </template>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <p>No Qualifications Data</p>
+                  </template>
                   </v-col>
                 </v-row>
                 <hr class="mt-8" />
@@ -860,7 +851,7 @@
                                 <h4 class="mb-2">Which University/College did you Graduate from. ?</h4>
                                 <div class="d-flex mt-4 mb-8  align-center justify-space-between">
                                 <div class="location-input w-75" :class="{'disabled-input': !isChangeUniversity}">
-                                  <v-autocomplete
+                                  <v-combobox
                                     v-model="university"
                                     :disabled="!isChangeUniversity"
                                     :items="resource.university"
@@ -1999,29 +1990,20 @@
             <span v-if="qualificationData.step == 'C'" class="text-blue-darken-4" @click="isAddQualification = true">Add More</span>
           </div>
           <template v-if="qualificationData.step == 'C'">
-            <v-card   elevation="0" class="pa-4">
-              <div class="d-flex justify-space-between mb-2">
-                <span class="text-blue-darken-4"># 1</span>
-                <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
-              </div>
-              <p>{{qualificationData.qualification}}</p>
-              <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
-              <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
-            </v-card>
-          </template>
-            <template v-else>
-              <p>No Qualifications Data</p>
-            </template>
-            <template v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
+            <div v-for="(qualificationData, index) in applicantQualification"  :key="qualificationData.id" >
               <v-card elevation="0" class="pa-4 mt-2">
                 <div class="d-flex justify-space-between mb-2">
-                  <span class="text-blue-darken-4"># {{index + 2}}</span>
-                  <span @click="isMyQualification = true" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
+                  <span class="text-blue-darken-4"># {{index + 1}}</span>
+                  <span @click="openEditMyQualification(qualificationData)" style="cursor: pointer;" class="text-blue-darken-4">Edit</span>
                 </div>
                 <p>{{qualificationData.qualification}}</p>
                 <p>{{qualificationData.university + ', '+qualificationData.qualificationCountry}}</p>
                 <p>Year Passed : <span class="text-blue-darken-4">{{qualificationData.year}}</span></p>
               </v-card>
+            </div>
+          </template>
+            <template v-else>
+              <p>No Qualifications Data</p>
             </template>
           </div>
         </template>
@@ -2117,7 +2099,7 @@
       <AdditionalData1 @backStep="backStep" />
     </div>
     <div v-if="!isLoading && isMyQualification" >
-      <AdditionalData2 @backStep="backStep" />
+      <AdditionalData2 :qualificationData="editMyQualificationData" @backStep="backStep" />
     </div>
     <div v-if="!isLoading && isMyEmployment" >
       <AdditionalData3 @backStep="backStep" />
@@ -2417,6 +2399,7 @@ export default {
       isEmploymentDetail: false,
       isAddQualification: false,
       isMyQualification: false,
+      editMyQualificationData: null,
       isMyEmployment: false,
       isLoading: false,
       screenWidth: window.innerWidth,
@@ -2599,6 +2582,7 @@ export default {
       isChangeCountry2: false,
       isChangeQualification: false,
       isChangeYear: false,
+      idAQ: null,
       first: null,
       university: null,
       country: null,
@@ -2722,6 +2706,7 @@ export default {
     openMyQualificationDetail2(data) {
       this.isQualificationDetail = true;
       this.isQualificationDetail2 = true;
+      this.idAQ = data.id;
       this.first = data.first;
       this.university = data.university;
       this.country = data.country;
@@ -2735,6 +2720,8 @@ export default {
       this.isChangeCountry1=false;
       this.isChangeQualification=false;
       this.isChangeYear=false;
+      this.getApplicantData()
+      this.getApplicantQualificationsData()
     },
     openMyEmploymentDetail() {
       this.isEmploymentDetail = true;
@@ -2744,6 +2731,10 @@ export default {
       this.isChangeEmployerName = false
       this.isChangePosition = false
       this.isChangeCountry2 = false
+    },
+    openEditMyQualification(data) {
+      this.editMyQualificationData = data
+      this.isMyQualification = true;
     },
     backStep() {
       this.isAddQualification = false;
@@ -2957,8 +2948,8 @@ export default {
             ...item,
             id: item.aq_id,
             first: item.first == 'Y' ? 'Y' : item.first == 'N' ? 'N' : 'N',
-            country: item.qualifications_country_name ? this.options.filter(
-            (i) => i.label == item.qualifications_country_name
+            country: item.country_name ? this.options.filter(
+            (i) => i.label == item.country_name
             )[0].value : null,
             year: item.year_passed,
             qualification: item.qualification_name,
@@ -3320,7 +3311,7 @@ export default {
           // localStorage.setItem("user_image", data.data.image);
           // localStorage.setItem("last_login", data.data.last_login);
           // localStorage.setItem("token", data.data.token);
-          this.getUserData();
+          // this.getUserData();
           // localStorage.setItem("name", data.data.name);
           // localStorage.setItem("email", data.data.email_id);
           // localStorage.setItem("g_id", data.data.gypsy_ref_no);
@@ -3723,11 +3714,15 @@ export default {
       const payload = {
         first: this.first,
       };
+      const payload2 = {
+        aq_id: this.idAQ,
+        first: this.first,
+      };
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.first) {
       axios
-        .post(`/gypsy-applicant/save-qualification-first-status`, payload, {
+        .post(this.isQualificationDetail2 ? `/applicant-qualifications/update` : `/gypsy-applicant/save-qualification-first-status`, this.isQualificationDetail2 ? payload2 : payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -3756,13 +3751,25 @@ export default {
     saveUniversity() {
       this.isSave = true;
       const payload = {
-        partner_name: this.university,
+        partner_name: this.university.label ? this.university.label : this.university,
       };
+      let payload2 = {}
+      if(this.university?.label) {
+        payload2 = {
+        aq_id: this.idAQ,
+        university_id: this.university.value,
+      } 
+      }else if(!this.university?.label) {
+        payload2 = {
+        aq_id: this.idAQ,
+        partner_name: this.university,
+      }
+      }
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.university) {
       axios
-        .post(`/gypsy-applicant/save-university`, payload, {
+        .post( this.isQualificationDetail2 ? `/applicant-qualifications/update` : `/gypsy-applicant/save-university`, this.isQualificationDetail2 ? payload2 : payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -3802,12 +3809,23 @@ export default {
           this.country.toLowerCase() +
           ".svg",
       };
+      const payload2 = {
+        aq_id: this.idAQ,
+        // country_current: this.input.country.id,
+        qualification_country: this.countryName,
+        qualification_country_prefix: this.country,
+        qualification_country_code: this.countryCode,
+        qualification_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+      };
       //console.log(payload);
       //console.log(this.phoneEvent);
       const token = localStorage.getItem("token");
       if(this.country) {
       axios
-        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+        .post(this.isQualificationDetail2 ? `/applicant-qualifications/update` : `/gypsy-applicant/save-qualification-country`, this.isQualificationDetail2 ? payload2 : payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -3835,16 +3853,29 @@ export default {
       }
     },
     saveQualification() {
+      console.log(this.qualification)
       this.isSave = true;
       const payload = {
         qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
         year_passed: this.year.toString(),
       };
+      let payload2 = {}
+      if(this.qualification?.label) {
+        payload2 = {
+        aq_id: this.idAQ,
+        qualification_id: this.qualification.value,
+      } 
+      }else if(!this.qualification?.label) {
+        payload2 = {
+        aq_id: this.idAQ,
+        qualification_name: this.qualification,
+      }
+      }
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.qualification) {
       axios
-        .post(`/gypsy-applicant/save-qualification`, payload, {
+        .post(this.isQualificationDetail2 ? `/applicant-qualifications/update` : `/gypsy-applicant/save-qualification`, this.isQualificationDetail2 ? payload2 : payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -3878,12 +3909,17 @@ export default {
         qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
         year_passed: this.year.toString(),
       };
+      const payload2 = {
+        aq_id: this.idAQ,
+        // qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
+        year_passed: this.year.toString(),
+      };
       //console.log(payload);
       const token = localStorage.getItem("token");
       const yearString  = this.year.toString()
       if(yearString.length == 4) {
       axios
-        .post(`/gypsy-applicant/save-qualification`, payload, {
+        .post(this.isQualificationDetail2 ? `/applicant-qualifications/update` : `/gypsy-applicant/save-qualification`, this.isQualificationDetail2 ? payload2 : payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -3899,6 +3935,51 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
+          console.log(error);
+          const message =
+            error.response.data.message === ""
+              ? "Something Wrong!!!"
+              : error.response.data.message;
+          this.errorMessage = message;
+          this.isError = true;
+        })
+        
+        .finally(() => this.isSave = false);
+      }
+    },
+    saveApplicantQualifications() {
+      this.isSave = true;
+      const payload = {
+        // country_current: this.input.country.id,
+        aq_id: this.idAQ,
+        qualification_country: this.countryName,
+        qualification_country_prefix: this.country,
+        qualification_country_code: this.countryCode,
+        qualification_country_flag:
+          "https://flagicons.lipis.dev/flags/4x3/" +
+          this.country.toLowerCase() +
+          ".svg",
+      };
+      //console.log(payload);
+      //console.log(this.phoneEvent);
+      const token = localStorage.getItem("token");
+      if(this.first && this.country && this.university && this.qualification && this.year) {
+      axios
+        .post(`/applicant-qualifications/update`, payload, {
+          headers: {
+            Authorization: `Bearer ${
+              token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          this.isSuccess = true;
+          this.successMessage = "Success save qualification country";
+          this.isChangeCountry1 = false
+        })
+        .catch((error) => {
           console.log(error);
           const message =
             error.response.data.message === ""

@@ -304,6 +304,7 @@ export default {
   components: {
     MazSelect,
   },
+  props: ['qualificationData'],
   data() {
     return {
       options: [
@@ -561,6 +562,7 @@ export default {
       isChangeCountry: false,
       isChangeQualification: false,
       isChangeYear: false,
+      idAQ: null,
       first: null,
       university: null,
       country: null,
@@ -613,8 +615,14 @@ export default {
   },
   mounted() {
     this.getQualifications()
-    this.getApplicantData()
     this.getUniversity()
+    console.log(this.qualificationData)
+    this.idAQ = this.qualificationData.id;
+    this.first = this.qualificationData.first;
+    this.university = this.qualificationData.university;
+    this.country = this.qualificationData.country;
+    this.qualification = this.qualificationData.qualification;
+    this.year = this.qualificationData.year
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -623,13 +631,14 @@ export default {
     saveFirst() {
       this.isSave = true;
       const payload = {
+        aq_id: this.idAQ,
         first: this.first,
       };
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.first) {
       axios
-        .post(`/gypsy-applicant/save-qualification-first-status`, payload, {
+        .post(`/applicant-qualifications/update`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -657,14 +666,23 @@ export default {
     },
     saveUniversity() {
       this.isSave = true;
-      const payload = {
+      let payload = {}
+      if(this.university?.label) {
+        payload = {
+        aq_id: this.idAQ,
+        university_id: this.university.value,
+      } 
+      }else if(!this.university?.label) {
+        payload = {
+        aq_id: this.idAQ,
         partner_name: this.university,
-      };
+      }
+      }
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.university) {
       axios
-        .post(`/gypsy-applicant/save-university`, payload, {
+        .post(`/applicant-qualifications/update`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -695,6 +713,7 @@ export default {
     saveCountry() {
       this.isSave = true;
       const payload = {
+        aq_id: this.idAQ,
         // country_current: this.input.country.id,
         qualification_country: this.countryName,
         qualification_country_prefix: this.country,
@@ -709,7 +728,7 @@ export default {
       const token = localStorage.getItem("token");
       if(this.country) {
       axios
-        .post(`/gypsy-applicant/save-qualification-country`, payload, {
+        .post(`/applicant-qualifications/update`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -738,15 +757,23 @@ export default {
     },
     saveQualification() {
       this.isSave = true;
-      const payload = {
-        qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
-        year_passed: this.year.toString(),
-      };
+      let payload = {}
+      if(this.qualification?.label) {
+        payload = {
+        aq_id: this.idAQ,
+        qualification_id: this.qualification.value,
+      } 
+      }else if(!this.qualification?.label) {
+        payload = {
+        aq_id: this.idAQ,
+        qualification_name: this.qualification,
+      }
+      }
       //console.log(payload);
       const token = localStorage.getItem("token");
       if(this.qualification) {
       axios
-        .post(`/gypsy-applicant/save-qualification`, payload, {
+        .post(`/applicant-qualifications/update`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -777,7 +804,8 @@ export default {
     saveYear() {
       this.isSave = true;
       const payload = {
-        qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
+        aq_id: this.idAQ,
+        // qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
         year_passed: this.year.toString(),
       };
       //console.log(payload);
@@ -785,7 +813,7 @@ export default {
       const yearString  = this.year.toString()
       if(yearString.length == 4) {
       axios
-        .post(`/gypsy-applicant/save-qualification`, payload, {
+        .post(`/applicant-qualifications/update`, payload, {
           headers: {
             Authorization: `Bearer ${
               token
@@ -812,34 +840,6 @@ export default {
         
         .finally(() => this.isSave = false);
       }
-    },
-    getApplicantData() {
-      this.isLoading = true;
-      const token = localStorage.getItem("token");
-      axios
-        .get(`/gypsy-applicant`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const data = response.data.data;
-          console.log(data);
-          this.first = data.first == 'Y' ? 'Y' : data.first == 'N' ? 'N' : 'N';
-          this.university = data.partner_name || '';
-          this.country = data.qualifications_country_name ? this.options.filter(
-            (i) => i.label == data.qualifications_country_name
-            )[0].value : null;
-          this.qualification = data.qualification_name || '';
-          this.year = data.year_passed
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
     },
     getUniversity() {
       this.isLoading = true;
