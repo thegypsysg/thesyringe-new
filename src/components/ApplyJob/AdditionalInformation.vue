@@ -1,6 +1,10 @@
 <template>
   <div>
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="primary" indeterminate />
+    </div>
     <div
+    v-else
       class="d-flex align-center"
       :class="{ 'login-container': !isSmall, 'mt-10': isSmall }"
     >
@@ -200,7 +204,9 @@ export default {
   name: 'WhereAreYou',
   data() {
     return {
+      isLoading: false,
       university: null,
+      countryId: null,
       countryName: '',
       nationality: null,
       nationalityName: '',
@@ -225,14 +231,37 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.getUniversityRegistrable()
-    this.getUniversityNonRegistrable()
     this.university = localStorage.getItem('qualification_university')
+    this.getApplicantData()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
-  methods: {
+  methods: { 
+    getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.countryId = data.qualifications_country;
+          this.getUniversityRegistrable()
+          this.getUniversityNonRegistrable()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     saveData() {
       console.log(this.university)
       const payload = {
@@ -274,7 +303,7 @@ export default {
       this.isLoading = true;
       const token = localStorage.getItem("token");
       axios
-        .get(`/university-list/registrable/${this.$route.params.id}`, 
+        .get(`/university-list/registrable/${this.$route.params.id}/${this.countryId}`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -304,7 +333,7 @@ export default {
       const token = localStorage.getItem("token");
       setTimeout(() => {
       axios
-        .get(`/university-list/non-registrable/${this.$route.params.id}`, 
+        .get(`/university-list/non-registrable/${this.$route.params.id}/${this.countryId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -468,5 +497,15 @@ export default {
 .custom-list:hover {
   background: rgb(248, 248, 248);
   cursor: pointer;
+}
+
+.loading-page {
+  margin-top: 300px;
+}
+
+@media (max-width: 599px) {
+  .loading-page {
+    margin-top: 450px;
+  }
 }
 </style>

@@ -1067,7 +1067,7 @@
               <v-container v-if="!isEmploymentDetail">
                 <v-row>
                   <v-col cols="6">
-                    <template v-if="employmentData.step == 'C'">
+                  <template v-if="employmentData.step == 'C'">
                     <v-card  elevation="0" class="pa-4">
                       <div class="d-flex justify-space-between mb-2">
                         <span class="text-blue-darken-4"># 1</span>
@@ -2885,7 +2885,7 @@ export default {
           }
           this.employmentData = {
             ...data,
-            step: data.employment_step,
+            step: data.employment_steps,
             position: data.position_name,
             name: data.employer_name,
             country: data.employer_country_name,
