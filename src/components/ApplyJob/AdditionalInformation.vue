@@ -39,21 +39,40 @@
                   </h1> -->
 
                   <!-- <v-form fast-fail @submit.prevent="login"> -->
-                    <p class="mb-2">Which University did you obtain this qualification. ?</p>
+                    <h3 class="mb-2">Please check if your university in this list below .</h3>
+                    <p class="mb-2 text-blue-accent-4">These are approved list of qualifications</p>
                     <div class="location-input mt-4 mb-8 w-100">
-                      <!-- <v-combobox
-                        v-model="university"
-                        :items="resource.university"
+                      <v-autocomplete
+                        v-model="universityRegis"
+                        :items="resource.universityRegis"
+                        :disabled="universityNonRegis"
                         variant="outlined"
                         item-value="label"
                         item-title="label"
-                        :item-children="resource.university"
                         label="--- Select University ---"
                         clearable
                         class="mt-n1"
                         density="compact"
-                      /> -->
+                      />
+                    </div>
+                    <h3 class="text-red my-8 text-center">OR</h3>
+                    <h3 class="mb-2">Please select from any of these University list .</h3>
+                    <p class="mb-2 text-blue-accent-4">Add a new university if its not in the List</p>
+                    <div class="location-input mt-4 mb-8 w-100">
                       <v-combobox
+                        v-model="universityNonRegis"
+                        :items="resource.universityNonRegis"
+                        :disabled="universityRegis"
+                        variant="outlined"
+                        item-value="label"
+                        item-title="label"
+                        label="--- Select University ---"
+                        clearable
+                        class="mt-n1"
+                        density="compact"
+                      />
+                    </div>
+                      <!-- <v-combobox
                       v-model="university"
                       :items="resource.university"
                       variant="outlined"
@@ -72,30 +91,7 @@
                             <p class="py-2 pl-2 custom-list">{{ item?.raw?.label }}</p>
                           </div>
                         </template>
-                        <!-- <template v-slot:item="{ props, item }">
-                          <div v-bind="props">
-                            <router-link
-                              class="text-decoration-none text-black font-weight-bold"
-                              :to="item.raw.slug"
-                            >
-                              <div class="d-flex align-center w-100">
-                                <div class="w-25 py-1">
-                                  <div style="width: 100px">
-                                    <v-img height="40" :src="item?.raw?.image">
-                                      <template #placeholder>
-                                        <div class="skeleton" /> </template
-                                    ></v-img>
-                                  </div>
-                                </div>
-                                <div class="w-75">
-                                  <p>{{ item?.raw?.name }}</p>
-                                </div>
-                              </div>
-                            </router-link>
-                          </div>
-                        </template> -->
-                      </v-combobox>
-                    </div>
+                      </v-combobox> -->
                     
 
                     <div
@@ -205,7 +201,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      university: null,
+      universityRegis: null,
+      universityNonRegis: null,
       countryId: null,
       countryName: '',
       nationality: null,
@@ -218,7 +215,6 @@ export default {
       resource: {
         universityRegis: [],
         universityNonRegis: [],
-        university: []
       },
     };
   },
@@ -231,7 +227,7 @@ export default {
     window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.university = localStorage.getItem('qualification_university')
+    // this.university = localStorage.getItem('qualification_university')
     this.getApplicantData()
   },
   unmounted() {
@@ -263,13 +259,21 @@ export default {
         });
     },
     saveData() {
-      console.log(this.university)
-      const payload = {
-        partner_name: this.university.label ? this.university.label : this.university,
-      };
+      console.log(this.universityRegis)
+      console.log(this.universityNonRegis)
+      let payload = {}
+      if(this.universityRegis && !this.universityNonRegis) {
+        payload = {
+          partner_name: this.universityRegis
+        }
+      } else if(this.universityNonRegis && !this.universityRegis) {
+        payload = {
+          partner_name: this.universityNonRegis.label ? this.universityNonRegis.label : this.universityNonRegis
+        }
+      }
       //console.log(payload);
       const token = localStorage.getItem("token");
-      if(this.university) {
+      if((this.universityRegis && !this.universityNonRegis) || (this.universityNonRegis && !this.universityRegis)) {
       axios
         .post(`/gypsy-applicant/save-university`, payload, {
           headers: {
@@ -283,8 +287,11 @@ export default {
           console.log(data)
           this.isSuccess = true;
           this.successMessage = "Success Save University";
-          localStorage.setItem("qualification_university", this.university.label ? this.university.label : this.university)
-          localStorage.setItem("qualification_university_id", this.university.value)
+          if(this.universityRegis && !this.universityNonRegis) {
+          localStorage.setItem("qualification_university", this.universityRegis)
+          } else if(this.universityNonRegis && !this.universityRegis) {
+            localStorage.setItem("qualification_university", this.universityNonRegis.label ? this.universityNonRegis.label : this.universityNonRegis)
+          }
           this.nextStep()
         })
         .catch((error) => {
@@ -349,22 +356,6 @@ export default {
               label: item.partner_name || '',
             };
           });
-          const joinedData = [
-            { label: 'Registrable' },
-            [...this.resource.universityRegis],
-            { label: 'Non Registrable' },
-            [...this.resource.universityNonRegis],
-          ]
-          const transformedData = joinedData.reduce((result, item) => {
-            if (Array.isArray(item)) {
-              result = [...result, ...item];
-            } else {
-              result.push(item);
-            }
-            return result;
-          }, []);
-          console.log(transformedData)
-         this.resource.university = transformedData
         })
         .catch((error) => {
           // eslint-disable-next-line

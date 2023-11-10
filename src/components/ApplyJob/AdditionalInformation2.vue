@@ -1,6 +1,10 @@
 <template>
   <div>
+    <div v-if="isLoading" class="text-center loading-page">
+      <v-progress-circular :size="50" color="primary" indeterminate />
+    </div>
     <div
+    v-else
       class="d-flex align-center"
       :class="{ 'login-container': !isSmall, 'mt-10': isSmall }"
     >
@@ -165,6 +169,7 @@ export default {
   name: 'WhereAreYou',
   data() {
     return {
+      isLoading: false,
       universityId: null,
       qualification: null,
       year: null,
@@ -191,12 +196,34 @@ export default {
     this.universityId = localStorage.getItem('qualification_university_id')
   },
   mounted() {
-    this.getQualifications()
+    this.getApplicantData()
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
-  methods: {
+  methods: {getApplicantData() {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          this.universityId = data.university_id;
+    this.getQualifications()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     saveData() {
       const payload = {
         qualification_name: this.qualification.label ? this.qualification.label : this.qualification,
@@ -379,5 +406,16 @@ export default {
 }
 .login-footer-btn-mobile {
   gap: 40px;
+}
+
+
+.loading-page {
+  margin-top: 300px;
+}
+
+@media (max-width: 599px) {
+  .loading-page {
+    margin-top: 450px;
+  }
 }
 </style>
