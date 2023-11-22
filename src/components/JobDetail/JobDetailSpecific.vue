@@ -72,9 +72,9 @@
                 :value="btn.tag"
                 class="my-slide-item"
               >
+                <!-- :size="isSmall ? 30 : 155" -->
                 <v-btn
                   class="sub-menu-btn"
-                  :size="isSmall ? 30 : 155"
                   :class="{
                     active: isSelected,
                     'py-4 mx-2': !isSmall,
@@ -284,669 +284,687 @@
             </div>
           </v-container>
         </div>
-        <v-container
-          v-if="!isCardLoading && privilegedJob"
-        >
-        <h1 v-if="privilegedJob?.length > 0" class="text-blue-darken-4 text-center" 
-          style="font-size: 56px; font-style: normal; font-weight: 700">
-          Privileged Partner Featured Job
-        </h1>
-        <div v-if="privilegedJob?.length > 0" class="line-divider mt-1 mb-4 mx-auto" />
-        <div class="d-flex flex-column w-100 justify-center mx-auto text-center">
-          <template v-for="card in privilegedJob" :key="card.id">
-          
-          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-            <v-card
-              class="my-4 card-cont px-8 pb-2"
-              :class="{ 'mx-auto text-center': !isSmall, 'mx-1': isSmall }"
-              :height="!isSmall ? 500 : 320"
-              :width="!isSmall ? 650 : 270"
-              elevation="1"
-              @click="toggle"
-            >
-              <div
-                v-if="isSmall"
-                style="
-                  font-size: 16px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2"
-              >
-                {{
-                  card.text.length >= 28
-                    ? card.text.substring(0, 28) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                v-if="!isSmall"
-                style="
-                  font-size: 20px;
-                  font-weight: 700;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 text-left"
-              >
-                {{
-                  card.text.length >= 32
-                    ? card.text.substring(0, 32) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                class="trending__app"
-                :class="{
-                  'card-image-cont-priv-desktop': !isSmall,
-                  'card-image-cont-2': isSmall,
-                }"
-              >
-                <v-img
-                  :src="card.image"
-                  class="card-image"
-                  :height="isSmall ? 170 : 300"
-                  cover
-                  transition="fade-transition"
-                >
-                  <template #placeholder>
-                    <div class="skeleton skeleton-category ml-2" />
-                  </template>
-                </v-img>
-              </div>
-              <div
-              style="
-                  position: absolute;
-                  top: 30px;
-                  right: 55px;
-                  background-color: #7C007C;
-                  padding-left: 6px;
-                  padding-right: 20px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  gap:10px;
-                  font-size: 12px;
-                "
-              class=" d-flex justify-start mt-8"
-            >
-              <span class="text-white">Privileged Featured Job</span>
-          </div>
+        <v-container v-if="!isCardLoading && privilegedJob">
+          <h1
+            v-if="privilegedJob?.length > 0"
+            class="text-blue-darken-4 text-center"
+            style="font-size: 56px; font-style: normal; font-weight: 700"
+          >
+            Privileged Partner Featured Job
+          </h1>
           <div
-          style="
-            position: absolute;
-            top: 30px;
-            left: 55px;
-            background-color: #fff;
-            padding-left: 8px;
-            padding-right: 20px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            font-weight: 600;
-            font-size: 12px;
-          "
-          class='mt-8'
-        >
-          <span class="text-brown" style="">{{card.subIndustry}}</span>
-        </div>
-
-              <v-btn
-                elevation="4"
-                :to="`/detail/${card.id}`"
-                style="
-                  position: absolute;
-                  bottom: 180px;
-                  left: 55px;
-                  background-color: #fa2964;
-                  border-radius: 5px;
-                  padding-left: 8px;
-                  padding-right: 6px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  font-weight: 600;
-                  font-size: 12px;
-                "
-              >
-                <span class="text-white" style="">View Job</span>
-              </v-btn>
-
-              <div
-                class="card-description d-flex flex-column mt-6"
-                style="position: relative; gap: 10px"
-              >
-                
-                <div class="card-address d-flex align-center">
-                  <div style="width: 25%">
-                    <v-img :src="card.locationImg" height="60"
-                      ><template #placeholder>
-                        <div class="skeleton" /> </template
-                    ></v-img>
-                  </div>
-                  <div style="width: 50%" class="card-address-info pl-2 d-flex flex-column justify-center text-left">
-                    <div>
-                    <h4 class="" style="font-weight: 600">
-                      {{
-                        card.place.length >= 32
-                          ? card.place.substring(0, 32) + '..'
-                          : card.place
-                      }}
-                    </h4>
-
-                    <div class="my-2" style="font-weight: 400">
-                      <p>{{ card.address }}</p>
-                    </div>
-                    <a target="_blank" class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
-                  </div>
+            v-if="privilegedJob?.length > 0"
+            class="line-divider mt-1 mb-4 mx-auto"
+          />
+          <div
+            class="d-flex flex-column w-100 justify-center mx-auto text-center"
+          >
+            <template v-for="card in privilegedJob" :key="card.id">
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="my-4 card-cont px-8 pb-2"
+                  :class="{ 'mx-auto text-center': !isSmall, 'mx-1': isSmall }"
+                  :height="!isSmall ? 500 : 320"
+                  :width="!isSmall ? 650 : 270"
+                  elevation="1"
+                  @click="toggle"
+                >
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2"
+                  >
+                    {{
+                      card.text.length >= 28
+                        ? card.text.substring(0, 28) + '..'
+                        : card.text
+                    }}
                   </div>
                   <div
-                  class="card-address-info text-left mt-n4 mb-n2"
-                  style="font-weight: 400; width: 25%"
-                >
-                  <p>
-                    <span class="text-red">{{ card.distanceText }}</span
-                    ><span class="text-muted"> away</span>
-                  </p>
-                </div>
-                </div>
-              </div>
-
-              <div class="w-25"></div>
-              <div
-              style="
-                  gap:20px
-                "
-              class=" d-flex justify-center w-75 mt-6"
-            >
-              <v-btn
-              v-if="card.google"
-                :size="!isSmall ? '35' : '50'"
-                variant="text"
-                color="white"
-                style="background: transparent"
-                icon
-                :href="card.google"
-              >
-                <v-icon :size="!isSmall ? '25' : '40'">
-                  <v-img
-                    src="@/assets/google.png"
-                    alt="Google Logo"
-                  />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.instagram"
-              :size="!isSmall ? '35' : '50'"
-                variant="text"
-                style="background: #fc2145"
-                color="white"
-                icon
-                :href="card.instagram"
-              >
-              <v-icon :size="!isSmall ? '20' : '24'">
-                  <i class="fa-brands fa-instagram" />
-                </v-icon>
-              </v-btn>
-
-              <v-btn
-              v-if="card.facebook"
-                :size="!isSmall ? '35' : '50'"
-                variant="text"
-                style="background: #4267b2"
-                color="white"
-                icon
-                :href="card.facebook"
-              >
-                <v-icon :size="!isSmall ? '20' : '24'">
-                  <i class="fa-brands fa-facebook-f" />
-                </v-icon>
-              </v-btn>
-
-              <v-btn
-              v-if="card.linkedin"
-                :size="!isSmall ? '35' : '50'"
-                variant="text"
-                style="background: #0072b1"
-                color="white"
-                icon
-                :href="card.linkedin"
-              >
-                <v-icon :size="!isSmall ? '20' : '24'">
-                  <i class="fa-brands fa-linkedin-in" />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.tiktok"
-                :size="!isSmall ? '35' : '50'"
-                variant="text"
-                style="background: black"
-                color="white"
-                icon
-                :href="card.tiktok"
-              >
-                <v-icon :size="!isSmall ? '20' : '24'">
-                  <i class="fa-brands fa-tiktok" />
-                </v-icon>
-              </v-btn>
-
-              <v-btn
-              v-if="card.youtube"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: #cd201f"
-              color="white"
-              icon
-              :href="card.youtube"
-            >
-            <v-icon :size="!isSmall ? '21' : '24'">
-                <i class="fa-brands fa-youtube" />
-              </v-icon>
-            </v-btn>
-
-              <v-btn
-              v-if="card.twitter"
-                :size="!isSmall ? '35' : '50'"
-                variant="text"
-                style="background: #1c96e8"
-                color="white"
-                icon="mdi-twitter"
-                :href="card.twitter"
-              >
-              <v-icon :size="!isSmall ? '21' : '24'">
-                <i class="fa-brands fa-twitter" />
-              </v-icon>
-            </v-btn>
-            </div>
-
-              <div class="card-btn-container-priv-desktop d-flex justify-space-between">
-                <v-btn
-                  color="black"
-                  class="card-btn"
-                  :width="isSmall ? 40 : 40"
-                  :height="isSmall ? 40 : 40"
-                  icon="mdi-share-variant-outline"
-                >
-                  <v-icon size="25" color="red">
-                    mdi-share-variant-outline
-                  </v-icon>
-                  <v-menu activator="parent">
-                    <v-list>
-                      <v-list-item @click="console.log('share')">
-                        <v-list-item-title
-                          ><v-icon class="mr-4" color="black" size="18">
-                            mdi-email-outline </v-icon
-                          >Email</v-list-item-title
-                        >
-                      </v-list-item>
-                      <v-list-item @click="console.log('share')">
-                        <v-list-item-title
-                          ><v-icon class="mr-4" size="18">
-                            <i class="fa-brands fa-facebook-f" /> </v-icon
-                          >Facebook</v-list-item-title
-                        >
-                      </v-list-item>
-                      <v-list-item @click="console.log('share')">
-                        <v-list-item-title
-                          ><v-icon class="mr-4" color="black" size="18">
-                            mdi-twitter </v-icon
-                          >Twitter</v-list-item-title
-                        >
-                      </v-list-item>
-                      <v-list-item @click="console.log('share')">
-                        <v-list-item-title
-                          ><v-icon class="mr-4" size="18">
-                            <i class="fa-brands fa-linkedin-in" /> </v-icon
-                          >Linkedin</v-list-item-title
-                        >
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                  </v-btn
-                >
-                <v-btn
-                  class="card-btn"
-                  color="black"
-                  icon="mdi-heart-outline"
-                  :width="isSmall ? 40 : 40"
-                  :height="isSmall ? 40 : 40"
-                  @click="card.isFav = !card.isFav"
-                >
-                  <v-icon size="25" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
-                </v-btn>
-              </div>
-            </v-card>
-          </v-lazy>
-        </template>
-        </div>
-        </v-container>
-        <v-container
-        v-if="!isCardLoading && platinumJob"
-        
-      >
-      <h1 v-if="platinumJob?.length > 0" style="color: #B2641D; font-size: 56px; font-style: normal; font-weight: 700" class=" text-center mt-2">
-        Platinum Partner Featured Job
-      </h1>
-      
-      <div v-if="platinumJob?.length > 0" class="line-divider mt-1 mb-4 mx-auto" />
-      <div class="d-flex w-100 justify-start flex-wrap">
-        <template v-for="card in platinumJob" :key="card.id">
-        
-        <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-          <v-card
-            class="my-4 card-cont pa-2"
-            :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-            :height="!isSmall ? 510 : 320"
-            :width="!isSmall ? 300 : 270"
-            elevation="1"
-            @click="toggle"
-          >
-            <div
-              v-if="isSmall"
-              style="
-                font-size: 16px;
-                font-weight: 600;
-                margin-bottom: 10px;
-                line-height: 19.36px;
-              "
-              class="pt-2"
-            >
-              {{
-                card.text.length >= 28
-                  ? card.text.substring(0, 28) + '..'
-                  : card.text
-              }}
-            </div>
-            <div
-              v-if="!isSmall"
-              style="
-                font-size: 16px;
-                font-weight: 700;
-                margin-bottom: 10px;
-                line-height: 19.36px;
-              "
-              class="pt-2 text-left"
-            >
-              {{
-                card.text.length >= 32
-                  ? card.text.substring(0, 32) + '..'
-                  : card.text
-              }}
-            </div>
-            <div
-              class="trending__app"
-              :class="{
-                'card-image-cont-4': !isSmall,
-                'card-image-cont-2': isSmall,
-              }"
-            >
-              <v-img
-                :src="card.image"
-                class="card-image"
-                :height="isSmall ? 170 : 220"
-                cover
-                transition="fade-transition"
-              >
-                <template #placeholder>
-                  <div class="skeleton skeleton-category ml-2" />
-                </template>
-              </v-img>
-            </div>
-                          <div
-              style="
-                  position: absolute;
-                  top: 30px;
-                  right: 15px;
-                  background-color: #E2FF02;
-                  padding-left: 15px;
-                  padding-right: 15px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  gap:10px;
-                  font-size: 12px;
-                  font-weight: 600;
-                "
-              class=" d-flex justify-start mt-8"
-            >
-              <span >Platinum Featured Job</span>
-          </div>
-            <div
-              style="
-                position: absolute;
-                bottom: 300px;
-                left: 15px;
-                background-color: #fff;
-                padding-left: 8px;
-                padding-right: 20px;
-                padding-top: 4px;
-                padding-bottom: 4px;
-                font-weight: 600;
-                font-size: 12px;
-              "
-            >
-              <span class="text-brown" style="">{{card.subIndustry}}</span>
-            </div>
-
-            <div
-              class="card-description d-flex flex-column mt-6"
-              style="position: relative; gap: 10px"
-            >
-              <div
-                class="card-address-info text-left mt-n4 mb-n2"
-                style="font-weight: 400"
-              >
-                <p>
-                  <span class="text-red">{{ card.distanceText }}</span
-                  ><span class="text-muted"> away</span>
-                </p>
-              </div>
-              <div class="card-address">
-                <div style="width: 100%">
-                  <v-img :src="card.locationImg" height="50"
-                    ><template #placeholder>
-                      <div class="skeleton" /> </template
-                  ></v-img>
-                </div>
-                <div style="width: 100%" class="card-address-info text-center">
-                  <h4 class="mt-4" style="font-weight: 600">
-                    {{
-                      card.place.length >= 32
-                        ? card.place.substring(0, 32) + '..'
-                        : card.place
-                    }}
-                  </h4>
-
-                  <div class="mt-2" style="font-weight: 400">
-                    <p>{{ card.address }}</p>
+                    v-if="!isSmall"
+                    style="
+                      font-size: 20px;
+                      font-weight: 700;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 text-left"
+                  >
+                    {{ card.text }}
                   </div>
-                  
-                  <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
-                </div>
-              </div>
-            </div>
-            <div
-            style="
-                gap:10px
-              "
-            class="w-100 d-flex justify-center mt-4 mb-8"
-          >
-            <v-btn
-            v-if="card.google"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              color="white"
-              style="background: transparent"
-              icon
-              :href="card.google"
-            >
-              <v-icon :size="!isSmall ? '25' : '40'">
-                <v-img
-                  src="@/assets/google.png"
-                  alt="Google Logo"
-                />
-              </v-icon>
-            </v-btn>
+                  <div
+                    class="trending__app"
+                    :class="{
+                      'card-image-cont-priv-desktop': !isSmall,
+                      'card-image-cont-2': isSmall,
+                    }"
+                  >
+                    <v-img
+                      :src="card.image"
+                      class="card-image"
+                      :height="isSmall ? 170 : 300"
+                      cover
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton skeleton-category ml-2" />
+                      </template>
+                    </v-img>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      right: 55px;
+                      background-color: #7c007c;
+                      padding-left: 6px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      gap: 10px;
+                      font-size: 12px;
+                    "
+                    class="d-flex justify-start mt-8"
+                  >
+                    <span class="text-white">Privileged Featured Job</span>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      left: 55px;
+                      background-color: #fff;
+                      padding-left: 8px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                    class="mt-8"
+                  >
+                    <span class="text-brown" style="">{{
+                      card.subIndustry
+                    }}</span>
+                  </div>
 
-            <v-btn
-            v-if="card.instagram"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: #fc2145"
-              color="white"
-              icon
-              :href="card.instagram"
-            >
-            <v-icon :size="!isSmall ? '20' : '24'">
-                <i class="fa-brands fa-instagram" />
-              </v-icon>
-            </v-btn>
+                  <v-btn
+                    elevation="4"
+                    :to="`/detail/${card.id}`"
+                    style="
+                      position: absolute;
+                      bottom: 180px;
+                      left: 55px;
+                      background-color: #fa2964;
+                      border-radius: 5px;
+                      padding-left: 8px;
+                      padding-right: 6px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                  >
+                    <span class="text-white" style="">View Job</span>
+                  </v-btn>
 
-            <v-btn
-            v-if="card.facebook"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: #4267b2"
-              color="white"
-              icon
-              :href="card.facebook"
-            >
-              <v-icon :size="!isSmall ? '20' : '24'">
-                <i class="fa-brands fa-facebook-f" />
-              </v-icon>
-            </v-btn>
+                  <div
+                    class="card-description d-flex flex-column mt-6"
+                    style="position: relative; gap: 10px"
+                  >
+                    <div class="card-address d-flex align-center">
+                      <div style="width: 25%">
+                        <v-img :src="card.locationImg" height="60"
+                          ><template #placeholder>
+                            <div class="skeleton" /> </template
+                        ></v-img>
+                      </div>
+                      <div
+                        style="width: 50%"
+                        class="card-address-info pl-2 d-flex flex-column justify-center text-left"
+                      >
+                        <div>
+                          <h4 class="" style="font-weight: 600">
+                            {{
+                              card.place.length >= 32
+                                ? card.place.substring(0, 32) + '..'
+                                : card.place
+                            }}
+                          </h4>
 
-            <v-btn
-            v-if="card.linkedin"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: #0072b1"
-              color="white"
-              icon
-              :href="card.linkedin"
-            >
-              <v-icon :size="!isSmall ? '20' : '24'">
-                <i class="fa-brands fa-linkedin-in" />
-              </v-icon>
-            </v-btn>
-            <v-btn
-            v-if="card.tiktok"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: black"
-              color="white"
-              icon
-              :href="card.tiktok"
-            >
-              <v-icon :size="!isSmall ? '20' : '24'">
-                <i class="fa-brands fa-tiktok" />
-              </v-icon>
-            </v-btn>
+                          <div class="my-2" style="font-weight: 400">
+                            <p>{{ card.address }}</p>
+                          </div>
+                          <a
+                            target="_blank"
+                            class="text-decoration-none mt-3"
+                            :href="card.website"
+                            >{{ card.website }}</a
+                          >
+                        </div>
+                      </div>
+                      <div
+                        class="card-address-info text-left mt-n4 mb-n2"
+                        style="font-weight: 400; width: 25%"
+                      >
+                        <p>
+                          <span class="text-red">{{ card.distanceText }}</span
+                          ><span class="text-muted"> away</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-            <v-btn
-            v-if="card.youtube"
-            :size="!isSmall ? '35' : '50'"
-            variant="text"
-            style="background: #cd201f"
-            color="white"
-            icon
-            :href="card.youtube"
-          >
-          <v-icon :size="!isSmall ? '21' : '24'">
-              <i class="fa-brands fa-youtube" />
-            </v-icon>
-          </v-btn>
+                  <div class="w-25"></div>
+                  <div
+                    style="gap: 20px"
+                    class="d-flex justify-center w-75 mt-6"
+                  >
+                    <v-btn
+                      v-if="card.google"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      color="white"
+                      style="background: transparent"
+                      icon
+                      :href="card.google"
+                    >
+                      <v-icon :size="!isSmall ? '25' : '40'">
+                        <v-img src="@/assets/google.png" alt="Google Logo" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.instagram"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #fc2145"
+                      color="white"
+                      icon
+                      :href="card.instagram"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-instagram" />
+                      </v-icon>
+                    </v-btn>
 
-            <v-btn
-            v-if="card.twitter"
-              :size="!isSmall ? '35' : '50'"
-              variant="text"
-              style="background: #1c96e8"
-              color="white"
-              icon="mdi-twitter"
-              :href="card.twitter"
-            >
-            <v-icon :size="!isSmall ? '21' : '24'">
-              <i class="fa-brands fa-twitter" />
-            </v-icon>
-          </v-btn>
+                    <v-btn
+                      v-if="card.facebook"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #4267b2"
+                      color="white"
+                      icon
+                      :href="card.facebook"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-facebook-f" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.linkedin"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #0072b1"
+                      color="white"
+                      icon
+                      :href="card.linkedin"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-linkedin-in" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.tiktok"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: black"
+                      color="white"
+                      icon
+                      :href="card.tiktok"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-tiktok" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.youtube"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #cd201f"
+                      color="white"
+                      icon
+                      :href="card.youtube"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '24'">
+                        <i class="fa-brands fa-youtube" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.twitter"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #1c96e8"
+                      color="white"
+                      icon="mdi-twitter"
+                      :href="card.twitter"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '24'">
+                        <i class="fa-brands fa-twitter" />
+                      </v-icon>
+                    </v-btn>
+                  </div>
+
+                  <div
+                    class="card-btn-container-priv-desktop d-flex justify-space-between"
+                  >
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      :width="isSmall ? 40 : 40"
+                      :height="isSmall ? 40 : 40"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="25" color="red">
+                        mdi-share-variant-outline
+                      </v-icon>
+                      <v-menu activator="parent">
+                        <v-list>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-email-outline </v-icon
+                              >Email</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-facebook-f" /> </v-icon
+                              >Facebook</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-twitter </v-icon
+                              >Twitter</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-linkedin-in" /> </v-icon
+                              >Linkedin</v-list-item-title
+                            >
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-btn>
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      :width="isSmall ? 40 : 40"
+                      :height="isSmall ? 40 : 40"
+                      @click="card.isFav = !card.isFav"
+                    >
+                      <v-icon size="25" color="red">
+                        {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline' }}
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </template>
           </div>
-          <div class="d-flex justify-center">
-          <v-btn
-          elevation="4"
-          :to="`/detail/${card.id}`"
-          style="
-            
-            background-color: #fa2964;
-            border-radius: 5px;
-            padding-left: 8px;
-            padding-right: 6px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            font-weight: 600;
-            font-size: 12px;
-          "
-        >
-          <span class="text-white" style="">View Job</span>
-        </v-btn>
-      </div>
-            <div class="card-btn-container-4 d-flex justify-space-between">
-              <v-btn
-                color="black"
-                class="card-btn"
-                :width="isSmall ? 40 : 32"
-                :height="isSmall ? 40 : 32"
-                icon="mdi-share-variant-outline"
-              >
-                <v-icon size="20" color="red">
-                  mdi-share-variant-outline
-                </v-icon>
-                <v-menu activator="parent">
-                  <v-list>
-                    <v-list-item @click="console.log('share')">
-                      <v-list-item-title
-                        ><v-icon class="mr-4" color="black" size="18">
-                          mdi-email-outline </v-icon
-                        >Email</v-list-item-title
+        </v-container>
+        <v-container v-if="!isCardLoading && platinumJob">
+          <h1
+            v-if="platinumJob?.length > 0"
+            style="
+              color: #b2641d;
+              font-size: 56px;
+              font-style: normal;
+              font-weight: 700;
+            "
+            class="text-center mt-2"
+          >
+            Platinum Partner Featured Job
+          </h1>
+
+          <div
+            v-if="platinumJob?.length > 0"
+            class="line-divider mt-1 mb-4 mx-auto"
+          />
+          <div class="d-flex w-100 justify-start flex-wrap">
+            <template v-for="card in platinumJob" :key="card.id">
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="my-4 card-cont pa-2"
+                  :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
+                  :height="!isSmall ? 510 : 320"
+                  :width="!isSmall ? 300 : 270"
+                  elevation="1"
+                  @click="toggle"
+                >
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2"
+                  >
+                    {{
+                      card.text.length >= 28
+                        ? card.text.substring(0, 28) + '..'
+                        : card.text
+                    }}
+                  </div>
+                  <div
+                    v-if="!isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 700;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 text-left"
+                  >
+                    {{ card.text }}
+                  </div>
+                  <div
+                    class="trending__app"
+                    :class="{
+                      'card-image-cont-4': !isSmall,
+                      'card-image-cont-2': isSmall,
+                    }"
+                  >
+                    <v-img
+                      :src="card.image"
+                      class="card-image"
+                      :height="isSmall ? 170 : 220"
+                      cover
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton skeleton-category ml-2" />
+                      </template>
+                    </v-img>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      right: 15px;
+                      background-color: #e2ff02;
+                      padding-left: 15px;
+                      padding-right: 15px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      gap: 10px;
+                      font-size: 12px;
+                      font-weight: 600;
+                    "
+                    class="d-flex justify-start mt-8"
+                  >
+                    <span>Platinum Featured Job</span>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      bottom: 300px;
+                      left: 15px;
+                      background-color: #fff;
+                      padding-left: 8px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                  >
+                    <span class="text-brown" style="">{{
+                      card.subIndustry
+                    }}</span>
+                  </div>
+
+                  <div
+                    class="card-description d-flex flex-column mt-6"
+                    style="position: relative; gap: 10px"
+                  >
+                    <div
+                      class="card-address-info text-left mt-n4 mb-n2"
+                      style="font-weight: 400"
+                    >
+                      <p>
+                        <span class="text-red">{{ card.distanceText }}</span
+                        ><span class="text-muted"> away</span>
+                      </p>
+                    </div>
+                    <div class="card-address">
+                      <div style="width: 100%">
+                        <v-img :src="card.locationImg" height="50"
+                          ><template #placeholder>
+                            <div class="skeleton" /> </template
+                        ></v-img>
+                      </div>
+                      <div
+                        style="width: 100%"
+                        class="card-address-info text-center"
                       >
-                    </v-list-item>
-                    <v-list-item @click="console.log('share')">
-                      <v-list-item-title
-                        ><v-icon class="mr-4" size="18">
-                          <i class="fa-brands fa-facebook-f" /> </v-icon
-                        >Facebook</v-list-item-title
-                      >
-                    </v-list-item>
-                    <v-list-item @click="console.log('share')">
-                      <v-list-item-title
-                        ><v-icon class="mr-4" color="black" size="18">
-                          mdi-twitter </v-icon
-                        >Twitter</v-list-item-title
-                      >
-                    </v-list-item>
-                    <v-list-item @click="console.log('share')">
-                      <v-list-item-title
-                        ><v-icon class="mr-4" size="18">
-                          <i class="fa-brands fa-linkedin-in" /> </v-icon
-                        >Linkedin</v-list-item-title
-                      >
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-                </v-btn
-              >
-              <v-btn
-                class="card-btn"
-                color="black"
-                icon="mdi-heart-outline"
-                :width="isSmall ? 40 : 32"
-                :height="isSmall ? 40 : 32"
-                @click="card.isFav = !card.isFav"
-              >
-                <v-icon size="20" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
-              </v-btn>
-            </div>
-          </v-card>
-        </v-lazy>
-      </template>
-    </div>
+                        <h4 class="mt-4" style="font-weight: 600">
+                          {{
+                            card.place.length >= 32
+                              ? card.place.substring(0, 32) + '..'
+                              : card.place
+                          }}
+                        </h4>
+
+                        <div class="mt-2" style="font-weight: 400">
+                          <p>{{ card.address }}</p>
+                        </div>
+
+                        <a
+                          class="text-decoration-none mt-3"
+                          :href="card.website"
+                          >{{ card.website }}</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="gap: 10px"
+                    class="w-100 d-flex justify-center mt-4 mb-8"
+                  >
+                    <v-btn
+                      v-if="card.google"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      color="white"
+                      style="background: transparent"
+                      icon
+                      :href="card.google"
+                    >
+                      <v-icon :size="!isSmall ? '25' : '40'">
+                        <v-img src="@/assets/google.png" alt="Google Logo" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.instagram"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #fc2145"
+                      color="white"
+                      icon
+                      :href="card.instagram"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-instagram" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.facebook"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #4267b2"
+                      color="white"
+                      icon
+                      :href="card.facebook"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-facebook-f" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.linkedin"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #0072b1"
+                      color="white"
+                      icon
+                      :href="card.linkedin"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-linkedin-in" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.tiktok"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: black"
+                      color="white"
+                      icon
+                      :href="card.tiktok"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '24'">
+                        <i class="fa-brands fa-tiktok" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.youtube"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #cd201f"
+                      color="white"
+                      icon
+                      :href="card.youtube"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '24'">
+                        <i class="fa-brands fa-youtube" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.twitter"
+                      :size="!isSmall ? '35' : '50'"
+                      variant="text"
+                      style="background: #1c96e8"
+                      color="white"
+                      icon="mdi-twitter"
+                      :href="card.twitter"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '24'">
+                        <i class="fa-brands fa-twitter" />
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                  <div class="d-flex justify-center">
+                    <v-btn
+                      elevation="4"
+                      :to="`/detail/${card.id}`"
+                      style="
+                        background-color: #fa2964;
+                        border-radius: 5px;
+                        padding-left: 8px;
+                        padding-right: 6px;
+                        padding-top: 4px;
+                        padding-bottom: 4px;
+                        font-weight: 600;
+                        font-size: 12px;
+                      "
+                    >
+                      <span class="text-white" style="">View Job</span>
+                    </v-btn>
+                  </div>
+                  <div
+                    class="card-btn-container-4 d-flex justify-space-between"
+                  >
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="20" color="red">
+                        mdi-share-variant-outline
+                      </v-icon>
+                      <v-menu activator="parent">
+                        <v-list>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-email-outline </v-icon
+                              >Email</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-facebook-f" /> </v-icon
+                              >Facebook</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-twitter </v-icon
+                              >Twitter</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-linkedin-in" /> </v-icon
+                              >Linkedin</v-list-item-title
+                            >
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-btn>
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                      @click="card.isFav = !card.isFav"
+                    >
+                      <v-icon size="20" color="red">
+                        {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline' }}
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </template>
+          </div>
         </v-container>
         <template v-if="isCardLoading">
           <v-container>
@@ -967,7 +985,7 @@
               }"
             >
               <h2
-              style="font-size: 56px; font-style: normal; font-weight: 700"
+                style="font-size: 56px; font-style: normal; font-weight: 700"
                 v-if="!isSmall"
                 class="text-center text-blue-darken-4"
               >
@@ -1007,7 +1025,7 @@
                     <v-card
                       class="my-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                      :height="!isSmall ? 320 : 280"
+                      :height="!isSmall ? 340 : 280"
                       :width="!isSmall ? 280 : 250"
                       elevation="0"
                       @click="toggle"
@@ -1031,18 +1049,15 @@
                       <div
                         v-if="!isSmall"
                         style="
-                          font-size: 16px;
+                          font-size: 14px;
                           font-weight: 600;
                           margin-bottom: 10px;
                           line-height: 19.36px;
+                          height: 40px;
                         "
                         class="pt-2 text-left"
                       >
-                        {{
-                          card.text.length >= 32
-                            ? card.text.substring(0, 32) + '..'
-                            : card.text
-                        }}
+                        {{ card.text }}
                       </div>
                       <div
                         class="trending__app"
@@ -1068,7 +1083,7 @@
                         :to="`/detail/${card.id}`"
                         style="
                           position: absolute;
-                          bottom: 110px;
+                          bottom: 120px;
                           left: 15px;
                           background-color: #fa2964;
                           border-radius: 5px;
@@ -1086,7 +1101,7 @@
                         v-if="card.featured == 'Y'"
                         style="
                           position: absolute;
-                          top: 50px;
+                          top: 60px;
                           right: 15px;
                           background-color: #f69400;
                           border-radius: 5px;
@@ -1103,22 +1118,22 @@
                           >Featured Jobs</span
                         >
                       </div>
-                                <div
-          style="
-            position: absolute;
-            top: 50px;
-            left: 15px;
-            background-color: #fff;
-            padding-left: 8px;
-            padding-right: 8px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            font-weight: 600;
-            font-size: 12px;
-          "
-        >
-          <span class="text-brown" style="">{{item.btn}}</span>
-        </div>
+                      <div
+                        style="
+                          position: absolute;
+                          top: 60px;
+                          left: 15px;
+                          background-color: #fff;
+                          padding-left: 8px;
+                          padding-right: 8px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                        "
+                      >
+                        <span class="text-brown" style="">{{ item.btn }}</span>
+                      </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
@@ -1231,7 +1246,7 @@
               :class="{ 'mt-n6 mb-14': !isSmall, 'my-4': isSmall }"
             >
               <v-btn
-              @click="goToViewAll(item.id)"
+                @click="goToViewAll(item.id)"
                 class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-8 px-16"
                 :class="{ 'btn-section-2': isSmall }"
               >
@@ -1403,627 +1418,650 @@
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="privilegedJob?.length > 0" 
-          style="font-size: 24px; font-style: normal; font-weight: 700" class="text-purple-accent-4 text-center mt-4">
-          Privileged Partner Featured Job
-        </h2>
-        <div v-if="privilegedJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
-        <div class="d-flex justify-center flex-wrap">
-          <template v-for="card in privilegedJob" :key="card.id">
-          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-            <v-card
-              class="mb-4 card-cont"
-              :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
-              :height="!isSmall ? 360 : 455"
-              width="90%"
-              elevation="1"
-              @click="toggle"
-            >
-
-              <div
-                v-if="isSmall"
-                style="
-                  font-size: 16px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 px-2"
-              >
-                {{
-                  card.text.length >= 28
-                    ? card.text.substring(0, 28) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                v-if="!isSmall"
-                style="
-                  font-size: 16px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 text-left"
-              >
-                {{
-                  card.text.length >= 32
-                    ? card.text.substring(0, 32) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                class="trending__app"
-                :class="{
-                  'card-image-cont-1': !isSmall,
-                  'card-image-cont-3': isSmall,
-                }"
-              >
-                <v-img
-                  :src="card.image"
-                  class="card-image"
-                  :height="isSmall ? 240 : 220"
-                  cover
-                  transition="fade-transition"
-                >
-                  <template #placeholder>
-                    <div class="skeleton skeleton-category ml-2" />
-                  </template>
-                </v-img>
-              </div>
-                            <div
-              style="
-                  position: absolute;
-                  top: 30px;
-                  right: 15px;
-                  background-color: #7C007C;
-                  padding-left: 6px;
-                  padding-right: 20px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  gap:10px;
-                  font-size: 12px;
-                "
-              class=" d-flex justify-start mt-8"
-            >
-              <span class="text-white">Privileged Featured Job</span>
-          </div>
-          
+          <h2
+            v-if="privilegedJob?.length > 0"
+            style="font-size: 24px; font-style: normal; font-weight: 700"
+            class="text-purple-accent-4 text-center mt-4"
+          >
+            Privileged Partner Featured Job
+          </h2>
           <div
-          style="
-            position: absolute;
-            top: 30px;
-            left: 15px;
-            background-color: #fff;
-            padding-left: 8px;
-            padding-right: 20px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            font-weight: 600;
-            font-size: 12px;
-          "
-          class=" d-flex justify-start mt-8"
-        >
-          <span class="text-brown" style="">{{card.subIndustry}}</span>
-        </div>
-              <v-btn
-                elevation="4"
-                :to="`/detail/${card.id}`"
-                style="
-                  position: absolute;
-                  bottom: 190px;
-                  left: 15px;
-                  background-color: #fa2964;
-                  border-radius: 5px;
-                  padding-left: 8px;
-                  padding-right: 6px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  font-weight: 600;
-                  font-size: 12px;
-                "
-              >
-                <span class="text-white" style="">View Job</span>
-              </v-btn>
-
-              <div
-                class="card-description px-2 d-flex flex-column mt-6"
-                style="position: relative; gap: 10px"
-              >
-                <div
-                  class="card-address-info text-left mt-n4 mb-n2"
-                  style="font-weight: 400"
+            v-if="privilegedJob?.length > 0"
+            class="line-divider mt-1 mb-6 mx-auto"
+          />
+          <div class="d-flex justify-center flex-wrap">
+            <template v-for="card in privilegedJob" :key="card.id">
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="mb-4 card-cont"
+                  :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
+                  :height="!isSmall ? 360 : 475"
+                  width="90%"
+                  elevation="1"
+                  @click="toggle"
                 >
-                  <p>
-                    <span class="text-red">{{ card.distanceText }}</span
-                    ><span class="text-muted"> away</span>
-                  </p>
-                </div>
-                <div class="card-address d-flex align-center">
-                  <div style="width: 25%">
-                    <v-img :src="card.locationImg" height="35"
-                      ><template #placeholder>
-                        <div class="skeleton" /> </template
-                    ></v-img>
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                      height: 40px;
+                    "
+                    class="pt-2 px-2"
+                  >
+                    {{ card.text }}
                   </div>
-                  <div style="width: 75%" class="card-address-info text-left">
-                    <h4 class="mt-4" style="font-weight: 600">
-                      {{
-                        card.place.length >= 32
-                          ? card.place.substring(0, 32) + '..'
-                          : card.place
-                      }}
-                    </h4>
+                  <div
+                    v-if="!isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 text-left"
+                  >
+                    {{
+                      card.text.length >= 32
+                        ? card.text.substring(0, 32) + '..'
+                        : card.text
+                    }}
+                  </div>
+                  <div
+                    class="trending__app"
+                    :class="{
+                      'card-image-cont-1': !isSmall,
+                      'card-image-cont-3': isSmall,
+                    }"
+                  >
+                    <v-img
+                      :src="card.image"
+                      class="card-image"
+                      :height="isSmall ? 240 : 220"
+                      cover
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton skeleton-category ml-2" />
+                      </template>
+                    </v-img>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      right: 15px;
+                      background-color: #7c007c;
+                      padding-left: 6px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      gap: 10px;
+                      font-size: 12px;
+                    "
+                    class="d-flex justify-start mt-8"
+                  >
+                    <span class="text-white">Privileged Featured Job</span>
+                  </div>
 
-                    <div class="mt-2 w-75" style="font-weight: 400">
-                      <p>{{ card.address }}</p>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      left: 15px;
+                      background-color: #fff;
+                      padding-left: 8px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                    class="d-flex justify-start mt-8"
+                  >
+                    <span class="text-brown" style="">{{
+                      card.subIndustry
+                    }}</span>
+                  </div>
+                  <v-btn
+                    elevation="4"
+                    :to="`/detail/${card.id}`"
+                    style="
+                      position: absolute;
+                      bottom: 190px;
+                      left: 15px;
+                      background-color: #fa2964;
+                      border-radius: 5px;
+                      padding-left: 8px;
+                      padding-right: 6px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                  >
+                    <span class="text-white" style="">View Job</span>
+                  </v-btn>
+
+                  <div
+                    class="card-description px-2 d-flex flex-column mt-6"
+                    style="position: relative; gap: 10px"
+                  >
+                    <div
+                      class="card-address-info text-left mt-n4 mb-n2"
+                      style="font-weight: 400"
+                    >
+                      <p>
+                        <span class="text-red">{{ card.distanceText }}</span
+                        ><span class="text-muted"> away</span>
+                      </p>
                     </div>
-                    <a class="text-decoration-none mt-3" :href="card.website">{{card.website}}</a>
+                    <div class="card-address d-flex align-center">
+                      <div style="width: 25%">
+                        <v-img :src="card.locationImg" height="35"
+                          ><template #placeholder>
+                            <div class="skeleton" /> </template
+                        ></v-img>
+                      </div>
+                      <div
+                        style="width: 75%"
+                        class="card-address-info text-left"
+                      >
+                        <h4 class="mt-4" style="font-weight: 600">
+                          {{
+                            card.place.length >= 32
+                              ? card.place.substring(0, 32) + '..'
+                              : card.place
+                          }}
+                        </h4>
+
+                        <div class="mt-2 w-75" style="font-weight: 400">
+                          <p>{{ card.address }}</p>
+                        </div>
+                        <a
+                          class="text-decoration-none mt-3"
+                          :href="card.website"
+                          >{{ card.website }}</a
+                        >
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div
-              style="
-                  gap:10px
-                "
-              class="w-100 px-2 d-flex justify-center mt-4 mb-4"
-            >
-              <v-btn
-              v-if="card.google"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                color="white"
-                style="background: transparent"
-                icon
-                :href="card.google"
-              >
-                <v-icon :size="!isSmall ? '25' : '30'">
-                  <v-img
-                    src="@/assets/google.png"
-                    alt="Google Logo"
-                  />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.instagram"
-              :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #fc2145"
-                color="white"
-                icon
-                :href="card.instagram"
-              >
-              <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-instagram" />
-                </v-icon>
-              </v-btn>
-  
-              <v-btn
-              v-if="card.facebook"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #4267b2"
-                color="white"
-                icon
-                :href="card.facebook"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-facebook-f" />
-                </v-icon>
-              </v-btn>
-  
-              <v-btn
-              v-if="card.linkedin"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #0072b1"
-                color="white"
-                icon
-                :href="card.linkedin"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-linkedin-in" />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.tiktok"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: black"
-                color="white"
-                icon
-                :href="card.tiktok"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-tiktok" />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.youtube"
-              :size="!isSmall ? '35' : '40'"
-              variant="text"
-              style="background: #cd201f"
-              color="white"
-              icon
-              :href="card.youtube"
-            >
-            <v-icon :size="!isSmall ? '21' : '19'">
-                <i class="fa-brands fa-youtube" />
-              </v-icon>
-            </v-btn>
-              <v-btn
-              v-if="card.twitter"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #1c96e8"
-                color="white"
-                icon="mdi-twitter"
-                :href="card.twitter"
-              >
-              <v-icon :size="!isSmall ? '21' : '19'">
-                <i class="fa-brands fa-twitter" />
-              </v-icon>
-            </v-btn>
-            </div>
+                  <div
+                    style="gap: 10px"
+                    class="w-100 px-2 d-flex justify-center mt-4 mb-4"
+                  >
+                    <v-btn
+                      v-if="card.google"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      color="white"
+                      style="background: transparent"
+                      icon
+                      :href="card.google"
+                    >
+                      <v-icon :size="!isSmall ? '25' : '30'">
+                        <v-img src="@/assets/google.png" alt="Google Logo" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.instagram"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #fc2145"
+                      color="white"
+                      icon
+                      :href="card.instagram"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-instagram" />
+                      </v-icon>
+                    </v-btn>
 
-              <div class="card-btn-container-6 d-flex justify-space-between">
-                <v-btn
-                  color="black"
-                  class="card-btn"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
-                  icon="mdi-share-variant-outline"
-                >
-                  <v-icon size="20" color="red">
-                    mdi-share-variant-outline
-                  </v-icon></v-btn
-                >
-                <v-btn
-                  class="card-btn"
-                  color="black"
-                  icon="mdi-heart-outline"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
-                >
-                  <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
-                </v-btn>
-              </div>
-            </v-card>
-          </v-lazy>
-        </template>
-        </div>
+                    <v-btn
+                      v-if="card.facebook"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #4267b2"
+                      color="white"
+                      icon
+                      :href="card.facebook"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-facebook-f" />
+                      </v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="card.linkedin"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #0072b1"
+                      color="white"
+                      icon
+                      :href="card.linkedin"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-linkedin-in" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.tiktok"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: black"
+                      color="white"
+                      icon
+                      :href="card.tiktok"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-tiktok" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.youtube"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #cd201f"
+                      color="white"
+                      icon
+                      :href="card.youtube"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '19'">
+                        <i class="fa-brands fa-youtube" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.twitter"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #1c96e8"
+                      color="white"
+                      icon="mdi-twitter"
+                      :href="card.twitter"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '19'">
+                        <i class="fa-brands fa-twitter" />
+                      </v-icon>
+                    </v-btn>
+                  </div>
+
+                  <div
+                    class="card-btn-container-6 d-flex justify-space-between"
+                  >
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="20" color="red">
+                        mdi-share-variant-outline
+                      </v-icon></v-btn
+                    >
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                    >
+                      <v-icon size="20" color="red"> mdi-heart-outline </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </template>
+          </div>
         </div>
         <div
           v-if="!isCardLoading && platinumJob"
           style="width: 100% !important"
           class="px-2"
         >
-        <h2 v-if="platinumJob?.length > 0" style="color: #B2641D; font-size: 24px; font-style: normal; font-weight: 700" class=" text-center mt-4">
-          Platinum Partner Featured Job
-        </h2>
-        <div v-if="platinumJob?.length > 0" class="line-divider mt-1 mb-6 mx-auto" />
-        <div class="d-flex justify-center flex-wrap">
-          <template v-for="card in platinumJob" :key="card.id">
-          <v-lazy :options="{ threshold: 0.5 }" min-height="100">
-            <v-card
-              class="mb-4 card-cont card-platinum"
-              :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
-              :height="!isSmall ? 360 : 570"
-              elevation="1"
-              @click="toggle"
-            >
-              <div
-                v-if="isSmall"
-                style="
-                  font-size: 16px;
-                  font-weight: 700;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 px-2"
-              >
-                {{
-                  card.text.length >= 28
-                    ? card.text.substring(0, 28) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                v-if="!isSmall"
-                style="
-                  font-size: 16px;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  line-height: 19.36px;
-                "
-                class="pt-2 text-left"
-              >
-                {{
-                  card.text.length >= 32
-                    ? card.text.substring(0, 32) + '..'
-                    : card.text
-                }}
-              </div>
-              <div
-                class="trending__app"
-                :class="{
-                  'card-image-cont-1': !isSmall,
-                  'card-image-cont-plat-mobile': isSmall,
-                }"
-              >
-                <v-img
-                  :src="card.image"
-                  class="card-image"
-                  :height="isSmall ? 240 : 220"
-                  cover
-                  transition="fade-transition"
+          <h2
+            v-if="platinumJob?.length > 0"
+            style="
+              color: #b2641d;
+              font-size: 24px;
+              font-style: normal;
+              font-weight: 700;
+            "
+            class="text-center mt-4"
+          >
+            Platinum Partner Featured Job
+          </h2>
+          <div
+            v-if="platinumJob?.length > 0"
+            class="line-divider mt-1 mb-6 mx-auto"
+          />
+          <div class="d-flex justify-center flex-wrap">
+            <template v-for="card in platinumJob" :key="card.id">
+              <v-lazy :options="{ threshold: 0.5 }" min-height="100">
+                <v-card
+                  class="mb-4 card-cont card-platinum"
+                  :class="{ 'mx-3 text-center': !isSmall, 'mx-auto': isSmall }"
+                  :height="!isSmall ? 360 : 590"
+                  elevation="1"
+                  @click="toggle"
                 >
-                  <template #placeholder>
-                    <div class="skeleton skeleton-category ml-2" />
-                  </template>
-                </v-img>
-              </div>
-
-              <div
-              style="
-                  position: absolute;
-                  top: 30px;
-                  right: 15px;
-                  background-color: #E2FF02;
-                  padding-left: 15px;
-                  padding-right: 15px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  gap:10px;
-                  font-size: 12px;
-                  font-weight: 600;
-                "
-              class=" d-flex justify-start mt-8"
-            >
-              <span >Platinum Featured Job</span>
-          </div>
-            <div
-              style="
-                position: absolute;
-                bottom: 350px;
-                left: 15px;
-                background-color: #fff;
-                padding-left: 8px;
-                padding-right: 20px;
-                padding-top: 4px;
-                padding-bottom: 4px;
-                font-weight: 600;
-                font-size: 12px;
-              "
-            >
-              <span class="text-brown" style="">{{card.subIndustry}}</span>
-            </div>
-
-              <div
-                class="card-description px-2 d-flex flex-column mt-6"
-                style="position: relative; gap: 10px"
-              >
-                <div
-                  class="card-address-info text-left mt-n4 mb-n2"
-                  style="font-weight: 400"
-                >
-                  <p>
-                    <span class="text-red">{{ card.distanceText }}</span
-                    ><span class="text-muted"> away</span>
-                  </p>
-                </div>
-                <div class="card-address mt-4">
-                  <div style="width: 100%">
-                    <v-img :src="card.locationImg" height="50"
-                      ><template #placeholder>
-                        <div class="skeleton" /> </template
-                    ></v-img>
+                  <div
+                    v-if="isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 700;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                      height: 40px;
+                    "
+                    class="pt-2 px-2"
+                  >
+                    {{ card.text }}
                   </div>
-                  <div style="width: 100%" class="card-address-info text-center">
-                    <h2 class="mt-4" style="font-weight: 600">
-                      {{
-                        card.place.length >= 32
-                          ? card.place.substring(0, 32) + '..'
-                          : card.place
-                      }}
-                    </h2>
+                  <div
+                    v-if="!isSmall"
+                    style="
+                      font-size: 16px;
+                      font-weight: 600;
+                      margin-bottom: 10px;
+                      line-height: 19.36px;
+                    "
+                    class="pt-2 text-left"
+                  >
+                    {{
+                      card.text.length >= 32
+                        ? card.text.substring(0, 32) + '..'
+                        : card.text
+                    }}
+                  </div>
+                  <div
+                    class="trending__app"
+                    :class="{
+                      'card-image-cont-1': !isSmall,
+                      'card-image-cont-plat-mobile': isSmall,
+                    }"
+                  >
+                    <v-img
+                      :src="card.image"
+                      class="card-image"
+                      :height="isSmall ? 240 : 220"
+                      cover
+                      transition="fade-transition"
+                    >
+                      <template #placeholder>
+                        <div class="skeleton skeleton-category ml-2" />
+                      </template>
+                    </v-img>
+                  </div>
 
-                    <div class="mt-2" style="font-weight: 400">
-                      <p>{{ card.address }}</p>
+                  <div
+                    style="
+                      position: absolute;
+                      top: 30px;
+                      right: 15px;
+                      background-color: #e2ff02;
+                      padding-left: 15px;
+                      padding-right: 15px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      gap: 10px;
+                      font-size: 12px;
+                      font-weight: 600;
+                    "
+                    class="d-flex justify-start mt-8"
+                  >
+                    <span>Platinum Featured Job</span>
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      bottom: 350px;
+                      left: 15px;
+                      background-color: #fff;
+                      padding-left: 8px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                      font-weight: 600;
+                      font-size: 12px;
+                    "
+                  >
+                    <span class="text-brown" style="">{{
+                      card.subIndustry
+                    }}</span>
+                  </div>
+
+                  <div
+                    class="card-description px-2 d-flex flex-column mt-6"
+                    style="position: relative; gap: 10px"
+                  >
+                    <div
+                      class="card-address-info text-left mt-n4 mb-n2"
+                      style="font-weight: 400"
+                    >
+                      <p>
+                        <span class="text-red">{{ card.distanceText }}</span
+                        ><span class="text-muted"> away</span>
+                      </p>
+                    </div>
+                    <div class="card-address mt-4">
+                      <div style="width: 100%">
+                        <v-img :src="card.locationImg" height="50"
+                          ><template #placeholder>
+                            <div class="skeleton" /> </template
+                        ></v-img>
+                      </div>
+                      <div
+                        style="width: 100%"
+                        class="card-address-info text-center"
+                      >
+                        <h2 class="mt-4" style="font-weight: 600">
+                          {{
+                            card.place.length >= 32
+                              ? card.place.substring(0, 32) + '..'
+                              : card.place
+                          }}
+                        </h2>
+
+                        <div class="mt-2" style="font-weight: 400">
+                          <p>{{ card.address }}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div
-              style="
-                  gap:10px
-                "
-              class="w-100 px-2 d-flex justify-center my-6"
-            >
-              <v-btn
-              v-if="card.google"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                color="white"
-                style="background: transparent"
-                icon
-                :href="card.google"
-              >
-                <v-icon :size="!isSmall ? '25' : '30'">
-                  <v-img
-                    src="@/assets/google.png"
-                    alt="Google Logo"
-                  />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.instagram"
-              :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #fc2145"
-                color="white"
-                icon
-                :href="card.instagram"
-              >
-              <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-instagram" />
-                </v-icon>
-              </v-btn>
+                  <div
+                    style="gap: 10px"
+                    class="w-100 px-2 d-flex justify-center my-6"
+                  >
+                    <v-btn
+                      v-if="card.google"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      color="white"
+                      style="background: transparent"
+                      icon
+                      :href="card.google"
+                    >
+                      <v-icon :size="!isSmall ? '25' : '30'">
+                        <v-img src="@/assets/google.png" alt="Google Logo" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.instagram"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #fc2145"
+                      color="white"
+                      icon
+                      :href="card.instagram"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-instagram" />
+                      </v-icon>
+                    </v-btn>
 
-              <v-btn
-              v-if="card.facebook"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #4267b2"
-                color="white"
-                icon
-                :href="card.facebook"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-facebook-f" />
-                </v-icon>
-              </v-btn>
-  
-              <v-btn
-              v-if="card.linkedin"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #0072b1"
-                color="white"
-                icon
-                :href="card.linkedin"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-linkedin-in" />
-                </v-icon>
-              </v-btn>
-              <v-btn
-              v-if="card.tiktok"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: black"
-                color="white"
-                icon
-                :href="card.tiktok"
-              >
-                <v-icon :size="!isSmall ? '20' : '18'">
-                  <i class="fa-brands fa-tiktok" />
-                </v-icon>
-              </v-btn>
+                    <v-btn
+                      v-if="card.facebook"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #4267b2"
+                      color="white"
+                      icon
+                      :href="card.facebook"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-facebook-f" />
+                      </v-icon>
+                    </v-btn>
 
-              <!-- v-if="itemData.youtube != null"
+                    <v-btn
+                      v-if="card.linkedin"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #0072b1"
+                      color="white"
+                      icon
+                      :href="card.linkedin"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-linkedin-in" />
+                      </v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-if="card.tiktok"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: black"
+                      color="white"
+                      icon
+                      :href="card.tiktok"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-tiktok" />
+                      </v-icon>
+                    </v-btn>
+
+                    <!-- v-if="itemData.youtube != null"
               :href="itemData.youtube" -->
-              <v-btn
-              v-if="card.youtube"
-              :size="!isSmall ? '35' : '40'"
-              variant="text"
-              style="background: #cd201f"
-              color="white"
-              icon
-              :href="card.youtube"
-            >
-            <v-icon :size="!isSmall ? '20' : '18'">
-                <i class="fa-brands fa-youtube" />
-              </v-icon>
-            </v-btn>
+                    <v-btn
+                      v-if="card.youtube"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #cd201f"
+                      color="white"
+                      icon
+                      :href="card.youtube"
+                    >
+                      <v-icon :size="!isSmall ? '20' : '18'">
+                        <i class="fa-brands fa-youtube" />
+                      </v-icon>
+                    </v-btn>
 
-              <v-btn
-              v-if="card.twitter"
-                :size="!isSmall ? '35' : '40'"
-                variant="text"
-                style="background: #1c96e8"
-                color="white"
-                icon="mdi-twitter"
-                :href="card.twitter"
-              >
-              <v-icon :size="!isSmall ? '21' : '19'">
-                <i class="fa-brands fa-twitter" />
-              </v-icon>
-            </v-btn>
-            </div>
-                <div class="w-100 my-4 d-flex justify-center">
-                    <a class="text-decoration-none text-center" :href="card.website">{{card.website}}</a>
+                    <v-btn
+                      v-if="card.twitter"
+                      :size="!isSmall ? '35' : '40'"
+                      variant="text"
+                      style="background: #1c96e8"
+                      color="white"
+                      icon="mdi-twitter"
+                      :href="card.twitter"
+                    >
+                      <v-icon :size="!isSmall ? '21' : '19'">
+                        <i class="fa-brands fa-twitter" />
+                      </v-icon>
+                    </v-btn>
                   </div>
-              <div class="d-flex mt-2 justify-center">
-                <v-btn
-                elevation="4"
-                :to="`/detail/${card.id}`"
-                style="
-                  
-                  background-color: #fa2964;
-                  border-radius: 5px;
-                  padding-left: 8px;
-                  padding-right: 6px;
-                  padding-top: 4px;
-                  padding-bottom: 4px;
-                  font-weight: 600;
-                  font-size: 12px;
-                "
-              >
-                <span class="text-white" style="">View Job</span>
-              </v-btn>
-            </div>
-              <div class="card-btn-container-plat-mobile d-flex justify-space-between">
-                <v-btn
-                  color="black"
-                  class="card-btn"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
-                  icon="mdi-share-variant-outline"
-                >
-                  <v-icon size="20" color="red">
-                    mdi-share-variant-outline
-                  </v-icon>
-                            <v-menu activator="parent">
-            <v-list>
-              <v-list-item @click="console.log('share')">
-                <v-list-item-title
-                  ><v-icon class="mr-4" color="black" size="18">
-                    mdi-email-outline </v-icon
-                  >Email</v-list-item-title
-                >
-              </v-list-item>
-              <v-list-item @click="console.log('share')">
-                <v-list-item-title
-                  ><v-icon class="mr-4" size="18">
-                    <i class="fa-brands fa-facebook-f" /> </v-icon
-                  >Facebook</v-list-item-title
-                >
-              </v-list-item>
-              <v-list-item @click="console.log('share')">
-                <v-list-item-title
-                  ><v-icon class="mr-4" color="black" size="18">
-                    mdi-twitter </v-icon
-                  >Twitter</v-list-item-title
-                >
-              </v-list-item>
-              <v-list-item @click="console.log('share')">
-                <v-list-item-title
-                  ><v-icon class="mr-4" size="18">
-                    <i class="fa-brands fa-linkedin-in" /> </v-icon
-                  >Linkedin</v-list-item-title
-                >
-              </v-list-item>
-            </v-list>
-          </v-menu>
-                  </v-btn
-                >
-                <v-btn
-                  class="card-btn"
-                  color="black"
-                  icon="mdi-heart-outline"
-                  :width="isSmall ? 40 : 32"
-                  :height="isSmall ? 40 : 32"
-                  @click="card.isFav = !card.isFav"
-                >
-                  <v-icon size="20" color="red"> {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline'}} </v-icon>
-                </v-btn>
-              </div>
-            </v-card>
-          </v-lazy>
-          </template>
+                  <div class="w-100 my-4 d-flex justify-center">
+                    <a
+                      class="text-decoration-none text-center"
+                      :href="card.website"
+                      >{{ card.website }}</a
+                    >
+                  </div>
+                  <div class="d-flex mt-2 justify-center">
+                    <v-btn
+                      elevation="4"
+                      :to="`/detail/${card.id}`"
+                      style="
+                        background-color: #fa2964;
+                        border-radius: 5px;
+                        padding-left: 8px;
+                        padding-right: 6px;
+                        padding-top: 4px;
+                        padding-bottom: 4px;
+                        font-weight: 600;
+                        font-size: 12px;
+                      "
+                    >
+                      <span class="text-white" style="">View Job</span>
+                    </v-btn>
+                  </div>
+                  <div
+                    class="card-btn-container-plat-mobile d-flex justify-space-between"
+                  >
+                    <v-btn
+                      color="black"
+                      class="card-btn"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                      icon="mdi-share-variant-outline"
+                    >
+                      <v-icon size="20" color="red">
+                        mdi-share-variant-outline
+                      </v-icon>
+                      <v-menu activator="parent">
+                        <v-list>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-email-outline </v-icon
+                              >Email</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-facebook-f" /> </v-icon
+                              >Facebook</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" color="black" size="18">
+                                mdi-twitter </v-icon
+                              >Twitter</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="console.log('share')">
+                            <v-list-item-title
+                              ><v-icon class="mr-4" size="18">
+                                <i class="fa-brands fa-linkedin-in" /> </v-icon
+                              >Linkedin</v-list-item-title
+                            >
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-btn>
+                    <v-btn
+                      class="card-btn"
+                      color="black"
+                      icon="mdi-heart-outline"
+                      :width="isSmall ? 40 : 32"
+                      :height="isSmall ? 40 : 32"
+                      @click="card.isFav = !card.isFav"
+                    >
+                      <v-icon size="20" color="red">
+                        {{ card.isFav ? 'mdi-heart' : 'mdi-heart-outline' }}
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-lazy>
+            </template>
           </div>
         </div>
         <template v-if="isCardLoading">
@@ -2061,7 +2099,7 @@
                 {{ item.title }}
               </h2>
               <h2
-              style="font-size: 24px; font-style: normal; font-weight: 700"
+                style="font-size: 24px; font-style: normal; font-weight: 700"
                 class="text-blue-darken-4 text-center"
                 v-if="isSmall"
               >
@@ -2121,7 +2159,7 @@
                     <v-card
                       class="mt-4 card-cont"
                       :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                      :height="!isSmall ? 300 : 320"
+                      :height="!isSmall ? 300 : 340"
                       :width="!isSmall ? 280 : 290"
                       elevation="0"
                       @click="toggle"
@@ -2133,14 +2171,11 @@
                           font-weight: 600;
                           margin-bottom: 10px;
                           line-height: 19.36px;
+                          height: 40px;
                         "
                         class="pt-2"
                       >
-                        {{
-                          card.text.length >= 28
-                            ? card.text.substring(0, 28) + '..'
-                            : card.text
-                        }}
+                        {{ card.text }}
                       </div>
                       <div
                         v-if="!isSmall"
@@ -2226,7 +2261,7 @@
                         v-if="card.featured == 'Y'"
                         style="
                           position: absolute;
-                          top: 50px;
+                          top: 60px;
                           right: 15px;
                           background-color: #f79303;
                           border-radius: 5px;
@@ -2243,21 +2278,21 @@
                         >
                       </div>
                       <div
-                      style="
-                        position: absolute;
-                        top: 50px;
-                        left: 15px;
-                        background-color: #fff;
-                        padding-left: 8px;
-                        padding-right: 8px;
-                        padding-top: 4px;
-                        padding-bottom: 4px;
-                        font-weight: 600;
-                        font-size: 12px;
-                      "
-                    >
-                      <span class="text-brown" style="">{{item.btn}}</span>
-                    </div>
+                        style="
+                          position: absolute;
+                          top: 60px;
+                          left: 15px;
+                          background-color: #fff;
+                          padding-left: 8px;
+                          padding-right: 8px;
+                          padding-top: 4px;
+                          padding-bottom: 4px;
+                          font-weight: 600;
+                          font-size: 12px;
+                        "
+                      >
+                        <span class="text-brown" style="">{{ item.btn }}</span>
+                      </div>
 
                       <div
                         class="card-description d-flex flex-column mt-6"
@@ -2369,7 +2404,7 @@
               :class="{ 'mt-n6 mb-14': !isSmall, 'mb-4': isSmall }"
             >
               <v-btn
-              @click="goToViewAll(item.id)"
+                @click="goToViewAll(item.id)"
                 class="btn-section btn-primary v-btn v-btn--has-bg theme--light elevation-0 text-white d-flex align-center py-4 px-10"
                 :class="{ 'btn-section-2': isSmall }"
               >
@@ -2421,7 +2456,11 @@
                       >{{ skillSlug2.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected == '---Select Country---' ? '-' : itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{
+                      itemSelected == '---Select Country---'
+                        ? '-'
+                        : itemSelected
+                    }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -2543,7 +2582,11 @@
                       >{{ skillSlug2.name }} Job</span
                     >
                     in
-                    <span class="text-blue-darken-4">{{ itemSelected == '---Select Country---' ? '-' : itemSelected }}</span>
+                    <span class="text-blue-darken-4">{{
+                      itemSelected == '---Select Country---'
+                        ? '-'
+                        : itemSelected
+                    }}</span>
                   </p>
                 </div>
                 <v-btn
@@ -2569,7 +2612,7 @@
         </v-container>
       </template>
       <v-dialog v-model="isLogin" persistent width="auto">
-        <v-card :width="isSmall ? 300 :450">
+        <v-card :width="isSmall ? 300 : 450">
           <v-card-text class="text-center">
             <h2 class="my-4">Please Sign up to View</h2>
             <v-btn class="mb-4" @click="isLogin = false"> OK </v-btn>
@@ -2676,7 +2719,7 @@ export default {
       //    };
       //  });
       //}
-      return this.specificJobs.filter(j => j.list.length > 0);
+      return this.specificJobs.filter((j) => j.list.length > 0);
     },
     filteredItemsDesktop() {
       // console.log(this.activeTag);
@@ -2693,7 +2736,7 @@ export default {
       //    };
       //  });
       //}
-      return this.specificJobs.filter(j => j.list.length > 0);
+      return this.specificJobs.filter((j) => j.list.length > 0);
     },
     filteredInternational() {
       if (!this.selectedInter || this.selectedInter == undefined) {
@@ -2730,10 +2773,10 @@ export default {
     );
   },
   beforeUnmount() {
-   // this.setItemSelected('---Select Country---');
-   // this.setItemSelectedComplete(null);
-   // this.setItemSelected2('---Select City---');
-   // this.setItemSelected2Complete(null);
+    // this.setItemSelected('---Select Country---');
+    // this.setItemSelectedComplete(null);
+    // this.setItemSelected2('---Select City---');
+    // this.setItemSelected2Complete(null);
     app.config.globalProperties.$eventBus.$off(
       'filterSpecificJobs',
       this.filterSpecificJobs
@@ -2768,11 +2811,11 @@ export default {
       'setItemSelected2Complete',
     ]),
     goToViewAll(id) {
-      const userName = localStorage.getItem("userName")
+      const userName = localStorage.getItem('userName');
       if (userName == 'null' || userName == null) {
         this.isLogin = true;
-      } else if(userName && (userName != null || userName != 'null')) {
-        this.$router.push(`/view-all/${id}`)
+      } else if (userName && (userName != null || userName != 'null')) {
+        this.$router.push(`/view-all/${id}`);
       }
     },
     goToRecognised(skillSlug) {
@@ -2839,24 +2882,20 @@ export default {
           this.countryId = data
             .filter((d) => d.country_name == this.itemSelected)
             .map((country) => country.country_id)[0];
-            const countryIdObj = JSON.parse(localStorage.getItem('itemSelectedObj'))
-            //console.log(this.itemSelectedComplete);
-            //console.log(countryIdObj);
+          const countryIdObj = JSON.parse(
+            localStorage.getItem('itemSelectedObj')
+          );
+          //console.log(this.itemSelectedComplete);
+          //console.log(countryIdObj);
           setTimeout(() => {
             this.getGroups(this.skillSlugId, countryIdObj?.id);
             this.getSpecificJobs(this.skillSlugId, countryIdObj?.id);
-            this.getPlatinumJob(
-              this.skillSlugId,
-              countryIdObj?.id
-            );
-            this.getPrivilegedJob(
-              this.skillSlugId,
-              countryIdObj?.id
-            );
+            this.getPlatinumJob(this.skillSlugId, countryIdObj?.id);
+            this.getPrivilegedJob(this.skillSlugId, countryIdObj?.id);
             this.getSkillBySlug(countryIdObj?.id);
             this.getInternationalSkills2(countryIdObj?.id);
             // console.log(this.countryId);
-          }, 200)
+          }, 200);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -2876,7 +2915,7 @@ export default {
           const data = response.data.data;
           // console.log(data);
 
-          this.skillSlugId = data.skills_id
+          this.skillSlugId = data.skills_id;
           this.skillSlug = {
             ...data,
             image: this.$fileURL + data.image || '',
@@ -2950,45 +2989,33 @@ export default {
           //  this.trendingBtn = [];
           //  this.skillSlug = {};
           //} else {
-            this.skillSlug2 = {
-              ...data,
-              image: this.$fileURL + data?.image || '',
-              mainImage: this.$fileURL + data?.main_image || '',
-              regulator: data?.partner_name || '',
-              name: data?.skills_name || '',
-              registrable: data?.registrable || 'N',
-              countryRegistrable: data?.country_registrable || 'N',
-            };
-            localStorage.setItem('skill_name', this.skillSlug.name);
-            localStorage.setItem('skill_id', this.skillSlugId);
-            localStorage.setItem('skill_image', this.skillSlug.image);
-            this.getSpecificJobs(
-              this.skillSlugId,
-              this.itemSelectedComplete.id
-            );
-            this.getGroups(
-              this.skillSlugId,
-              this.itemSelectedComplete.id
-            );
-            this.getPlatinumJob(
-              this.skillSlugId,
-              this.itemSelectedComplete.id
-            );
-            this.getPrivilegedJob(
-              this.skillSlugId,
-              this.itemSelectedComplete.id
-            );
-            this.getInternationalSkills2(this.itemSelectedComplete.id);
-            //this.getGroups2(
-            //  this.skillSlugId,
-            //  this.itemSelectedComplete.id,
-            //  ''
-            //);
-            //this.getSpecificJobs2(
-            //  this.skillSlugId,
-            //  this.itemSelectedComplete.id,
-            //  ''
-            //);
+          this.skillSlug2 = {
+            ...data,
+            image: this.$fileURL + data?.image || '',
+            mainImage: this.$fileURL + data?.main_image || '',
+            regulator: data?.partner_name || '',
+            name: data?.skills_name || '',
+            registrable: data?.registrable || 'N',
+            countryRegistrable: data?.country_registrable || 'N',
+          };
+          localStorage.setItem('skill_name', this.skillSlug.name);
+          localStorage.setItem('skill_id', this.skillSlugId);
+          localStorage.setItem('skill_image', this.skillSlug.image);
+          this.getSpecificJobs(this.skillSlugId, this.itemSelectedComplete.id);
+          this.getGroups(this.skillSlugId, this.itemSelectedComplete.id);
+          this.getPlatinumJob(this.skillSlugId, this.itemSelectedComplete.id);
+          this.getPrivilegedJob(this.skillSlugId, this.itemSelectedComplete.id);
+          this.getInternationalSkills2(this.itemSelectedComplete.id);
+          //this.getGroups2(
+          //  this.skillSlugId,
+          //  this.itemSelectedComplete.id,
+          //  ''
+          //);
+          //this.getSpecificJobs2(
+          //  this.skillSlugId,
+          //  this.itemSelectedComplete.id,
+          //  ''
+          //);
           //}
           // console.log(this.skillSlug);
         })
@@ -3011,11 +3038,11 @@ export default {
       // ];
       axios
         .get(
-          //countryId ? 
+          //countryId ?
           `/job-positions/${skillId}/${countryId}`
           //:
           //`/job-positions/${skillId}`
-          )
+        )
         .then((response) => {
           const data = response.data.data;
           // console.log(data);
@@ -3039,8 +3066,8 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          //countryId ? 
-          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}/featured` 
+          //countryId ?
+          `/sub-industries-jobs/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}/featured`
           //:
           //`/sub-industries-jobs/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
@@ -3067,7 +3094,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              //.filter(i => i.featured == 'Y')
+                //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -3131,8 +3158,8 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-          //countryId ? 
-          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          //countryId ?
+          `/jobs/get-jobs-by-type/privileged/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
           //:
           //`/jobs/get-jobs-by-type/privileged/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
@@ -3186,7 +3213,7 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-         //console.log(this.privilegedJob)
+          //console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3252,8 +3279,8 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-          
-         //console.log(this.privilegedJob)
+
+          //console.log(this.privilegedJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3267,8 +3294,8 @@ export default {
       this.isCardLoading = true;
       axios
         .get(
-        //countryId ? 
-          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}` 
+          //countryId ?
+          `/jobs/get-jobs-by-type/platinum/${skillId}/${countryId}/-1/-1/${this.latitude}/${this.longitude}`
           //:
           //`/jobs/get-jobs-by-type/platinum/${skillId}/-1/-1/-1/${this.latitude}/${this.longitude}`
         )
@@ -3322,7 +3349,7 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-         //console.log(this.platinumJob)
+          //console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3388,8 +3415,8 @@ export default {
               youtube: skill.youtube || '',
             };
           });
-          
-        // console.log(this.platinumJob)
+
+          // console.log(this.platinumJob)
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -3464,7 +3491,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              //.filter(i => i.featured == 'Y')
+                //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -3529,9 +3556,7 @@ export default {
       axios
         .get(
           positionId == ''
-            ? `/sub-industries-jobs/${this.skillSlugId}/${
-                this.countryId
-              }/-1/${
+            ? `/sub-industries-jobs/${this.skillSlugId}/${this.countryId}/-1/${
                 this.itemSelected2Complete
                   ? this.itemSelected2Complete.id
                   : '-1'
@@ -3567,7 +3592,7 @@ export default {
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
               slug: `${item.sub_industry_name.split(' ')}` || '#',
               list: item.jobs
-              //.filter(i => i.featured == 'Y')
+                //.filter(i => i.featured == 'Y')
                 .sort((a, b) => a.distance - b.distance)
                 .map((skill) => {
                   return {
@@ -3630,12 +3655,10 @@ export default {
     getInternationalSkills2(countryId) {
       this.isCardLoading = true;
       axios
-        .get(
-          `/job-international/skills/${this.skillSlugId}/${countryId}`
-        )
+        .get(`/job-international/skills/${this.skillSlugId}/${countryId}`)
         .then((response) => {
           const data = response.data.data;
-         // console.log('international ', data);
+          // console.log('international ', data);
 
           //.filter((d) => d.country_id == this.itemSelectedComplete.id)
           const allJobs = data.reduce((accumulator, currentValue) => {
@@ -3954,7 +3977,7 @@ export default {
 .card-btn-container-1 {
   position: absolute;
   gap: 10px;
-  bottom: 90px;
+  bottom: 100px;
   right: 30px;
   z-index: 100;
 }
