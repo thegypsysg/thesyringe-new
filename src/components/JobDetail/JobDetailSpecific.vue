@@ -650,7 +650,7 @@
                 <v-card
                   class="my-4 card-cont pa-2"
                   :class="{ 'mx-3 text-center': !isSmall, 'mx-1': isSmall }"
-                  :height="!isSmall ? 510 : 320"
+                  :height="!isSmall ? 530 : 320"
                   :width="!isSmall ? 300 : 270"
                   elevation="1"
                   @click="toggle"
@@ -678,6 +678,7 @@
                       font-weight: 700;
                       margin-bottom: 10px;
                       line-height: 19.36px;
+                      height: 40px;
                     "
                     class="pt-2 text-left"
                   >
