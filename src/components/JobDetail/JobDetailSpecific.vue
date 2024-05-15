@@ -988,9 +988,16 @@
               <h2
                 style="font-size: 56px; font-style: normal; font-weight: 700"
                 v-if="!isSmall"
-                class="text-center text-blue-darken-4"
+                class="text-center"
               >
-                {{ item.title }}
+                {{
+                  `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} ${
+                    item.title
+                  }`
+                }}
+                <span class="text-red"
+                  >( 15 <span class="text-black">Jobs</span> )</span
+                >
               </h2>
               <div class="line-divider-2 mt-1 mb-2 mx-auto" />
               <h3
@@ -2100,11 +2107,18 @@
                 {{ item.title }}
               </h2>
               <h2
-                style="font-size: 24px; font-style: normal; font-weight: 700"
-                class="text-blue-darken-4 text-center"
+                style="font-size: 20px; font-style: normal; font-weight: 700"
+                class="text-center"
                 v-if="isSmall"
               >
-                {{ item.title }}
+                {{
+                  `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} ${
+                    item.title
+                  }`
+                }}
+                <span class="text-red"
+                  >( 15 <span class="text-black">Jobs</span> )</span
+                >
               </h2>
               <div class="line-divider-2 mt-1 mb-2 mx-auto" />
               <!-- <router-link
@@ -2413,6 +2427,67 @@
               </v-btn>
             </div>
           </div>
+          <div
+            class="d-flex flex-column justify-center align-center align-content-center mt-10 pb-8"
+            style="gap: 20px"
+          >
+            <h3>
+              Are you a
+              {{ titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader }} . ?
+            </h3>
+            <div class="">
+              <v-btn elevation="0" class="btn_sign__up mr-4">
+                Sign up / Sign In
+              </v-btn>
+            </div>
+            <h3>Share this Page</h3>
+            <div>
+              <v-btn
+                style="background: #f4f5f7; color: black"
+                variant="text"
+                color="black"
+                icon="mdi-share-outline"
+                width="40"
+                height="40"
+              >
+                <v-icon color="rgb(38, 38, 38)" size="22">
+                  mdi-share-outline
+                </v-icon>
+                <v-menu activator="parent">
+                  <v-list>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title>
+                        <v-icon class="mr-4" color="black" size="18">
+                          mdi-email-outline </v-icon
+                        >Email
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title>
+                        <v-icon class="mr-4" size="18">
+                          <i class="fa-brands fa-facebook-f" /> </v-icon
+                        >Facebook
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title>
+                        <v-icon class="mr-4" color="black" size="18">
+                          mdi-twitter </v-icon
+                        >Twitter
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="console.log('share')">
+                      <v-list-item-title>
+                        <v-icon class="mr-4" size="18">
+                          <i class="fa-brands fa-linkedin-in" /> </v-icon
+                        >Linkedin
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-btn>
+            </div>
+          </div>
         </template>
       </template>
       <template v-if="!isSmall && filteredItemsDesktop.length > 0">
@@ -2705,6 +2780,18 @@ export default {
     isSmall() {
       return this.screenWidth < 640;
     },
+    titleHeader() {
+      let path = this.$route.path;
+      let name = this.$route.path.split('/')[1];
+      let name2 = this.$route.params.name.split('-').join(' ');
+      let title = '';
+      if (path.includes('detail')) {
+        title = this.capitalizeFirstLetter(name2);
+      } else {
+        title = this.capitalizeFirstLetter(name);
+      }
+      return title;
+    },
     filteredItems() {
       // console.log(this.activeTag);
       //if (!this.activeTag || this.activeTag == undefined) {
@@ -2811,6 +2898,15 @@ export default {
       'setItemSelected2',
       'setItemSelected2Complete',
     ]),
+    capitalizeFirstLetter(sentence) {
+      const words = sentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      const capitalizedSentence = words.join(' ');
+      return capitalizedSentence;
+    },
     goToViewAll(id) {
       const userName = localStorage.getItem('userName');
       if (userName == 'null' || userName == null) {

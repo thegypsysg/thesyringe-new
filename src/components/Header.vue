@@ -2,15 +2,43 @@
   <v-app-bar
     :class="{
       'app-bar-mobile-start': isSmall && isHome && tokenStart,
-      'app-bar-mobile-start': isSmall && isDetailPage && isApply && !isEmployment && !isCheck,
-      'app-bar-mobile-start': isSmall && isDetailPage && isEmployment && !isApply && !isCheck,
-      'app-bar-mobile-start': isSmall && isDetailPage && !isEmployment && !isApply && isCheck,
-      'app-bar-mobile-1': isSmall && isHome && !isPrivacy && !isTerms && !isProfile && !tokenStart,
-      'app-bar-mobile-2': isSmall && !isHome && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment && !isCheck,
-      'app-bar-mobile-3': isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
-      'app-bar-mobile-4': isSmall && isDetailPage && !isPrivacy && !isTerms && !isProfile && !isApply  && !isEmployment && !isCheck,
-      'app-bar-mobile-5': isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
-      'app-bar-mobile-6': isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-start':
+        isSmall && isDetailPage && isApply && !isEmployment && !isCheck,
+      'app-bar-mobile-start':
+        isSmall && isDetailPage && isEmployment && !isApply && !isCheck,
+      'app-bar-mobile-start':
+        isSmall && isDetailPage && !isEmployment && !isApply && isCheck,
+      'app-bar-mobile-1':
+        isSmall &&
+        isHome &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !tokenStart,
+      'app-bar-mobile-2':
+        isSmall &&
+        !isHome &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isApply &&
+        !isEmployment &&
+        !isCheck,
+      'app-bar-mobile-3':
+        isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-4':
+        isSmall &&
+        isDetailPage &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isApply &&
+        !isEmployment &&
+        !isCheck,
+      'app-bar-mobile-5':
+        isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
+      'app-bar-mobile-6':
+        isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
     }"
     color="white"
     elevation="1"
@@ -18,8 +46,12 @@
   >
     <router-link :to="path">
       <div class="logo-img-container d-flex align-center">
-        <v-img class="logo-img" :src="$fileURL + logo" height="50" 
-        :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isProfile }">
+        <v-img
+          class="logo-img"
+          :src="$fileURL + logo"
+          height="50"
+          :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isProfile }"
+        >
           <template #placeholder>
             <div class="skeleton" />
           </template>
@@ -27,46 +59,46 @@
       </div>
     </router-link>
     <v-btn
-    v-if="isHome && !tokenStart"
-    style="background: #f4f5f7; color: black"
-    variant="text"
-    color="black"
-    icon="mdi-share-outline"
-    width="40"
-    height="40"
-  >
-    <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
-    <v-menu activator="parent">
-      <v-list>
-        <v-list-item @click="console.log('share')">
-          <v-list-item-title>
-            <v-icon class="mr-4" color="black" size="18">
-              mdi-email-outline </v-icon
-            >Email
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="console.log('share')">
-          <v-list-item-title>
-            <v-icon class="mr-4" size="18">
-              <i class="fa-brands fa-facebook-f" /> </v-icon
-            >Facebook
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="console.log('share')">
-          <v-list-item-title>
-            <v-icon class="mr-4" color="black" size="18"> mdi-twitter </v-icon
-            >Twitter
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="console.log('share')">
-          <v-list-item-title>
-            <v-icon class="mr-4" size="18">
-              <i class="fa-brands fa-linkedin-in" /> </v-icon
-            >Linkedin
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+      v-if="isHome && !tokenStart"
+      style="background: #f4f5f7; color: black"
+      variant="text"
+      color="black"
+      icon="mdi-share-outline"
+      width="40"
+      height="40"
+    >
+      <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" color="black" size="18">
+                mdi-email-outline </v-icon
+              >Email
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" size="18">
+                <i class="fa-brands fa-facebook-f" /> </v-icon
+              >Facebook
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" color="black" size="18"> mdi-twitter </v-icon
+              >Twitter
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="console.log('share')">
+            <v-list-item-title>
+              <v-icon class="mr-4" size="18">
+                <i class="fa-brands fa-linkedin-in" /> </v-icon
+              >Linkedin
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-btn>
     <div v-if="isWelcome" class="ml-10 d-flex flex-row header-info">
       <div v-if="!isSmall" class="divider" />
@@ -150,7 +182,7 @@
           : titleHeader
       }}</span>
     </div>
-    
+
     <div v-if="isPrivacy" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span': isSmall }">Privacy Policy</span>
@@ -159,18 +191,36 @@
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span-2': isSmall }">Terms & Conditions</span>
     </div>
-    <div v-if="isMyProfile" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+    <div
+      v-if="isMyProfile"
+      class="ml-md-10 ml-sm-6 d-flex flex-row header-info"
+    >
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span-2': isSmall }">My Profile</span>
     </div>
-    <div v-if="isResumeProfile" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+    <div
+      v-if="isResumeProfile"
+      class="ml-md-10 ml-sm-6 d-flex flex-row header-info"
+    >
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
-      <span class="text-blue-accent-4" :class="{ 'header-info-span-2': isSmall }">Resume Profile</span>
+      <span
+        class="text-blue-accent-4"
+        :class="{ 'header-info-span-2': isSmall }"
+        >Resume Profile</span
+      >
     </div>
     <v-spacer v-if="isPrivacy || isTerms || isProfile" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
-      v-if="!isWelcome && !isDetail && !isRecognised && !isPrivacy && !isTerms && !isProfile  && !tokenStart"
+      v-if="
+        !isWelcome &&
+        !isDetail &&
+        !isRecognised &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !tokenStart
+      "
       class="navbar__search navbar__search__desktop"
     >
       <v-autocomplete
@@ -216,7 +266,11 @@
     <div
       class="mr-10 d-flex justify-space-between"
       style="min-width: 500px"
-      v-if="(isDetailPage && !isSmall && !isApply) || (isDetailPage && !isSmall && !isEmployment) || (isDetailPage && !isSmall && !isCheck)"
+      v-if="
+        (isDetailPage && !isSmall && !isApply) ||
+        (isDetailPage && !isSmall && !isEmployment) ||
+        (isDetailPage && !isSmall && !isCheck)
+      "
     >
       <div class="d-flex align-center">
         <v-btn
@@ -338,22 +392,26 @@
             v-bind="props"
             variant="text"
           >
-          <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
-            <span>{{ itemSelected }}</span>
-          </template>
-          <template v-if="itemSelectedComplete || itemSelectedComplete != null">
-            <span class="text-blue-darken-4">{{
-              itemSelectedComplete?.title
-            }}</span
-            ><span class="text-red">
-              ({{ itemSelectedComplete?.count }}
-              {{
-                itemSelectedComplete?.count == '1' ||
-                itemSelectedComplete?.count == '0'
-                  ? 'Job'
-                  : 'Jobs'
-              }})</span
+            <template
+              v-if="!itemSelectedComplete || itemSelectedComplete == null"
             >
+              <span>{{ itemSelected }}</span>
+            </template>
+            <template
+              v-if="itemSelectedComplete || itemSelectedComplete != null"
+            >
+              <span class="text-blue-darken-4">{{
+                itemSelectedComplete?.title
+              }}</span
+              ><span class="text-red">
+                ({{ itemSelectedComplete?.count }}
+                {{
+                  itemSelectedComplete?.count == '1' ||
+                  itemSelectedComplete?.count == '0'
+                    ? 'Job'
+                    : 'Jobs'
+                }})</span
+              >
             </template>
             <v-icon right dark> mdi-menu-down </v-icon>
           </v-btn>
@@ -441,10 +499,17 @@
     >
       Sign up / Register
     </v-btn> -->
-    
-  <v-spacer v-if="!isSmall && tokenStart"></v-spacer>
+
+    <v-spacer v-if="!isSmall && tokenStart"></v-spacer>
     <v-btn
-      v-if="!isWelcome && !isRecognised && !isPrivacy && !isTerms && !isProfile && userName == null"
+      v-if="
+        !isWelcome &&
+        !isRecognised &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        userName == null
+      "
       elevation="0"
       class="btn_sign__up mr-4"
       @click="loginGypsy"
@@ -452,53 +517,83 @@
       Sign up / Sign In
     </v-btn>
     <v-btn
-    v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && userName != null"
-    elevation="0"
-    class="btn_log__out"
-    @click="logout"
-    :class="{'mr-6': tokenStart}"
-  >
-    Logout
-  </v-btn>
-  <div
-    v-if="!isWelcome"
-    style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
-    icon
-    :class="{ 'mr-2': isPrivacy || isTerms || isProfile || tokenStart }"
-    @click="drawer = !drawer"
-  >
-    <v-img
-      v-if="userImage != null"
-      :src="userImage"
-      cover
-      style="height: 100%; width: 100%; border-radius: 50%"
+      v-if="
+        !isWelcome && !isPrivacy && !isTerms && !isProfile && userName != null
+      "
+      elevation="0"
+      class="btn_log__out"
+      @click="logout"
+      :class="{ 'mr-6': tokenStart }"
     >
-      <template #placeholder>
-        <div class="skeleton" />
-      </template>
-    </v-img>
-    <v-img
-      v-else-if="userImage == null && !isLoading"
-      src="@/assets/user_icon.png"
-      cover
-      height="48"
-      style="height: 100%; width: 100%"
-    />
-  </div>
+      Logout
+    </v-btn>
+    <div
+      v-if="!isWelcome"
+      style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
+      icon
+      :class="{ 'mr-2': isPrivacy || isTerms || isProfile || tokenStart }"
+      @click="drawer = !drawer"
+    >
+      <v-img
+        v-if="userImage != null"
+        :src="userImage"
+        cover
+        style="height: 100%; width: 100%; border-radius: 50%"
+      >
+        <template #placeholder>
+          <div class="skeleton" />
+        </template>
+      </v-img>
+      <v-img
+        v-else-if="userImage == null && !isLoading"
+        src="@/assets/user_icon.png"
+        cover
+        height="48"
+        style="height: 100%; width: 100%"
+      />
+    </div>
 
-    <template v-if="!isWelcome && !isPrivacy && !isTerms && !isProfile && !isApply && !isEmployment && !isCheck && !tokenStart" #extension>
+    <template
+      v-if="
+        !isWelcome &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isApply &&
+        !isEmployment &&
+        !isCheck &&
+        !tokenStart
+      "
+      #extension
+    >
       <div
         class="mobile__app text-center scroll-container d-flex flex-column justify-center align-content-space-between mx-2"
         :class="{
           'mb-n10': !isHome,
           'mobile-specific': isSpecific,
           'mobile-recognised': isRecognised,
+          'scroll-container-2': isDetailPage,
         }"
       >
+        <p
+          v-if="isSpecific && itemSelectedComplete?.id == 1"
+          class="font-weight-bold text-blue-darken-4 mb-n4 mt-n14"
+        >
+          {{ titleHeader == 'Icunurse' ? 'ICU Nurse' : titleHeader }} Jobs
+        </p>
         <div
-          class="mb-n2"
-          :class="{ 'mt-1': (isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck), 'mt-n10': isSpecific }"
-          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)"
+          :class="{
+            'mt-n12':
+              (isDetailPage && !isApply) ||
+              (isDetailPage && !isEmployment) ||
+              (isDetailPage && !isCheck),
+            'mt-n10': isSpecific,
+          }"
+          v-if="
+            (isDetailPage && !isApply) ||
+            (isDetailPage && !isEmployment) ||
+            (isDetailPage && !isCheck)
+          "
         >
           <h2>
             {{
@@ -510,7 +605,11 @@
             }}
           </h2>
         </div>
-        <div class="d-flex flex-column mb-n4" v-if="isSpecific">
+        <div
+          class="d-flex flex-column mb-n4"
+          :class="itemSelectedComplete?.id != 1 ? 'mt-n14' : ''"
+          v-if="isSpecific"
+        >
           <v-menu v-if="!isLoading">
             <template #activator="{ props }">
               <v-btn
@@ -519,22 +618,26 @@
                 v-bind="props"
                 variant="text"
               >
-              <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
-                <span>{{ itemSelected }}</span>
-              </template>
-              <template v-if="itemSelectedComplete || itemSelectedComplete != null">
-                <span class="text-blue-darken-4">{{
-                  itemSelectedComplete?.title
-                }}</span
-                ><span class="text-red">
-                  ({{ itemSelectedComplete?.count }}
-                  {{
-                    itemSelectedComplete?.count == '1' ||
-                    itemSelectedComplete?.count == '0'
-                      ? 'Job'
-                      : 'Jobs'
-                  }})</span
+                <template
+                  v-if="!itemSelectedComplete || itemSelectedComplete == null"
                 >
+                  <span>{{ itemSelected }}</span>
+                </template>
+                <template
+                  v-if="itemSelectedComplete || itemSelectedComplete != null"
+                >
+                  <span class="text-blue-darken-4">{{
+                    itemSelectedComplete?.title
+                  }}</span
+                  ><span class="text-red">
+                    ({{ itemSelectedComplete?.count }}
+                    {{
+                      itemSelectedComplete?.count == '1' ||
+                      itemSelectedComplete?.count == '0'
+                        ? 'Job'
+                        : 'Jobs'
+                    }})</span
+                  >
                 </template>
                 <v-icon right dark> mdi-menu-down </v-icon>
               </v-btn>
@@ -663,7 +766,14 @@
           </v-menu>
         </div>
 
-        <div v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)">
+        <div
+          class="mt-n4"
+          v-if="
+            (isDetailPage && !isApply) ||
+            (isDetailPage && !isEmployment) ||
+            (isDetailPage && !isCheck)
+          "
+        >
           <span>{{ detailHeader.address }}</span>
         </div>
         <!-- <div v-if="isHome">
@@ -696,16 +806,20 @@
           </v-menu>
         </div> -->
         <div
-          v-if="(isDetailPage && !isApply) || (isDetailPage && !isEmployment) || (isDetailPage && !isCheck)"
-          style="height: 50px"
-          class="info-title d-flex align-center mb-4 mt-n4"
+          v-if="
+            (isDetailPage && !isApply) ||
+            (isDetailPage && !isEmployment) ||
+            (isDetailPage && !isCheck)
+          "
+          style="height: 80px"
+          class="info-title d-flex flex-column justify-center align-content-center align-center mb-4"
         >
           <v-img height="40" :src="detailHeader.logo">
             <!-- <template #placeholder> <div class="skeleton" /> </template
           > -->
           </v-img>
           <div v-if="!isSmall" class="divider-2 ml-10 mr-4"></div>
-          <div class="web" style="font-size: 12px">
+          <div class="web mt-4" style="font-size: 12px">
             <h4>{{ detailHeader.partner }}</h4>
             <a class="text-decoration-none" :href="detailHeader.website"
               ><p class="text-blue-darken-4 font-weight-bold">
@@ -715,7 +829,12 @@
           </div>
         </div>
         <form
-          v-if="(!isDetail && !isRecognised && !tokenStart) || (!isDetail && !isRecognised && !isApply) || (!isDetail && !isRecognised && !isEmployment) || (!isDetailPage && !isRecognised && !isCheck)"
+          v-if="
+            (!isDetail && !isRecognised && !tokenStart) ||
+            (!isDetail && !isRecognised && !isApply) ||
+            (!isDetail && !isRecognised && !isEmployment) ||
+            (!isDetailPage && !isRecognised && !isCheck)
+          "
           class="navbar__search navbar__search__mobile mx-auto"
           @submit="preventSubmit"
         >
@@ -765,7 +884,10 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
-        <div v-if="(isHome && !tokenStart) || isSpecific" class="my-slide d-flex">
+        <div
+          v-if="(isHome && !tokenStart) || isSpecific"
+          class="my-slide d-flex"
+        >
           <v-btn
             class="sub-menu-btn view-all"
             style="box-shadow: 0 5px 25px rgba(0, 0, 0, 0)"
@@ -811,8 +933,10 @@
     </template>
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" temporary location="right">
-    <div class="drawer__top" 
-    :class="{ 'py-6': userName == null, 'py-2': userName != null }">
+    <div
+      class="drawer__top"
+      :class="{ 'py-6': userName == null, 'py-2': userName != null }"
+    >
       <p
         v-if="userName == null"
         class="text-decoration-none"
@@ -858,10 +982,10 @@
     </div>
     <div class="drawer__heading">
       <router-link :to="path">
-      <div class="drawer-logo">
-        <v-img height="35" width="80" :src="$fileURL + logo" />
-      </div>
-    </router-link>
+        <div class="drawer-logo">
+          <v-img height="35" width="80" :src="$fileURL + logo" />
+        </div>
+      </router-link>
       <v-menu contained style="z-index: 1000">
         <template #activator="{ props }">
           <v-btn
@@ -918,8 +1042,8 @@
           <v-img height="20" width="30" src="@/assets/images/icons/home.png" />
         </div>
         <router-link class="text-decoration-none text-black" :to="path">
-        <v-list-item-title style="font-size: 12px"> Home </v-list-item-title>
-      </router-link>
+          <v-list-item-title style="font-size: 12px"> Home </v-list-item-title>
+        </router-link>
       </li>
 
       <li v-if="userName != null" class="v-list-item mt-n2">
@@ -944,7 +1068,10 @@
             src="@/assets/images/icons/menu-shopper.png"
           />
         </div>
-        <router-link class="text-decoration-none text-black" to="/resume-profile">
+        <router-link
+          class="text-decoration-none text-black"
+          to="/resume-profile"
+        >
           <v-list-item-title style="font-size: 12px">
             Resume Profile
           </v-list-item-title>
@@ -1098,7 +1225,7 @@ import app from '@/util/eventBus';
 // import eventBus from "@/util/eventBus";
 // import eventBus from "@/util/eventBus";
 import axios from '@/util/axios';
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -1146,7 +1273,7 @@ export default {
 
       logo: '',
       headerData: {},
-      currentTime: "",
+      currentTime: '',
 
       selectedType: 0,
       activeIndex: 1,
@@ -1173,31 +1300,34 @@ export default {
       const url = new URL(window.location.href);
 
       // Mendapatkan nilai token dari parameter query 'token'
-      const tokenParam = url.searchParams.get("token");
+      const tokenParam = url.searchParams.get('token');
       if (tokenParam) {
-        localStorage.setItem("token", tokenParam);
+        localStorage.setItem('token', tokenParam);
       }
 
       // Mengupdate data 'token' dalam komponen dengan nilai yang ditemukan
       return tokenParam;
     },
     token() {
-      return localStorage.getItem("token");
+      return localStorage.getItem('token');
     },
     isPrivacy() {
-      return this.$route.path == "/privacy-policy";
+      return this.$route.path == '/privacy-policy';
     },
     isTerms() {
-      return this.$route.path == "/our-terms";
+      return this.$route.path == '/our-terms';
     },
     isProfile() {
-      return this.$route.path == "/my-profile" || this.$route.path == "/resume-profile";
+      return (
+        this.$route.path == '/my-profile' ||
+        this.$route.path == '/resume-profile'
+      );
     },
     isMyProfile() {
-      return this.$route.path == "/my-profile";
+      return this.$route.path == '/my-profile';
     },
     isResumeProfile() {
-      return this.$route.path == "/resume-profile";
+      return this.$route.path == '/resume-profile';
     },
     isSmall() {
       return this.screenWidth < 640;
@@ -1233,7 +1363,7 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   mounted() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
     } else if (token) {
@@ -1250,10 +1380,7 @@ export default {
     //   'getHeaderDetail',
     //   this.getHeaderDetail
     // );
-    app.config.globalProperties.$eventBus.$on(
-      'applyJob2',
-      this.applyJob2
-    );
+    app.config.globalProperties.$eventBus.$on('applyJob2', this.applyJob2);
     app.config.globalProperties.$eventBus.$on(
       'applyJobFalse2',
       this.applyJobFalse2
@@ -1266,10 +1393,7 @@ export default {
       'employmentJobFalse2',
       this.employmentJobFalse2
     );
-    app.config.globalProperties.$eventBus.$on(
-      'checkJob2',
-      this.checkJob2
-    );
+    app.config.globalProperties.$eventBus.$on('checkJob2', this.checkJob2);
     app.config.globalProperties.$eventBus.$on(
       'checkJobFalse2',
       this.checkJobFalse2
@@ -1316,10 +1440,7 @@ export default {
     //   'getHeaderDetail',
     //   this.getHeaderDetail
     // );
-    app.config.globalProperties.$eventBus.$off(
-      'applyJob2',
-      this.applyJob2
-    );
+    app.config.globalProperties.$eventBus.$off('applyJob2', this.applyJob2);
     app.config.globalProperties.$eventBus.$off(
       'applyJobFalse2',
       this.applyJobFalse2
@@ -1332,10 +1453,7 @@ export default {
       'employmentJobFalse2',
       this.employmentJobFalse2
     );
-    app.config.globalProperties.$eventBus.$off(
-      'checkJob2',
-      this.checkJob2
-    );
+    app.config.globalProperties.$eventBus.$off('checkJob2', this.checkJob2);
     app.config.globalProperties.$eventBus.$off(
       'checkJobFalse2',
       this.checkJobFalse2
@@ -1383,52 +1501,75 @@ export default {
   methods: {
     applyJob() {
       this.isLoading = true;
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       axios
-      .get(`/gypsy-applicant`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const data = response.data.data;
-        console.log(data);
-        if(data && data.basic_steps == null) {
-          this.tokenStart = token
-          app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
-          localStorage.setItem('applicant_data', JSON.stringify(data))
-          window.location.href = '/'
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == null) {
-          app.config.globalProperties.$eventBus.$emit('applyJob');
-          app.config.globalProperties.$eventBus.$emit('applyJob2');
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
-          app.config.globalProperties.$eventBus.$emit('employmentJob');
-          app.config.globalProperties.$eventBus.$emit('employmentJob2');
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == "C" ) {
-          //console.log('OK')
-          app.config.globalProperties.$eventBus.$emit('checkJob');
-          app.config.globalProperties.$eventBus.$emit('checkJob2');
-        } else if(data == null) {
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
-        }
-        
-        if (data.slug) {
-          this.path = `/${data.slug}`;
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
-        } else {
-          this.path = "/";
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
-        }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
-        
-        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          if (data && data.basic_steps == null) {
+            this.tokenStart = token;
+            app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
+            localStorage.setItem('applicant_data', JSON.stringify(data));
+            window.location.href = '/';
+          } else if (
+            data &&
+            data.basic_steps == 'C' &&
+            data.qualifications_steps == null
+          ) {
+            app.config.globalProperties.$eventBus.$emit('applyJob');
+            app.config.globalProperties.$eventBus.$emit('applyJob2');
+          } else if (
+            data &&
+            data.basic_steps == 'C' &&
+            data.qualifications_steps == 'C' &&
+            data.employment_steps == null
+          ) {
+            app.config.globalProperties.$eventBus.$emit('employmentJob');
+            app.config.globalProperties.$eventBus.$emit('employmentJob2');
+          } else if (
+            data &&
+            data.basic_steps == 'C' &&
+            data.qualifications_steps == 'C' &&
+            data.employment_steps == 'C'
+          ) {
+            //console.log('OK')
+            app.config.globalProperties.$eventBus.$emit('checkJob');
+            app.config.globalProperties.$eventBus.$emit('checkJob2');
+          } else if (data == null) {
+            app.config.globalProperties.$eventBus.$emit(
+              'changeHeaderPath',
+              '/'
+            );
+          }
+
+          if (data.slug) {
+            this.path = `/${data.slug}`;
+            app.config.globalProperties.$eventBus.$emit(
+              'changeHeaderPath',
+              `/${data.slug}`
+            );
+          } else {
+            this.path = '/';
+            app.config.globalProperties.$eventBus.$emit(
+              'changeHeaderPath',
+              '/'
+            );
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+
+          // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     applyJob2() {
       this.isApply = true;
@@ -1450,7 +1591,7 @@ export default {
     },
     changeHeaderPath(path) {
       //console.log(image)
-      this.path = path
+      this.path = path;
     },
     getTokenStart(tokenParam) {
       this.tokenStart = tokenParam;
@@ -1460,10 +1601,10 @@ export default {
     },
     changeHeaderImage(image) {
       //console.log(image)
-      this.userImage = this.$fileURL + image
+      this.userImage = this.$fileURL + image;
     },
     logout() {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       axios
         .get(`/gypsy-logout`, {
           headers: {
@@ -1473,13 +1614,13 @@ export default {
         .then((response) => {
           const data = response.data.data;
           console.log(data);
-          localStorage.setItem("name", null);
-          localStorage.setItem("userName", null);
-          localStorage.setItem("g_id", null);
-          localStorage.setItem("user_image", null);
-          localStorage.setItem("token", null);
-          this.path = '/'
-          window.location.href = "/";
+          localStorage.setItem('name', null);
+          localStorage.setItem('userName', null);
+          localStorage.setItem('g_id', null);
+          localStorage.setItem('user_image', null);
+          localStorage.setItem('token', null);
+          this.path = '/';
+          window.location.href = '/';
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -1489,7 +1630,7 @@ export default {
     getHeaderUserData() {
       this.isLoading = true;
       //console.log(this.tokenProvider);
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       axios
         .get(`/gypsy-user`, {
           headers: {
@@ -1503,7 +1644,7 @@ export default {
           //console.log(data);
 
           this.userName = data.name;
-          localStorage.setItem("userName", data.name);
+          localStorage.setItem('userName', data.name);
           this.userDated = data.last_login;
           this.userImage =
             data.image != null ? this.$fileURL + data.image : null;
@@ -1519,7 +1660,7 @@ export default {
     },
     getHeaderUserData2() {
       this.isLoading = true;
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       axios
         .get(`/gypsy-user`, {
           headers: {
@@ -1574,12 +1715,11 @@ export default {
     },
     updateTime() {
       // Ambil zona waktu Singapore
-      const singaporeTime = moment().tz("Asia/Singapore");
+      const singaporeTime = moment().tz('Asia/Singapore');
       // Format waktu dalam hh:mm:ss
-      this.currentTime = singaporeTime.format("HH:mm:ss");
+      this.currentTime = singaporeTime.format('HH:mm:ss');
     },
     loginGypsy() {
-      
       const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
       window.location.href = externalURL;
       //axios
@@ -1601,8 +1741,8 @@ export default {
       //  });
     },
     getRegistrableData() {
-      this.getRegistrableCountry()
-      this.getRegistrableSkills()
+      this.getRegistrableCountry();
+      this.getRegistrableSkills();
     },
     getRegistrableCountry() {
       this.isLoading = true;
@@ -1744,8 +1884,11 @@ export default {
           this.getHeaderDetail(this.country[0].id);
           this.setItemSelectedComplete(this.country[0]);
           this.setItemSelected(this.country[0].title);
-          localStorage.setItem('itemSelectedObj', JSON.stringify(this.country[0]))
-          localStorage.setItem('itemSelectedTit', this.country[0].title)
+          localStorage.setItem(
+            'itemSelectedObj',
+            JSON.stringify(this.country[0])
+          );
+          localStorage.setItem('itemSelectedTit', this.country[0].title);
           app.config.globalProperties.$eventBus.$emit('getSkillBySlugFirst');
         })
         .catch((error) => {
@@ -1982,6 +2125,11 @@ export default {
   white-space: nowrap;
   gap: 20px;
 }
+
+.scroll-container-2 {
+  height: 220px;
+}
+
 .v-app-bar.v-toolbar {
   max-width: 100%;
 }
@@ -1998,10 +2146,10 @@ export default {
   height: 9vh;
 }
 .app-bar-mobile-4 {
-  height: 26vh;
+  height: 35vh;
 }
 .app-bar-mobile-5 {
-  height: 32vh;
+  height: 35vh;
 }
 .app-bar-mobile-6 {
   height: 25vh;

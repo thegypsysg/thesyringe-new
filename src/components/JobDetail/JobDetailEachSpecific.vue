@@ -620,9 +620,9 @@
 import axios from '@/util/axios';
 import app from '@/util/eventBus';
 import { mapState, mapMutations } from 'vuex';
-import ApplyForm from '@/components/ApplyForm.vue'
-import EmploymentForm from '@/components/EmploymentForm.vue'
-import CheckForm from '@/components/CheckForm.vue'
+import ApplyForm from '@/components/ApplyForm.vue';
+import EmploymentForm from '@/components/EmploymentForm.vue';
+import CheckForm from '@/components/CheckForm.vue';
 import moment from 'moment';
 
 export default {
@@ -630,7 +630,7 @@ export default {
   components: {
     ApplyForm,
     EmploymentForm,
-    CheckForm
+    CheckForm,
   },
   data() {
     return {
@@ -705,10 +705,7 @@ export default {
       'goToRecognised2',
       this.goToRecognised2
     );
-    app.config.globalProperties.$eventBus.$on(
-      'applyJob',
-      this.applyJob
-    );
+    app.config.globalProperties.$eventBus.$on('applyJob', this.applyJob);
     app.config.globalProperties.$eventBus.$on(
       'applyJobFalse',
       this.applyJobFalse
@@ -721,10 +718,7 @@ export default {
       'employmentJobFalse',
       this.employmentJobFalse
     );
-    app.config.globalProperties.$eventBus.$on(
-      'checkJob',
-      this.checkJob
-    );
+    app.config.globalProperties.$eventBus.$on('checkJob', this.checkJob);
     app.config.globalProperties.$eventBus.$on(
       'checkJobFalse',
       this.checkJobFalse
@@ -735,10 +729,7 @@ export default {
       'goToRecognised2',
       this.goToRecognised2
     );
-    app.config.globalProperties.$eventBus.$off(
-      'applyJob',
-      this.applyJob
-    );
+    app.config.globalProperties.$eventBus.$off('applyJob', this.applyJob);
     app.config.globalProperties.$eventBus.$off(
       'applyJobFalse',
       this.applyJobFalse
@@ -751,10 +742,7 @@ export default {
       'employmentJobFalse',
       this.employmentJobFalse
     );
-    app.config.globalProperties.$eventBus.$off(
-      'checkJob',
-      this.checkJob
-    );
+    app.config.globalProperties.$eventBus.$off('checkJob', this.checkJob);
     app.config.globalProperties.$eventBus.$off(
       'checkJobFalse',
       this.checkJobFalse
@@ -802,7 +790,7 @@ export default {
       this.setSkillRecognised(this.skillSlug.name);
       this.setIdSkillRecognised(this.skillSlug.skills_id);
       app.config.globalProperties.$eventBus.$emit('getRegulatorInfo');
-      this.$router.push('/recognised-qualifications')
+      this.$router.push('/recognised-qualifications');
     },
     checkDetail() {
       app.config.globalProperties.$eventBus.$emit('getHeaderDetail');
@@ -998,7 +986,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 210px;
+  margin-top: 240px;
   position: relative;
 }
 .btn-container {

@@ -1,5 +1,6 @@
 <template>
-  <v-container class="mt-6 footer_lks">
+  <div v-if="(isDetailPage && isSmall) || (isSpecific && isSmall)"></div>
+  <v-container v-else class="mt-6 footer_lks">
     <v-row class="d-flex justify-center">
       <v-col cols="12" sm="12" md="3">
         <h2 class="footer_title">About {{ footerData.company_name }}</h2>
@@ -308,6 +309,14 @@
       <v-icon size="20">mdi-share-outline</v-icon>
     </v-btn> -->
   </v-container>
+  <v-dialog v-model="isLogin" persistent width="auto">
+    <v-card :width="isSmall ? 300 : 450">
+      <v-card-text class="text-center">
+        <h2 class="my-4">Please Log in to apply for this job</h2>
+        <v-btn class="mb-4" @click="isLogin = false"> OK </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -319,6 +328,7 @@ export default {
   name: 'Footer',
   data() {
     return {
+      isLogin: false,
       footerData: {
         company_name: '',
         location: '',
@@ -358,50 +368,81 @@ export default {
   },
   methods: {
     applyJob() {
-      this.isLoading = true;
-      const token = localStorage.getItem("token");
-      axios
-      .get(`/gypsy-applicant`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const data = response.data.data;
-        console.log(data);
-        if(data && data.basic_steps == null) {
-          app.config.globalProperties.$eventBus.$emit('getTokenStart', token);
-          localStorage.setItem('applicant_data', JSON.stringify(data))
-          window.location.href = '/'
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == null) {
-          app.config.globalProperties.$eventBus.$emit('applyJob');
-          app.config.globalProperties.$eventBus.$emit('applyJob2');
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == null ) {
-          app.config.globalProperties.$eventBus.$emit('employmentJob');
-          app.config.globalProperties.$eventBus.$emit('employmentJob2');
-        } else if(data && data.basic_steps == 'C' && data.qualifications_steps == 'C' && data.employment_steps == "C" ) {
-          // console.log('OK')
-          app.config.globalProperties.$eventBus.$emit('checkJob');
-          app.config.globalProperties.$eventBus.$emit('checkJob2');
-        } else if(data == null) {
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
-        }
-        
-        if (data.slug) {
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
-        } else {
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
-        }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
-        
-        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+      const userName = localStorage.getItem('userName');
+      if (userName == 'null' || userName == null) {
+        this.isLogin = true;
+      } else if (userName && (userName != null || userName != 'null')) {
+        this.isLoading = true;
+        const token = localStorage.getItem('token');
+        axios
+          .get(`/gypsy-applicant`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            const data = response.data.data;
+            console.log(data);
+            if (data && data.basic_steps == null) {
+              app.config.globalProperties.$eventBus.$emit(
+                'getTokenStart',
+                token
+              );
+              localStorage.setItem('applicant_data', JSON.stringify(data));
+              window.location.href = '/';
+            } else if (
+              data &&
+              data.basic_steps == 'C' &&
+              data.qualifications_steps == null
+            ) {
+              app.config.globalProperties.$eventBus.$emit('applyJob');
+              app.config.globalProperties.$eventBus.$emit('applyJob2');
+            } else if (
+              data &&
+              data.basic_steps == 'C' &&
+              data.qualifications_steps == 'C' &&
+              data.employment_steps == null
+            ) {
+              app.config.globalProperties.$eventBus.$emit('employmentJob');
+              app.config.globalProperties.$eventBus.$emit('employmentJob2');
+            } else if (
+              data &&
+              data.basic_steps == 'C' &&
+              data.qualifications_steps == 'C' &&
+              data.employment_steps == 'C'
+            ) {
+              // console.log('OK')
+              app.config.globalProperties.$eventBus.$emit('checkJob');
+              app.config.globalProperties.$eventBus.$emit('checkJob2');
+            } else if (data == null) {
+              app.config.globalProperties.$eventBus.$emit(
+                'changeHeaderPath',
+                '/'
+              );
+            }
+
+            if (data.slug) {
+              app.config.globalProperties.$eventBus.$emit(
+                'changeHeaderPath',
+                `/${data.slug}`
+              );
+            } else {
+              app.config.globalProperties.$eventBus.$emit(
+                'changeHeaderPath',
+                '/'
+              );
+            }
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.log(error);
+
+            // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      }
     },
     handleResize() {
       this.screenWidth = window.innerWidth;
