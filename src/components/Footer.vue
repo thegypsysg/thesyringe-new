@@ -1,5 +1,5 @@
 <template>
-  <div v-if="(isDetailPage && isSmall) || (isSpecific && isSmall)"></div>
+  <div v-if="isDetailPage || isSpecific"></div>
   <v-container v-else class="mt-6 footer_lks">
     <v-row class="d-flex justify-center">
       <v-col cols="12" sm="12" md="3">

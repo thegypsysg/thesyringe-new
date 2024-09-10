@@ -287,7 +287,7 @@
         <v-container v-if="!isCardLoading && privilegedJob">
           <h1
             v-if="privilegedJob?.length > 0"
-            class="text-blue-darken-4 text-center"
+            class="text-center"
             style="font-size: 56px; font-style: normal; font-weight: 700"
           >
             Privileged Partner Featured Job
@@ -990,14 +990,15 @@
                 v-if="!isSmall"
                 class="text-center"
               >
-                {{
-                  `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} ${
-                    item.title
-                  }`
-                }}
-                <span class="text-red"
-                  >( 15 <span class="text-black">Jobs</span> )</span
-                >
+                {{ `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} Jobs` }}
+                <span class="text-red">( 15 )</span>
+              </h2>
+              <h2
+                style="font-size: 56px; font-style: normal; font-weight: 700"
+                v-if="!isSmall"
+                class="text-center"
+              >
+                {{ `${item.title}` }}
               </h2>
               <div class="line-divider-2 mt-1 mb-2 mx-auto" />
               <h3
@@ -1429,7 +1430,7 @@
           <h2
             v-if="privilegedJob?.length > 0"
             style="font-size: 24px; font-style: normal; font-weight: 700"
-            class="text-purple-accent-4 text-center mt-4"
+            class="text-center mt-4"
           >
             Privileged Partner Featured Job
           </h2>
@@ -2111,14 +2112,15 @@
                 class="text-center"
                 v-if="isSmall"
               >
-                {{
-                  `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} ${
-                    item.title
-                  }`
-                }}
-                <span class="text-red"
-                  >( 15 <span class="text-black">Jobs</span> )</span
-                >
+                {{ `${titleHeader == 'Icunurse' ? 'Icu Nurse' : titleHeader} Jobs` }}
+                <span class="text-red">( 15 )</span>
+              </h2>
+              <h2
+                style="font-size: 20px; font-style: normal; font-weight: 700"
+                class="text-center"
+                v-if="isSmall"
+              >
+                {{ `${item.title}` }}
               </h2>
               <div class="line-divider-2 mt-1 mb-2 mx-auto" />
               <!-- <router-link
@@ -3185,7 +3187,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? 'Jobs in ' + item.sub_industry_name
+                ? 'In ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3582,7 +3584,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? 'Jobs in ' + item.sub_industry_name
+                ? 'In ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3683,7 +3685,7 @@ export default {
             return {
               id: item.sub_industry_id || 1,
               title: item.sub_industry_name
-                ? 'Jobs in ' + item.sub_industry_name
+                ? 'In ' + item.sub_industry_name
                 : '',
               btn: item.sub_industry_name || '',
               path: `/${item.sub_industry_name.split(' ').join('-')}` || '#',
@@ -3849,7 +3851,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 270px;
+  margin-top: 290px;
   position: relative;
 }
 .btn-container {

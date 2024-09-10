@@ -986,7 +986,7 @@ export default {
   font-weight: 900;
 }
 .banner-container {
-  margin-top: 240px;
+  margin-top: 260px;
   position: relative;
 }
 .btn-container {
