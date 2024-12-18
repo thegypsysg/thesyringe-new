@@ -30,7 +30,7 @@
             ></v-icon>
             {{ footerData.mobile_number }}
           </li>
-          <li>
+          <li style="cursor: pointer" @click="whatsappFooter">
             <v-icon
               color="#FA2964"
               size="20"
@@ -54,21 +54,33 @@
       <v-col cols="12" sm="12" md="3">
         <h2 class="footer_title" style="margin-bottom: 16px">Quick links</h2>
         <ul class="footer_links" style="margin-top: 37px">
-          <li>
+          <!-- <li>
             <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
             Job Categories
+          </li> -->
+          <li>
+            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
+            <div style="cursor: pointer" @click="loginGypsy">
+              Sign Up/Register
+            </div>
           </li>
           <li>
             <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
-            Sign Up/Register
+            <a
+              style="text-decoration: none; color: black"
+              :href="`https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe - New Employment Agency  Enquiry`"
+            >
+              Agencies
+            </a>
           </li>
           <li>
             <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
-            Agencies
-          </li>
-          <li>
-            <v-icon size="15" class="mr-2 fa fa-angle-double-right"></v-icon>
-            Employers
+            <a
+              style="text-decoration: none; color: black"
+              :href="`https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe - New Employer Enquiry`"
+            >
+              Employers
+            </a>
           </li>
         </ul>
       </v-col>
@@ -115,26 +127,59 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title">Jobseekers</h2>
-        <p
-          class="footer_paragraph"
-          style="margin-bottom: 16px; margin-top: 34px"
-        >
-          Sign Up and be part of our community of Healthcare Jobs around the
-          world. Please type your email and press get started.
+        <p class="font-weight-light mb-n6 mt-2" style="text-align: left">
+          Coming Soon...
         </p>
-        <input class="footer_input" placeholder="Type your email" />
-        <v-btn
-          style="
-            width: inherit;
-            border-radius: 0 !important;
-            margin-top: 16px;
-            background: #fa2964;
-            color: white;
-          "
+        <h5
+          v-if="isSmall"
+          class="font-weight-light mb-4"
+          style="margin-bottom: 16px; text-align: center"
         >
-          Get started
-        </v-btn>
+          Explore
+          <span class="font-weight-bold">{{ footerData?.company_name }}</span>
+          on your Mobile
+        </h5>
+        <h5
+          v-if="!isSmall"
+          class="font-weight-light mt-10"
+          style="margin-bottom: 16px"
+        >
+          Explore
+          <span class="font-weight-bold">{{ footerData?.company_name }}</span>
+          on your Mobile
+        </h5>
+        <div class="d-flex w-100 justify-center">
+          <v-btn variant="text" class="p-0">
+            <v-img
+              height="35"
+              style="border-radius: 10px"
+              src="@/assets/play-store.jpg"
+            />
+          </v-btn>
+          <v-btn variant="text" class="p-0">
+            <v-img
+              height="35"
+              style="border-radius: 10px"
+              src="@/assets/app-store.jpg"
+            />
+          </v-btn>
+        </div>
+        <!-- <input class="footer_input" placeholder="Type your email" /> -->
+        <!-- <div class="footer-btn-cont">
+          <v-btn
+            class="footer-btn"
+            style="
+              width: inherit;
+              border-radius: 0 !important;
+              margin-top: 16px;
+              background: #00cdcd;
+              color: white;
+            "
+          >
+            <span>Get started</span>
+          </v-btn>
+          <div class="footer-btn-hover" />
+        </div> -->
       </v-col>
     </v-row>
   </v-container>
@@ -506,6 +551,31 @@ export default {
       // .finally(() => {
       //   this.isLoading = false;
       // });
+    },
+    loginGypsy() {
+      this.$router.push('/sign-in');
+      // const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
+      // window.location.href = externalURL;
+      //axios
+      //  .post(`/gypsy-login/google`, {
+      //    app_id: 5,
+      //  })
+      //  .then((response) => {
+      //    console.log(response);
+      //    //if (response) {
+      //    //  window.location.assign(response.data.target_url);
+      //    //} else {
+      //    //  window.location.href = "/sign-in";
+      //    //}
+      //    //console.log(response.data.target_url);
+      //  })
+      //  .catch((error) => {
+      //    console.log(error);
+      //    //window.location.href = "/sign-in";
+      //  });
+    },
+    whatsappFooter() {
+      window.location.href = `https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe Support - May I help you please`;
     },
   },
 };

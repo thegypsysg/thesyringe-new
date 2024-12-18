@@ -5,10 +5,14 @@ import JobDetailSpecific from '@/components/JobDetail/JobDetailSpecific.vue';
 import ViewAllFromSpecific from '@/components/JobDetail/ViewAllFromSpecific.vue';
 import JobDetailEachSpecific from '@/components/JobDetail/JobDetailEachSpecific.vue';
 import RecognisedQualifications from '@/components/RecognisedQualifications.vue';
-import SignUp from '../views/SignUpForm.vue';
-import PrivacyTerms from "../views/PrivacyTerms.vue";
-import MyProfile from "../views/MyProfile.vue";
-import ResumeProfile from "../views/ResumeProfile.vue";
+// import SignUp from '../views/SignUpForm.vue';
+import PrivacyTerms from '../views/PrivacyTerms.vue';
+import MyProfile from '../views/MyProfile.vue';
+import ResumeProfile from '../views/ResumeProfile.vue';
+import SignUp from '@/views/SignUpForm.vue';
+import OTPEmailForm from '@/views/OTPEmailForm.vue';
+import CreatePasswordForm from '@/views/CreatePasswordForm.vue';
+import SocialLogin from '@/views/SocialLoginForm.vue';
 
 const routes = [
   {
@@ -16,11 +20,11 @@ const routes = [
     component: Home,
   },
   {
-    path: "/my-profile",
+    path: '/my-profile',
     component: MyProfile,
   },
   {
-    path: "/resume-profile",
+    path: '/resume-profile',
     component: ResumeProfile,
   },
   {
@@ -65,14 +69,46 @@ const routes = [
     component: RecognisedQualifications,
   },
   {
-    path: "/privacy-policy",
-    name: "Privacy Policy",
+    path: '/privacy-policy',
+    name: 'Privacy Policy',
     component: PrivacyTerms,
   },
   {
-    path: "/our-terms",
-    name: "OurTerms",
+    path: '/our-terms',
+    name: 'OurTerms',
     component: PrivacyTerms,
+  },
+  {
+    path: '/sign-in',
+    name: 'Welcome',
+    component: SignUp,
+  },
+  {
+    path: '/sign-up-email',
+    name: 'SignUpEmail',
+    component: OTPEmailForm,
+  },
+  {
+    path: '/signup-email',
+    name: 'Create Password',
+    component: CreatePasswordForm,
+  },
+  {
+    path: '/social-sign-up',
+    name: 'Social Sign Up',
+    component: SocialLogin,
+    beforeRouteEnter(to, from, next) {
+      const email = to.query.email || '';
+      const name = to.query.name || '';
+      const avatar = to.query.avatar || '';
+
+      // Anda dapat menyimpan nilai-nilai ini dalam state Vuex atau menggunakan mereka langsung dalam komponen
+      next((vm) => {
+        vm.email = email;
+        vm.name = name;
+        vm.avatar = avatar;
+      });
+    },
   },
 ];
 

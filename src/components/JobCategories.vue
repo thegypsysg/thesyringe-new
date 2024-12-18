@@ -30,7 +30,7 @@
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <div class="trending__app d-flex justify-center mb-8">
                 <div class="title-card title-card-mobile text-center mx-auto">
-                  <h1>{{ card.title }} Jobs</h1>
+                  <h3>{{ card.title }} Jobs</h3>
                 </div>
                 <v-card
                   style="

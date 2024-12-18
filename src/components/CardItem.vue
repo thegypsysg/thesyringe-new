@@ -24,7 +24,7 @@
                 >
                   <template #placeholder> <div class="skeleton" /> </template
                 ></v-img>
-                <div class="card-tag">{{ card.jobs }} Jobs</div>
+                <!-- <div class="card-tag">{{ card.jobs }} Jobs</div> -->
 
                 <v-card-title class="card-title"
                   >{{ card.title }} Jobs</v-card-title
@@ -57,7 +57,7 @@
                 >
                   <template #placeholder> <div class="skeleton" /> </template
                 ></v-img>
-                <div class="card-tag">{{ card.jobs }} Jobs</div>
+                <!-- <div class="card-tag">{{ card.jobs }} Jobs</div> -->
                 <v-card-title
                   class="card-title"
                   :class="{ 'card-title-2': !isSmall, 'card-title-3': isSmall }"
@@ -87,7 +87,7 @@
                 >
                   <template #placeholder> <div class="skeleton" /> </template
                 ></v-img>
-                <div class="card-tag">{{ card.jobs }} Jobs</div>
+                <!-- <div class="card-tag">{{ card.jobs }} Jobs</div> -->
 
                 <v-card-title class="card-title"
                   >{{ card.title }} Jobs</v-card-title
@@ -98,11 +98,11 @@
         </div>
       </v-col>
     </v-row>
-    <div class="w-100 d-flex justify-center mb-4">
+    <!-- <div class="w-100 d-flex justify-center mb-4">
       <a href="#" class="btn btn-outline-light"
         >View All <i class="fa fa-circle-arrow-right"></i
       ></a>
-    </div>
+    </div> -->
   </v-container>
 </template>
 

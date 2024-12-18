@@ -22,9 +22,27 @@
             ></v-img>
             <v-card-title class="card-title px-8">
               <h3 class="mb-4">{{ card.title }}</h3>
-              <v-btn variant="flat" :color="card.btnColor">{{
-                card.btnText
-              }}</v-btn>
+              <v-btn
+                v-if="card.btnText == 'Signup / Register'"
+                @click="loginGypsy"
+                variant="flat"
+                :color="card.btnColor"
+                >{{ card.btnText }}</v-btn
+              >
+              <v-btn
+                v-if="card.btnText == 'Open free acount'"
+                @click="openFreeAccount"
+                variant="flat"
+                :color="card.btnColor"
+                >{{ card.btnText }}</v-btn
+              >
+              <v-btn
+                v-else
+                @click="sendInquiry"
+                variant="flat"
+                :color="card.btnColor"
+                >{{ card.btnText }}</v-btn
+              >
             </v-card-title>
           </v-card>
         </v-lazy>
@@ -80,6 +98,34 @@ export default {
     },
     nextSlideCategory() {
       this.activeIndexCategory++;
+    },
+    loginGypsy() {
+      this.$router.push('/sign-in');
+      //const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
+      //window.location.href = externalURL;
+      //axios
+      //  .post(`/gypsy-login/google`, {
+      //    app_id: 5,
+      //  })
+      //  .then((response) => {
+      //    console.log(response);
+      //    //if (response) {
+      //    //  window.location.assign(response.data.target_url);
+      //    //} else {
+      //    //  window.location.href = "/sign-in";
+      //    //}
+      //    //console.log(response.data.target_url);
+      //  })
+      //  .catch((error) => {
+      //    console.log(error);
+      //    //window.location.href = "/sign-in";
+      //  });
+    },
+    openFreeAccount() {
+      window.location.href = `https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe - New Employer Enquiry`;
+    },
+    sendInquiry() {
+      window.location.href = `https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe - New Employment Agency  Enquiry`;
     },
   },
 };

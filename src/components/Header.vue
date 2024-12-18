@@ -14,6 +14,7 @@
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         !tokenStart,
       'app-bar-mobile-2':
         isSmall &&
@@ -21,24 +22,41 @@
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         !isApply &&
         !isEmployment &&
         !isCheck,
       'app-bar-mobile-3':
-        isSmall && isWelcome && !isPrivacy && !isTerms && !isProfile,
+        isSmall &&
+        isWelcome &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isSignIn,
       'app-bar-mobile-4':
         isSmall &&
         isDetailPage &&
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         !isApply &&
         !isEmployment &&
         !isCheck,
       'app-bar-mobile-5':
-        isSmall && isSpecific && !isPrivacy && !isTerms && !isProfile,
+        isSmall &&
+        isSpecific &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isSignIn,
       'app-bar-mobile-6':
-        isSmall && isRecognised && !isPrivacy && !isTerms && !isProfile,
+        isSmall &&
+        isRecognised &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isSignIn,
     }"
     color="white"
     elevation="1"
@@ -50,7 +68,9 @@
           class="logo-img"
           :src="$fileURL + logo"
           height="50"
-          :class="{ 'ml-8': isWelcome && isPrivacy && isTerms && isProfile }"
+          :class="{
+            'ml-8': isWelcome && isPrivacy && isTerms && isProfile && isSignIn,
+          }"
         >
           <template #placeholder>
             <div class="skeleton" />
@@ -58,7 +78,7 @@
         </v-img>
       </div>
     </router-link>
-    <v-btn
+    <!-- <v-btn
       v-if="isHome && !tokenStart"
       style="background: #f4f5f7; color: black"
       variant="text"
@@ -99,8 +119,12 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-btn>
-    <div v-if="isWelcome" class="ml-10 d-flex flex-row header-info">
+    </v-btn> -->
+    <div
+      @click="loginGypsy"
+      v-if="isWelcome"
+      class="ml-10 d-flex flex-row header-info"
+    >
       <div v-if="!isSmall" class="divider" />
       <span :class="{ 'header-info-span': isSmall }">Sign Up / Login</span>
     </div>
@@ -198,6 +222,10 @@
       <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
       <span :class="{ 'header-info-span-2': isSmall }">My Profile</span>
     </div>
+    <div v-if="isSignIn" class="ml-md-10 ml-sm-6 d-flex flex-row header-info">
+      <div :class="{ divider: !isSmall, 'divider-2': isSmall }" />
+      <span :class="{ 'header-info-span-2': isSmall }">Sign-Up / Sign-in</span>
+    </div>
     <div
       v-if="isResumeProfile"
       class="ml-md-10 ml-sm-6 d-flex flex-row header-info"
@@ -209,7 +237,7 @@
         >Resume Profile</span
       >
     </div>
-    <v-spacer v-if="isPrivacy || isTerms || isProfile" />
+    <v-spacer v-if="isPrivacy || isTerms || isProfile || isSignIn" />
     <v-spacer v-if="!isSmall && (isWelcome || isDetail)" />
     <form
       v-if="
@@ -219,6 +247,7 @@
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         !tokenStart
       "
       class="navbar__search navbar__search__desktop"
@@ -336,7 +365,7 @@
       </v-btn>
     </div>
     <div
-      v-if="isSpecific && !isPrivacy && !isTerms && !isProfile"
+      v-if="isSpecific && !isPrivacy && !isTerms && !isProfile && !isSignIn"
       class="desktop__app"
       style="min-width: 600px !important"
     >
@@ -508,6 +537,7 @@
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         userName == null
       "
       elevation="0"
@@ -518,7 +548,12 @@
     </v-btn>
     <v-btn
       v-if="
-        !isWelcome && !isPrivacy && !isTerms && !isProfile && userName != null
+        !isWelcome &&
+        !isPrivacy &&
+        !isTerms &&
+        !isProfile &&
+        !isSignIn &&
+        userName != null
       "
       elevation="0"
       class="btn_log__out"
@@ -531,7 +566,9 @@
       v-if="!isWelcome"
       style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer"
       icon
-      :class="{ 'mr-2': isPrivacy || isTerms || isProfile || tokenStart }"
+      :class="{
+        'mr-2': isPrivacy || isTerms || isProfile || tokenStart,
+      }"
       @click="drawer = !drawer"
     >
       <v-img
@@ -559,6 +596,7 @@
         !isPrivacy &&
         !isTerms &&
         !isProfile &&
+        !isSignIn &&
         !isApply &&
         !isEmployment &&
         !isCheck &&
@@ -1143,32 +1181,54 @@
           :class="{ 'mb-2': userName == null }"
         >
           <v-col cols="3" class="d-flex justify-end">
-            <v-img
-              src="@/assets/images/icons/facebook.png"
-              height="40"
-              width="32"
-            />
+            <a :href="contactData?.facebook">
+              <v-img
+                src="@/assets/images/icons/facebook.png"
+                height="40"
+                width="32"
+              />
+            </a>
           </v-col>
           <v-col class="d-flex justify-center" cols="3">
-            <v-img
-              src="@/assets/images/icons/insta.png"
-              height="40"
-              width="32"
-            />
+            <a :href="contactData?.instagram">
+              <v-img
+                src="@/assets/images/icons/insta.png"
+                height="40"
+                width="32"
+              />
+            </a>
           </v-col>
           <v-col class="d-flex justify-start" cols="3">
-            <v-img
-              src="@/assets/images/icons/tiktok.png"
-              class="mt-1"
-              height="35"
-              width="35"
-            />
+            <a :href="contactData?.tiktok">
+              <v-img
+                src="@/assets/images/icons/tiktok.png"
+                class="mt-1"
+                height="35"
+                width="35"
+              />
+            </a>
+          </v-col>
+          <v-col
+            class="d-flex justify-center flex-column align-center"
+            cols="12"
+          >
+            <p class="text-caption">Wha'ts App Support (24 hrs)</p>
+            <a
+              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=The Gypsy Support here - How may I help you. ?`"
+            >
+              <v-img
+                src="@/assets/whatsapp.svg"
+                class="mt-1"
+                height="35"
+                width="35"
+              />
+            </a>
           </v-col>
         </v-row>
         <div
           v-if="userName != null"
           style="font-size: 12px"
-          class="text-grey my-1"
+          class="text-grey my-4"
         >
           <router-link
             class="text-decoration-none text-grey"
@@ -1181,25 +1241,25 @@
             Terms
           </router-link>
         </div>
-        <div class="drawer-social d-flex" style="width: 100%">
+        <!-- <div class="drawer-social d-flex" style="width: 100%">
           <div>
             <h5>WhatsApp</h5>
             <a
               style="text-decoration: none; font-size: 10px"
               :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=Hello!`"
             >
-              {{ footerData?.whats_app }}
+              {{ contactData?.whats_app }}
             </a>
           </div>
           <div>
             <h5>Contact us</h5>
             <a
               style="text-decoration: none; font-size: 10px"
-              :href="`mailto:${footerData?.email_id}`"
-              >{{ footerData?.email_id }}</a
+              :href="`mailto:${contactData?.email_id}`"
+              >{{ contactData?.email_id }}</a
             >
           </div>
-        </div>
+        </div> -->
         <v-divider class="mt-2 mb-n2" />
         <v-container class="footer-bottom pb-2 d-flex justify-center">
           <div class="d-flag d-flex justify-space-between w-100 align-center">
@@ -1325,6 +1385,9 @@ export default {
     },
     isMyProfile() {
       return this.$route.path == '/my-profile';
+    },
+    isSignIn() {
+      return this.$route.path == '/social-sign-up';
     },
     isResumeProfile() {
       return this.$route.path == '/resume-profile';
@@ -1720,8 +1783,9 @@ export default {
       this.currentTime = singaporeTime.format('HH:mm:ss');
     },
     loginGypsy() {
-      const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
-      window.location.href = externalURL;
+      this.$router.push('/sign-in');
+      //const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
+      //window.location.href = externalURL;
       //axios
       //  .post(`/gypsy-login/google`, {
       //    app_id: 5,
@@ -2112,6 +2176,11 @@ export default {
 </script>
 
 <style scoped>
+.v-field--variant-filled .v-field__overlay {
+  background-color: white !important;
+  opacity: 0.04;
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
 .view-all {
   position: sticky !important;
   top: 0 !important;
