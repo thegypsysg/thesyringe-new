@@ -374,6 +374,7 @@ export default {
   data() {
     return {
       isLogin: false,
+      userName: null,
       footerData: {
         company_name: '',
         location: '',
@@ -400,6 +401,22 @@ export default {
     isSpecific() {
       return this.$route.params.name;
     },
+    tokenProvider() {
+      // Mendapatkan URL dari browser
+      const url = new URL(window.location.href);
+
+      // Mendapatkan nilai token dari parameter query 'token'
+      const tokenParam = url.searchParams.get('token');
+      if (tokenParam) {
+        localStorage.setItem('token', tokenParam);
+      }
+
+      // Mengupdate data 'token' dalam komponen dengan nilai yang ditemukan
+      return tokenParam;
+    },
+    token() {
+      return localStorage.getItem('token');
+    },
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -407,11 +424,57 @@ export default {
   mounted() {
     this.getAppContact();
     this.getTrendingCardData();
+    const token = localStorage.getItem('token');
+    if (this.tokenProvider != null) {
+      this.getHeaderUserData();
+    } else if (token) {
+      this.getHeaderUserData();
+    }
+
+    app.config.globalProperties.$eventBus.$on(
+      'getTokenStart',
+      this.getTokenStart
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'getHeaderUserData',
+      this.getHeaderUserData
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderWelcome2',
+      this.changeHeaderWelcome2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderWelcome3',
+      this.changeHeaderWelcome3
+    );
+    app.config.globalProperties.$eventBus.$on('getUserName', this.getUserName);
+  },
+  beforeUnmount() {
+    app.config.globalProperties.$eventBus.$off(
+      'getTokenStart',
+      this.getTokenStart
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'getHeaderUserData',
+      this.getHeaderUserData
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'changeHeaderWelcome2',
+      this.changeHeaderWelcome2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'changeHeaderWelcome3',
+      this.changeHeaderWelcome3
+    );
+    app.config.globalProperties.$eventBus.$off('getUserName', this.getUserName);
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getUserName(name) {
+      this.userName = name;
+    },
     applyJob() {
       const userName = localStorage.getItem('userName');
       if (userName == 'null' || userName == null) {
@@ -576,6 +639,70 @@ export default {
     },
     whatsappFooter() {
       window.location.href = `https://api.whatsapp.com/send?phone=+6589102000&text=The Syringe Support - May I help you please`;
+    },
+    getTokenStart(tokenParam) {
+      this.tokenStart = tokenParam;
+    },
+    changeHeaderWelcome2() {
+      this.userName = localStorage.getItem('name');
+      this.getHeaderUserData();
+      // this.titleWelcome = title;
+    },
+    changeHeaderWelcome3() {
+      this.getHeaderUserData2();
+      // this.titleWelcome = title;
+    },
+    getHeaderUserData() {
+      this.isLoading = true;
+      //console.log(this.tokenProvider);
+      const token = localStorage.getItem('token');
+      axios
+        .get(`/gypsy-user`, {
+          headers: {
+            Authorization: `Bearer ${
+              this.tokenProvider ? this.tokenProvider : token
+            }`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          //console.log(data);
+
+          this.userName = data.name;
+          // this.userImage = null;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error.response.status == 401);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getHeaderUserData2() {
+      this.isLoading = true;
+      const token = localStorage.getItem('token');
+      axios
+        .get(`/gypsy-user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+
+          this.userName = data.name;
+
+          // this.userImage = null;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };

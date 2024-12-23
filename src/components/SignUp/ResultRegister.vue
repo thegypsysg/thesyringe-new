@@ -16,22 +16,23 @@
               <v-row>
                 <v-col cols="12">
                   <h2 class="mt-6">
-                    Hi {{ name }}
+                    {{ name || "" }}
                   </h2>
                   <br />
-                  <h2>You have successfully created your Basic Resume Profile .</h2>
+                  <h2>You have successfully completed the Sign Up process.</h2>
+                  <br />
+                  <h2>Gypsy ID : {{ gId || "" }}</h2>
 
-                  <div class="d-flex mt-12 align-center w-100">
+                  <div class="d-flex mt-12 align-center w-50">
                     <v-btn
-                    :disabled="isLoading"
                       type="submit"
                       variant="outlined"
                       class="login-btn"
                       :class="{
-                        'w-50 login-btn-mobile': isSmall,
+                        'w-25 login-btn-mobile': isSmall,
                         'w-33': !isSmall,
                       }"
-                      @click="goToPath()"
+                      @click="changeHeader()"
                     >
                       OK
                     </v-btn>
@@ -61,16 +62,14 @@
 </template>
 
 <script>
-import app from '@/util/eventBus';
-import axios from '@/util/axios';
+import app from "@/util/eventBus";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "AdditionalSecurity",
   data() {
     return {
-      isLoading: false,
       name: "",
-      path: '',
+      gId: "",
       screenWidth: window.innerWidth,
       isSuccess: false,
       successMessage: "",
@@ -85,56 +84,31 @@ export default {
     window.addEventListener("resize", this.handleResize);
   },
   mounted() {
-    this.name = localStorage.getItem("userName")
-      ? localStorage.getItem("userName")
+    this.name = localStorage.getItem("name")
+      ? localStorage.getItem("name")
       : "";
     this.gId = localStorage.getItem("g_id") ? localStorage.getItem("g_id") : "";
-    this.getData()
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    goToPath() {
-      if (this.path != '/') {
-          this.$router.push(this.path);
-        } else {
-          this.$router.push(this.path);
-        app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-        }
-    },
-    getData() {
-      
-    this.isLoading = true;
+    changeHeader() {
+      const appId = localStorage.getItem("app_id");
       const token = localStorage.getItem("token");
-      axios
-      .get(`/gypsy-applicant`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const data = response.data.data;
-        console.log(data);
-        if (data.slug) {
-          this.path = `/${data.slug}`;
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', `/${data.slug}`);
-        } else {
-        this.path = "/";
-          app.config.globalProperties.$eventBus.$emit('changeHeaderPath', "/");
+      if (appId == "") {
+        app.config.globalProperties.$eventBus.$emit(
+          "changeHeaderWelcome2",
+          "Sign-Up / Sign-in"
+        );
+        this.$router.push(`/?token=${token}`);
+      } else if (appId == "5") {
+        const externalURL = `https://the-syringe.com?token=${token}`;
+        window.location.href = externalURL;
+      } else if (appId == "2") {
+        const externalURL = `https://mall-e.in?token=${token}`;
+        window.location.href = externalURL;
       }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
-        
-        // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
-
-      
     },
     nextStep() {
       this.$emit("nextStep");
@@ -155,7 +129,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-image: url("@/assets/Syringe-Signup-main.jpg");
+  background-image: url("@/assets/header.png");
   background-position: center;
   background-size: cover;
   background-color: #cccccc;
@@ -189,8 +163,8 @@ export default {
   width: 400px;
   height: 50px;
 
-  background: #fa2964;
-  border-radius: 5px;
+  background: #5d87ff;
+  border-radius: 2px;
   color: white !important;
   font-weight: 500;
   font-size: 14px;

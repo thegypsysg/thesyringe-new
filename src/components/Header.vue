@@ -538,7 +538,7 @@
         !isTerms &&
         !isProfile &&
         !isSignIn &&
-        userName == null
+        !userName
       "
       elevation="0"
       class="btn_sign__up mr-4"
@@ -553,7 +553,7 @@
         !isTerms &&
         !isProfile &&
         !isSignIn &&
-        userName != null
+        userName
       "
       elevation="0"
       class="btn_log__out"
@@ -1279,6 +1279,7 @@
 </template>
 
 <script>
+import { setAuthHeader } from '@/util/axios';
 import { mapState, mapMutations } from 'vuex';
 import app from '@/util/eventBus';
 
@@ -1428,8 +1429,10 @@ export default {
   mounted() {
     const token = localStorage.getItem('token');
     if (this.tokenProvider != null) {
+      setAuthHeader(this.tokenProvider);
       this.getHeaderUserData();
     } else if (token) {
+      setAuthHeader(token);
       this.getHeaderUserData();
     }
     this.search = null;
@@ -1497,6 +1500,14 @@ export default {
       'removeDetail',
       this.removeDetail
     );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderWelcome2',
+      this.changeHeaderWelcome2
+    );
+    app.config.globalProperties.$eventBus.$on(
+      'changeHeaderWelcome3',
+      this.changeHeaderWelcome3
+    );
   },
   beforeUnmount() {
     // app.config.globalProperties.$eventBus.$off(
@@ -1556,6 +1567,14 @@ export default {
     app.config.globalProperties.$eventBus.$on(
       'removeDetail',
       this.removeDetail
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'changeHeaderWelcome2',
+      this.changeHeaderWelcome2
+    );
+    app.config.globalProperties.$eventBus.$off(
+      'changeHeaderWelcome3',
+      this.changeHeaderWelcome3
     );
   },
   unmounted() {
@@ -1658,6 +1677,7 @@ export default {
     },
     getTokenStart(tokenParam) {
       this.tokenStart = tokenParam;
+      setAuthHeader(tokenParam);
     },
     getTrendingCardData2() {
       this.tokenStart = null;
@@ -1682,6 +1702,7 @@ export default {
           localStorage.setItem('g_id', null);
           localStorage.setItem('user_image', null);
           localStorage.setItem('token', null);
+          app.config.globalProperties.$eventBus.$emit('getUserName');
           this.path = '/';
           window.location.href = '/';
         })
@@ -1711,11 +1732,20 @@ export default {
           this.userDated = data.last_login;
           this.userImage =
             data.image != null ? this.$fileURL + data.image : null;
+          app.config.globalProperties.$eventBus.$emit('getUserName');
           // this.userImage = null;
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+          console.log(error.response.status == 401);
+          if (error.response.status == 401) {
+            localStorage.setItem('name', null);
+            localStorage.setItem('userName', null);
+            localStorage.setItem('g_id', null);
+            localStorage.setItem('user_image', null);
+            localStorage.setItem('token', null);
+            app.config.globalProperties.$eventBus.$emit('getUserName');
+          }
         })
         .finally(() => {
           this.isLoading = false;
@@ -1747,6 +1777,20 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    changeHeaderWelcome2() {
+      this.userName = localStorage.getItem('name');
+      this.userDated = localStorage.getItem('last_login');
+      this.userImage = this.$fileURL + localStorage.getItem('user_image');
+      console.log(this.userName);
+      console.log(this.userDated);
+      console.log(this.userImage);
+      this.getHeaderUserData();
+      // this.titleWelcome = title;
+    },
+    changeHeaderWelcome3() {
+      this.getHeaderUserData2();
+      // this.titleWelcome = title;
     },
     getAppContact() {
       // this.isLoading = true;
