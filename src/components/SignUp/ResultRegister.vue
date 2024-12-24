@@ -16,12 +16,12 @@
               <v-row>
                 <v-col cols="12">
                   <h2 class="mt-6">
-                    {{ name || "" }}
+                    {{ name || '' }}
                   </h2>
                   <br />
                   <h2>You have successfully completed the Sign Up process.</h2>
                   <br />
-                  <h2>Gypsy ID : {{ gId || "" }}</h2>
+                  <h2>Gypsy ID : {{ gId || '' }}</h2>
 
                   <div class="d-flex mt-12 align-center w-50">
                     <v-btn
@@ -62,17 +62,17 @@
 </template>
 
 <script>
-import app from "@/util/eventBus";
+// import app from '@/util/eventBus';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "AdditionalSecurity",
+  name: 'AdditionalSecurity',
   data() {
     return {
-      name: "",
-      gId: "",
+      name: '',
+      gId: '',
       screenWidth: window.innerWidth,
       isSuccess: false,
-      successMessage: "",
+      successMessage: '',
     };
   },
   computed: {
@@ -81,47 +81,47 @@ export default {
     },
   },
   created() {
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
   },
   mounted() {
-    this.name = localStorage.getItem("name")
-      ? localStorage.getItem("name")
-      : "";
-    this.gId = localStorage.getItem("g_id") ? localStorage.getItem("g_id") : "";
+    this.name = localStorage.getItem('name')
+      ? localStorage.getItem('name')
+      : '';
+    this.gId = localStorage.getItem('g_id') ? localStorage.getItem('g_id') : '';
   },
   unmounted() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     changeHeader() {
-      const appId = localStorage.getItem("app_id");
-      const token = localStorage.getItem("token");
-      if (appId == "") {
-        app.config.globalProperties.$eventBus.$emit(
-          "changeHeaderWelcome2",
-          "Sign-Up / Sign-in"
-        );
-        this.$router.push(`/?token=${token}`);
-      } else if (appId == "5") {
-        const externalURL = `https://the-syringe.com?token=${token}`;
-        window.location.href = externalURL;
-      } else if (appId == "2") {
-        const externalURL = `https://mall-e.in?token=${token}`;
-        window.location.href = externalURL;
-      }
+      // const appId = localStorage.getItem('app_id');
+      const token = localStorage.getItem('token');
+      // if (appId == "") {
+      //   app.config.globalProperties.$eventBus.$emit(
+      //     "changeHeaderWelcome2",
+      //     "Sign-Up / Sign-in"
+      //   );
+      //   this.$router.push(`/?token=${token}`);
+      // } else if (appId == "5") {
+      const externalURL = `https://the-syringe.com?token=${token}`;
+      window.location.href = externalURL;
+      // } else if (appId == "2") {
+      //   const externalURL = `https://mall-e.in?token=${token}`;
+      //   window.location.href = externalURL;
+      // }
     },
     nextStep() {
-      this.$emit("nextStep");
+      this.$emit('nextStep');
     },
     backStep() {
-      this.$emit("backStep");
+      this.$emit('backStep');
     },
     handleResize() {
       this.screenWidth = window.innerWidth;
     },
     resendOTP() {
       this.isSuccess = true;
-      this.successMessage = "Success send OTP";
+      this.successMessage = 'Success send OTP';
     },
   },
 };
@@ -129,7 +129,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-image: url("@/assets/header.png");
+  background-image: url('@/assets/header.png');
   background-position: center;
   background-size: cover;
   background-color: #cccccc;
