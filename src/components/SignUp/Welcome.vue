@@ -144,7 +144,7 @@
                     />
                   </div>
                 </div>
-                <p
+                <!-- <p
                   v-if="!isMobile"
                   class="text-grey mt-4"
                   :class="{ 'mb-4': !isSmall, 'mb-6': isSmall }"
@@ -161,7 +161,7 @@
                     "
                     >Enter Mobile number</span
                   >
-                </p>
+                </p> -->
                 <div
                   v-if="isMobile && !isSendOTP"
                   class="text-grey mt-4"
@@ -472,18 +472,18 @@
   </div>
 </template>
 <script setup>
-import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
+import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput';
 </script>
 
 <script>
-import axios from "@/util/axios";
-import app from "@/util/eventBus";
+import axios from '@/util/axios';
+import app from '@/util/eventBus';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Welcome",
+  name: 'Welcome',
   data() {
     return {
-      appIdLogin: "",
+      appIdLogin: '',
       tokenLogin: null,
       isSending: false,
       isSuccessForgot: false,
@@ -501,30 +501,30 @@ export default {
       rememberMe: false,
       showPassword: false,
       email: null,
-      password: "",
+      password: '',
       mobile: null,
-      otp: "",
+      otp: '',
       phoneEvent: null,
       isError: false,
       token: null,
       isSuccess: false,
       appDetails1: null,
-      errorMessage: "",
-      successMessage: "",
+      errorMessage: '',
+      successMessage: '',
       emailRules: [
         (value) => {
           if (value) return true;
-          return "E-mail is requred.";
+          return 'E-mail is requred.';
         },
         (value) => {
           if (/.+@.+\..+/.test(value)) return true;
-          return "E-mail must be valid.";
+          return 'E-mail must be valid.';
         },
       ],
       passwordRules: [
         (value) => {
           if (value) return true;
-          return "Password is requred.";
+          return 'Password is requred.';
         },
       ],
       screenWidth: window.innerWidth,
@@ -535,14 +535,14 @@ export default {
       return this.screenWidth < 640;
     },
     socialProvider() {
-      return this.capitalizeFirstLetter(localStorage.getItem("social")) ==
-        "Linkedin-openid"
-        ? "LinkedIn Login"
-        : this.capitalizeFirstLetter(localStorage.getItem("social")) + " Login";
+      return this.capitalizeFirstLetter(localStorage.getItem('social')) ==
+        'Linkedin-openid'
+        ? 'LinkedIn Login'
+        : this.capitalizeFirstLetter(localStorage.getItem('social')) + ' Login';
     },
     appId() {
-      localStorage.setItem("app_id", this.$route.query.app_id || "");
-      return this.$route.query.app_id || "";
+      localStorage.setItem('app_id', this.$route.query.app_id || '');
+      return this.$route.query.app_id || '';
     },
   },
   watch: {
@@ -569,14 +569,14 @@ export default {
     },
   },
   created() {
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
   },
   mounted() {
     console.log(this.appId);
     this.getAppDetails1();
   },
   unmounted() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     sendOTP() {
@@ -591,9 +591,9 @@ export default {
           console.log(data);
           this.successMessage = data.message;
           this.isSuccess = true;
-          localStorage.setItem("email", data.data.email_id);
+          localStorage.setItem('email', data.data.email_id);
           // this.email = "";
-          this.$router.push("/sign-up-email");
+          this.$router.push('/sign-up-email');
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -602,7 +602,7 @@ export default {
             ? error.response.data.email_id[0]
             : error.response.data.message
             ? error.response.data.message
-            : "Something Wrong!!!";
+            : 'Something Wrong!!!';
           this.errorMessage = message;
           this.isError = true;
         })
@@ -617,31 +617,31 @@ export default {
       }, 3000);
     },
     capitalizeFirstLetter(string) {
-      return string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
+      return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
     },
     nextStep() {
-      this.$emit("nextStep");
+      this.$emit('nextStep');
     },
     loginSocial(social_name) {
-      if (social_name == "facebook") {
+      if (social_name == 'facebook') {
         this.isFacebook = true;
       } else {
         axios
           .post(`/gypsy-login/${social_name}`, {
-            app_id: this.appId == "" ? this.$appId : this.appId,
+            app_id: this.appId == '' ? this.$appId : this.appId,
           })
           .then((response) => {
             console.log(response);
             if (response) {
               window.location.assign(response.data.target_url);
             } else {
-              window.location.href = "/sign-in";
+              window.location.href = '/sign-in';
             }
             console.log(response.data.target_url);
           })
           .catch((error) => {
             console.log(error);
-            window.location.href = "/sign-in";
+            window.location.href = '/sign-in';
           });
       }
     },
@@ -666,7 +666,7 @@ export default {
             ? error.response.data.email_id[0]
             : error.response.data.message
             ? error.response.data.message
-            : "Something Wrong!!!";
+            : 'Something Wrong!!!';
           this.errorMessage = message;
           this.isError = true;
         })
@@ -675,12 +675,12 @@ export default {
         });
     },
     hideEmail(email) {
-      const atIndex = email.indexOf("@");
+      const atIndex = email.indexOf('@');
       if (atIndex >= 0) {
         const username = email.substring(0, atIndex);
         const hiddenPart = username
           .substring(0, Math.max(0, username.length - 6))
-          .replace(/./g, "*");
+          .replace(/./g, '*');
         const visiblePart = username.substring(
           Math.max(0, username.length - 6)
         );
@@ -701,7 +701,7 @@ export default {
             const data = response.data;
             this.successMessage = data.message;
             this.isSuccess = true;
-            localStorage.setItem("mobile", this.mobile);
+            localStorage.setItem('mobile', this.mobile);
             // this.email = "";
             this.nextStep();
           })
@@ -717,7 +717,7 @@ export default {
                 } is already exist in our database using the email id ${this.hideEmail(
                   error.response.data.email_id
                 )}`
-              : "Something Wrong!!!";
+              : 'Something Wrong!!!';
             this.errorMessage = message;
             this.isError = true;
           })
@@ -738,38 +738,38 @@ export default {
             const data = response.data.data;
             console.log(data);
             if (data == null) {
-              localStorage.setItem("email", this.email);
-              this.$router.push("/sign-up-email");
-            } else if (data.social_type == "E" && data.password) {
+              localStorage.setItem('email', this.email);
+              this.$router.push('/sign-up-email');
+            } else if (data.social_type == 'E' && data.password) {
               this.isLogin = true;
-            } else if (data.social_type == "E" && !data.password) {
-              localStorage.setItem("email", data.email_id);
-              localStorage.setItem("gypsy_id", data.gypsy_id);
-              localStorage.setItem("token", data.token);
-              this.$router.push("/signup-email");
-            } else if (data.social_type == "G") {
+            } else if (data.social_type == 'E' && !data.password) {
+              localStorage.setItem('email', data.email_id);
+              localStorage.setItem('gypsy_id', data.gypsy_id);
+              localStorage.setItem('token', data.token);
+              this.$router.push('/signup-email');
+            } else if (data.social_type == 'G') {
               this.successMessage =
-                "You Last used Google to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .";
-              this.isLogin = true;
-              this.isSuccess = true;
-            } else if (data.social_type == "F") {
-              this.successMessage =
-                "You Last used Facebook to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .";
+                'You Last used Google to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .';
               this.isLogin = true;
               this.isSuccess = true;
-            } else if (data.social_type == "L") {
+            } else if (data.social_type == 'F') {
               this.successMessage =
-                "You Last used Linkedin to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .";
+                'You Last used Facebook to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .';
               this.isLogin = true;
               this.isSuccess = true;
-            } else if (data.social_type == "T") {
+            } else if (data.social_type == 'L') {
               this.successMessage =
-                "You Last used Tiktok to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .";
+                'You Last used Linkedin to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .';
               this.isLogin = true;
               this.isSuccess = true;
-            } else if (data.social_type == "X") {
+            } else if (data.social_type == 'T') {
               this.successMessage =
-                "You Last used Twitter to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .";
+                'You Last used Tiktok to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .';
+              this.isLogin = true;
+              this.isSuccess = true;
+            } else if (data.social_type == 'X') {
+              this.successMessage =
+                'You Last used Twitter to Sign-Up please use it again for faster login your account or please Enter your Password to proceed .';
               this.isLogin = true;
               this.isSuccess = true;
             }
@@ -786,7 +786,7 @@ export default {
               ? error.response.data.email_id[0]
               : error.response.data.message
               ? error.response.data.message
-              : "Something Wrong!!!";
+              : 'Something Wrong!!!';
             this.errorMessage = message;
             this.isError = true;
           })
@@ -796,7 +796,7 @@ export default {
       }
     },
     loginEmail() {
-      this.appIdLogin = localStorage.getItem("app_id");
+      this.appIdLogin = localStorage.getItem('app_id');
       this.isSending = true;
       const payload = {
         email_id: this.email,
@@ -814,20 +814,20 @@ export default {
             this.successMessage = data.message;
             this.isSuccess = true;
 
-            if (this.appIdLogin == "") {
-              localStorage.setItem("social", "Email");
-              localStorage.setItem("token", data.token);
+            if (this.appIdLogin == '') {
+              localStorage.setItem('social', 'Email');
+              localStorage.setItem('token', data.token);
               app.config.globalProperties.$eventBus.$emit(
-                "changeHeaderWelcome3",
-                "Sign-Up / Sign-in"
+                'changeHeaderWelcome3',
+                'Sign-Up / Sign-in'
               );
               this.$router.push(`/?token=${data.token}`);
-            } else if (this.appIdLogin == "5") {
-              localStorage.setItem("social", "Email");
+            } else if (this.appIdLogin == '5') {
+              localStorage.setItem('social', 'Email');
               const externalURL = `https://the-syringe.com?token=${data.token}`;
               window.location.href = externalURL;
-            } else if (this.appIdLogin == "2") {
-              localStorage.setItem("social", "Email");
+            } else if (this.appIdLogin == '2') {
+              localStorage.setItem('social', 'Email');
               const externalURL = `https://mall-e.in?token=${data.token}`;
               window.location.href = externalURL;
             }
@@ -838,7 +838,7 @@ export default {
         .catch((error) => {
           console.log(error);
           // eslint-disable-next-line
-          this.errorMessage = "Wrong Password";
+          this.errorMessage = 'Wrong Password';
           this.isError = true;
         })
         .finally(() => {
@@ -847,21 +847,21 @@ export default {
     },
     closeChangePassword() {
       this.isChangePassword = false;
-      if (this.appIdLogin == "") {
-        console.log("app id, ", this.appIdLogin);
-        localStorage.setItem("social", "Email");
-        localStorage.setItem("token", this.tokenLogin);
+      if (this.appIdLogin == '') {
+        console.log('app id, ', this.appIdLogin);
+        localStorage.setItem('social', 'Email');
+        localStorage.setItem('token', this.tokenLogin);
         app.config.globalProperties.$eventBus.$emit(
-          "changeHeaderWelcome3",
-          "Sign-Up / Sign-in"
+          'changeHeaderWelcome3',
+          'Sign-Up / Sign-in'
         );
         this.$router.push(`/?token=${this.tokenLogin}`);
-      } else if (this.appIdLogin == "5") {
-        localStorage.setItem("social", "Email");
+      } else if (this.appIdLogin == '5') {
+        localStorage.setItem('social', 'Email');
         const externalURL = `https://the-syringe.com?token=${this.tokenLogin}`;
         window.location.href = externalURL;
-      } else if (this.appIdLogin == "2") {
-        localStorage.setItem("social", "Email");
+      } else if (this.appIdLogin == '2') {
+        localStorage.setItem('social', 'Email');
         const externalURL = `https://mall-e.in?token=${this.tokenLogin}`;
         window.location.href = externalURL;
       }

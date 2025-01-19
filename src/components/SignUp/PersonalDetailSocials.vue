@@ -316,14 +316,14 @@
 </template>
 
 <script>
-import axios from "@/util/axios";
-import app from "@/util/eventBus";
-import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
-import MazSelect from "maz-ui/components/MazSelect";
-import ImageCropperDialog from "../ImageCropperDialog.vue";
+import axios from '@/util/axios';
+import app from '@/util/eventBus';
+import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput';
+import MazSelect from 'maz-ui/components/MazSelect';
+import ImageCropperDialog from '../ImageCropperDialog.vue';
 
 export default {
-  name: "PersonalDetails",
+  name: 'PersonalDetails',
   components: {
     MazPhoneNumberInput,
     MazSelect,
@@ -337,271 +337,271 @@ export default {
       valid: false,
       image: null,
       imageSend: null,
-      image_path: "",
-      name: "",
-      email: "",
-      country: "SG",
-      gender: "",
-      code: "",
+      image_path: '',
+      name: '',
+      email: '',
+      country: 'SG',
+      gender: '',
+      code: '',
       mobile: null,
       phoneEvent: null,
       screenWidth: window.innerWidth,
       isError: false,
       isErrorPhone: false,
       isSuccess: false,
-      errorMessage: "",
-      errorMessagePhone: "",
-      successMessage: "",
-      emailErrorPhone: "",
+      errorMessage: '',
+      errorMessagePhone: '',
+      successMessage: '',
+      emailErrorPhone: '',
       resource: {
         code: [],
       },
       options: [
-        { value: "SG", label: "Singapore" },
-        { value: "BD", label: "Bangladesh" },
-        { value: "IN", label: "India" },
-        { value: "MY", label: "Malaysia" },
-        { value: "GB", label: "United Kingdom" },
-        { value: "PH", label: "Philippines" },
-        { value: "AF", label: "Afghanistan" },
-        { value: "AX", label: "Aland Islands" },
-        { value: "AL", label: "Albania" },
-        { value: "DZ", label: "Algeria" },
-        { value: "AS", label: "American Samoa" },
-        { value: "AD", label: "Andorra" },
-        { value: "AO", label: "Angola" },
-        { value: "AI", label: "Anguilla" },
-        { value: "AQ", label: "Antarctica" },
-        { value: "AG", label: "Antigua And Barbuda" },
-        { value: "AR", label: "Argentina" },
-        { value: "AM", label: "Armenia" },
-        { value: "AW", label: "Aruba" },
-        { value: "AU", label: "Australia" },
-        { value: "AT", label: "Austria" },
-        { value: "AZ", label: "Azerbaijan" },
-        { value: "BS", label: "Bahamas" },
-        { value: "BH", label: "Bahrain" },
-        { value: "BB", label: "Barbados" },
-        { value: "BY", label: "Belarus" },
-        { value: "BE", label: "Belgium" },
-        { value: "BZ", label: "Belize" },
-        { value: "BJ", label: "Benin" },
-        { value: "BM", label: "Bermuda" },
-        { value: "BT", label: "Bhutan" },
-        { value: "BO", label: "Bolivia" },
-        { value: "BA", label: "Bosnia And Herzegovina" },
-        { value: "BW", label: "Botswana" },
-        { value: "BV", label: "Bouvet Island" },
-        { value: "BR", label: "Brazil" },
-        { value: "IO", label: "British Indian Ocean Territory" },
-        { value: "BN", label: "Brunei Darussalam" },
-        { value: "BG", label: "Bulgaria" },
-        { value: "BF", label: "Burkina Faso" },
-        { value: "BI", label: "Burundi" },
-        { value: "KH", label: "Cambodia" },
-        { value: "CM", label: "Cameroon" },
-        { value: "CA", label: "Canada" },
-        { value: "CV", label: "Cape Verde" },
-        { value: "KY", label: "Cayman Islands" },
-        { value: "CF", label: "Central African Republic" },
-        { value: "TD", label: "Chad" },
-        { value: "CL", label: "Chile" },
-        { value: "CN", label: "China" },
-        { value: "CX", label: "Christmas Island" },
-        { value: "CC", label: "Cocos (Keeling) Islands" },
-        { value: "CO", label: "Colombia" },
-        { value: "KM", label: "Comoros" },
-        { value: "CG", label: "Congo" },
-        { value: "CD", label: "Congo, Democratic Republic" },
-        { value: "CK", label: "Cook Islands" },
-        { value: "CR", label: "Costa Rica" },
-        { value: "CI", label: "Cote D'Ivoire" },
-        { value: "HR", label: "Croatia" },
-        { value: "CU", label: "Cuba" },
-        { value: "CY", label: "Cyprus" },
-        { value: "CZ", label: "Czech Republic" },
-        { value: "DK", label: "Denmark" },
-        { value: "DJ", label: "Djibouti" },
-        { value: "DM", label: "Dominica" },
-        { value: "DO", label: "Dominican Republic" },
-        { value: "EC", label: "Ecuador" },
-        { value: "EG", label: "Egypt" },
-        { value: "SV", label: "El Salvador" },
-        { value: "GQ", label: "Equatorial Guinea" },
-        { value: "ER", label: "Eritrea" },
-        { value: "EE", label: "Estonia" },
-        { value: "ET", label: "Ethiopia" },
-        { value: "FK", label: "Falkland Islands (Malvinas)" },
-        { value: "FO", label: "Faroe Islands" },
-        { value: "FJ", label: "Fiji" },
-        { value: "FI", label: "Finland" },
-        { value: "FR", label: "France" },
-        { value: "GF", label: "French Guiana" },
-        { value: "PF", label: "French Polynesia" },
-        { value: "TF", label: "French Southern Territories" },
-        { value: "GA", label: "Gabon" },
-        { value: "GM", label: "Gambia" },
-        { value: "GE", label: "Georgia" },
-        { value: "DE", label: "Germany" },
-        { value: "GH", label: "Ghana" },
-        { value: "GI", label: "Gibraltar" },
-        { value: "GR", label: "Greece" },
-        { value: "GL", label: "Greenland" },
-        { value: "GD", label: "Grenada" },
-        { value: "GP", label: "Guadeloupe" },
-        { value: "GU", label: "Guam" },
-        { value: "GT", label: "Guatemala" },
-        { value: "GG", label: "Guernsey" },
-        { value: "GN", label: "Guinea" },
-        { value: "GW", label: "Guinea-Bissau" },
-        { value: "GY", label: "Guyana" },
-        { value: "HT", label: "Haiti" },
-        { value: "HM", label: "Heard Island & Mcdonald Islands" },
-        { value: "VA", label: "Holy See (Vatican City State)" },
-        { value: "HN", label: "Honduras" },
-        { value: "HK", label: "Hong Kong" },
-        { value: "HU", label: "Hungary" },
-        { value: "IS", label: "Iceland" },
-        { value: "ID", label: "Indonesia" },
-        { value: "IR", label: "Iran, Islamic Republic Of" },
-        { value: "IQ", label: "Iraq" },
-        { value: "IE", label: "Ireland" },
-        { value: "IM", label: "Isle Of Man" },
-        { value: "IL", label: "Israel" },
-        { value: "IT", label: "Italy" },
-        { value: "JM", label: "Jamaica" },
-        { value: "JP", label: "Japan" },
-        { value: "JE", label: "Jersey" },
-        { value: "JO", label: "Jordan" },
-        { value: "KZ", label: "Kazakhstan" },
-        { value: "KE", label: "Kenya" },
-        { value: "KI", label: "Kiribati" },
-        { value: "KR", label: "Korea" },
-        { value: "KW", label: "Kuwait" },
-        { value: "KG", label: "Kyrgyzstan" },
-        { value: "LA", label: "Lao People's Democratic Republic" },
-        { value: "LV", label: "Latvia" },
-        { value: "LB", label: "Lebanon" },
-        { value: "LS", label: "Lesotho" },
-        { value: "LR", label: "Liberia" },
-        { value: "LY", label: "Libyan Arab Jamahiriya" },
-        { value: "LI", label: "Liechtenstein" },
-        { value: "LT", label: "Lithuania" },
-        { value: "LU", label: "Luxembourg" },
-        { value: "MO", label: "Macao" },
-        { value: "MK", label: "Macedonia" },
-        { value: "MG", label: "Madagascar" },
-        { value: "MW", label: "Malawi" },
-        { value: "MV", label: "Maldives" },
-        { value: "ML", label: "Mali" },
-        { value: "MT", label: "Malta" },
-        { value: "MH", label: "Marshall Islands" },
-        { value: "MQ", label: "Martinique" },
-        { value: "MR", label: "Mauritania" },
-        { value: "MU", label: "Mauritius" },
-        { value: "YT", label: "Mayotte" },
-        { value: "MX", label: "Mexico" },
-        { value: "FM", label: "Micronesia, Federated States Of" },
-        { value: "MD", label: "Moldova" },
-        { value: "MC", label: "Monaco" },
-        { value: "MN", label: "Mongolia" },
-        { value: "ME", label: "Montenegro" },
-        { value: "MS", label: "Montserrat" },
-        { value: "MA", label: "Morocco" },
-        { value: "MZ", label: "Mozambique" },
-        { value: "MM", label: "Myanmar" },
-        { value: "NA", label: "Namibia" },
-        { value: "NR", label: "Nauru" },
-        { value: "NP", label: "Nepal" },
-        { value: "NL", label: "Netherlands" },
-        { value: "AN", label: "Netherlands Antilles" },
-        { value: "NC", label: "New Caledonia" },
-        { value: "NZ", label: "New Zealand" },
-        { value: "NI", label: "Nicaragua" },
-        { value: "NE", label: "Niger" },
-        { value: "NG", label: "Nigeria" },
-        { value: "NU", label: "Niue" },
-        { value: "NF", label: "Norfolk Island" },
-        { value: "MP", label: "Northern Mariana Islands" },
-        { value: "NO", label: "Norway" },
-        { value: "OM", label: "Oman" },
-        { value: "PK", label: "Pakistan" },
-        { value: "PW", label: "Palau" },
-        { value: "PS", label: "Palestinian Territory, Occupied" },
-        { value: "PA", label: "Panama" },
-        { value: "PG", label: "Papua New Guinea" },
-        { value: "PY", label: "Paraguay" },
-        { value: "PE", label: "Peru" },
-        { value: "PN", label: "Pitcairn" },
-        { value: "PL", label: "Poland" },
-        { value: "PT", label: "Portugal" },
-        { value: "PR", label: "Puerto Rico" },
-        { value: "QA", label: "Qatar" },
-        { value: "RE", label: "Reunion" },
-        { value: "RO", label: "Romania" },
-        { value: "RU", label: "Russian Federation" },
-        { value: "RW", label: "Rwanda" },
-        { value: "BL", label: "Saint Barthelemy" },
-        { value: "SH", label: "Saint Helena" },
-        { value: "KN", label: "Saint Kitts And Nevis" },
-        { value: "LC", label: "Saint Lucia" },
-        { value: "MF", label: "Saint Martin" },
-        { value: "PM", label: "Saint Pierre And Miquelon" },
-        { value: "VC", label: "Saint Vincent And Grenadines" },
-        { value: "WS", label: "Samoa" },
-        { value: "SM", label: "San Marino" },
-        { value: "ST", label: "Sao Tome And Principe" },
-        { value: "SA", label: "Saudi Arabia" },
-        { value: "SN", label: "Senegal" },
-        { value: "RS", label: "Serbia" },
-        { value: "SC", label: "Seychelles" },
-        { value: "SL", label: "Sierra Leone" },
-        { value: "SK", label: "Slovakia" },
-        { value: "SI", label: "Slovenia" },
-        { value: "SB", label: "Solomon Islands" },
-        { value: "SO", label: "Somalia" },
-        { value: "ZA", label: "South Africa" },
-        { value: "GS", label: "South Georgia And Sandwich Isl." },
-        { value: "ES", label: "Spain" },
-        { value: "LK", label: "Sri Lanka" },
-        { value: "SD", label: "Sudan" },
-        { value: "SR", label: "Suriname" },
-        { value: "SJ", label: "Svalbard And Jan Mayen" },
-        { value: "SZ", label: "Swaziland" },
-        { value: "SE", label: "Sweden" },
-        { value: "CH", label: "Switzerland" },
-        { value: "SY", label: "Syrian Arab Republic" },
-        { value: "TW", label: "Taiwan" },
-        { value: "TJ", label: "Tajikistan" },
-        { value: "TZ", label: "Tanzania" },
-        { value: "TH", label: "Thailand" },
-        { value: "TL", label: "Timor-Leste" },
-        { value: "TG", label: "Togo" },
-        { value: "TK", label: "Tokelau" },
-        { value: "TO", label: "Tonga" },
-        { value: "TT", label: "Trinidad And Tobago" },
-        { value: "TN", label: "Tunisia" },
-        { value: "TR", label: "Turkey" },
-        { value: "TM", label: "Turkmenistan" },
-        { value: "TC", label: "Turks And Caicos Islands" },
-        { value: "TV", label: "Tuvalu" },
-        { value: "UG", label: "Uganda" },
-        { value: "UA", label: "Ukraine" },
-        { value: "AE", label: "United Arab Emirates" },
-        { value: "US", label: "United States" },
-        { value: "UM", label: "United States Outlying Islands" },
-        { value: "UY", label: "Uruguay" },
-        { value: "UZ", label: "Uzbekistan" },
-        { value: "VU", label: "Vanuatu" },
-        { value: "VE", label: "Venezuela" },
-        { value: "VN", label: "Viet Nam" },
-        { value: "VG", label: "Virgin Islands}, British" },
-        { value: "VI", label: "Virgin Islands}, U.S." },
-        { value: "WF", label: "Wallis And Futuna" },
-        { value: "EH", label: "Western Sahara" },
-        { value: "YE", label: "Yemen" },
-        { value: "ZM", label: "Zambia" },
-        { value: "ZW", label: "Zimbabwe" },
+        { value: 'SG', label: 'Singapore' },
+        { value: 'BD', label: 'Bangladesh' },
+        { value: 'IN', label: 'India' },
+        { value: 'MY', label: 'Malaysia' },
+        { value: 'GB', label: 'United Kingdom' },
+        { value: 'PH', label: 'Philippines' },
+        { value: 'AF', label: 'Afghanistan' },
+        { value: 'AX', label: 'Aland Islands' },
+        { value: 'AL', label: 'Albania' },
+        { value: 'DZ', label: 'Algeria' },
+        { value: 'AS', label: 'American Samoa' },
+        { value: 'AD', label: 'Andorra' },
+        { value: 'AO', label: 'Angola' },
+        { value: 'AI', label: 'Anguilla' },
+        { value: 'AQ', label: 'Antarctica' },
+        { value: 'AG', label: 'Antigua And Barbuda' },
+        { value: 'AR', label: 'Argentina' },
+        { value: 'AM', label: 'Armenia' },
+        { value: 'AW', label: 'Aruba' },
+        { value: 'AU', label: 'Australia' },
+        { value: 'AT', label: 'Austria' },
+        { value: 'AZ', label: 'Azerbaijan' },
+        { value: 'BS', label: 'Bahamas' },
+        { value: 'BH', label: 'Bahrain' },
+        { value: 'BB', label: 'Barbados' },
+        { value: 'BY', label: 'Belarus' },
+        { value: 'BE', label: 'Belgium' },
+        { value: 'BZ', label: 'Belize' },
+        { value: 'BJ', label: 'Benin' },
+        { value: 'BM', label: 'Bermuda' },
+        { value: 'BT', label: 'Bhutan' },
+        { value: 'BO', label: 'Bolivia' },
+        { value: 'BA', label: 'Bosnia And Herzegovina' },
+        { value: 'BW', label: 'Botswana' },
+        { value: 'BV', label: 'Bouvet Island' },
+        { value: 'BR', label: 'Brazil' },
+        { value: 'IO', label: 'British Indian Ocean Territory' },
+        { value: 'BN', label: 'Brunei Darussalam' },
+        { value: 'BG', label: 'Bulgaria' },
+        { value: 'BF', label: 'Burkina Faso' },
+        { value: 'BI', label: 'Burundi' },
+        { value: 'KH', label: 'Cambodia' },
+        { value: 'CM', label: 'Cameroon' },
+        { value: 'CA', label: 'Canada' },
+        { value: 'CV', label: 'Cape Verde' },
+        { value: 'KY', label: 'Cayman Islands' },
+        { value: 'CF', label: 'Central African Republic' },
+        { value: 'TD', label: 'Chad' },
+        { value: 'CL', label: 'Chile' },
+        { value: 'CN', label: 'China' },
+        { value: 'CX', label: 'Christmas Island' },
+        { value: 'CC', label: 'Cocos (Keeling) Islands' },
+        { value: 'CO', label: 'Colombia' },
+        { value: 'KM', label: 'Comoros' },
+        { value: 'CG', label: 'Congo' },
+        { value: 'CD', label: 'Congo, Democratic Republic' },
+        { value: 'CK', label: 'Cook Islands' },
+        { value: 'CR', label: 'Costa Rica' },
+        { value: 'CI', label: "Cote D'Ivoire" },
+        { value: 'HR', label: 'Croatia' },
+        { value: 'CU', label: 'Cuba' },
+        { value: 'CY', label: 'Cyprus' },
+        { value: 'CZ', label: 'Czech Republic' },
+        { value: 'DK', label: 'Denmark' },
+        { value: 'DJ', label: 'Djibouti' },
+        { value: 'DM', label: 'Dominica' },
+        { value: 'DO', label: 'Dominican Republic' },
+        { value: 'EC', label: 'Ecuador' },
+        { value: 'EG', label: 'Egypt' },
+        { value: 'SV', label: 'El Salvador' },
+        { value: 'GQ', label: 'Equatorial Guinea' },
+        { value: 'ER', label: 'Eritrea' },
+        { value: 'EE', label: 'Estonia' },
+        { value: 'ET', label: 'Ethiopia' },
+        { value: 'FK', label: 'Falkland Islands (Malvinas)' },
+        { value: 'FO', label: 'Faroe Islands' },
+        { value: 'FJ', label: 'Fiji' },
+        { value: 'FI', label: 'Finland' },
+        { value: 'FR', label: 'France' },
+        { value: 'GF', label: 'French Guiana' },
+        { value: 'PF', label: 'French Polynesia' },
+        { value: 'TF', label: 'French Southern Territories' },
+        { value: 'GA', label: 'Gabon' },
+        { value: 'GM', label: 'Gambia' },
+        { value: 'GE', label: 'Georgia' },
+        { value: 'DE', label: 'Germany' },
+        { value: 'GH', label: 'Ghana' },
+        { value: 'GI', label: 'Gibraltar' },
+        { value: 'GR', label: 'Greece' },
+        { value: 'GL', label: 'Greenland' },
+        { value: 'GD', label: 'Grenada' },
+        { value: 'GP', label: 'Guadeloupe' },
+        { value: 'GU', label: 'Guam' },
+        { value: 'GT', label: 'Guatemala' },
+        { value: 'GG', label: 'Guernsey' },
+        { value: 'GN', label: 'Guinea' },
+        { value: 'GW', label: 'Guinea-Bissau' },
+        { value: 'GY', label: 'Guyana' },
+        { value: 'HT', label: 'Haiti' },
+        { value: 'HM', label: 'Heard Island & Mcdonald Islands' },
+        { value: 'VA', label: 'Holy See (Vatican City State)' },
+        { value: 'HN', label: 'Honduras' },
+        { value: 'HK', label: 'Hong Kong' },
+        { value: 'HU', label: 'Hungary' },
+        { value: 'IS', label: 'Iceland' },
+        { value: 'ID', label: 'Indonesia' },
+        { value: 'IR', label: 'Iran, Islamic Republic Of' },
+        { value: 'IQ', label: 'Iraq' },
+        { value: 'IE', label: 'Ireland' },
+        { value: 'IM', label: 'Isle Of Man' },
+        { value: 'IL', label: 'Israel' },
+        { value: 'IT', label: 'Italy' },
+        { value: 'JM', label: 'Jamaica' },
+        { value: 'JP', label: 'Japan' },
+        { value: 'JE', label: 'Jersey' },
+        { value: 'JO', label: 'Jordan' },
+        { value: 'KZ', label: 'Kazakhstan' },
+        { value: 'KE', label: 'Kenya' },
+        { value: 'KI', label: 'Kiribati' },
+        { value: 'KR', label: 'Korea' },
+        { value: 'KW', label: 'Kuwait' },
+        { value: 'KG', label: 'Kyrgyzstan' },
+        { value: 'LA', label: "Lao People's Democratic Republic" },
+        { value: 'LV', label: 'Latvia' },
+        { value: 'LB', label: 'Lebanon' },
+        { value: 'LS', label: 'Lesotho' },
+        { value: 'LR', label: 'Liberia' },
+        { value: 'LY', label: 'Libyan Arab Jamahiriya' },
+        { value: 'LI', label: 'Liechtenstein' },
+        { value: 'LT', label: 'Lithuania' },
+        { value: 'LU', label: 'Luxembourg' },
+        { value: 'MO', label: 'Macao' },
+        { value: 'MK', label: 'Macedonia' },
+        { value: 'MG', label: 'Madagascar' },
+        { value: 'MW', label: 'Malawi' },
+        { value: 'MV', label: 'Maldives' },
+        { value: 'ML', label: 'Mali' },
+        { value: 'MT', label: 'Malta' },
+        { value: 'MH', label: 'Marshall Islands' },
+        { value: 'MQ', label: 'Martinique' },
+        { value: 'MR', label: 'Mauritania' },
+        { value: 'MU', label: 'Mauritius' },
+        { value: 'YT', label: 'Mayotte' },
+        { value: 'MX', label: 'Mexico' },
+        { value: 'FM', label: 'Micronesia, Federated States Of' },
+        { value: 'MD', label: 'Moldova' },
+        { value: 'MC', label: 'Monaco' },
+        { value: 'MN', label: 'Mongolia' },
+        { value: 'ME', label: 'Montenegro' },
+        { value: 'MS', label: 'Montserrat' },
+        { value: 'MA', label: 'Morocco' },
+        { value: 'MZ', label: 'Mozambique' },
+        { value: 'MM', label: 'Myanmar' },
+        { value: 'NA', label: 'Namibia' },
+        { value: 'NR', label: 'Nauru' },
+        { value: 'NP', label: 'Nepal' },
+        { value: 'NL', label: 'Netherlands' },
+        { value: 'AN', label: 'Netherlands Antilles' },
+        { value: 'NC', label: 'New Caledonia' },
+        { value: 'NZ', label: 'New Zealand' },
+        { value: 'NI', label: 'Nicaragua' },
+        { value: 'NE', label: 'Niger' },
+        { value: 'NG', label: 'Nigeria' },
+        { value: 'NU', label: 'Niue' },
+        { value: 'NF', label: 'Norfolk Island' },
+        { value: 'MP', label: 'Northern Mariana Islands' },
+        { value: 'NO', label: 'Norway' },
+        { value: 'OM', label: 'Oman' },
+        { value: 'PK', label: 'Pakistan' },
+        { value: 'PW', label: 'Palau' },
+        { value: 'PS', label: 'Palestinian Territory, Occupied' },
+        { value: 'PA', label: 'Panama' },
+        { value: 'PG', label: 'Papua New Guinea' },
+        { value: 'PY', label: 'Paraguay' },
+        { value: 'PE', label: 'Peru' },
+        { value: 'PN', label: 'Pitcairn' },
+        { value: 'PL', label: 'Poland' },
+        { value: 'PT', label: 'Portugal' },
+        { value: 'PR', label: 'Puerto Rico' },
+        { value: 'QA', label: 'Qatar' },
+        { value: 'RE', label: 'Reunion' },
+        { value: 'RO', label: 'Romania' },
+        { value: 'RU', label: 'Russian Federation' },
+        { value: 'RW', label: 'Rwanda' },
+        { value: 'BL', label: 'Saint Barthelemy' },
+        { value: 'SH', label: 'Saint Helena' },
+        { value: 'KN', label: 'Saint Kitts And Nevis' },
+        { value: 'LC', label: 'Saint Lucia' },
+        { value: 'MF', label: 'Saint Martin' },
+        { value: 'PM', label: 'Saint Pierre And Miquelon' },
+        { value: 'VC', label: 'Saint Vincent And Grenadines' },
+        { value: 'WS', label: 'Samoa' },
+        { value: 'SM', label: 'San Marino' },
+        { value: 'ST', label: 'Sao Tome And Principe' },
+        { value: 'SA', label: 'Saudi Arabia' },
+        { value: 'SN', label: 'Senegal' },
+        { value: 'RS', label: 'Serbia' },
+        { value: 'SC', label: 'Seychelles' },
+        { value: 'SL', label: 'Sierra Leone' },
+        { value: 'SK', label: 'Slovakia' },
+        { value: 'SI', label: 'Slovenia' },
+        { value: 'SB', label: 'Solomon Islands' },
+        { value: 'SO', label: 'Somalia' },
+        { value: 'ZA', label: 'South Africa' },
+        { value: 'GS', label: 'South Georgia And Sandwich Isl.' },
+        { value: 'ES', label: 'Spain' },
+        { value: 'LK', label: 'Sri Lanka' },
+        { value: 'SD', label: 'Sudan' },
+        { value: 'SR', label: 'Suriname' },
+        { value: 'SJ', label: 'Svalbard And Jan Mayen' },
+        { value: 'SZ', label: 'Swaziland' },
+        { value: 'SE', label: 'Sweden' },
+        { value: 'CH', label: 'Switzerland' },
+        { value: 'SY', label: 'Syrian Arab Republic' },
+        { value: 'TW', label: 'Taiwan' },
+        { value: 'TJ', label: 'Tajikistan' },
+        { value: 'TZ', label: 'Tanzania' },
+        { value: 'TH', label: 'Thailand' },
+        { value: 'TL', label: 'Timor-Leste' },
+        { value: 'TG', label: 'Togo' },
+        { value: 'TK', label: 'Tokelau' },
+        { value: 'TO', label: 'Tonga' },
+        { value: 'TT', label: 'Trinidad And Tobago' },
+        { value: 'TN', label: 'Tunisia' },
+        { value: 'TR', label: 'Turkey' },
+        { value: 'TM', label: 'Turkmenistan' },
+        { value: 'TC', label: 'Turks And Caicos Islands' },
+        { value: 'TV', label: 'Tuvalu' },
+        { value: 'UG', label: 'Uganda' },
+        { value: 'UA', label: 'Ukraine' },
+        { value: 'AE', label: 'United Arab Emirates' },
+        { value: 'US', label: 'United States' },
+        { value: 'UM', label: 'United States Outlying Islands' },
+        { value: 'UY', label: 'Uruguay' },
+        { value: 'UZ', label: 'Uzbekistan' },
+        { value: 'VU', label: 'Vanuatu' },
+        { value: 'VE', label: 'Venezuela' },
+        { value: 'VN', label: 'Viet Nam' },
+        { value: 'VG', label: 'Virgin Islands}, British' },
+        { value: 'VI', label: 'Virgin Islands}, U.S.' },
+        { value: 'WF', label: 'Wallis And Futuna' },
+        { value: 'EH', label: 'Western Sahara' },
+        { value: 'YE', label: 'Yemen' },
+        { value: 'ZM', label: 'Zambia' },
+        { value: 'ZW', label: 'Zimbabwe' },
       ],
     };
   },
@@ -610,25 +610,25 @@ export default {
       return this.screenWidth < 640;
     },
     emailProvider() {
-      return this.$route.query.email || "";
+      return this.$route.query.email || '';
     },
     nameProvider() {
-      return this.$route.query.name || "";
+      return this.$route.query.name || '';
     },
     tokenProvider() {
-      return this.$route.query.token || "";
+      return this.$route.query.token || '';
     },
     appId() {
-      return this.$route.query.app_id || "";
+      return this.$route.query.app_id || '';
     },
     avatarProvider() {
       const { social, avatar } = this.$route.query;
 
-      let avatarURL = "";
-      if (social == "Linkedin-openid") {
+      let avatarURL = '';
+      if (social == 'Linkedin-openid') {
         const url = this.$route.fullPath;
-        const startIndex = url.indexOf("&avatar=") + 8;
-        const endIndex = url.indexOf("&email=");
+        const startIndex = url.indexOf('&avatar=') + 8;
+        const endIndex = url.indexOf('&email=');
         avatarURL = url.substring(startIndex, endIndex);
       } else {
         avatarURL = avatar;
@@ -638,43 +638,43 @@ export default {
     },
     socialProvider() {
       return this.capitalizeFirstLetter(this.$route.query.social) ==
-        "Linkedin-openid"
-        ? "LinkedIn"
+        'Linkedin-openid'
+        ? 'LinkedIn'
         : this.capitalizeFirstLetter(this.$route.query.social);
     },
     socialType() {
-      return this.$route.query.social.toLowerCase() == "linkedin-openid" &&
+      return this.$route.query.social.toLowerCase() == 'linkedin-openid' &&
         this.$route.query.email
-        ? "L"
-        : this.$route.query.social.toLowerCase() == "google" &&
+        ? 'L'
+        : this.$route.query.social.toLowerCase() == 'google' &&
           this.$route.query.email
-        ? "G"
-        : this.$route.query.social.toLowerCase() == "facebook" &&
+        ? 'G'
+        : this.$route.query.social.toLowerCase() == 'facebook' &&
           this.$route.query.email
-        ? "F"
-        : this.$route.query.social.toLowerCase() == "tiktok" &&
+        ? 'F'
+        : this.$route.query.social.toLowerCase() == 'tiktok' &&
           this.$route.query.email
-        ? "T"
-        : this.$route.query.social.toLowerCase() == "twitter" &&
+        ? 'T'
+        : this.$route.query.social.toLowerCase() == 'twitter' &&
           this.$route.query.email
-        ? "X"
-        : "E";
+        ? 'X'
+        : 'E';
     },
   },
 
   created() {
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
   },
   mounted() {
     // http://127.0.0.1:3000/social-sign-up?social=Linkedin-openid&token=AQXU1SSjbJsVPkS_W1OXUhFknOBnsoZtvFStOKDxzpflfpTsvPnh-H9vemA8yEJAnI8wg8pyxOBzMsypz8pV7ibIu0mfMWae8aJT9bUYZE4LYLyvYTupaLWdG-zT5N4RSnwR3jsZBwHi_bf9Og6PC9ivTR9UdHBN5GbmQDnWK3yTN7ykFmUf72prhJ9JTP4ZSwV47L8ibgGi-w--bDhlTvKuBgeU2cEbzXnyYqaB-3dOYjFRYVb-t5zDRGuJJPEng7o-bXGLBhrE26N8TE_0wqC4z_BHnaCNcIiffBdPoErLae3kw_dc0H1shZHZoaTCApogFAVd_QqdmCLyXgUetuV_zJ3ErQ&name=Aji%20Prasetyo&avatar=https://media.licdn.com/dms/image/C5603AQFpUB0qnqPngg/profile-displayphoto-shrink_100_100/0/1633493208219?e=1700092800&v=beta&t=NjQ44W-k9N0rZmq99yEMVaTiri1OKazhny-u8hjNV-U&email=aji.2467@students.amikom.ac.id
     this.email = this.emailProvider;
-    this.password = "";
+    this.password = '';
     this.name = this.nameProvider;
     this.image_path = this.avatarProvider;
     this.getCountryCode();
     app.config.globalProperties.$eventBus.$emit(
-      "changeHeaderWelcome",
-      this.socialProvider + " Registration"
+      'changeHeaderWelcome',
+      this.socialProvider + ' Registration'
     );
     console.log(this.emailProvider);
     console.log(this.nameProvider);
@@ -682,25 +682,25 @@ export default {
     console.log(this.appId);
   },
   unmounted() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     deleteImage() {
       this.image = null;
       this.imageSend = null;
-      this.image_path = "";
+      this.image_path = '';
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     nextStep() {
-      this.$emit("nextStep");
+      this.$emit('nextStep');
     },
     backStep() {
-      this.$emit("backStep");
+      this.$emit('backStep');
       app.config.globalProperties.$eventBus.$emit(
-        "changeHeaderWelcome",
-        "Sign-Up / Sign-in"
+        'changeHeaderWelcome',
+        'Sign-Up / Sign-in'
       );
     },
     onFileChangeInput(e) {
@@ -730,12 +730,12 @@ export default {
     },
     saveData() {
       if (this.valid) {
-        if (this.name == "") {
+        if (this.name == '') {
           this.isName = false;
         } else {
           this.isName = true;
         }
-        if (this.gender == "") {
+        if (this.gender == '') {
           this.isGender = false;
         } else {
           this.isGender = true;
@@ -745,6 +745,17 @@ export default {
         } else {
           this.isMobile = true;
         }
+
+        if (this.name == '' && this.gender == '' && this.mobile == null) {
+          return false;
+        }
+        if (this.gender == '' && this.mobile == null) {
+          return false;
+        }
+        if (this.mobile == null) {
+          return false;
+        }
+
         this.isSending = true;
         const countryName = this.options
           .filter((o) => o.value == this.country)
@@ -757,59 +768,59 @@ export default {
           country_prefix: this.country,
           gender: this.gender,
           app_id: this.appId,
-          registered_type: this.isSmall ? "M" : "W",
+          registered_type: this.isSmall ? 'M' : 'W',
           social_type: this.socialType,
           token: this.tokenProvider,
           country_name: countryName,
           image: this.imageSend != null ? this.imageSend : this.avatarProvider,
           country_code: this.phoneEvent.countryCallingCode
             ? `+${this.phoneEvent.countryCallingCode}`
-            : "",
+            : '',
           flag: `https://flagicons.lipis.dev/flags/4x3/${this.phoneEvent.countryCode.toLowerCase()}.svg`,
         };
         axios
           .post(`/gypsy/save-social-user`, payload, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
           })
           .then((response) => {
             const data = response.data;
             console.log(data);
             this.successMessage = data.message;
-            localStorage.setItem("name", data.data.name);
-            localStorage.setItem("g_id", data.data.gypsy_ref_no);
-            localStorage.setItem("user_image", data.data.image);
-            localStorage.setItem("last_login", data.data.last_login);
-            localStorage.setItem("token", data.data.token);
+            localStorage.setItem('name', data.data.name);
+            localStorage.setItem('g_id', data.data.gypsy_ref_no);
+            localStorage.setItem('user_image', data.data.image);
+            localStorage.setItem('last_login', data.data.last_login);
+            localStorage.setItem('token', data.data.token);
 
             let typeSocial =
-              this.socialType == "L"
-                ? "LinkedIn"
-                : this.socialType == "G"
-                ? "Google"
-                : this.socialType == "F"
-                ? "Facebook"
-                : this.socialType == "T"
-                ? "Tiktok"
-                : this.socialType == "X"
-                ? "Twitter"
-                : this.socialType == "E"
-                ? "Email"
-                : "";
+              this.socialType == 'L'
+                ? 'LinkedIn'
+                : this.socialType == 'G'
+                ? 'Google'
+                : this.socialType == 'F'
+                ? 'Facebook'
+                : this.socialType == 'T'
+                ? 'Tiktok'
+                : this.socialType == 'X'
+                ? 'Twitter'
+                : this.socialType == 'E'
+                ? 'Email'
+                : '';
 
-            localStorage.setItem("social", typeSocial);
+            localStorage.setItem('social', typeSocial);
 
             this.isSuccess = true;
-            this.email = "";
-            this.name = "";
+            this.email = '';
+            this.name = '';
             this.country = null;
             this.city = null;
-            this.mobile = "";
-            this.gender = "";
+            this.mobile = '';
+            this.gender = '';
             app.config.globalProperties.$eventBus.$emit(
-              "changeHeaderWelcome",
-              "Sign Up Completed"
+              'changeHeaderWelcome',
+              'Sign Up Completed'
             );
             this.nextStep();
             this.getUserData();
@@ -827,17 +838,17 @@ export default {
                     error.response.data.email_id == null &&
                     error.response.data.message
                   ? `This Mobile Number ${this.mobile} already exists in our database`
-                  : "";
+                  : '';
               this.emailErrorPhone = error.response.data.email_id
                 ? error.response.data.email_id
-                : "";
+                : '';
               this.errorMessagePhone = message;
               this.isErrorPhone = true;
             } else {
               const message = error.response.data.email_id
                 ? error.response.data.email_id[0]
-                : error.response.data.message === ""
-                ? "Something Wrong!!!"
+                : error.response.data.message === ''
+                ? 'Something Wrong!!!'
                 : error.response.data.message;
               this.errorMessage = message;
               this.isError = true;
@@ -864,8 +875,8 @@ export default {
           // eslint-disable-next-line
           console.log(error);
           const message =
-            error.response.data.message === ""
-              ? "Something Wrong!!!"
+            error.response.data.message === ''
+              ? 'Something Wrong!!!'
               : error.response.data.message;
           this.errorMessage = message;
           this.isError = true;
@@ -887,8 +898,8 @@ export default {
           // eslint-disable-next-line
           console.log(error);
           const message =
-            error.response.data.message === ""
-              ? "Something Wrong!!!"
+            error.response.data.message === ''
+              ? 'Something Wrong!!!'
               : error.response.data.message;
           this.errorMessage = message;
           this.isError = true;
@@ -899,7 +910,7 @@ export default {
     },
     resendOTP() {
       this.isSuccess = true;
-      this.successMessage = "Success send OTP";
+      this.successMessage = 'Success send OTP';
     },
   },
 };
@@ -907,7 +918,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-image: url("@/assets/header.png");
+  background-image: url('@/assets/header.png');
   background-position: center;
   background-size: cover;
   background-color: #cccccc;

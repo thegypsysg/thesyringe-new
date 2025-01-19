@@ -198,7 +198,8 @@
                     "
                     class="py-2 text-left"
                   >
-                    <span style="color: #fa2964">24</span> Jobs
+                    <span style="color: #fa2964">{{ item?.jobs }}</span>
+                    Jobs
                   </div>
 
                   <div
@@ -324,7 +325,7 @@ export default {
             return {
               id: item.skills_id || 1,
               text: item.skills_name || '',
-              jobs: 20,
+              jobs: item.jobs_count || 0,
               path: item.slug || '',
               image: item.image ? this.$fileURL + item.image : '',
             };
